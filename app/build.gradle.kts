@@ -5,6 +5,13 @@ plugins {
     alias(libs.plugins.hilt.android) 
 }
 
+object Libs {
+    const val androidApplication = "com.android.application"
+    const val kotlinAndroid = "org.jetbrains.kotlin.android"
+    const val ksp = "com.google.devtools.ksp"
+    const val hiltAndroid = "dagger.hilt.android.plugin"
+}
+
 android {
     namespace = "com.hgh.samplecompose"
     compileSdk = 34
@@ -15,6 +22,9 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        resConfig("en")
+        resConfig("kr")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -68,6 +78,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("com.android.tools.build:gradle:8.3.1")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.50")
