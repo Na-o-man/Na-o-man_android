@@ -24,6 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.hgh.na_o_man.presentation.ui.add.AddGroupActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Na_o_man"/>
     </application>
 
 </manifest>
