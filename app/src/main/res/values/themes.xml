@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Na_o_man" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Na_o_man" parent="android:Theme.Material.Light.NoActionBar" >
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
 </resources>

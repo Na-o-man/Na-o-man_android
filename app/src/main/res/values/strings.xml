@@ -2,4 +2,5 @@
     <string name="app_name">나ㅇ만</string>
     <string name="back_description">뒤로가기</string>
     <string name="my_page_description">마이페이지</string>
+    <string name="error_tex">서버와 연결을 실패했습니다.</string>
 </resources>

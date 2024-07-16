@@ -68,7 +68,7 @@ fun MainScreen(
                 )
             }
         },
-        containerColor = Color(0xFF44234F2)
+        containerColor = Color(0xFFBBCFE5)
     ) { innerPadding ->
         Box(
             modifier = Modifier

@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.hgh.na_o_man.presentation.component.type.AppBarMenu
 
 @Composable
-fun CreateAppBar(
+fun EndAppBar(
     modifier: Modifier = Modifier,
     onCreateClick: () -> Unit,
 ) {
@@ -33,7 +33,7 @@ fun CreateAppBar(
     )
 }
 @Composable
-fun BackAppBar(
+fun StartEndAppBar(
     modifier: Modifier = Modifier,
     onExitClick: () -> Unit,
     onCreateClick: () -> Unit,
@@ -92,7 +92,7 @@ private fun MainAppBar(
 @Preview(showBackground = true)
 @Composable
 fun AppBarPreview() {
-    BackAppBar(
+    StartEndAppBar(
         onCreateClick = {},
         onExitClick = {}
     )
