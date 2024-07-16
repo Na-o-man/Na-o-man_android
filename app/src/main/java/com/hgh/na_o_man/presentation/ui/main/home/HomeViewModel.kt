@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.main.home
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,10 @@ class HomeViewModel @Inject constructor(
                 getGroupList()
             }
         }
+    }
+
+    init {
+        Log.d("리컴포저블","HomeViewModelInit")
     }
 
     private fun getGroupList() = viewModelScope.launch {

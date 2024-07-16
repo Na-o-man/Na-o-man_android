@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.main
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,6 +41,7 @@ import com.hgh.na_o_man.presentation.theme.Purple40
 import com.hgh.na_o_man.presentation.theme.Purple80
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
+import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
 import com.hgh.samplecompose.R
 
 @Composable
@@ -52,7 +54,12 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val coroutineScope = rememberCoroutineScope()
+    Log.d("리컴포저블", "MainScreen")
 
+    bottomBarState = when (currentDestination?.route) {
+        MainScreenRoute.HOME.route, MainScreenRoute.ALARM.route, MainScreenRoute.ADD.route -> true
+        else -> false
+    }
 
     Scaffold(
         bottomBar = {
@@ -80,7 +87,11 @@ fun MainScreen(
                 startDestination = MainScreenRoute.HOME.route
             ) {
                 composable(route = MainScreenRoute.HOME.route) {
-                    HomeScreen()
+                    HomeScreen(
+                        navigationMyPage = {
+                            navController.navigate(MainScreenRoute.MY_PAGE.route)
+                        }
+                    )
                 }
 
                 composable(route = MainScreenRoute.ADD.route) {
@@ -88,6 +99,13 @@ fun MainScreen(
 
                 composable(route = MainScreenRoute.ALARM.route) {
                     AlarmScreen()
+                }
+                composable(route = MainScreenRoute.MY_PAGE.route) {
+                    MyPageScreen(
+                        navigationBack = {
+                            navController.popBackStack()
+                        }
+                    )
                 }
             }
         }
@@ -185,6 +203,7 @@ enum class MainScreenRoute(val route: String) {
     HOME("home"),
     ADD("add_group"),
     ALARM("alarm"),
+    MY_PAGE("my_page"),
 }
 
 //@Preview

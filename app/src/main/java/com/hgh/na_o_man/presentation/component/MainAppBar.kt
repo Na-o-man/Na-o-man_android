@@ -22,28 +22,42 @@ import com.hgh.na_o_man.presentation.component.type.AppBarMenu
 @Composable
 fun EndAppBar(
     modifier: Modifier = Modifier,
-    onCreateClick: () -> Unit,
+    onEndClick: () -> Unit,
 ) {
     MainAppBar(
         modifier = modifier,
         back = null,
         menu = AppBarMenu.MYPAGE,
-        onMenuClick = onCreateClick,
-        onBackClick = { },
+        onEndClick = onEndClick,
+        onStartClick = { },
+    )
+}
+
+@Composable
+fun StartAppBar(
+    modifier: Modifier = Modifier,
+    onStartClick: () -> Unit,
+) {
+    MainAppBar(
+        modifier = modifier,
+        back = AppBarMenu.BACK,
+        menu = null,
+        onStartClick = onStartClick,
+        onEndClick = {}
     )
 }
 @Composable
 fun StartEndAppBar(
     modifier: Modifier = Modifier,
-    onExitClick: () -> Unit,
-    onCreateClick: () -> Unit,
+    onStartClick: () -> Unit,
+    onEndClick: () -> Unit,
 ) {
     MainAppBar(
         modifier = modifier,
         back = AppBarMenu.BACK,
         menu = AppBarMenu.BACK,
-        onMenuClick = onExitClick,
-        onBackClick = onCreateClick,
+        onEndClick = onEndClick,
+        onStartClick = onStartClick,
     )
 }
 
@@ -52,8 +66,8 @@ private fun MainAppBar(
     modifier: Modifier = Modifier,
     back: AppBarMenu? = null,
     menu: AppBarMenu? = null,
-    onMenuClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onStartClick: () -> Unit,
+    onEndClick: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -70,7 +84,7 @@ private fun MainAppBar(
                 modifier = Modifier
                     .padding(start = back.horizontalPadding)
                     .clip(RoundedCornerShape(30.dp))
-                    .clickable { onBackClick() }
+                    .clickable { onStartClick() }
                     .align(Alignment.CenterStart),
             )
         }
@@ -82,7 +96,7 @@ private fun MainAppBar(
                 modifier = Modifier
                     .padding(end = menu.horizontalPadding)
                     .clip(RoundedCornerShape(30.dp))
-                    .clickable { onMenuClick() }
+                    .clickable { onEndClick() }
                     .align(Alignment.CenterEnd),
             )
         }
@@ -93,7 +107,7 @@ private fun MainAppBar(
 @Composable
 fun AppBarPreview() {
     StartEndAppBar(
-        onCreateClick = {},
-        onExitClick = {}
+        onEndClick = {},
+        onStartClick = {}
     )
 }
