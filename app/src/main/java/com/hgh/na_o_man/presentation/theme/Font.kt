@@ -1,66 +1,71 @@
-package com.hgh.na_o_man.presentation.theme
-
+import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.hgh.samplecompose.R
 
-val pretendardRegular = Font(
-    resId = R.font.pretendard_regular,
-    weight = FontWeight.Normal
+val Pretendard = FontFamily(
+    Font(R.font.pretendard_bold, FontWeight.Bold),
+    Font(R.font.pretendard_semibold, FontWeight.SemiBold),
+    Font(R.font.pretendard_medium, FontWeight.Medium),
+    Font(R.font.pretendard_regular, FontWeight.Normal)
 )
 
-val pretendardMedium = Font(
-    resId = R.font.pretendard_medium,
-    weight = FontWeight.Medium
+val Typography = Typography(
+    displayLarge = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        lineHeight = 36.sp
+    ),
+    displayMedium = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 20.sp,
+        lineHeight = 30.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp,
+        lineHeight = 28.sp
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp
+    ),
+    labelLarge = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        lineHeight = 18.sp
+    )
 )
-
-val pretendardBold = Font(
-    resId = R.font.pretendard_bold,
-    weight = FontWeight.Bold
-)
-
-val pretendardThin = Font(
-    resId = R.font.pretendard_thin,
-    weight = FontWeight.Thin
-)
-
-val pretendardExtraLight = Font(
-    resId = R.font.pretendard_extralight,
-    weight = FontWeight.ExtraLight
-)
-
-val pretendardLight = Font(
-    resId = R.font.pretendard_light,
-    weight = FontWeight.Light
-)
-
-val pretendardSemiBold = Font(
-    resId = R.font.pretendard_semibold,
-    weight = FontWeight.SemiBold
-)
-
-val pretendardExtraBold = Font(
-    resId = R.font.pretendard_extrabold,
-    weight = FontWeight.ExtraBold
-)
-
-val pretendardBlack = Font(
-    resId = R.font.pretendard_black,
-    weight = FontWeight.Black
-)
-
-val pretendard = FontFamily(
-    Font(R.font.pretendard_regular, FontWeight.Normal, FontStyle.Normal),
-    Font(R.font.pretendard_medium, FontWeight.Medium, FontStyle.Normal),
-    Font(R.font.pretendard_bold, FontWeight.Bold, FontStyle.Normal),
-    Font(R.font.pretendard_thin, FontWeight.Thin, FontStyle.Normal),
-    Font(R.font.pretendard_extralight, FontWeight.ExtraLight, FontStyle.Normal),
-    Font(R.font.pretendard_light, FontWeight.Light, FontStyle.Normal),
-    Font(R.font.pretendard_semibold, FontWeight.SemiBold, FontStyle.Normal),
-    Font(R.font.pretendard_extrabold, FontWeight.ExtraBold, FontStyle.Normal),
-    Font(R.font.pretendard_black, FontWeight.Black, FontStyle.Normal)
-)
-
-
