@@ -107,8 +107,7 @@ private fun MainAppBar(
 @Preview(showBackground = true)
 @Composable
 fun AppBarPreview() {
-    StartEndAppBar(
-        onEndClick = {},
+    StartAppBar(
         onStartClick = {}
     )
 }

@@ -5,8 +5,8 @@ import android.os.PersistableBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.hgh.na_o_man.presentation.theme.NaOManTheme
-import com.hgh.na_o_man.presentation.ui.add.accept.AcceptInviteScreen
-import com.hgh.na_o_man.presentation.ui.add.request.RequestInviteScreen
+import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptInviteScreen
+import com.hgh.na_o_man.presentation.ui.add.addgroup.RequestInviteScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.ui.add.request
+package com.hgh.na_o_man.presentation.ui.add.addgroup
 
 import androidx.compose.runtime.Composable
 

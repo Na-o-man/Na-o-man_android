@@ -23,6 +23,8 @@ val lightSkyBlue = Color(187, 207, 229)
 val SteelBlue = Color(139, 165, 193)
 //0x748292
 val SlateGray = Color(116, 130, 146)
+//0xF9D067
+val Mustrard = Color(249, 208, 103)
 
 
 
