@@ -29,6 +29,11 @@
             android:name="com.hgh.na_o_man.presentation.ui.add.AddGroupActivity"
             android:exported="true"
             android:theme="@style/Theme.Na_o_man"/>
+
+<!--        <activity-->
+<!--            android:name="androidx.compose.ui.tooling.PreviewActivity"-->
+<!--            android:exported="true" />             -->
+
     </application>
 
 </manifest>

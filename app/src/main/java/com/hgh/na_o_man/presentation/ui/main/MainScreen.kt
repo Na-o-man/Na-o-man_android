@@ -37,8 +37,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.Purple40
-import com.hgh.na_o_man.presentation.theme.Purple80
+import com.hgh.na_o_man.presentation.theme.SteelBlue
+import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
@@ -120,24 +122,24 @@ fun BottomNavigation(
 ) {
     val gradient = Brush.linearGradient(
         colors = listOf(
-            Color(0xFF4A90E2),
-            Color(0xFF50E3C2),
-            Color(0xFF4A90E2),
-            Color(0xFF50E3C2),
+            lightSkyBlue,
+            LightWhite,
+            lightSkyBlue,
+            LightWhite,
         ),
         start = Offset.Zero,
         end = Offset.Infinite,
     )
 
     Surface(
-        color = Color(0xFF4A90E2),
+        color = lightSkyBlue,
         shape = RoundedCornerShape(50),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 28.dp)
             .padding(bottom = 21.dp)
             .height(90.dp)
-            .border(4.dp, gradient, RoundedCornerShape(50))
+            .border(1.dp, gradient, RoundedCornerShape(50))
     ) {
         Row(
             modifier = Modifier
@@ -157,7 +159,7 @@ fun BottomNavigation(
                     Icon(
                         imageVector = ImageVector.vectorResource(id = navigationItem.icon),
                         contentDescription = null,
-                        tint = if (currentDestination?.route == navigationItem.route) Purple80 else Purple40,
+                        tint = if (currentDestination?.route == navigationItem.route) Purple40 else LightWhite,
                     )
                 }
             }
@@ -183,19 +185,24 @@ fun navigateBottomNavigationScreen(
 enum class BottomNavigationItem(
     val route: String,
     @DrawableRes val icon: Int,
+    val color: Color,
     // @StringRes val title: Int,
 ) {
     HOME(
         route = MainScreenRoute.HOME.route,
-        icon = R.drawable.ic_launcher_foreground
+        icon = R.drawable.ic_bottom_nav_home_24,
+ LightWhite
     ),
     ADD(
         route = MainScreenRoute.ADD.route,
-        icon = R.drawable.ic_launcher_foreground,
+        icon = R.drawable.ic_bottom_nav_plus_19,
+        color = SteelBlue
     ),
+
     ALARM(
         route = MainScreenRoute.ALARM.route,
-        icon = R.drawable.ic_launcher_foreground,
+        icon = R.drawable.ic_bottom_nav_alarm_22,
+ LightWhite,
     )
 }
 
