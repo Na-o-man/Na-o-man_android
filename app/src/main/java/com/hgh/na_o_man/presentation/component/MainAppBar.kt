@@ -5,12 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -18,6 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hgh.na_o_man.presentation.component.type.AppBarMenu
+import com.hgh.na_o_man.presentation.theme.SteelBlue
 
 @Composable
 fun EndAppBar(
@@ -46,6 +46,7 @@ fun StartAppBar(
         onEndClick = {}
     )
 }
+
 @Composable
 fun StartEndAppBar(
     modifier: Modifier = Modifier,
@@ -55,7 +56,24 @@ fun StartEndAppBar(
     MainAppBar(
         modifier = modifier,
         back = AppBarMenu.BACK,
-        menu = AppBarMenu.BACK,
+        menu = AppBarMenu.MYPAGE,
+        onEndClick = onEndClick,
+        onStartClick = onStartClick,
+    )
+}
+
+@Composable
+fun BackAndSelectAppBar(
+    modifier: Modifier = Modifier,
+    isMenuClick: Boolean,
+    onStartClick: () -> Unit,
+    onEndClick: () -> Unit,
+) {
+    MainAppBar(
+        modifier = modifier,
+        back = AppBarMenu.BACK,
+        menu = AppBarMenu.CHECK,
+        isMenuClick = isMenuClick,
         onEndClick = onEndClick,
         onStartClick = onStartClick,
     )
@@ -66,6 +84,7 @@ private fun MainAppBar(
     modifier: Modifier = Modifier,
     back: AppBarMenu? = null,
     menu: AppBarMenu? = null,
+    isMenuClick: Boolean = false,
     onStartClick: () -> Unit,
     onEndClick: () -> Unit,
 ) {
@@ -83,7 +102,6 @@ private fun MainAppBar(
                 contentDescription = stringResource(id = back.contentDescription),
                 modifier = Modifier
                     .padding(start = back.horizontalPadding)
-                    .clip(RoundedCornerShape(30.dp))
                     .clickable { onStartClick() }
                     .align(Alignment.CenterStart),
             )
@@ -91,11 +109,14 @@ private fun MainAppBar(
         if (menu != null) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = menu.icon),
-                tint = Color.Unspecified,
+                tint = (if (isMenuClick) {
+                    Color.Yellow
+                } else {
+                    Color.Unspecified
+                }) as Color,
                 contentDescription = stringResource(id = menu.contentDescription),
                 modifier = Modifier
                     .padding(end = menu.horizontalPadding)
-                    .clip(RoundedCornerShape(30.dp))
                     .clickable { onEndClick() }
                     .align(Alignment.CenterEnd),
             )
@@ -106,8 +127,9 @@ private fun MainAppBar(
 @Preview(showBackground = true)
 @Composable
 fun AppBarPreview() {
-    StartEndAppBar(
+    BackAndSelectAppBar(
         onEndClick = {},
-        onStartClick = {}
+        onStartClick = {},
+        isMenuClick = true
     )
 }
