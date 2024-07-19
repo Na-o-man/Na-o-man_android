@@ -56,23 +56,23 @@ fun PhotoListScreen(
 
     Log.d("리컴포저블", "PhotoListScreen")
 
-//    LaunchedEffect(key1 = viewModel.effect) {
-//        viewModel.effect.collect { effect ->
-//            when (effect) {
-//                PhotoListContract.PhotoListSideEffect.NaviBack -> {
-//
-//                }
-//
-//                PhotoListContract.PhotoListSideEffect.NaviVote -> {
-//
-//                }
-//
-//                is PhotoListContract.PhotoListSideEffect.ShowToast -> {
-//                    Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//    }
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                PhotoListContract.PhotoListSideEffect.NaviBack -> {
+
+                }
+
+                PhotoListContract.PhotoListSideEffect.NaviVote -> {
+
+                }
+
+                is PhotoListContract.PhotoListSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     BackHandler(enabled = viewState.isDialogVisible) {
         viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDialogClosed)
@@ -127,7 +127,7 @@ fun PhotoListScreen(
                         ) {
                             itemsIndexed(viewState.photoList, key = { _, it ->
                                 it.id
-                            }) {_,photo ->
+                            }) { _, photo ->
                                 ImageCard(
                                     modifier = Modifier
                                         .padding(bottom = 8.dp)
@@ -155,7 +155,7 @@ fun PhotoListScreen(
                         }
                         if (viewState.photoList.count { it.is1 } in 1..5) {
                             ActionButtons(true)
-                        } else if ( viewState.photoList.count { it.is1 } > 5 ) {
+                        } else if (viewState.photoList.count { it.is1 } > 5) {
                             ActionButtons(false)
                         }
 
@@ -174,48 +174,9 @@ fun PhotoListScreen(
     }
 }
 
-
-
-
-@Composable
-fun PhotoList(
-    photos : List<Dummy>,
-    isSelectMode : Boolean,
-    modifier: Modifier = Modifier,
-    onClick : ()->Unit ,
-    onSelect : ()->Unit,
-){
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // 2열의 그리드
-        modifier = modifier
-            .padding(start = 40.dp, end = 40.dp, top = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        items(photos, key = {
-            it.id
-        }) {
-            ImageCard(
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
-                    .fillMaxWidth()
-                    .aspectRatio(1.25f),
-                image = it,
-                isSelectMode = isSelectMode,
-                onClick = {
-                    onClick()
-                },
-                onSelect = {
-                    onSelect()
-                }
-            )
-
-        }
-    }
-}
-
 @Composable
 fun ActionButtons(
-    isVoteAvailable : Boolean = true
+    isVoteAvailable: Boolean = true
 ) {
     Row(
         modifier = Modifier
@@ -225,7 +186,7 @@ fun ActionButtons(
         verticalAlignment = Alignment.CenterVertically
     ) {
         ActionButton(text = "다운 받기", modifier = Modifier.weight(1f))
-        if (isVoteAvailable){
+        if (isVoteAvailable) {
             ActionButton(text = "안건\n부치기", modifier = Modifier.weight(1f))
         }
         ActionButton(text = "삭제하기", modifier = Modifier.weight(1f))
@@ -250,12 +211,4 @@ fun ActionButton(
             textAlign = TextAlign.Center,
         )
     }
-}
-
-@Composable
-fun PhotoList(
-    photos: List<Dummy>,
-    onItemClick: (Dummy) -> Unit,
-) {
-
 }

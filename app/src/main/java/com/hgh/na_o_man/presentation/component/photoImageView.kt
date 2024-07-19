@@ -31,7 +31,7 @@ fun ImageCard(
     onSelect: (Dummy) -> Unit = {},
 ) {
     SideEffect {
-        Log.d("Recomposition", "아이디 ${image.id} ")
+        Log.d("리컴포저블", "아이디 ${image.id} ")
     }
 
     Card(
