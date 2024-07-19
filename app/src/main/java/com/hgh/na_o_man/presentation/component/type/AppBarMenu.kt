@@ -13,13 +13,13 @@ enum class AppBarMenu(
 ) {
     BACK(
         horizontalPadding = 20.dp,
-        icon = R.drawable.ic_launcher_background,
+        icon = R.drawable.ic_button_back_arrow_38,
         contentDescription = R.string.back_description,
     ),
 
     MYPAGE(
         horizontalPadding = 20.dp,
-        icon = R.drawable.ic_launcher_background,
+        icon = R.drawable.ic_menu_39,
         contentDescription = R.string.my_page_description,
     ),
 }

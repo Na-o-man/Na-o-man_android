@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -187,15 +188,15 @@ enum class BottomNavigationItem(
 ) {
     HOME(
         route = MainScreenRoute.HOME.route,
-        icon = R.drawable.ic_launcher_foreground
+        icon = R.drawable.ic_bottom_nav_home_24
     ),
     ADD(
         route = MainScreenRoute.ADD.route,
-        icon = R.drawable.ic_launcher_foreground,
+        icon = R.drawable.ic_button_nav_plus_new_31,
     ),
     ALARM(
         route = MainScreenRoute.ALARM.route,
-        icon = R.drawable.ic_launcher_foreground,
+        icon = R.drawable.ic_bottom_nav_alarm_22,
     )
 }
 
