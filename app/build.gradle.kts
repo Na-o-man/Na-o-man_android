@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt.android) 
+    alias(libs.plugins.hilt.android)
 }
 
 
@@ -83,4 +83,10 @@ dependencies {
     //coil
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+
+    // KaKao Login
+    implementation("com.kakao.sdk:v2-user:2.19.0")
+
+    // Goole Login
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 }

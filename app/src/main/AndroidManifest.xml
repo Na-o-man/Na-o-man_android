@@ -15,11 +15,21 @@
         android:theme="@style/Theme.Na_o_man"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_key"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_key" />
+
         <activity
             android:name="com.hgh.na_o_man.presentation.ui.main.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Na_o_man"></activity>
+            android:theme="@style/Theme.Na_o_man" >
+
+        </activity>
 
         <activity
             android:name="com.hgh.na_o_man.presentation.ui.add.AddGroupActivity"
@@ -30,6 +40,12 @@
             android:name="com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity"
             android:exported="true"
             android:theme="@style/Theme.Na_o_man">
+        </activity>
+
+        <activity
+            android:name="com.hgh.na_o_man.presentation.ui.sign.SignActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Na_o_man" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
