@@ -53,6 +53,12 @@
             android:exported="true"
             android:theme="@style/Theme.Na_o_man" >
         </activity>
+
+
+<!--        <activity-->
+<!--            android:name="androidx.compose.ui.tooling.PreviewActivity"-->
+<!--            android:exported="true" />             -->
+
     </application>
 
 </manifest>

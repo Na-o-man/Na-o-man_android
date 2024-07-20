@@ -14,12 +14,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hgh.na_o_man.R
 
+
 @Composable
 fun StartTopCloud(){
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_start_cloud_430),
         contentDescription = stringResource(R.string.back_description),
-        tint = Color(0x408D8D8D),
+        tint = LightWhite,
         modifier = Modifier
             .fillMaxWidth()
             .blur(10.dp)
@@ -27,7 +28,7 @@ fun StartTopCloud(){
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_start_cloud_430),
         contentDescription = stringResource(R.string.back_description),
-        tint = Color.White,
+        tint = LightWhite,
         modifier = Modifier
             .fillMaxWidth()
     )
@@ -38,7 +39,7 @@ fun EndTopCloud(){
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_end_cloud_386),
         contentDescription = stringResource(R.string.back_description),
-        tint = Color(0x408D8D8D),
+        tint = LightWhite,
         modifier = Modifier
             .fillMaxWidth()
             .blur(10.dp)
@@ -47,7 +48,7 @@ fun EndTopCloud(){
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_end_cloud_386),
         contentDescription = stringResource(R.string.back_description),
-        tint = Color.White,
+        tint = LightWhite,
         modifier = Modifier
             .fillMaxWidth()
             .offset(x=30.dp)
@@ -65,7 +66,7 @@ fun DecorationCloud(modifier: Modifier){
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_cloud_138),
         contentDescription = stringResource(R.string.back_description),
-        tint = Color.White,
+        tint = LightWhite,
         modifier = modifier
     )
 }

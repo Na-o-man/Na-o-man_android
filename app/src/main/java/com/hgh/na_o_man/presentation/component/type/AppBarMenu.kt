@@ -2,12 +2,15 @@ package com.hgh.na_o_man.presentation.component.type
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hgh.na_o_man.R
 
 enum class AppBarMenu(
     val horizontalPadding: Dp,
+    val shape: Shape = RectangleShape, // 사각형 모양
     @DrawableRes val icon: Int,
     @StringRes val contentDescription: Int,
 ) {
