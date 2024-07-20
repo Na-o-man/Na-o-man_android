@@ -24,6 +24,11 @@ enum class AppBarMenu(
         horizontalPadding = 20.dp,
         icon = R.drawable.ic_menu_39,
         contentDescription = R.string.my_page_description,
-    )
+    ),
 
+    CHECK(
+        horizontalPadding = 20.dp,
+        icon = R.drawable.ic_button_check_box_39,
+        contentDescription = R.string.checkable,
+    ),
 }

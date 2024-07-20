@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -42,4 +43,11 @@ class MainActivity : ComponentActivity() {
         createResultLauncher.launch(intent)
     }
 
+    companion object {
+        fun goMain(context: Context) {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(intent)
+        }
+    }
 }

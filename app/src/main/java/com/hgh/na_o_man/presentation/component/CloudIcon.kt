@@ -13,7 +13,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.presentation.theme.LightWhite
+
 
 @Composable
 fun StartTopCloud(){
