@@ -6,17 +6,23 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,70 +52,114 @@ fun SignScreen(
     val googleLoginLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        Log.d("구글", "로그인 스타트 ")
         if (result.resultCode == Activity.RESULT_OK) {
-            Log.d("구글", "로그인 0")
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             socialLoginUtil.handleGoogleSignInResult(task)
-        } else {
-            Log.d("구글", "로그인 실패 ${result.resultCode}")
         }
     }
 
+    Log.d("리컴포저블", "signScreen")
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+
+        Box(
+            modifier = Modifier.background(Color(0xFFBBCFE5))
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.Center)
+            ) {
+
+                Image(
+                    painter = painterResource(id = R.drawable.ic_logo_),
+                    contentDescription = "구글 로그인",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 100.dp)
+                        .aspectRatio(4.3F)
+                )
+
+                Spacer(modifier = Modifier.height(240.dp))
 
 
-    Surface (
-        modifier = Modifier.fillMaxSize()
-    ){
-
-        Column (
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.Center)
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.ic_login_with_google_222),
-                contentDescription = "구글 로그인",
-                modifier = Modifier.clickable {
-                    val signInIntent = socialLoginUtil.googleSignIn()
-                    googleLoginLauncher.launch(signInIntent)
-                }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Image(
-                painter = painterResource(id = R.drawable.ic_login_with_kakao_222),
-                contentDescription = "카톡 로그인",
-                modifier = Modifier.clickable {
-                    socialLoginUtil.kakaoSignIn()
-                }
-            )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_login_with_google_222),
+                    contentDescription = "구글 로그인",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 100.dp)
+                        .aspectRatio(4.3F)
+                        .clickable {
+                            val signInIntent = socialLoginUtil.googleSignIn()
+                            googleLoginLauncher.launch(signInIntent)
+                        }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_login_with_kakao_222),
+                    contentDescription = "카톡 로그인",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 100.dp)
+                        .aspectRatio(4.3F)
+                        .clickable {
+                            socialLoginUtil.kakaoSignIn()
+                        }
+                )
+            }
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
-    Surface (
-        modifier = Modifier.fillMaxSize()
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+    ) {
 
-    ){
+        Box(
+            modifier = Modifier.background(Color(0xFFBBCFE5))
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.Center)
+            ) {
 
-        Column (
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.Center)
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.ic_login_with_google_222),
-                contentDescription = "구글 로그인",
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Image(
-                painter = painterResource(id = R.drawable.ic_login_with_kakao_222),
-                contentDescription = "카톡 로그인",
-            )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_logo_),
+                    contentDescription = "구글 로그인",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 100.dp)
+                        .aspectRatio(4.3F)
+                )
+
+                Spacer(modifier = Modifier.height(240.dp))
+
+
+                Image(
+                    painter = painterResource(id = R.drawable.ic_login_with_google_222),
+                    contentDescription = "구글 로그인",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 100.dp)
+                        .aspectRatio(4.3F)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_login_with_kakao_222),
+                    contentDescription = "카톡 로그인",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 100.dp)
+                        .aspectRatio(4.3F)
+                )
+            }
         }
     }
 }
