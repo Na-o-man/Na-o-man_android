@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +29,9 @@ fun AddGroupButton(modifier: Modifier = Modifier) {
             .border(width = 2.dp, color = Color.White, shape = RoundedCornerShape(50))
             .background(Color.Transparent)
     ) {
-        Text(text = "공유 그룹 추가하기", color = Color.White)  // 글씨 색상 변경하기
+        Text(text = "공유 그룹 추가하기",
+            style = com.hgh.na_o_man.presentation.theme.Typography.displaySmall, //글씨체 변경 필요 (Extra Bold 없음)
+            color = Color(0xFF8BA5C1))
     }
 }
 

@@ -7,8 +7,7 @@
   <path
       android:pathData="M29.46,31.12H120.5V30.75L95.74,5.25C93.1,2.53 89.45,1 85.63,1L28.96,1C13.51,1 1,13.26 1,28.39V59C1,43.6 13.74,31.12 29.46,31.12Z"
       android:strokeWidth="2"
-      android:fillColor="#ffffff"
-      android:fillAlpha="0.15">
+      android:fillColor="#C5D6E9">
     <aapt:attr name="android:strokeColor">
       <gradient 
           android:startX="127.83"

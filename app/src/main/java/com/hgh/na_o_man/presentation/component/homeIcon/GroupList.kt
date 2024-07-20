@@ -32,7 +32,7 @@ fun EventCard(
             .padding(15.dp)
             .fillMaxWidth()
             .border(width = 2.dp, color = Color.White, shape = RoundedCornerShape(30))
-            .background(Color(0xFFE8F0FE), shape = RoundedCornerShape(30.dp))
+            .background(Color(0xFFC5D6E9), shape = RoundedCornerShape(30.dp))
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -55,11 +55,11 @@ fun EventCard(
             Text(text = title, fontSize = 20.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(painter = painterResource(id = R.drawable.ic_person_13), contentDescription = null, tint = Color.Gray, modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "$participantCount", color = Color.Gray, fontSize = 14.sp)
+                Icon(painter = painterResource(id = R.drawable.ic_person_13), contentDescription = null, tint = Color.White, modifier = Modifier.size(15.dp))
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(text = "$participantCount", color = Color.White, fontSize = 20.sp)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = date, color = Color.Gray, fontSize = 14.sp)
+                Text(text = date, color = Color.White, fontSize = 20.sp)
             }
         }
     }

@@ -19,24 +19,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hgh.samplecompose.R
 
-@Composable
-fun IconButtonWithBorderExample() {
-    IconButton(
-        onClick = { /* TODO: 아이콘 버튼 클릭 시 실행할 동작 */ },
-        modifier = Modifier
-            .padding(8.dp) // 테두리와 아이콘 사이의 여백
-            .border(
-                BorderStroke(2.dp, Color.White), // 흰색 테두리
-                shape = MaterialTheme.shapes.small // 테두리 모양
-            )
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_cloud_138), // 아이콘 리소스 ID를 사용
-            contentDescription = "Example Icon",
-            tint = Color(0xFFBBCFE5) // 아이콘 색상 설정
-        )
-    }
-}
+//@Composable
+//fun IconButtonWithBorderExample() {
+//    IconButton(
+//        onClick = { /* TODO: 아이콘 버튼 클릭 시 실행할 동작 */ },
+//        modifier = Modifier
+//            .padding(8.dp) // 테두리와 아이콘 사이의 여백
+//            .border(
+//                BorderStroke(2.dp, Color.White), // 흰색 테두리
+//                shape = MaterialTheme.shapes.small // 테두리 모양
+//            )
+//    ) {
+//        Icon(
+//            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_cloud_138), // 아이콘 리소스 ID를 사용
+//            contentDescription = "Example Icon",
+//            tint = Color(0xFFBBCFE5) // 아이콘 색상 설정
+//        )
+//    }
+//}
 
 @Composable
 fun CloudBtn(
