@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.hgh.samplecompose.R
+import com.hgh.na_o_man.R
 
 @Composable
 fun StartTopCloud(){

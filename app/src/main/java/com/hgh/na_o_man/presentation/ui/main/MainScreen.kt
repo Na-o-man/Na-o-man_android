@@ -37,12 +37,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.Purple40
 import com.hgh.na_o_man.presentation.theme.Purple80
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
-import com.hgh.samplecompose.R
 
 @Composable
 fun MainScreen(

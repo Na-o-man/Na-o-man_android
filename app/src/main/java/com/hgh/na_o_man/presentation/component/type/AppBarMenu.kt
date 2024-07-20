@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.hgh.samplecompose.R
+import com.hgh.na_o_man.R
 
 enum class AppBarMenu(
     val horizontalPadding: Dp,
