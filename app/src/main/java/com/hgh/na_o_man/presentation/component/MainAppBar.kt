@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -40,7 +41,9 @@ fun StartAppBar(
     onStartClick: () -> Unit,
 ) {
     MainAppBar(
-        modifier = modifier,
+        modifier = modifier
+            .padding(start = 10.dp, top = 10.dp)
+            .size(76.dp),
         back = AppBarMenu.BACK,
         menu = null,
         onStartClick = onStartClick,
@@ -107,8 +110,7 @@ private fun MainAppBar(
 @Preview(showBackground = true)
 @Composable
 fun AppBarPreview() {
-    StartEndAppBar(
-        onEndClick = {},
+    StartAppBar(
         onStartClick = {}
     )
 }

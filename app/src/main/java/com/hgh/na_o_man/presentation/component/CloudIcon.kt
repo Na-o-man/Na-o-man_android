@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Icon
