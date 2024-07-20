@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -188,22 +189,33 @@ enum class BottomNavigationItem(
     val color: Color,
     // @StringRes val title: Int,
 ) {
-    HOME(
-        route = MainScreenRoute.HOME.route,
-        icon = R.drawable.ic_bottom_nav_home_24,
- LightWhite
-    ),
-    ADD(
-        route = MainScreenRoute.ADD.route,
-        icon = R.drawable.ic_bottom_nav_plus_19,
-        color = SteelBlue
-    ),
+//     HOME(
+//         route = MainScreenRoute.HOME.route,
+// <<<<<<< feat/home-ui
+//         icon = R.drawable.ic_bottom_nav_home_24
+//     ),
+//     ADD(
+//         route = MainScreenRoute.ADD.route,
+//         icon = R.drawable.ic_button_nav_plus_new_31,
+// =======
+//         icon = R.drawable.ic_bottom_nav_home_24,
+//  LightWhite
+//     ),
+//     ADD(
+//         route = MainScreenRoute.ADD.route,
+//         icon = R.drawable.ic_bottom_nav_plus_19,
+//         color = SteelBlue
+// >>>>>>> dev
+//     ),
 
-    ALARM(
-        route = MainScreenRoute.ALARM.route,
-        icon = R.drawable.ic_bottom_nav_alarm_22,
- LightWhite,
-    )
+//     ALARM(
+//         route = MainScreenRoute.ALARM.route,
+//         icon = R.drawable.ic_bottom_nav_alarm_22,
+// <<<<<<< feat/home-ui
+// =======
+//  LightWhite,
+// >>>>>>> dev
+//     )
 }
 
 enum class MainScreenRoute(val route: String) {

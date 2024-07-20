@@ -24,7 +24,7 @@ enum class AppBarMenu(
     ),
 
     MYPAGE(
-        horizontalPadding = 0.dp,
+        horizontalPadding = 20.dp,]
         icon = R.drawable.ic_menu_39,
         contentDescription = R.string.my_page_description,
     )
