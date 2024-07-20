@@ -1,6 +1,5 @@
 package com.hgh.na_o_man.presentation.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Icon
@@ -13,8 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.LightWhite
-import com.hgh.samplecompose.R
 
 @Composable
 fun StartTopCloud(){

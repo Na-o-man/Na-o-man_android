@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -38,6 +37,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.Purple40
 import com.hgh.na_o_man.presentation.theme.SteelBlue
@@ -45,7 +45,6 @@ import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
-import com.hgh.samplecompose.R
 
 @Composable
 fun MainScreen(
@@ -160,7 +159,7 @@ fun BottomNavigation(
                     Icon(
                         imageVector = ImageVector.vectorResource(id = navigationItem.icon),
                         contentDescription = null,
-                        tint = if (currentDestination?.route == navigationItem.route) Purple40 else LightWhite,
+                        tint = if (currentDestination?.route == navigationItem.route) SteelBlue else LightWhite,
                     )
                 }
             }
@@ -189,33 +188,21 @@ enum class BottomNavigationItem(
     val color: Color,
     // @StringRes val title: Int,
 ) {
-//     HOME(
-//         route = MainScreenRoute.HOME.route,
-// <<<<<<< feat/home-ui
-//         icon = R.drawable.ic_bottom_nav_home_24
-//     ),
-//     ADD(
-//         route = MainScreenRoute.ADD.route,
-//         icon = R.drawable.ic_button_nav_plus_new_31,
-// =======
-//         icon = R.drawable.ic_bottom_nav_home_24,
-//  LightWhite
-//     ),
-//     ADD(
-//         route = MainScreenRoute.ADD.route,
-//         icon = R.drawable.ic_bottom_nav_plus_19,
-//         color = SteelBlue
-// >>>>>>> dev
-//     ),
-
-//     ALARM(
-//         route = MainScreenRoute.ALARM.route,
-//         icon = R.drawable.ic_bottom_nav_alarm_22,
-// <<<<<<< feat/home-ui
-// =======
-//  LightWhite,
-// >>>>>>> dev
-//     )
+     HOME(
+         route = MainScreenRoute.HOME.route,
+         icon = R.drawable.ic_bottom_nav_home_24,
+         color = Color.Unspecified
+     ),
+     ADD(
+         route = MainScreenRoute.ADD.route,
+         icon = R.drawable.ic_button_nav_plus_new_31,
+         color = Color.Unspecified
+     ),
+     ALARM(
+         route = MainScreenRoute.ALARM.route,
+         icon = R.drawable.ic_bottom_nav_alarm_22,
+         color = Color.Unspecified,
+     )
 }
 
 enum class MainScreenRoute(val route: String) {

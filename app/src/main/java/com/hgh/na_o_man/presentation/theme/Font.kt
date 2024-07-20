@@ -4,7 +4,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.hgh.samplecompose.R
+import com.hgh.na_o_man.R
 
 val Pretendard = FontFamily(
     Font(R.font.pretendard_bold, FontWeight.Bold),

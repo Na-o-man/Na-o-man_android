@@ -19,7 +19,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hgh.na_o_man.presentation.component.type.AppBarMenu
-import com.hgh.samplecompose.R
 
 @Composable
 fun EndAppBar(

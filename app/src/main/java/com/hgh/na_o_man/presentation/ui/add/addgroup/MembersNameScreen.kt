@@ -48,7 +48,7 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
-import com.hgh.samplecompose.R
+import com.hgh.na_o_man.R
 
 @Composable
 fun MembersNameScreen(
