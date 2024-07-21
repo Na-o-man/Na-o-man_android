@@ -6,8 +6,10 @@ import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -37,6 +39,8 @@ import com.hgh.na_o_man.presentation.component.StartEndAppBar
 import com.hgh.na_o_man.presentation.component.StartTopCloud
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
+import com.hgh.na_o_man.presentation.component.groupdetail.Bigfolder
+import com.hgh.na_o_man.presentation.component.groupdetail.GroupInfo
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailScreen
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailScreenRoute
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
@@ -94,6 +98,7 @@ fun GroupDetailFolderScreen(
                 Box(modifier = Modifier.fillMaxSize()) {
                     EndTopCloud()
                 }
+
                 Box(modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
@@ -101,9 +106,27 @@ fun GroupDetailFolderScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 50.dp)
-                            .align(Alignment.BottomCenter)
                     ){
+                        Spacer(modifier = Modifier.height(100.dp))
+
+                        Box(
+                            modifier = Modifier
+                                .padding(start = 200.dp)
+                        ) {
+                            GroupInfo(title = "제목", participantCount = 5, date = "2024.07.20")
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                        ) {
+                            Bigfolder()
+                        }
+
+                        Spacer(modifier = Modifier.height(90.dp))
+
                         Row(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
@@ -112,7 +135,6 @@ fun GroupDetailFolderScreen(
                             CloudBtn(title = "다운로드")
                             SmallCloudBtn(title = "지난 안건")
                         }
-
                     }
                 }
             }
@@ -120,11 +142,11 @@ fun GroupDetailFolderScreen(
     }
 }
 
-//@Preview
-//@Composable
-//fun PreView(
-//) {
-//    GroupDetailFolderScreen(
-//        navigationMyPage = {},
-//        navigationBack = {})
-//}
+@Preview
+@Composable
+fun PreView(
+) {
+    GroupDetailFolderScreen(
+        navigationMyPage = {},
+        navigationBack = {})
+}

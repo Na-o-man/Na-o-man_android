@@ -24,12 +24,15 @@ fun Bigfolder(){
             contentDescription = ("폴더머리"),
             tint = Color.White,
             modifier = Modifier
+                .offset(x = 2.dp)
 
         )
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_group_detail_folder_head_122),
             contentDescription = ("폴더머리"),
-            tint = Color.Unspecified // 아이콘 색상 설정
+            tint = Color.Unspecified, // 아이콘 색상 설정
+                modifier = Modifier
+                .offset(x = 2.dp)
         )
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_group_detail_folder_body_293),
@@ -51,8 +54,8 @@ fun Bigfolder(){
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewFolder() {
-    Bigfolder()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewFolder() {
+//    Bigfolder()
+//}
