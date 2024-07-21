@@ -44,13 +44,44 @@ fun CloudBtn(
             .clickable(onClick = onClick)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_cloud_138), // 아이콘 리소스 ID를 사용
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_big_cloud_138), // 아이콘 리소스 ID를 사용
             contentDescription = "Example Icon",
             tint = Color(0xAA8D8D8D),
             modifier = modifier.blur(5.dp)
         )
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_cloud_138), // 아이콘 리소스 ID를 사용
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_big_cloud_138), // 아이콘 리소스 ID를 사용
+            contentDescription = "Example Icon",
+            tint = Color.Unspecified // 아이콘 색상 설정
+        )
+
+        Text(
+            text = title,
+            color = Color(0xFF748292),
+            style = com.hgh.na_o_man.presentation.theme.Typography.labelMedium
+        )
+    }
+}
+
+@Composable
+fun SmallCloudBtn(
+    title : String ,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .clickable(onClick = onClick)
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_small_cloud_112), // 아이콘 리소스 ID를 사용
+            contentDescription = "Example Icon",
+            tint = Color(0xAA8D8D8D),
+            modifier = modifier.blur(5.dp)
+        )
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_small_cloud_112), // 아이콘 리소스 ID를 사용
             contentDescription = "Example Icon",
             tint = Color.Unspecified // 아이콘 색상 설정
         )
@@ -67,4 +98,5 @@ fun CloudBtn(
 @Composable
 fun PreviewIconButtonWithBorderExample() {
     CloudBtn(title = "지난\n안건")
+    SmallCloudBtn(title = "이미지")
 }

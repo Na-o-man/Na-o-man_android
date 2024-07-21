@@ -1,8 +1,10 @@
 package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 
 import CloudBtn
+import SmallCloudBtn
 import android.util.Log
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -94,24 +96,35 @@ fun GroupDetailFolderScreen(
                 }
                 Box(modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding))
-                // 여기에 추가 컨텐츠
-//                Row {
-//                    CloudBtn(title = "이미지\n분류")
-//                    CloudBtn(title = "다운로드")
-//                    CloudBtn(title = "지난 안건")
-//                }
+                    .padding(padding)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 50.dp)
+                            .align(Alignment.BottomCenter)
+                    ){
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                        ) {
+                            SmallCloudBtn(title = "이미지\n분류")
+                            CloudBtn(title = "다운로드")
+                            SmallCloudBtn(title = "지난 안건")
+                        }
 
+                    }
+                }
             }
         }
     }
 }
 
-@Preview
-@Composable
-fun PreView(
-) {
-    GroupDetailFolderScreen(
-        navigationMyPage = {},
-        navigationBack = {})
-}
+//@Preview
+//@Composable
+//fun PreView(
+//) {
+//    GroupDetailFolderScreen(
+//        navigationMyPage = {},
+//        navigationBack = {})
+//}

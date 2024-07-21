@@ -25,6 +25,42 @@ class HomeViewModel @Inject constructor(
                 name = "예제 2",
                 participantCount = 3,
                 date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
             )
         )
     )
