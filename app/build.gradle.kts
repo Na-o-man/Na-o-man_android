@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt.android) 
 }
 
+
 android {
     namespace = "com.hgh.samplecompose"
     compileSdk = 34
@@ -15,6 +16,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -70,6 +73,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
+    // preview
+    // implementation("androidx.compose.ui:ui-tooling-preview:1.2.0")
+    // debugImplementation("androidx.compose.ui:ui-tooling:1.2.0")
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.50")
