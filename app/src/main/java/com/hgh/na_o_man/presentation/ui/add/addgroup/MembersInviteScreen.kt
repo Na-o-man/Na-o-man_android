@@ -39,15 +39,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.base.LoadState
-import com.hgh.na_o_man.presentation.component.EndAppBar
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
-import com.hgh.samplecompose.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
