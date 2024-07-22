@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.ui.sign
+package com.hgh.na_o_man.presentation.ui.sign.signin
 
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
@@ -9,6 +9,7 @@ class SignContract {
 
     data class SignViewState(
         val loadState: LoadState = LoadState.SUCCESS,
+        val test : String = ""
     ): ViewState
 
     sealed class SignSideEffect : ViewSideEffect {

@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.ui.sign
+package com.hgh.na_o_man.presentation.ui.sign.signin
 
 import android.util.Log
 import com.hgh.na_o_man.presentation.base.BaseViewModel
@@ -20,5 +20,9 @@ class SignViewModel @Inject constructor(
 
             }
         }
+    }
+
+    fun changTest() {
+        updateState { copy(test = "ttttt") }
     }
 }

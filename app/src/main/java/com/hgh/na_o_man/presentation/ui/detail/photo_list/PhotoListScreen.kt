@@ -43,6 +43,7 @@ import com.hgh.na_o_man.presentation.component.ImageDialog
 import com.hgh.na_o_man.presentation.component.StartTopCloud
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
+import com.hgh.na_o_man.presentation.component.TopCloud
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.Typography
 import kotlinx.coroutines.flow.map
@@ -103,7 +104,7 @@ fun PhotoListScreen(
                 containerColor = Color.Transparent
             ) { padding ->
                 Box(modifier = Modifier.fillMaxSize()) {
-                    StartTopCloud()
+                    TopCloud()
                     DecorationCloud(
                         modifier = Modifier
                             .size(150.dp, 94.dp)
