@@ -31,4 +31,16 @@ enum class AppBarMenu(
         icon = R.drawable.ic_button_check_box_39,
         contentDescription = R.string.checkable,
     ),
+
+    Next1(
+        horizontalPadding = 20.dp,
+        icon = R.drawable.ic_button_next_38,
+        contentDescription = R.string.next1_description,
+    ),
+
+    Next2(
+        horizontalPadding = 20.dp,
+        icon = R.drawable.ic_button_cloud_138,
+        contentDescription = R.string.next2_description,
+    )
 }
