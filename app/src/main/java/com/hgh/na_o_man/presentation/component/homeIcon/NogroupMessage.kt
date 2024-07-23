@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,26 +30,35 @@ fun NoGroupBox(
         ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_no_group_message_299), // 아이콘 리소스 ID를 사용
-            contentDescription = "Example Icon",
+            contentDescription = "Box",
             tint = Color(0xAA8D8D8D),
         )
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_no_group_message_299), // 아이콘 리소스 ID를 사용
-            contentDescription = "Example Icon",
+            contentDescription = "Box",
             tint = Color.Unspecified // 아이콘 색상 설정
         )
 
-        Text(
-            textAlign = TextAlign.Center,
-            text = message,
-            color = Color.White,
-            style = com.hgh.na_o_man.presentation.theme.Typography.bodyLarge
-        )
+        Box(
+            modifier = Modifier
+        ) {
+            Column {
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = message,
+                    color = Color.White,
+                    style = com.hgh.na_o_man.presentation.theme.Typography.bodyLarge
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+                AddGroupButton("공유 그룹 추가하기")
+            }
+        }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewNoGroupBox() {
-    NoGroupBox(message = "아직 공유그룹이 없어요.\n그룹을 추가해 주세요.")
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewNoGroupBox() {
+//    NoGroupBox(message = "아직 공유그룹이 없어요.\n그룹을 추가해 주세요.")
+//}

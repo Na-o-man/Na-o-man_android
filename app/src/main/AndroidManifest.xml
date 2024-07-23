@@ -20,9 +20,9 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_key"/>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_key" />
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="@string/google_key" />-->
 
         <activity
             android:name="com.hgh.na_o_man.presentation.ui.main.MainActivity"

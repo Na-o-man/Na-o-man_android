@@ -39,7 +39,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.LightWhite
-import com.hgh.na_o_man.presentation.theme.Purple40
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
@@ -195,8 +194,8 @@ enum class BottomNavigationItem(
      ),
      ADD(
          route = MainScreenRoute.ADD.route,
-         icon = R.drawable.ic_button_nav_plus_new_31,
-         color = Color.Unspecified
+         icon = R.drawable.ic_bottom_nav_plus_button_last_33,
+         color = Color.White
      ),
      ALARM(
          route = MainScreenRoute.ALARM.route,
