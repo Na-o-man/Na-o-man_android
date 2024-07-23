@@ -194,8 +194,8 @@ enum class BottomNavigationItem(
      ),
      ADD(
          route = MainScreenRoute.ADD.route,
-         icon = R.drawable.ic_button_nav_plus_new_31,
-         color = Color.Unspecified
+         icon = R.drawable.ic_bottom_nav_plus_button_last_33,
+         color = Color.White
      ),
      ALARM(
          route = MainScreenRoute.ALARM.route,
