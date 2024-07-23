@@ -1,7 +1,8 @@
 package com.hgh.na_o_man.presentation.ui.sign.signin
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,15 +44,32 @@ import com.hgh.na_o_man.presentation.theme.Typography
 
 @Composable
 fun ArgeeScreen(
-    naviUploadScreen: () -> Unit,
+    naviUserScreen: () -> Unit,
     viewModel: SignViewModel = hiltViewModel()
 ) {
-    val viewState by viewModel.viewState.collectAsState()
+    val context = LocalContext.current as Activity
     var isTermsAgreed by remember { mutableStateOf(false) }
     var isPrivacyAgreed by remember { mutableStateOf(false) }
     var isAdsAgreed by remember { mutableStateOf(false) }
 
     Log.d("리컴포저블", "ArgeeScreen")
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                SignContract.SignSideEffect.NaviUser -> {
+                    naviUserScreen()
+                }
+
+                is SignContract.SignSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                }
+
+                else -> {}
+            }
+        }
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -57,7 +77,7 @@ fun ArgeeScreen(
             modifier = Modifier.background(Color(0xFFBBCFE5))
         ) {
             Image(
-                painter = painterResource(R.drawable.background_1),
+                painter = painterResource(R.drawable.background_2),
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -85,7 +105,7 @@ fun ArgeeScreen(
                     onPrivacyAgreeChange = { isPrivacyAgreed = it },
                     isAdsAgreed = isAdsAgreed,
                     onAdsAgreeChange = { isAdsAgreed = it },
-                    onNaviUpload = { naviUploadScreen() }
+                    onNaviUpload = { viewModel.setEvent(SignContract.SignEvent.OnClickALlAgree) }
                 )
             }
         }
@@ -100,7 +120,7 @@ fun AgreeComponent(
     onPrivacyAgreeChange: (Boolean) -> Unit,
     isAdsAgreed: Boolean,
     onAdsAgreeChange: (Boolean) -> Unit,
-    onNaviUpload: () -> Unit = {},
+    onNaviUpload: () -> Unit,
 ) {
 
     Log.d("리컴포저블", "AgreeComponent")
@@ -265,7 +285,7 @@ fun Preview3() {
             modifier = Modifier.background(Color(0xFFBBCFE5))
         ) {
             Image(
-                painter = painterResource(R.drawable.background_1),
+                painter = painterResource(R.drawable.background_2),
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -287,7 +307,7 @@ fun Preview3() {
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 AgreeComponent(
-                    true, { }, true, {}, false, {}
+                    true, { }, true, {}, false, {}, {}
                 )
             }
         }

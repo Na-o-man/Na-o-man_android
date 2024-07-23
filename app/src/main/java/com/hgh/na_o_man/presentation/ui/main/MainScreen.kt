@@ -139,7 +139,7 @@ fun BottomNavigation(
             .padding(horizontal = 28.dp)
             .padding(bottom = 21.dp)
             .height(90.dp)
-            .border(1.dp, gradient, RoundedCornerShape(50))
+            .border(2.dp, gradient, RoundedCornerShape(50))
     ) {
         Row(
             modifier = Modifier

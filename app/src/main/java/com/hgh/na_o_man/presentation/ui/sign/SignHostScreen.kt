@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.presentation.ui.sign.signin.ArgeeScreen
 import com.hgh.na_o_man.presentation.ui.sign.signin.SignScreen
 import com.hgh.na_o_man.presentation.ui.sign.signin.SignViewModel
+import com.hgh.na_o_man.presentation.ui.sign.signin.UserScreen
 
 @Composable
 fun SignHostScreen(
@@ -44,9 +45,15 @@ fun SignHostScreen(
                 }
 
                 composable(route = SignScreenRoute.AGREE.route) {
-                    ArgeeScreen(naviUploadScreen = {
-                        navController.navigate(SignScreenRoute.UPLOAD.route)
+                    ArgeeScreen(naviUserScreen = {
+                        navController.navigate(SignScreenRoute.USER.route)
                     }, viewModel = viewModel)
+                }
+
+                composable(route = SignScreenRoute.USER.route) {
+                    UserScreen(naviUploadScreen ={
+                        navController.navigate(SignScreenRoute.UPLOAD.route)
+                    }, viewModel =viewModel)
                 }
 
                 composable(route = SignScreenRoute.UPLOAD.route) {
@@ -62,5 +69,6 @@ fun SignHostScreen(
 enum class SignScreenRoute(val route: String) {
     LOGIN("login"),
     AGREE("argee"),
+    USER("user_info"),
     UPLOAD("image_upload")
 }

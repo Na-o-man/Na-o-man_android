@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.Utill
+package com.hgh.na_o_man.presentation.util
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable

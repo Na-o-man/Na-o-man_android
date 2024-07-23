@@ -12,17 +12,33 @@ class SignViewModel @Inject constructor(
 ) {
 
     init {
-        Log.d("리컴포저블","SignViewModel")
+        Log.d("리컴포저블", "SignViewModel")
     }
+
     override fun handleEvents(event: SignContract.SignEvent) {
         when (event) {
             is SignContract.SignEvent.InitSignScreen -> {
 
             }
+
+            SignContract.SignEvent.OnClickALlAgree -> {
+                sendEffect({ SignContract.SignSideEffect.NaviUser })
+            }
+
+            is SignContract.SignEvent.OnClickLogin -> {
+                updateState { copy(userInfo = event.userInfo) }
+                sendEffect({ SignContract.SignSideEffect.NaviAgree })
+            }
+
+            SignContract.SignEvent.OnClickUpload -> {
+                sendEffect({ SignContract.SignSideEffect.NaviUpload })
+            }
+
+            SignContract.SignEvent.OnClickFinish -> {
+
+            }
         }
     }
 
-    fun changTest() {
-        updateState { copy(test = "ttttt") }
-    }
+
 }

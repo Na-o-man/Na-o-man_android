@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.presentation.Utill.SocialLoginUtil
+import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
+import com.hgh.na_o_man.presentation.util.SocialLoginUtil
 
 @Composable
 fun SignScreen(
@@ -41,10 +44,8 @@ fun SignScreen(
     val context = LocalContext.current as Activity
     val socialLoginUtil = remember {
         SocialLoginUtil(context, object : SocialLoginUtil.LoginCallback {
-            override fun onLoginSuccess(token: String) {
-                Toast.makeText(context, token, Toast.LENGTH_SHORT).show()
-                naviAgreeScreen()
-                viewModel.changTest()
+            override fun onLoginSuccess(dummy: Dummy) {
+                viewModel.setEvent(SignContract.SignEvent.OnClickLogin(dummy))
             }
 
             override fun onLoginFailure(error: Throwable) {
@@ -59,6 +60,22 @@ fun SignScreen(
         if (result.resultCode == Activity.RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             socialLoginUtil.handleGoogleSignInResult(task)
+        }
+    }
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                SignContract.SignSideEffect.NaviAgree -> {
+                    naviAgreeScreen()
+                }
+
+                is SignContract.SignSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                }
+
+                else -> {}
+            }
         }
     }
 
