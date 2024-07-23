@@ -2,6 +2,7 @@ package com.hgh.na_o_man.presentation.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,7 +18,7 @@ import com.hgh.na_o_man.presentation.theme.LightWhite
 
 
 @Composable
-fun StartTopCloud(){
+fun StartTopCloud() {
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_start_cloud_430),
         contentDescription = stringResource(R.string.back_description),
@@ -36,7 +37,7 @@ fun StartTopCloud(){
 }
 
 @Composable
-fun EndTopCloud(){
+fun EndTopCloud() {
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_end_cloud_386),
         contentDescription = stringResource(R.string.back_description),
@@ -44,7 +45,7 @@ fun EndTopCloud(){
         modifier = Modifier
             .fillMaxWidth()
             .blur(10.dp)
-            .offset(x=30.dp)
+            .offset(x = 30.dp)
     )
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_end_cloud_386),
@@ -52,12 +53,35 @@ fun EndTopCloud(){
         tint = LightWhite,
         modifier = Modifier
             .fillMaxWidth()
-            .offset(x=30.dp)
+            .offset(x = 30.dp)
     )
 }
 
 @Composable
-fun DecorationCloud(modifier: Modifier){
+fun TopCloud() {
+    Icon(
+        imageVector = ImageVector.vectorResource(R.drawable.ic_top_cloud_346),
+        contentDescription = stringResource(R.string.back_description),
+        tint = Color(0x408D8D8D),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 33.dp)
+            .offset(y = (-40).dp)
+            .blur(10.dp)
+    )
+    Icon(
+        imageVector = ImageVector.vectorResource(R.drawable.ic_top_cloud_346),
+        contentDescription = stringResource(R.string.back_description),
+        tint = LightWhite,
+        modifier = Modifier
+            .padding(horizontal = 33.dp)
+            .offset(y = (-40).dp)
+            .fillMaxWidth()
+    )
+}
+
+@Composable
+fun DecorationCloud(modifier: Modifier) {
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_cloud_138),
         contentDescription = stringResource(R.string.back_description),
@@ -87,5 +111,11 @@ fun Preview2() {
 @Preview(showBackground = true)
 @Composable
 fun Preview3() {
+    TopCloud()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun Preview4() {
     DecorationCloud(Modifier)
 }

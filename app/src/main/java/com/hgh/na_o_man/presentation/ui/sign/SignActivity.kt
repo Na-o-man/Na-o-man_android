@@ -8,7 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.hgh.na_o_man.presentation.Utill.SocialLoginUtil
+import com.hgh.na_o_man.presentation.util.SocialLoginUtil
 import com.hgh.na_o_man.presentation.theme.NaOManTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,7 +29,7 @@ class SignActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NaOManTheme {
-                SignScreen()
+                SignHostScreen()
             }
         }
     }
