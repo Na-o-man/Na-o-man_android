@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.sign.signin
 
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -18,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -49,6 +51,15 @@ fun UploadScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+
+                else -> {}
+            }
+        }
+    }
+
     when (viewState.loadState) {
         LoadState.LOADING -> {
             StateLoadingScreen()
@@ -74,7 +85,7 @@ fun UploadScreen(
 
                 Surface(
                     color = Color(0x4DFFFFFF),
-                    shape = RoundedCornerShape(24),
+                    shape = RoundedCornerShape(24.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
@@ -89,7 +100,7 @@ fun UploadScreen(
                                 ),
                                 start = Offset.Zero,
                                 end = Offset.Infinite,
-                            ), RoundedCornerShape(24)
+                            ), RoundedCornerShape(24.dp)
                         )
                 ) {
                     Column(
@@ -197,7 +208,7 @@ fun UploadScreenPv() {
 
         Surface(
             color = Color(0x4DFFFFFF),
-            shape = RoundedCornerShape(24),
+            shape = RoundedCornerShape(24.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
@@ -212,7 +223,7 @@ fun UploadScreenPv() {
                         ),
                         start = Offset.Zero,
                         end = Offset.Infinite,
-                    ), RoundedCornerShape(24)
+                    ), RoundedCornerShape(24.dp)
                 )
         ) {
             Column(

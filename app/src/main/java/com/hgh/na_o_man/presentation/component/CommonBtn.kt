@@ -1,6 +1,8 @@
 package com.hgh.na_o_man.presentation.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,10 +44,13 @@ fun SignBtn(
 
     Surface(
         color = Color(0x66FFFFFF),
-        shape = RoundedCornerShape(18),
+        shape = RoundedCornerShape(18.dp),
         modifier = Modifier
             .size(200.dp, 60.dp)
-            .border(2.dp, gradient, RoundedCornerShape(18))
+            .border(2.dp, gradient, RoundedCornerShape(18.dp))
+            .clickable{
+                onClick()
+            }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -73,6 +78,50 @@ fun SignBtn(
     }
 }
 
+@Composable
+fun MyPageBtn(
+    onClick : () -> Unit,
+    text : String,
+) {
+    val gradient = Brush.verticalGradient(
+        colors = listOf(
+            Color(0x00FFFFFF),
+            Color(0xFFFFFFFF),
+        ),
+    )
+
+    Surface(
+        color = Color(0x66FFFFFF),
+        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier
+            .size(200.dp, 40.dp)
+            .border(2.dp, gradient, RoundedCornerShape(20.dp))
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize(),
+
+            ) {
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFFFFFFFF),
+                modifier = Modifier,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+            )
+
+        }
+    }
+}
+
+@Preview
+@Composable
+fun MyPageBtnPreview() {
+    MyPageBtn (onClick = {}, text = "로그아웃")
+}
 @Preview
 @Composable
 fun SignBtnPreview() {
