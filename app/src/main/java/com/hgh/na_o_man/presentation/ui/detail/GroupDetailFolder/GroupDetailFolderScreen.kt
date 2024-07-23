@@ -118,12 +118,12 @@ fun GroupDetailFolderScreen(
 
                         Spacer(modifier = Modifier.height(20.dp))
 
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                        ) {
-                            Bigfolder()
-                        }
+//                        Box(
+//                            modifier = Modifier
+//                                .align(Alignment.CenterHorizontally)
+//                        ) {
+//                            Bigfolder()
+//                        }
 
                         Spacer(modifier = Modifier.height(90.dp))
 
