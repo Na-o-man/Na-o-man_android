@@ -27,7 +27,7 @@ import com.hgh.na_o_man.R
 
 @Composable
 fun SignBtn(
-
+    onClick : () -> Unit,
 ) {
     val gradient = Brush.linearGradient(
         colors = listOf(
@@ -76,5 +76,5 @@ fun SignBtn(
 @Preview
 @Composable
 fun SignBtnPreview() {
-    SignBtn()
+    SignBtn {}
 }
