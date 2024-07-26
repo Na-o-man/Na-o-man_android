@@ -73,6 +73,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
+    implementation ("com.google.accompanist:accompanist-pager:0.20.1")
+    implementation ("com.google.accompanist:accompanist-pager-indicators:0.20.1")
+
     // hilt
     implementation("com.google.dagger:hilt-android:2.50")
     ksp("com.google.dagger:hilt-compiler:2.50")

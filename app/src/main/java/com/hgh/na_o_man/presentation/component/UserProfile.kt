@@ -47,8 +47,8 @@ fun UserProfile(
    }
 }
 
-@Preview(showBackground = true, backgroundColor = 0x000000)
-@Composable
-fun UserPreview() {
-   UserProfile(Dummy(), Modifier.size(200.dp))
-}
+//@Preview(showBackground = true, backgroundColor = 0x000000)
+//@Composable
+//fun UserPreview() {
+//   UserProfile(Dummy(), Modifier.size(200.dp))
+//}

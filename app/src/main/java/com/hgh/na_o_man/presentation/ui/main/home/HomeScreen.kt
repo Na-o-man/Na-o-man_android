@@ -24,7 +24,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.GroupDummy
-import com.hgh.na_o_man.presentation.Utill.composableActivityViewModel
+//import com.hgh.na_o_man.presentation.Utill.composableActivityViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndAppBar
 import com.hgh.na_o_man.presentation.component.EndTopCloud
@@ -34,6 +34,7 @@ import com.hgh.na_o_man.presentation.component.homeIcon.EventCard
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
 import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 import com.hgh.na_o_man.presentation.ui.main.MainViewModel
+import com.hgh.na_o_man.presentation.util.composableActivityViewModel
 
 @Composable
 fun HomeScreen(
