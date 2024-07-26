@@ -66,7 +66,7 @@ fun TopCloud() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 33.dp)
-            .offset(y = (-40).dp)
+            .offset(y = (-50).dp)
             .blur(10.dp)
     )
     Icon(
@@ -75,7 +75,7 @@ fun TopCloud() {
         tint = LightWhite,
         modifier = Modifier
             .padding(horizontal = 33.dp)
-            .offset(y = (-40).dp)
+            .offset(y = (-50).dp)
             .fillMaxWidth()
     )
 }

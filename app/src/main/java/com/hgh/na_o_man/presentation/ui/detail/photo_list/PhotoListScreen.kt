@@ -1,14 +1,17 @@
 package com.hgh.na_o_man.presentation.ui.detail.photo_list
 
+import CloudWhiteBtn
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,12 +19,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,24 +33,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.BackAndSelectAppBar
 import com.hgh.na_o_man.presentation.component.DecorationCloud
 import com.hgh.na_o_man.presentation.component.ImageCard
 import com.hgh.na_o_man.presentation.component.ImageDialog
-import com.hgh.na_o_man.presentation.component.StartTopCloud
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.TopCloud
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.Typography
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun PhotoListScreen(
@@ -118,20 +124,31 @@ fun PhotoListScreen(
                         .fillMaxSize()
                         .padding(padding)
                 ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "전체", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(2),
                             modifier = Modifier
-                                .padding(start = 40.dp, end = 40.dp, top = 8.dp)
+                                .padding(start = 40.dp, end = 40.dp, top = 24.dp)
                                 .weight(1f),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             itemsIndexed(viewState.photoList, key = { _, it ->
                                 it.id
                             }) { _, photo ->
+
+                                val isLastItem = viewState.photoList.last() == photo
+                                val modifier = if (isLastItem) {
+                                    Modifier.padding(bottom = 70.dp)
+                                } else {
+                                    Modifier.padding(bottom = 8.dp)
+                                }
+
                                 ImageCard(
-                                    modifier = Modifier
-                                        .padding(bottom = 8.dp)
+                                    modifier = modifier
                                         .fillMaxWidth()
                                         .aspectRatio(1.25f),
                                     image = photo,
@@ -154,12 +171,13 @@ fun PhotoListScreen(
 
                             }
                         }
-                        if (viewState.photoList.count { it.is1 } in 1..5) {
-                            ActionButtons(true)
-                        } else if (viewState.photoList.count { it.is1 } > 5) {
-                            ActionButtons(false)
-                        }
-
+                    }
+                    if (viewState.photoList.count { it.is1 } > 0) {
+                        PhotoMenu(
+                            isMine = true,
+                            modifier = Modifier.align(alignment = Alignment.BottomCenter),
+                            onCLickDown = {}
+                        )
                     }
                 }
 
@@ -167,9 +185,67 @@ fun PhotoListScreen(
                     ImageDialog(
                         image = viewState.dialogPhoto,
                         onCancelButtonClick = { viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDialogClosed) },
+                        { modifier ->
+                            PhotoMenu(
+                                isMine = false,
+                                modifier = modifier,
+                                onCLickDown = {})
+                        }
                     )
                 }
 
+            }
+        }
+    }
+}
+
+@Composable
+fun PhotoMenu(
+    isMine: Boolean = false,
+    modifier: Modifier = Modifier,
+    onCLickDown: () -> Unit,
+    onClickDelete: () -> Unit = {},
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding()
+    ) {
+        Surface(
+            color = Color(0x4DFFFFFF),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+                .align(Alignment.BottomEnd)
+                .height(40.dp)
+                .border(
+                    2.dp, Brush.linearGradient(
+                        colors = listOf(
+                            Color(0x00FFFFFF),
+                            Color(0x8CFFFFFF),
+                            Color(0x33FFFFFF),
+                            Color(0xFFFFFFFF),
+                            Color(0x00FFFFFF),
+                        ),
+                        start = Offset.Zero,
+                        end = Offset.Infinite,
+                    ),
+                    RoundedCornerShape(0.dp)
+                )
+        ) { }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            CloudWhiteBtn(title = "다운 받기") {
+                onCLickDown()
+            }
+            if (isMine) {
+                Spacer(modifier = Modifier.width(20.dp))
+                CloudWhiteBtn(title = "삭제하기") {
+                    onClickDelete()
+                }
             }
         }
     }
@@ -211,5 +287,47 @@ fun ActionButton(
             style = Typography.bodyMedium,
             textAlign = TextAlign.Center,
         )
+    }
+}
+
+@Preview
+@Composable
+fun photoList() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding()
+    ) {
+        Surface(
+            color = Color(0x4DFFFFFF),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+                .align(Alignment.BottomEnd)
+                .height(40.dp)
+                .border(
+                    2.dp, Brush.linearGradient(
+                        colors = listOf(
+                            Color(0x00FFFFFF),
+                            Color(0x8CFFFFFF),
+                            Color(0x33FFFFFF),
+                            Color(0xFFFFFFFF),
+                            Color(0x00FFFFFF),
+                        ),
+                        start = Offset.Zero,
+                        end = Offset.Infinite,
+                    ),
+                    RoundedCornerShape(0.dp)
+                )
+        ) { }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            CloudWhiteBtn(title = "다운 받기", modifier = Modifier)
+            Spacer(modifier = Modifier.width(20.dp))
+            CloudWhiteBtn(title = "삭제하기")
+        }
     }
 }
