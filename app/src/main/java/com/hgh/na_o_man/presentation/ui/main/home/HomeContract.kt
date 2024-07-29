@@ -26,7 +26,6 @@ class HomeContract {
 
     sealed class HomeEvent : ViewEvent {
         object InitHomeScreen : HomeEvent()
-        object OnBottomAddClicked : HomeEvent()
         object OnAddGroupInBoxClicked : HomeEvent()
         object OnAddGroupClicked : HomeEvent()
         object onEnterGroupClicked : HomeEvent()

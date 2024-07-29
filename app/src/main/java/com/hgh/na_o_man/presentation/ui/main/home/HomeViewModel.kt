@@ -70,9 +70,6 @@ class HomeViewModel @Inject constructor(
             is HomeContract.HomeEvent.InitHomeScreen -> {
                 getGroupList()
             }
-            is HomeContract.HomeEvent.OnBottomAddClicked -> {
-
-            }
             is HomeContract.HomeEvent.OnAddGroupInBoxClicked -> {
 
             }

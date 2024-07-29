@@ -97,7 +97,7 @@ fun MainScreen(
                 }
 
                 composable(route = MainScreenRoute.ADD.route) {
-                    HomeScreenWithButton(navigationMyPage = {})
+                    HomeScreenWithButton(navigationMyPage = { /*TODO*/ })
                 }
 
                 composable(route = MainScreenRoute.ALARM.route) {

@@ -48,10 +48,6 @@ fun HomeScreenWithButton(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블", "HomeScreen")
-//    LaunchedEffect(key1 = true) {
-//        Log.d("리컴포저블","InitHomeScreen")
-//        viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
-//    }
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
@@ -79,30 +75,49 @@ fun HomeScreenWithButton(
                     DecorationCloud(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(end = 4.dp, bottom = 190.dp)
+                            .padding(end = 4.dp, bottom = 120.dp)
                             .zIndex(1f))
                 }
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    NoGroupBox(message = "아직 공유그룹이 없어요.\n\n그룹을 추가해 주세요.","공유 그룹 추가하기")
-
-                    Row(
+                if(viewState.groupList.isEmpty()) {
+                    Box(
                         modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .offset(y = -100.dp)
+                            .fillMaxSize()
+                            .padding(padding),
+                        contentAlignment = Alignment.Center
                     ) {
-                        ShareGroupButton(title = "공유 그룹 입장")
-                        ShareGroupButton(title = "공유 그룹 추가")
+                        NoGroupBox(message = "아직 공유그룹이 없어요.\n\n그룹을 추가해 주세요.","공유 그룹 추가하기")
+
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .offset(y = -50.dp)
+                        ) {
+                            ShareGroupButton(title = "공유 그룹 입장")
+                            ShareGroupButton(title = "공유 그룹 추가")
+                        }
+                    }
+                } else{
+                    Box(modifier = Modifier){
+                    GroupListScreen(
+                        groupList = viewState.groupList,
+                        modifier = Modifier.padding(padding)
+                    )
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .offset(y = -50.dp)
+                        ) {
+                            ShareGroupButton(title = "공유 그룹 입장")
+                            ShareGroupButton(title = "공유 그룹 추가")
+                        }
                     }
                 }
+
             }
         }
     }
 }
+
 
 @Preview
 @Composable
