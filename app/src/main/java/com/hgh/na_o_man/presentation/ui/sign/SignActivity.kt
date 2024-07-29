@@ -8,28 +8,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.hgh.na_o_man.di.util.DataStoreUtil
 import com.hgh.na_o_man.presentation.util.SocialLoginUtil
 import com.hgh.na_o_man.presentation.theme.NaOManTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignActivity : ComponentActivity() {
-
-    private var googleLoginLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                socialLoginUtil.handleGoogleSignInResult(task)
-            }
-        }
-
-    private lateinit var socialLoginUtil: SocialLoginUtil
+    @Inject
+    lateinit var dataStoreUtil: DataStoreUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             NaOManTheme {
-                SignHostScreen()
+                SignHostScreen(dataStoreUtil = dataStoreUtil)
             }
         }
     }

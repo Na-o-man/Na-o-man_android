@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.hgh.na_o_man.di.util.DataStoreUtil
 import com.hgh.na_o_man.presentation.ui.sign.signin.ArgeeScreen
 import com.hgh.na_o_man.presentation.ui.sign.signin.SignScreen
 import com.hgh.na_o_man.presentation.ui.sign.signin.SignViewModel
@@ -22,7 +23,8 @@ import com.hgh.na_o_man.presentation.ui.sign.signin.UserScreen
 @Composable
 fun SignHostScreen(
     navController: NavHostController = rememberNavController(),
-    viewModel: SignViewModel = hiltViewModel()
+    viewModel: SignViewModel = hiltViewModel(),
+    dataStoreUtil: DataStoreUtil,
 ) {
 
     Log.d("리컴포저블", "GroupDetailScreen")
@@ -36,8 +38,14 @@ fun SignHostScreen(
             NavHost(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,
-                startDestination = SignScreenRoute.LOGIN.route
+                startDestination = SignScreenRoute.SPLASH.route
             ) {
+
+                composable(route = SignScreenRoute.SPLASH.route) {
+                    SplashScreen(naviSignScreen = {
+                        navController.navigate(SignScreenRoute.LOGIN.route)
+                    }, dateStoreUtil = dataStoreUtil)
+                }
 
                 composable(route = SignScreenRoute.LOGIN.route) {
                     SignScreen(naviAgreeScreen = {
@@ -71,6 +79,7 @@ fun SignHostScreen(
 }
 
 enum class SignScreenRoute(val route: String) {
+    SPLASH("splash"),
     LOGIN("login"),
     AGREE("argee"),
     USER("user_info"),
