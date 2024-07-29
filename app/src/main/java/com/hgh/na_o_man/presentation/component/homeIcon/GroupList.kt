@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,12 +49,19 @@ fun EventCard(
             tint = Color.Unspecified,
         )
 
-        Column (
+        Column(
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(start = 70.dp)
+                .padding(start = 80.dp, end = 16.dp) // 끝쪽 패딩 추가
         ) {
-            Text(text = title, fontSize = 20.sp, color = Color.Black)
+            Text(
+                text = title,
+                fontSize = 20.sp,
+                color = Color.Black,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                modifier = Modifier.widthIn(min = 0.dp, max = 160.dp) // 텍스트의 최대 너비 설정
+            )
             Spacer(modifier = Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(

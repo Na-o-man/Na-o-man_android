@@ -3,9 +3,11 @@ package com.hgh.na_o_man.presentation.ui.main.home
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,12 +36,13 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.EventCard
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
+import com.hgh.na_o_man.presentation.component.homeIcon.ShareGroupButton
 import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 import com.hgh.na_o_man.presentation.ui.main.MainViewModel
 import com.hgh.na_o_man.presentation.util.composableActivityViewModel
 
 @Composable
-fun HomeScreen(
+fun HomeScreenWithButton(
     navigationMyPage: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -76,97 +79,34 @@ fun HomeScreen(
                     DecorationCloud(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(end = 4.dp, bottom = 120.dp)
+                            .padding(end = 4.dp, bottom = 190.dp)
                             .zIndex(1f))
                 }
-                if(viewState.groupList.isEmpty()) {
-                    Box(
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    NoGroupBox(message = "아직 공유그룹이 없어요.\n\n그룹을 추가해 주세요.","공유 그룹 추가하기")
+
+                    Row(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding),
-                        contentAlignment = Alignment.Center
+                            .align(Alignment.BottomCenter)
+                            .offset(y = -100.dp)
                     ) {
-                        NoGroupBox(message = "아직 공유그룹이 없어요.\n\n그룹을 추가해 주세요.","공유 그룹 추가하기")
+                        ShareGroupButton(title = "공유 그룹 입장")
+                        ShareGroupButton(title = "공유 그룹 추가")
                     }
-                } else{
-                    GroupListScreen(
-                        groupList = viewState.groupList,
-                        modifier = Modifier.padding(padding)
-                    )
                 }
-
             }
         }
     }
 }
 
+@Preview
 @Composable
-fun HomeSuccessScreen(
-    navigationMyPage: () -> Unit,
+fun HomeScreenWithButtonPreView(
 ) {
-    Scaffold(
-        topBar = {
-            EndAppBar(
-                onEndClick = {
-                    navigationMyPage()
-                }
-            )
-        },
-        containerColor = Color.Transparent
-    ) { padding ->
-        //구름 배경 Box
-        Box(modifier = Modifier.fillMaxSize()) {
-            EndTopCloud()
-            DecorationCloud(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 4.dp, bottom = 190.dp)
-                    .zIndex(1f))
-        }
-
-        Box(
-            modifier = Modifier
-                .padding(padding)
-        ) {
-            Text(
-                "HOME",
-                modifier = Modifier.align(Alignment.TopCenter),
-                color = Color.White
-            )
-        }
-
-    }
+    HomeScreenWithButton(navigationMyPage = {})
 }
-
-@Composable
-fun GroupListScreen(
-    groupList : List<GroupDummy>,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        LazyColumn (
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            items(groupList) { group ->
-                EventCard(
-                    imageRes = group.imageRes,
-                    title = group.name,
-                    participantCount = group.participantCount,
-                    date = group.date
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-        }
-    }
-}
-
-//@Preview
-//@Composable
-//fun HomeScreenPreView(
-//) {
-//    HomeScreen(navigationMyPage = {}, navController = {})
-//}

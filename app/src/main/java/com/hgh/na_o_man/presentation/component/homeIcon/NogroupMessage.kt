@@ -24,6 +24,7 @@ import com.hgh.na_o_man.R
 @Composable
 fun NoGroupBox(
     message : String,
+    ButtonMessage: String
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -51,7 +52,7 @@ fun NoGroupBox(
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
-                AddGroupButton("공유 그룹 추가하기")
+                AddGroupButton(ButtonMessage)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.main.alarm
 
+import com.hgh.na_o_man.domain.model.AlarmDummy
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
@@ -9,6 +10,7 @@ class AlarmContract {
 
     data class AlarmViewState(
         val loadState: LoadState = LoadState.SUCCESS,
+        val alarmList: List<AlarmDummy> = listOf(),
     ): ViewState
 
     sealed class AlarmSideEffect : ViewSideEffect {
