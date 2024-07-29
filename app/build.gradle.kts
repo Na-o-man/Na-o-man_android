@@ -71,6 +71,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("androidx.navigation:navigation-compose:2.5.3")
 
     //Retrofit + OkHttp + Gson
     implementation("com.google.code.gson:gson:2.10.1")
@@ -85,7 +86,9 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
 
-    implementation("androidx.navigation:navigation-compose:2.5.3")
+    //WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation("androidx.hilt:hilt-work:1.0.0")
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.50")
@@ -94,7 +97,6 @@ dependencies {
 
     //coil
     implementation("io.coil-kt:coil-compose:2.6.0")
-
 
     // KaKao Login
     implementation("com.kakao.sdk:v2-user:2.19.0")
