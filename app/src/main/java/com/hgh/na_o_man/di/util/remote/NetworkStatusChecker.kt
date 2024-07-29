@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.di.util
+package com.hgh.na_o_man.di.util.remote
 
 import android.content.Context
 import android.net.ConnectivityManager

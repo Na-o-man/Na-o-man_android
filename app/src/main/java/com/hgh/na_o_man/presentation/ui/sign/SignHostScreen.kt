@@ -13,7 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.hgh.na_o_man.di.util.DataStoreUtil
+import com.hgh.na_o_man.di.util.data_store.DataStoreUtil
 import com.hgh.na_o_man.presentation.ui.sign.signin.ArgeeScreen
 import com.hgh.na_o_man.presentation.ui.sign.signin.SignScreen
 import com.hgh.na_o_man.presentation.ui.sign.signin.SignViewModel

@@ -1,7 +1,7 @@
 package com.hgh.na_o_man.di.util.auth
 
 import android.content.Context
-import com.hgh.na_o_man.di.util.DataStoreUtil
+import com.hgh.na_o_man.di.util.data_store.DataStoreUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator

@@ -7,7 +7,7 @@ import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.hgh.na_o_man.di.util.NetworkStatusChecker
+import com.hgh.na_o_man.di.util.remote.NetworkStatusChecker
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 import java.security.MessageDigest

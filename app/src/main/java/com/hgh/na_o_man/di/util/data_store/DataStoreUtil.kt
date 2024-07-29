@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.di.util
+package com.hgh.na_o_man.di.util.data_store
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey

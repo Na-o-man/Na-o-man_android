@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.di.util
+package com.hgh.na_o_man.di.util.remote
 
 import com.hgh.na_o_man.MainApplication
 import com.hgh.na_o_man.di.RemoteModule

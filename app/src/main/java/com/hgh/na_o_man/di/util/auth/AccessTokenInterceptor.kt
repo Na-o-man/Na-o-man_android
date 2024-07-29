@@ -1,7 +1,7 @@
 package com.hgh.na_o_man.di.util.auth
 
 import android.util.Log
-import com.hgh.na_o_man.di.util.DataStoreUtil
+import com.hgh.na_o_man.di.util.data_store.DataStoreUtil
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response

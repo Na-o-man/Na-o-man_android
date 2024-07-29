@@ -2,7 +2,7 @@ package com.hgh.na_o_man.di
 
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.di.util.auth.AccessTokenInterceptor
-import com.hgh.na_o_man.di.util.DataStoreUtil
+import com.hgh.na_o_man.di.util.data_store.DataStoreUtil
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

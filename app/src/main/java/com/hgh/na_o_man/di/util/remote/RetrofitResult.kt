@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.di.util
+package com.hgh.na_o_man.di.util.remote
 
 sealed class RetrofitResult<out T> {
     data class Success<T>(val data: T) : RetrofitResult<T>()

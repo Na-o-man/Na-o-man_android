@@ -15,7 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.di.util.DataStoreUtil
+import com.hgh.na_o_man.di.util.data_store.DataStoreUtil
 import com.hgh.na_o_man.presentation.ui.main.MainActivity
 import kotlinx.coroutines.delay
 
