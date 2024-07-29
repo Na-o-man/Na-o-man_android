@@ -12,13 +12,23 @@ class HomeContract {
     data class HomeViewState(
         val loadState: LoadState = LoadState.SUCCESS,
         val groupList: List<GroupDummy> = listOf(),
+        val BottomAddSelected: Boolean = false,
+        val AddGroupInBoxSelected: Boolean = false,
+        val AddGroupSelected: Boolean = false,
+        val EnterGroupSelected: Boolean = false,
+
     ): ViewState
 
     sealed class HomeSideEffect : ViewSideEffect {
-
+        object NaviHomeScreenWithButton : HomeSideEffect()
+        object NaviAddSharedGroup : HomeSideEffect()
     }
 
     sealed class HomeEvent : ViewEvent {
         object InitHomeScreen : HomeEvent()
+        object OnBottomAddClicked : HomeEvent()
+        object OnAddGroupInBoxClicked : HomeEvent()
+        object OnAddGroupClicked : HomeEvent()
+        object onEnterGroupClicked : HomeEvent()
     }
 }

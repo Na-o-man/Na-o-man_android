@@ -164,9 +164,9 @@ fun GroupListScreen(
     }
 }
 
-//@Preview
-//@Composable
-//fun HomeScreenPreView(
-//) {
-//    HomeScreen(navigationMyPage = {}, navController = {})
-//}
+@Preview
+@Composable
+fun HomeScreenPreView(
+) {
+    HomeScreen(navigationMyPage = {})
+}

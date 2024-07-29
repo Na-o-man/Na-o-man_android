@@ -56,7 +56,9 @@ fun AlarmScreen(
             Scaffold(
                 topBar = {
                     StartAppBar(
-                        onStartClick = {}
+                        onStartClick = {
+                            // 홈으로 가는 코드 작성
+                        }
                     )
                 },
                 containerColor = Color.Transparent

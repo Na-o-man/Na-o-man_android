@@ -43,6 +43,7 @@ import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
+import com.hgh.na_o_man.presentation.ui.main.home.HomeScreenWithButton
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
 
 @Composable
@@ -96,6 +97,7 @@ fun MainScreen(
                 }
 
                 composable(route = MainScreenRoute.ADD.route) {
+                    HomeScreenWithButton(navigationMyPage = {})
                 }
 
                 composable(route = MainScreenRoute.ALARM.route) {
