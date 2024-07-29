@@ -12,16 +12,14 @@ class HomeContract {
     data class HomeViewState(
         val loadState: LoadState = LoadState.SUCCESS,
         val groupList: List<GroupDummy> = listOf(),
-        val BottomAddSelected: Boolean = false,
-        val AddGroupInBoxSelected: Boolean = false,
-        val AddGroupSelected: Boolean = false,
-        val EnterGroupSelected: Boolean = false,
-
     ): ViewState
 
     sealed class HomeSideEffect : ViewSideEffect {
-        object NaviHomeScreenWithButton : HomeSideEffect()
-        object NaviAddSharedGroup : HomeSideEffect()
+        // "공유그룹 추가하기" 버튼 눌렀을 때 이벤트
+        object NaviMembersInviteScreen : HomeSideEffect()
+
+        // "공유그룹 입장" 버튼 눌렀을 때 이벤트
+        object NaviAcceptInviteScreen : HomeSideEffect()
     }
 
     sealed class HomeEvent : ViewEvent {
@@ -29,5 +27,6 @@ class HomeContract {
         object OnAddGroupInBoxClicked : HomeEvent()
         object OnAddGroupClicked : HomeEvent()
         object onEnterGroupClicked : HomeEvent()
+        object onGroupListClicked : HomeEvent()
     }
 }

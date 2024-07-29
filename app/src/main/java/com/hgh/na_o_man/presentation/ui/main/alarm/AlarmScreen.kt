@@ -30,11 +30,13 @@ import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.AlarmRead
+import com.hgh.na_o_man.presentation.component.homeIcon.NoAlarmBox
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
 
 @Composable
 fun AlarmScreen(
     viewModel: AlarmViewModel = hiltViewModel(),
+    navigationHome: () -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블","AlarmScreen")
@@ -57,7 +59,7 @@ fun AlarmScreen(
                 topBar = {
                     StartAppBar(
                         onStartClick = {
-                            // 홈으로 가는 코드 작성
+                            navigationHome()
                         }
                     )
                 },
@@ -94,7 +96,7 @@ fun AlarmScreen(
                                 .padding(padding),
                             contentAlignment = Alignment.Center
                         ) {
-                            NoGroupBox(message = "알림이 없습니다.", null.toString())
+                            NoAlarmBox(message = "알림이 없습니다.","하이루")
                         }
                     } else{
                         AlarmListScreen(
@@ -169,5 +171,5 @@ fun AlarmListScreen(
 @Composable
 fun AlarmPreView(
 ) {
-    AlarmScreen()
+    AlarmScreen(navigationHome = {})
 }

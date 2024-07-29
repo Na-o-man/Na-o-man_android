@@ -68,15 +68,22 @@ class HomeViewModel @Inject constructor(
     override fun handleEvents(event: HomeContract.HomeEvent) {
         when (event) {
             is HomeContract.HomeEvent.InitHomeScreen -> {
+                Log.d("HomeViewModel", "InitHomeScreen event")
                 getGroupList()
             }
             is HomeContract.HomeEvent.OnAddGroupInBoxClicked -> {
-
+                Log.d("HomeViewModel", "OnAddGroupInBoxClicked event")
+                sendEffect(
+                    { HomeContract.HomeSideEffect.NaviMembersInviteScreen }
+                )
             }
             is HomeContract.HomeEvent.OnAddGroupClicked -> {
 
             }
             is HomeContract.HomeEvent.onEnterGroupClicked -> {
+
+            }
+            is HomeContract.HomeEvent.onGroupListClicked -> {
 
             }
         }

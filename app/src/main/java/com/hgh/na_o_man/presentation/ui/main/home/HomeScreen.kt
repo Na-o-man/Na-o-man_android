@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -41,14 +42,30 @@ import com.hgh.na_o_man.presentation.util.composableActivityViewModel
 @Composable
 fun HomeScreen(
     navigationMyPage: () -> Unit,
+    navigationToMembersInvite: () -> Unit,  // 네비게이션 함수 추가
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
+    val sideEffect by viewModel.effect.collectAsState(initial = null)
+
     Log.d("리컴포저블", "HomeScreen")
 //    LaunchedEffect(key1 = true) {
 //        Log.d("리컴포저블","InitHomeScreen")
 //        viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
 //    }
+
+    LaunchedEffect(sideEffect) {
+        when (sideEffect) {
+            is HomeContract.HomeSideEffect.NaviMembersInviteScreen -> {
+//                Log.d("HomeScreen", "Navigating to MembersInviteScreen")
+                navigationToMembersInvite()
+            }
+            is HomeContract.HomeSideEffect.NaviAcceptInviteScreen -> {
+
+            }
+            else -> Unit
+        }
+    }
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
@@ -86,7 +103,9 @@ fun HomeScreen(
                             .padding(padding),
                         contentAlignment = Alignment.Center
                     ) {
-                        NoGroupBox(message = "아직 공유그룹이 없어요.\n\n그룹을 추가해 주세요.","공유 그룹 추가하기")
+                        NoGroupBox(message = "아직 공유그룹이 없어요.\n\n그룹을 추가해 주세요.",
+                            "공유 그룹 추가하기",
+                            onAddGroupInBoxClicked = {viewModel.setEvent(HomeContract.HomeEvent.OnAddGroupInBoxClicked)})
                     }
                 } else{
                     GroupListScreen(
@@ -164,9 +183,13 @@ fun GroupListScreen(
     }
 }
 
-@Preview
-@Composable
-fun HomeScreenPreView(
-) {
-    HomeScreen(navigationMyPage = {})
-}
+//@Preview
+//@Composable
+//fun HomeScreenPreView() {
+//    val navController = rememberNavController()
+//
+//    HomeScreen(
+//        navigationMyPage = { /* 네비게이션 로직 추가 */ },
+//        navigationToMembersInvite = { navController.navigate("members_invite_route") }
+//    )
+//}

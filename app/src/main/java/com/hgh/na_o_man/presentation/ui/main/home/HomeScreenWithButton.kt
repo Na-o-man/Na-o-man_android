@@ -35,6 +35,7 @@ import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.EventCard
+import com.hgh.na_o_man.presentation.component.homeIcon.NoAlarmBox
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
 import com.hgh.na_o_man.presentation.component.homeIcon.ShareGroupButton
 import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
@@ -85,7 +86,7 @@ fun HomeScreenWithButton(
                             .padding(padding),
                         contentAlignment = Alignment.Center
                     ) {
-                        NoGroupBox(message = "아직 공유그룹이 없어요.\n\n그룹을 추가해 주세요.","공유 그룹 추가하기")
+                        NoAlarmBox(message = "아직 공유그룹이 없어요.\n\n그룹을 추가해 주세요.","공유 그룹 추가하기")
 
                         Row(
                             modifier = Modifier
