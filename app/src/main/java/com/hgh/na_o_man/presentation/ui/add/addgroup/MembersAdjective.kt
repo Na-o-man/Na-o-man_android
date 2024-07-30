@@ -67,7 +67,7 @@ fun MembersAdjective(
         LoadState.LOADING -> {
             StateLoadingScreen()
         }
-
+ 
         LoadState.ERROR -> {
             StateErrorScreen()
         }

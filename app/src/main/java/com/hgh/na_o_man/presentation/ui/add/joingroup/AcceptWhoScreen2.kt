@@ -59,6 +59,7 @@ fun AcceptWhoScreen2(
             StateLoadingScreen()
         }
 
+        
         LoadState.ERROR -> {
             StateErrorScreen()
         }

@@ -19,4 +19,5 @@ class AddContract {
         object InitMembersInviteScreen : AddEvent()
         object OnBackButtonClicked : AddEvent() // 뒤로가기 이벤트 추가
     }
+
 }

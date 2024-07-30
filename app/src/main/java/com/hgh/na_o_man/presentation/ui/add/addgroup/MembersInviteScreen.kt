@@ -95,6 +95,7 @@ fun MembersInviteScreen(
 //                    )
 
                     // 화면 중앙 이미지
+
                     Box(
                         modifier = Modifier
                             .align(Alignment.Center)

@@ -160,6 +160,7 @@ fun AcceptCheckScreen(
                             )
                         }
 
+
                         // 원 2
                         Box(
                             modifier = Modifier

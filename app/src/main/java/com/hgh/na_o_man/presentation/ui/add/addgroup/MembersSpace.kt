@@ -69,6 +69,7 @@ fun MembersSpace(
                     StartAppBar(
                         onStartClick = { }
                     )
+                    
                 },
                 containerColor = Color.Black // 여기를 수정
             ) { padding ->

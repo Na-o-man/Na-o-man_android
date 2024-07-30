@@ -44,7 +44,6 @@ import com.hgh.na_o_man.presentation.theme.Mustard
 import com.hgh.na_o_man.presentation.theme.SlateGray
 import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
-
 @Composable
 fun AcceptWhoScreen3(
     viewModel: AddViewModel = hiltViewModel(),

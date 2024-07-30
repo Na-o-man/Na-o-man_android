@@ -63,6 +63,7 @@ fun AcceptWhoScreen1(
     Log.d("리컴포저블","AcceptWhoScreen1")
     var textValue by remember { mutableStateOf("제주도 2024") }
 
+    
     when (viewState.loadState) {
         LoadState.LOADING -> {
             StateLoadingScreen()

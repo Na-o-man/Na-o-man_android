@@ -33,6 +33,7 @@ import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptWhoScreen3
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.reflect.Modifier
 
+
 @AndroidEntryPoint
 class AddGroupActivity : ComponentActivity() {
 

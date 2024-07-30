@@ -60,6 +60,7 @@ fun AcceptInviteScreen(
     Log.d("리컴포저블","MembersSpace")
     var textValue by remember { mutableStateOf("URL을 입력해 주세요.") }
 
+    
     when (viewState.loadState) {
         LoadState.LOADING -> {
             StateLoadingScreen()
