@@ -12,7 +12,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface AuthService {
-    @POST("auth/login/android")
+    @POST("auth/signup/android")
     suspend fun postSignUpAPI(
         @Body signupRequest: SignUpRequestDto
     ): Response<ApiResult<UserTokenDto>>

@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Base64
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.hgh.na_o_man.di.util.remote.NetworkStatusChecker
@@ -18,7 +19,7 @@ class MainApplication : Application(), DefaultLifecycleObserver {
     override fun onCreate() {
         super<Application>.onCreate()
         KakaoSdk.init(this, getString(R.string.kakao_key))
-        getKeyHash()
+        networkConnectionChecker = NetworkStatusChecker(applicationContext)
     }
 
     override fun onStop(owner: LifecycleOwner) {
@@ -33,12 +34,16 @@ class MainApplication : Application(), DefaultLifecycleObserver {
 
     fun getKeyHash() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+            val packageInfo =
+                packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
             for (signature in packageInfo.signingInfo.apkContentsSigners) {
                 try {
                     val md = MessageDigest.getInstance("SHA")
                     md.update(signature.toByteArray())
-                    Log.d("getKeyHash", "key hash: ${Base64.encodeToString(md.digest(), Base64.NO_WRAP)}")
+                    Log.d(
+                        "getKeyHash",
+                        "key hash: ${Base64.encodeToString(md.digest(), Base64.NO_WRAP)}"
+                    )
                 } catch (e: NoSuchAlgorithmException) {
                     Log.w("getKeyHash", "Unable to get MessageDigest. signature=$signature", e)
                 }
@@ -47,10 +52,7 @@ class MainApplication : Application(), DefaultLifecycleObserver {
     }
 
     companion object {
-
-
         private lateinit var networkConnectionChecker: NetworkStatusChecker
         fun isOnline() = networkConnectionChecker.isOnline()
     }
-
 }

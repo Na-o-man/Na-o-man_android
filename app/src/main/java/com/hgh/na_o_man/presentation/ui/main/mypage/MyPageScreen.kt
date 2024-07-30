@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.R
+import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.CommonDialog
 import com.hgh.na_o_man.presentation.component.DecorationCloud
@@ -112,7 +113,7 @@ fun MyPageScreen(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    UserProfile(userInfo = viewState.userInfo, modifier = Modifier.size(160.dp))
+                    UserProfile(userInfo = AuthInfoModel(), modifier = Modifier.size(160.dp))
                     Spacer(modifier = Modifier.height(10.dp))
                     Image(
                         painter = painterResource(id = R.drawable.logo),
