@@ -15,10 +15,18 @@ class HomeContract {
     ): ViewState
 
     sealed class HomeSideEffect : ViewSideEffect {
+        // "공유그룹 추가하기" 버튼 눌렀을 때 이벤트
+        object NaviMembersInviteScreen : HomeSideEffect()
 
+        // "공유그룹 입장" 버튼 눌렀을 때 이벤트
+        object NaviAcceptInviteScreen : HomeSideEffect()
     }
 
     sealed class HomeEvent : ViewEvent {
         object InitHomeScreen : HomeEvent()
+        object OnAddGroupInBoxClicked : HomeEvent()
+        object OnAddGroupClicked : HomeEvent()
+        object onEnterGroupClicked : HomeEvent()
+        object onGroupListClicked : HomeEvent()
     }
 }

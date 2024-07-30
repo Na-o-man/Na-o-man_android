@@ -1,22 +1,18 @@
-package com.hgh.na_o_man.presentation.ui.main.home
+package com.hgh.na_o_man.domain.repository
 
-import android.util.Log
-import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.GroupDummy
-import com.hgh.na_o_man.presentation.base.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
-) : BaseViewModel<HomeContract.HomeViewState, HomeContract.HomeSideEffect, HomeContract.HomeEvent>(
-    HomeContract.HomeViewState(
-        groupList = listOf(
+interface GroupRepository {
+    suspend fun getGroups(): List<GroupDummy>
+}
+
+class GroupRepositoryImpl : GroupRepository {
+    override suspend fun getGroups(): List<GroupDummy> {
+        return listOf(
             GroupDummy(
                 imageRes = R.drawable.ic_example,
-                name = "예제",
+                name = "예제 제목이 너무 길어서 화면 밖으로 튀어나갈 것만 같아",
                 participantCount = 5,
                 date = "2024-07-20"
             ),
@@ -63,37 +59,5 @@ class HomeViewModel @Inject constructor(
                 date = "2024-07-21"
             )
         )
-    )
-) {
-    override fun handleEvents(event: HomeContract.HomeEvent) {
-        when (event) {
-            is HomeContract.HomeEvent.InitHomeScreen -> {
-                Log.d("HomeViewModel", "InitHomeScreen event")
-                getGroupList()
-            }
-            is HomeContract.HomeEvent.OnAddGroupInBoxClicked -> {
-                Log.d("HomeViewModel", "OnAddGroupInBoxClicked event")
-                sendEffect(
-                    { HomeContract.HomeSideEffect.NaviMembersInviteScreen }
-                )
-            }
-            is HomeContract.HomeEvent.OnAddGroupClicked -> {
-
-            }
-            is HomeContract.HomeEvent.onEnterGroupClicked -> {
-
-            }
-            is HomeContract.HomeEvent.onGroupListClicked -> {
-
-            }
-        }
-    }
-
-    init {
-        Log.d("리컴포저블","HomeViewModelInit")
-    }
-
-    private fun getGroupList() = viewModelScope.launch {
-
     }
 }

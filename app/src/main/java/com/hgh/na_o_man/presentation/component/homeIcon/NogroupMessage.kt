@@ -24,6 +24,8 @@ import com.hgh.na_o_man.R
 @Composable
 fun NoGroupBox(
     message : String,
+    buttonMessage: String,
+    onAddGroupInBoxClicked: () -> Unit
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -51,7 +53,44 @@ fun NoGroupBox(
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
-                AddGroupButton("공유 그룹 추가하기")
+                AddGroupButton(buttonMessage, onClick = onAddGroupInBoxClicked)
+            }
+        }
+    }
+}
+
+@Composable
+fun NoAlarmBox(
+    message : String,
+    buttonMessage: String,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_no_group_message_299), // 아이콘 리소스 ID를 사용
+            contentDescription = "Box",
+            tint = Color(0xAA8D8D8D),
+        )
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_no_group_message_299), // 아이콘 리소스 ID를 사용
+            contentDescription = "Box",
+            tint = Color.Unspecified // 아이콘 색상 설정
+        )
+
+        Box(
+            modifier = Modifier
+        ) {
+            Column {
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = message,
+                    color = Color.White,
+                    style = com.hgh.na_o_man.presentation.theme.Typography.bodyLarge
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+                AddGroupButton(buttonMessage)
             }
         }
     }
