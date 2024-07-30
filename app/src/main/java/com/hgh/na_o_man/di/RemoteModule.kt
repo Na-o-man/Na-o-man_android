@@ -3,6 +3,7 @@ package com.hgh.na_o_man.di
 import android.content.Context
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.di.util.auth.AccessTokenInterceptor
+import com.hgh.na_o_man.di.util.auth.Authenticator
 import com.hgh.na_o_man.di.util.data_store.DataStoreUtil
 import dagger.Module
 import dagger.Provides
@@ -49,13 +50,14 @@ object RemoteModule {
     fun provideAuthOKHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         dataStoreUtil: DataStoreUtil,
+        authenticator: Authenticator
     ): OkHttpClient =
         OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
-            //.authenticator()
+            .authenticator(authenticator)
             .addNetworkInterceptor(AccessTokenInterceptor(dataStoreUtil))
             .retryOnConnectionFailure(false)
             .build()
