@@ -302,9 +302,9 @@ fun AcceptWhoScreen3(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun Preview11() {
-    AcceptWhoScreen3()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun Preview11() {
+//    AcceptWhoScreen3()
+//}
 

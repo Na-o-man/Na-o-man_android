@@ -198,7 +198,7 @@ fun MembersInviteScreen(
                             .padding(top = 220.dp, end = 50.dp)
                             .clickable {
                                 // MembersSpace로 이동
-                                viewModel.navigate("membersNameScreen")
+//                                viewModel.navigate("membersNameScreen")
                             }
                     )
                 }
@@ -206,18 +206,18 @@ fun MembersInviteScreen(
         }
 
 
-@Preview(showBackground = true)
-@Composable
-fun Preview1() {
-    // NavController 생성
-    val navController = rememberNavController()
-
-    // AddViewModel의 더미 인스턴스 생성
-    val dummyViewModel = object : AddViewModel(navController) {
-        // 필요한 프로퍼티나 메소드 오버라이드
-    }
-
-    // MembersInviteScreen에 navController와 dummyViewModel 전달
-    MembersInviteScreen(viewModel = dummyViewModel)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun Preview1() {
+//    // NavController 생성
+//    val navController = rememberNavController()
+//
+//    // AddViewModel의 더미 인스턴스 생성
+//    val dummyViewModel = object : AddViewModel(navController) {
+//        // 필요한 프로퍼티나 메소드 오버라이드
+//    }
+//
+//    // MembersInviteScreen에 navController와 dummyViewModel 전달
+//    MembersInviteScreen(viewModel = dummyViewModel)
+//}
 
