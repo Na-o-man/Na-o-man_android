@@ -94,7 +94,4 @@ object RemoteModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-    private inline fun <reified T> Retrofit.buildService(): T {
-        return this.create(T::class.java)
-    }
 }
