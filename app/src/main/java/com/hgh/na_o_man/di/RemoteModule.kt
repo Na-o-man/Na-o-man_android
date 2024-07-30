@@ -11,7 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
+//import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -65,7 +65,7 @@ object RemoteModule {
         Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(R.string.base_url.toString())
-            .addConverterFactory(ScalarsConverterFactory.create())
+//            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -90,7 +90,7 @@ object RemoteModule {
         Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(R.string.base_url.toString())
-            .addConverterFactory(ScalarsConverterFactory.create())
+//            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

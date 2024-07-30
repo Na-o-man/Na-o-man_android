@@ -51,10 +51,10 @@ class AddGroupActivity : ComponentActivity() {
     fun MyAppNavHost(navController: NavController) {
         NavHost(navController as NavHostController, startDestination = if (intent.getBooleanExtra(ADD_GROUP, true)) "acceptInvite" else "membersInvite") {
 
-            composable("membersInvite") {
-                val viewModel: AddViewModel = viewModel()
-                MembersInviteScreen(viewModel)
-            }
+//            composable("membersInvite") {
+//                val viewModel: AddViewModel = viewModel()
+//                MembersInviteScreen(viewModel)
+//            }
             composable("acceptInvite") { // "acceptWho"에서 "acceptInvite"로 변경
                 AcceptScreen() // AcceptScreen 호출
             }

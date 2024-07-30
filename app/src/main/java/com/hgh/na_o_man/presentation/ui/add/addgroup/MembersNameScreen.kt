@@ -87,19 +87,19 @@ fun MembersNameScreen(
                     )
                 },
                 bottomBar = {
-                    NextAppBar1(
-                        modifier = Modifier.padding(bottom = 190.dp, end = 82.dp),
-                        onStartClick = { viewModel.navigateUp() },
-                        onEndClick = {
-                            // 자신의 프로필을 추가하는 로직을 여기에 작성합니다.
-                            viewModel.addSelfToGroup2() // 프로필 추가 메서드 호출
-                        },
-                        onNextClick = {
-                            // 해당 그룹에서의 닉네임 변경 후 다음 화면으로 이동 viewModel.updateNickname(nameText)
-                            viewModel.addNicknameToGroup(nameText)
-                            viewModel.navigate("members_adjective")
-                        }
-                    )
+//                    NextAppBar1(
+//                        modifier = Modifier.padding(bottom = 190.dp, end = 82.dp),
+//                        onStartClick = { viewModel.navigateUp() },
+//                        onEndClick = {
+//                            // 자신의 프로필을 추가하는 로직을 여기에 작성합니다.
+//                            viewModel.addSelfToGroup2() // 프로필 추가 메서드 호출
+//                        },
+//                        onNextClick = {
+//                            // 해당 그룹에서의 닉네임 변경 후 다음 화면으로 이동 viewModel.updateNickname(nameText)
+//                            viewModel.addNicknameToGroup(nameText)
+//                            viewModel.navigate("members_adjective")
+//                        }
+//                    )
                 },
                 containerColor = lightSkyBlue // 여기를 수정
             ) { padding ->
@@ -304,7 +304,7 @@ fun MembersNameScreen(
                             .padding(bottom = 130.dp, end = 50.dp)
                             .clickable {
                                 // MembersAdjective로 이동
-                                viewModel.navigate("membersAdjective")
+//                                viewModel.navigate("membersAdjective")
                             }
                     )
                 }
@@ -312,20 +312,20 @@ fun MembersNameScreen(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun Preview2() {
-    // NavController 생성
-    val navController = rememberNavController()
-    // AddViewModel의 더미 인스턴스 생성
-
-    val dummyViewModel = object : AddViewModel(navController) {
-        // 필요한 프로퍼티나 메소드 오버라이드
-        // 예: nickname = "더미닉네임"
-    }
-    // MembersNameScreen에 dummyViewModel 전달
-    MembersNameScreen(viewModel = dummyViewModel)
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun Preview2() {
+//    // NavController 생성
+//    val navController = rememberNavController()
+//    // AddViewModel의 더미 인스턴스 생성
+//
+//    val dummyViewModel = object : AddViewModel(navController) {
+//        // 필요한 프로퍼티나 메소드 오버라이드
+//        // 예: nickname = "더미닉네임"
+//    }
+//    // MembersNameScreen에 dummyViewModel 전달
+//    MembersNameScreen(viewModel = dummyViewModel)
+//}
 
 

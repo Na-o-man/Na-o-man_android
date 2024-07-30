@@ -279,18 +279,18 @@ fun MembersAdjective(
         }
     }
 
-@Preview(showBackground = true)
-@Composable
-fun Preview3() {
-    // NavController 생성
-    val navController = rememberNavController()
-
-    // AddViewModel의 더미 인스턴스 생성
-    val dummyViewModel = object : AddViewModel(navController) {
-        // 필요한 프로퍼티나 메소드 오버라이드
-    }
-
-    // MembersAdjective에 viewModel와 dummyViewModel 전달
-    MembersAdjective(viewModel = dummyViewModel)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun Preview3() {
+//    // NavController 생성
+//    val navController = rememberNavController()
+//
+//    // AddViewModel의 더미 인스턴스 생성
+////    val dummyViewModel = object : AddViewModel(navController) {
+////        // 필요한 프로퍼티나 메소드 오버라이드
+////    }
+//
+//    // MembersAdjective에 viewModel와 dummyViewModel 전달
+////    MembersAdjective(viewModel = dummyViewModel)
+//}
 

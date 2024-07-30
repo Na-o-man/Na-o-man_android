@@ -179,19 +179,19 @@ fun MembersFolder(
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun Preview6() {
-    // NavController 생성
-    val navController = rememberNavController()
-
-    // AddViewModel의 더미 인스턴스 생성
-    val dummyViewModel = object : AddViewModel(navController) {
-        // 필요한 프로퍼티나 메소드 오버라이드
-    }
-
-    // MembersFolder에 navController와 dummyViewModel 전달
-    MembersFolder(viewModel = dummyViewModel)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun Preview6() {
+//    // NavController 생성
+//    val navController = rememberNavController()
+//
+//    // AddViewModel의 더미 인스턴스 생성
+////    val dummyViewModel = object : AddViewModel(navController) {
+//        // 필요한 프로퍼티나 메소드 오버라이드
+////    }
+//
+//    // MembersFolder에 navController와 dummyViewModel 전달
+////    MembersFolder(viewModel = dummyViewModel)
+//}
 
 

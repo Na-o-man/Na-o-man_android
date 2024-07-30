@@ -358,14 +358,14 @@ fun PageIndicator(pagerState: PagerState) {
         }
     }
 }
-
-@Composable
-fun IndicatorDot(index: Int, currentPage: Int) {
-    val color = if (index == currentPage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-    Box(
-        modifier = Modifier
-            .size(10.dp)
-            .padding(4.dp)
-            .background(LightWhite, shape = CircleShape)
-    )
-}
+//
+//@Composable
+//fun IndicatorDot(index: Int, currentPage: Int) {
+//    val color = if (index == currentPage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+//    Box(
+//        modifier = Modifier
+//            .size(10.dp)
+//            .padding(4.dp)
+//            .background(LightWhite, shape = CircleShape)
+//    )
+//}

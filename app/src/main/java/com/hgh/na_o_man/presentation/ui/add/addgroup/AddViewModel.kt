@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 open class AddViewModel @Inject constructor(
-    private val navController: NavController // NavController 주입
+//    private val navController: NavController // NavController 주입
 ) : BaseViewModel<AddViewState, AddSideEffect, AddEvent>(
     AddViewState() // 초기 상태 설정
 ) {
@@ -45,14 +45,14 @@ open class AddViewModel @Inject constructor(
     }
 
     // 뒤로가기 처리 메서드
-    fun navigateUp() {
-        navController.navigateUp() // NavController를 사용하여 뒤로가기
-    }
+//    fun navigateUp() {
+//        navController.navigateUp() // NavController를 사용하여 뒤로가기
+//    }
 
     // 특정 화면으로 이동하는 메서드
-    fun navigate(route: String) {
-        navController.navigate(route) // NavController를 사용하여 특정 route로 이동
-    }
+//    fun navigate(route: String) {
+//        navController.navigate(route) // NavController를 사용하여 특정 route로 이동
+//    }
 
     override fun handleEvents(event: AddEvent) {
         when (event) {
@@ -75,39 +75,39 @@ open class AddViewModel @Inject constructor(
                 handleAddGroup3(event.selectedButtons, event.inputText)
             }
             is AddEvent.AddGroup4 -> {
-                if (event.textValue.isNotBlank()) {
-                    navigate("members_loading") // 다음 화면으로 이동
-                    // 이후 AddGroup5 이벤트를 호출
-                    addGroup5() // AddGroup5 로직 호출
-                } else {
-                    sendEffect ({ ShowErrorMessage("유효한 텍스트를 입력해주세요.") }) // 에러 메시지 전송
-                }
+//                if (event.textValue.isNotBlank()) {
+//                    navigate("members_loading") // 다음 화면으로 이동
+//                    // 이후 AddGroup5 이벤트를 호출
+//                    addGroup5() // AddGroup5 로직 호출
+//                } else {
+//                    sendEffect ({ ShowErrorMessage("유효한 텍스트를 입력해주세요.") }) // 에러 메시지 전송
+//                }
             }
             is AddEvent.AddGroup5 -> {
-                // MembersLoading으로 이동 후 3초 대기 후 MembersFolder로 이동
-                navigate("members_loading") // MembersLoading 화면으로 이동
-                // 5초 후 MembersFolder로 이동
-                viewModelScope.launch {
-                    delay(5000) // 5초 대기
-                    navigate("members_folder") // MembersFolder로 이동
-                }
+//                // MembersLoading으로 이동 후 3초 대기 후 MembersFolder로 이동
+//                navigate("members_loading") // MembersLoading 화면으로 이동
+//                // 5초 후 MembersFolder로 이동
+//                viewModelScope.launch {
+//                    delay(5000) // 5초 대기
+//                    navigate("members_folder") // MembersFolder로 이동
+//                }
             }
             is AddEvent.AddGroup6 -> {
-                // 다음 스크린으로 이동하는 로직
-                navigate("accept_check_screen") // 원하는 경로로 변경
+//                // 다음 스크린으로 이동하는 로직
+//                navigate("accept_check_screen") // 원하는 경로로 변경
             }
             is AddEvent.AddGroup7 -> {
-                // AcceptWhoScreen으로 이동하는 로직
-                navigate("accept_who_screen")
+//                // AcceptWhoScreen으로 이동하는 로직
+//                navigate("accept_who_screen")
             }
             is AddEvent.AddGroup8 -> {
-                // MembersLoading으로 이동
-                navigate("members_loading")
-                // 5초 후에 돌아오기
-                viewModelScope.launch {
-                    delay(3000) // 5초 대기
-                    navController.popBackStack() // 이전 화면으로 돌아가기
-                }
+//                // MembersLoading으로 이동
+//                navigate("members_loading")
+//                // 5초 후에 돌아오기
+//                viewModelScope.launch {
+//                    delay(3000) // 5초 대기
+//                    navController.popBackStack() // 이전 화면으로 돌아가기
+//                }
             }
         }
     }

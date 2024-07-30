@@ -55,6 +55,7 @@ import com.hgh.na_o_man.presentation.theme.SlateGray
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract
+import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
 
 @Composable
@@ -330,16 +331,16 @@ fun AcceptCheckScreen(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun Preview8() {
-    // NavController 생성
-    val navController = rememberNavController()
-    // AddViewModel의 더미 인스턴스 생성
-    val dummyViewModel = object : AddViewModel(navController) {
-    // 필요한 프로퍼티나 메소드 오버라이드
-    }
-    // AcceptCheckScreen에 navController와 dummyViewModel 전달 -> viewModel
-    AcceptCheckScreen(viewModel = dummyViewModel)
-}
-
+//@Preview(showBackground = true)
+//@Composable
+//fun Preview8() {
+//    // NavController 생성
+//    val navController = rememberNavController()
+//    // AddViewModel의 더미 인스턴스 생성
+//    val dummyViewModel = object : AddViewModel(navController) {
+//    // 필요한 프로퍼티나 메소드 오버라이드
+//    }
+//    // AcceptCheckScreen에 navController와 dummyViewModel 전달 -> viewModel
+//    AcceptCheckScreen(viewModel = dummyViewModel)
+//}
+//

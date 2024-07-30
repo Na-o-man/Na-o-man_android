@@ -120,11 +120,11 @@ fun MainScreen(
                         }
                     )
                 }
-                composable(route = MainScreenRoute.MEMBERS_INVITE.route) {  // 이 경로가 추가되었는지 확인
-                    MembersInviteScreen(
-                        navController = navController
-                    )
-                }
+//                composable(route = MainScreenRoute.MEMBERS_INVITE.route) {  // 이 경로가 추가되었는지 확인
+//                    MembersInviteScreen(
+//                        navController = navController
+//                    )
+//                }
             }
         }
 
