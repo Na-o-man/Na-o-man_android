@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name="com.hgh.na_o_man.MainApplication"
@@ -24,17 +25,12 @@
 <!--            android:name="com.google.android.geo.API_KEY"-->
 <!--            android:value="@string/google_key" />-->
 
+
         <activity
             android:name="com.hgh.na_o_man.presentation.ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Na_o_man" >
 
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -52,6 +48,12 @@
             android:name="com.hgh.na_o_man.presentation.ui.sign.SignActivity"
             android:exported="true"
             android:theme="@style/Theme.Na_o_man" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
 

@@ -28,11 +28,15 @@ class MyPageViewModel @Inject constructor(
             }
 
             MyPageContract.MyPageEvent.OnClickLogOut -> {
-
+                updateState { copy(dialogMod = DialogMode.LOGOUT, isDialogVisible = true) }
             }
 
             MyPageContract.MyPageEvent.OnClickSignOut -> {
+                updateState { copy(dialogMod = DialogMode.SING_OUT, isDialogVisible = true) }
+            }
 
+            MyPageContract.MyPageEvent.OnDialogClosed -> {
+                updateState { copy(isDialogVisible = false) }
             }
         }
     }

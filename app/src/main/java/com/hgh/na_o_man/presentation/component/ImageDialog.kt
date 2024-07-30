@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,54 +35,62 @@ import com.hgh.na_o_man.presentation.theme.Typography
 fun ImageDialog(
     image: Dummy,
     onCancelButtonClick: () -> Unit,
+    content: @Composable (Modifier) -> Unit,
 ) {
     Dialog(onDismissRequest = { onCancelButtonClick() }) {
-        Surface(
-            modifier = Modifier
-                .wrapContentHeight()
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 12.dp),
-            shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(2.dp, SteelBlue),
-            color = LightWhite.copy(alpha = 0.8f)
+        Box(
+            Modifier.fillMaxSize()
         ) {
-            Column {
-                Box {
-                    ImageCard(
-                        image = image, isSelectMode = false, modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .shadow(3.dp, RoundedCornerShape(16.dp))
-                    )
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 12.dp),
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(2.dp, SteelBlue),
+                color = LightWhite.copy(alpha = 0.8f)
+            ) {
+                Column {
+                    Box {
+                        ImageCard(
+                            image = image, isSelectMode = false, modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .shadow(3.dp, RoundedCornerShape(16.dp))
+                        )
 
-                    IconButton(
+                        IconButton(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd), onClick = onCancelButtonClick
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
+                                contentDescription = null,
+                                tint = Color.Unspecified
+                            )
+                        }
+                    }
+                    Row(
                         modifier = Modifier
-                            .align(Alignment.TopEnd), onClick = onCancelButtonClick
+                            .height(height = 45.dp)
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
                             contentDescription = null,
-                            tint = Color.Unspecified
+                            tint = Color.Unspecified,
                         )
+
+                        Text(text = image.dummyString2, style = Typography.labelMedium)
                     }
                 }
-                Row(
-                    modifier = Modifier
-                        .height(height = 45.dp)
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                    )
-
-                    Text(text = image.dummyString2, style = Typography.labelMedium)
-                }
             }
+
+            content(Modifier.align(Alignment.BottomCenter))
         }
     }
 }
@@ -90,7 +99,7 @@ fun ImageDialog(
 @Composable
 @Preview
 fun PreView() {
-    ImageDialog(Dummy()) {
+    ImageDialog(Dummy(),{}) {
 
     }
 }

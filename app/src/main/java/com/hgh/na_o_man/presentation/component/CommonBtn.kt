@@ -96,6 +96,9 @@ fun MyPageBtn(
         modifier = Modifier
             .size(200.dp, 40.dp)
             .border(2.dp, gradient, RoundedCornerShape(20.dp))
+            .clickable {
+                onClick()
+            }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
