@@ -2,7 +2,6 @@ package com.hgh.na_o_man.presentation.ui.main.home
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -18,15 +17,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.GroupDummy
-//import com.hgh.na_o_man.presentation.Utill.composableActivityViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.DecorationCloud
 import com.hgh.na_o_man.presentation.component.EndAppBar
@@ -35,9 +29,6 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.EventCard
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
-import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
-import com.hgh.na_o_man.presentation.ui.main.MainViewModel
-import com.hgh.na_o_man.presentation.util.composableActivityViewModel
 
 @Composable
 fun HomeScreen(

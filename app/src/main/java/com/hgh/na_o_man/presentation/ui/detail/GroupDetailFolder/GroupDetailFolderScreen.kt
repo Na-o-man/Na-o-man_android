@@ -3,79 +3,49 @@ package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 import CloudBtn
 import SmallCloudBtn
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.derivedStateOf
-import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ModifierInfo
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.FolderDummy
-import com.hgh.na_o_man.domain.model.GroupDummy
-//import com.hgh.na_o_man.presentation.Util.composableActivityViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
-import com.hgh.na_o_man.presentation.component.DecorationCloud
-import com.hgh.na_o_man.presentation.component.EndAppBar
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.FolderProfile
-import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StartEndAppBar
-import com.hgh.na_o_man.presentation.component.StartTopCloud
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
-import com.hgh.na_o_man.presentation.component.UserProfile
 import com.hgh.na_o_man.presentation.component.groupdetail.Bigfolder
 import com.hgh.na_o_man.presentation.component.groupdetail.GroupInfo
-import com.hgh.na_o_man.presentation.component.homeIcon.EventCard
-import com.hgh.na_o_man.presentation.ui.detail.GroupDetailScreen
-import com.hgh.na_o_man.presentation.ui.detail.GroupDetailScreenRoute
-import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
-import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListViewModel
 import com.hgh.na_o_man.presentation.ui.main.BottomNavigation
-import com.hgh.na_o_man.presentation.ui.main.MainViewModel
 import com.hgh.na_o_man.presentation.ui.main.navigateBottomNavigationScreen
 
 
-@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalPagerApi
 @Composable
 fun GroupDetailFolderScreen(
     navigationMyPage: () -> Unit,
@@ -94,8 +64,8 @@ fun GroupDetailFolderScreen(
     )
 
     val scope = rememberCoroutineScope()
-    val pagerState = rememberPagerState(pageCount = {dummyFolderData.size})
-    val selectedTabIndex = remember{ derivedStateOf { pagerState.currentPage }  }
+//    val pagerState = rememberPagerState(initialPage = {dummyFolderData.size})
+//    val selectedTabIndex = remember{ derivedStateOf { pagerState.currentPage }  }
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
@@ -195,6 +165,7 @@ fun GroupDetailFolderScreen(
 }
 
 
+@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Composable
 fun PreView(

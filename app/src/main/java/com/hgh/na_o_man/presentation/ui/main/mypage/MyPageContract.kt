@@ -11,7 +11,9 @@ class MyPageContract {
 
     data class MyPageViewState(
         val loadState: LoadState = LoadState.SUCCESS,
-        val userInfo : Dummy = Dummy()
+        val userInfo : Dummy = Dummy(),
+        val isDialogVisible: Boolean = false,
+        val dialogMod : DialogMode = DialogMode.LOGOUT,
     ): ViewState
 
     sealed class MyPageSideEffect : ViewSideEffect {
@@ -27,5 +29,11 @@ class MyPageContract {
         object OnClickBack : MyPageEvent()
         object OnClickLogOut : MyPageEvent()
         object OnClickSignOut : MyPageEvent()
+        object OnDialogClosed : MyPageEvent()
     }
+}
+
+enum class DialogMode(val title : String) {
+    SING_OUT("탈퇴하시겠습니끼?\n탈퇴 시 데이터는 복구할 수 없습니다."),
+    LOGOUT("로그아웃 하시겠습니까?"),
 }

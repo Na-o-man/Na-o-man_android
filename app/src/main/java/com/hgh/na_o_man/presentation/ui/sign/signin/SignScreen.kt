@@ -3,6 +3,7 @@ package com.hgh.na_o_man.presentation.ui.sign.signin
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -35,6 +36,7 @@ import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
 import com.hgh.na_o_man.presentation.util.SocialLoginUtil
+import com.hgh.na_o_man.presentation.util.getActivity
 
 @Composable
 fun SignScreen(
@@ -77,6 +79,10 @@ fun SignScreen(
                 else -> {}
             }
         }
+    }
+
+    BackHandler {
+        context.finish()
     }
 
     Log.d("리컴포저블", "signScreen")
