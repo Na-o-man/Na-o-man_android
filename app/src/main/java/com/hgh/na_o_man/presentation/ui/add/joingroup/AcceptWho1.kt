@@ -2,15 +2,23 @@ package com.hgh.na_o_man.presentation.ui.add.joingroup
 
 import androidx.compose.runtime.Composable
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
@@ -44,13 +52,14 @@ import com.hgh.na_o_man.presentation.theme.Mustard
 import com.hgh.na_o_man.presentation.theme.SlateGray
 import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
+
 @Composable
-fun AcceptWhoScreen3(
+fun AcceptWhoScreen1(
     viewModel: AddViewModel = hiltViewModel(),
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    Log.d("리컴포저블","AcceptWhoScreen3")
+    Log.d("리컴포저블","AcceptWhoScreen1")
     var textValue by remember { mutableStateOf("제주도 2024") }
 
     when (viewState.loadState) {
@@ -303,7 +312,60 @@ fun AcceptWhoScreen3(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview10() {
-    AcceptWhoScreen3()
+fun Preview9() {
+    AcceptWhoScreen1()
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun AcceptScreen() {
+    val pagerState = rememberPagerState(pageCount = {3}) // 페이지 수를 설정
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.weight(1f) // 남은 공간을 차지하게 설정
+        ) { page ->
+            when (page) {
+                0 -> AcceptWhoScreen1()
+                1 -> AcceptWhoScreen2()
+                2 -> AcceptWhoScreen3()
+            }
+        }
+
+        // 페이지 인디케이터
+        PageIndicator(pagerState)
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun PageIndicator(pagerState: PagerState) {
+    Row(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+        repeat(3) { index ->
+            val color = if (pagerState.currentPage == index) Color.Blue else Color.Gray
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .padding(4.dp)
+                    .background(color, shape = CircleShape)
+            )
+        }
+    }
+}
+
+@Composable
+fun IndicatorDot(index: Int, currentPage: Int) {
+    val color = if (index == currentPage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+    Box(
+        modifier = Modifier
+            .size(10.dp)
+            .padding(4.dp)
+            .background(LightWhite, shape = CircleShape)
+    )
+}

@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
@@ -55,7 +56,10 @@ import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.Mustard
 import com.hgh.na_o_man.presentation.theme.SlateGray
 import com.hgh.na_o_man.presentation.theme.SteelBlue
+import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract
 import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
+import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersSpace
 
 
 @Composable
@@ -78,7 +82,7 @@ fun AcceptCheckScreen(
 
         LoadState.SUCCESS -> {
             Scaffold(
-                containerColor = Color.Black // 여기를 수정
+                containerColor = lightSkyBlue // 여기를 수정
             ) { padding ->
                 //구름 배경 Box
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -160,7 +164,6 @@ fun AcceptCheckScreen(
                             )
                         }
 
-
                         // 원 2
                         Box(
                             modifier = Modifier
@@ -221,7 +224,10 @@ fun AcceptCheckScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Button(
-                            onClick = { isCorrect = false },
+                            onClick = {
+                                isCorrect = false
+                                viewModel.handleEvents(AddContract.AddEvent.AddGroup8) // MembersLoading으로 이동 후 5초 후 돌아오기
+                                      },
                             modifier = Modifier
                                 .padding(start = 85.dp, top = 20.dp)
                                 .height(45.dp)
@@ -244,7 +250,11 @@ fun AcceptCheckScreen(
                         }
 
                         Button(
-                            onClick = { isCorrect = true },
+                            onClick = {
+                                isCorrect = true
+                                // 맞아요 버튼 클릭 시 AcceptWhoScreen으로 이동
+                                viewModel.handleEvents(AddContract.AddEvent.AddGroup7) // AddGroup7 이벤트 호출
+                                      },
                             modifier = Modifier
                                 .padding(end = 85.dp, top = 20.dp)
                                 .height(45.dp)
@@ -327,7 +337,14 @@ fun AcceptCheckScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview7() {
-    AcceptCheckScreen()
+fun Preview8() {
+    // NavController 생성
+    val navController = rememberNavController()
+    // AddViewModel의 더미 인스턴스 생성
+    val dummyViewModel = object : AddViewModel(navController) {
+    // 필요한 프로퍼티나 메소드 오버라이드
+    }
+    // AcceptCheckScreen에 navController와 dummyViewModel 전달 -> viewModel
+    AcceptCheckScreen(viewModel = dummyViewModel)
 }
 

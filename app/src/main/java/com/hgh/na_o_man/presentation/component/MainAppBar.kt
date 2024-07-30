@@ -83,12 +83,12 @@ fun BackAndSelectAppBar(
 }
 
 @Composable
-fun NextAppBar(
+fun NextAppBar1(
     modifier: Modifier = Modifier,
     back: AppBarMenu? = null,
     menu: AppBarMenu? = null,
     next1: AppBarMenu? = AppBarMenu.Next1,
-    next2: AppBarMenu? = AppBarMenu.Next2,
+    next2: AppBarMenu? = null,
     isMenuClick: Boolean = false,
     onStartClick: () -> Unit,
     onEndClick: () -> Unit,
@@ -99,6 +99,31 @@ fun NextAppBar(
         back = null,
         menu = null,
         next1 = AppBarMenu.Next1,
+        next2 = null,
+        isMenuClick = isMenuClick,
+        onStartClick = onStartClick,
+        onEndClick = onEndClick,
+        onNextClick = onNextClick // next 버튼 클릭 이벤트 전달
+    )
+}
+
+@Composable
+fun NextAppBar2(
+    modifier: Modifier = Modifier,
+    back: AppBarMenu? = null,
+    menu: AppBarMenu? = null,
+    next1: AppBarMenu? = null,
+    next2: AppBarMenu? = AppBarMenu.Next2,
+    isMenuClick: Boolean = false,
+    onStartClick: () -> Unit,
+    onEndClick: () -> Unit,
+    onNextClick: () -> Unit,
+) {
+    MainAppBar(
+        modifier = modifier,
+        back = null,
+        menu = null,
+        next1 = null,
         next2 = AppBarMenu.Next2,
         isMenuClick = isMenuClick,
         onStartClick = onStartClick,
@@ -106,6 +131,8 @@ fun NextAppBar(
         onNextClick = onNextClick // next 버튼 클릭 이벤트 전달
     )
 }
+
+
 
 @Composable
 private fun MainAppBar(
@@ -160,7 +187,6 @@ private fun MainAppBar(
                 tint = Color.Unspecified,
                 contentDescription = stringResource(id = next1.contentDescription),
                 modifier = Modifier
-                    .padding(end = 16.dp)
                     .clickable { onNextClick() }
                     .align(Alignment.CenterEnd)
             )

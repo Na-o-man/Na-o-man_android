@@ -40,7 +40,7 @@ enum class AppBarMenu(
 
     Next2(
         horizontalPadding = 20.dp,
-        icon = R.drawable.ic_button_cloud_138,
+        icon = R.drawable.ic_button_cloud_next_140,
         contentDescription = R.string.next2_description,
     )
 }

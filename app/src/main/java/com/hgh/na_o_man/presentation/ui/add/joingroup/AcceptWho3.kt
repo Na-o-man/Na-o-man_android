@@ -46,12 +46,12 @@ import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
 
 @Composable
-fun AcceptWhoScreen2(
+fun AcceptWhoScreen3(
     viewModel: AddViewModel = hiltViewModel(),
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    Log.d("리컴포저블","AcceptWhoScreen2")
+    Log.d("리컴포저블","AcceptWhoScreen3")
     var textValue by remember { mutableStateOf("제주도 2024") }
 
     when (viewState.loadState) {
@@ -59,7 +59,6 @@ fun AcceptWhoScreen2(
             StateLoadingScreen()
         }
 
-        
         LoadState.ERROR -> {
             StateErrorScreen()
         }
@@ -305,7 +304,7 @@ fun AcceptWhoScreen2(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview9() {
-    AcceptWhoScreen2()
+fun Preview11() {
+    AcceptWhoScreen3()
 }
 

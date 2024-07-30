@@ -37,44 +37,49 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
+import com.hgh.na_o_man.presentation.component.NextAppBar1
 import com.hgh.na_o_man.presentation.component.StartAppBar
-import com.hgh.na_o_man.presentation.component.StateErrorScreen
-import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
+import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MembersInviteScreen(
-    navController: NavController, // NavController 전달
+//    navController: NavController, // NavController 전달
     viewModel: AddViewModel = hiltViewModel(),
     ) {
     val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블","MembersInviteScreen")
     var textValue by remember { mutableStateOf("인원 수를 입력해주세요.") }
 
-    when (viewState.loadState) {
-        LoadState.LOADING -> {
-            StateLoadingScreen()
-        }
+    Scaffold(
+        topBar = {
+            StartAppBar(
+                onStartClick = { }
+            ) },
 
-        LoadState.ERROR -> {
-            StateErrorScreen()
-        }
+        bottomBar = {
+            NextAppBar1(onStartClick = { },
+                modifier = Modifier.padding(bottom = 285.dp, end = 50.dp),
+                onEndClick = { },
+                onNextClick = {
+                    if (viewState.memberCount <= 0) {
+                        AddContract.AddSideEffect.ShowErrorMessage("유효한 인원 수를 입력해주세요.")
+                    } else {
+                        // AddGroup1 이벤트 발생
+                        viewModel.handleEvents(AddContract.AddEvent.AddGroup1(textValue))
+                    }
+                }
+            )
+        },
 
-        LoadState.SUCCESS -> {
-            Scaffold(
-                topBar = {
-                    StartAppBar(
-                        onStartClick = { }
-                    )
-                },
-                containerColor = Color.Black // 여기를 수정
+                containerColor = lightSkyBlue // 여기를 수정
             ) { padding ->
                 //구름 배경 Box
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -95,7 +100,6 @@ fun MembersInviteScreen(
 //                    )
 
                     // 화면 중앙 이미지
-
                     Box(
                         modifier = Modifier
                             .align(Alignment.Center)
@@ -194,20 +198,12 @@ fun MembersInviteScreen(
                             .padding(top = 220.dp, end = 50.dp)
                             .clickable {
                                 // MembersSpace로 이동
-                                navController.navigate("membersNameScreen")
+                                viewModel.navigate("membersNameScreen")
                             }
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_next_38),
-                            contentDescription = "Image Background",
-                            modifier = Modifier.size(38.dp) // 이미지 크기 조정
-                        )
-                    }
+                    )
                 }
             }
         }
-    }
-}
 
 
 @Preview(showBackground = true)
@@ -217,11 +213,11 @@ fun Preview1() {
     val navController = rememberNavController()
 
     // AddViewModel의 더미 인스턴스 생성
-    val dummyViewModel = object : AddViewModel() {
+    val dummyViewModel = object : AddViewModel(navController) {
         // 필요한 프로퍼티나 메소드 오버라이드
     }
 
     // MembersInviteScreen에 navController와 dummyViewModel 전달
-    MembersInviteScreen(viewModel = dummyViewModel, navController = navController)
+    MembersInviteScreen(viewModel = dummyViewModel)
 }
 

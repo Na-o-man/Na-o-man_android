@@ -27,6 +27,7 @@ val SlateGray = Color(116, 130, 146)
 val Mustard = Color(249, 208, 103)
 //0x134B80
 val DeepBlue = Color(19, 75, 128)
-
+//0x3C73AE
+val LightNavy = Color(60, 115,174)
 
 

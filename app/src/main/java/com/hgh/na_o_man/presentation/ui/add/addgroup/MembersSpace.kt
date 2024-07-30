@@ -35,14 +35,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
+import com.hgh.na_o_man.presentation.component.NextAppBar1
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
+import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 
 
 @Composable
@@ -51,27 +54,32 @@ fun MembersSpace(
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    Log.d("리컴포저블","MembersSpace")
+    Log.d("리컴포저블", "MembersSpace")
     var textValue by remember { mutableStateOf("공간을 입력해 주세요.") }
-
-    when (viewState.loadState) {
-        LoadState.LOADING -> {
-            StateLoadingScreen()
-        }
-
-        LoadState.ERROR -> {
-            StateErrorScreen()
-        }
-
-        LoadState.SUCCESS -> {
             Scaffold(
                 topBar = {
                     StartAppBar(
                         onStartClick = { }
                     )
-                    
                 },
-                containerColor = Color.Black // 여기를 수정
+                bottomBar = {
+                    // 다음 버튼
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize() // 전체 크기로 채우기
+                            .padding(top = 215.dp, end = 50.dp),
+                        contentAlignment = Alignment.Center // 중앙 정렬
+                    ) {
+                        NextAppBar1(
+                            onStartClick = { },
+                            onEndClick = { },
+                            onNextClick = {
+                                viewModel.handleEvents(AddContract.AddEvent.AddGroup4(textValue)) // 텍스트 값을 포함하여 이벤트 전송
+                            }
+                        )
+                    }
+                },
+                containerColor = lightSkyBlue // 여기를 수정
             ) { padding ->
                 //구름 배경 Box
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -119,8 +127,6 @@ fun MembersSpace(
                             fontWeight = FontWeight.SemiBold
                         )
                     }
-
-
 
                     // 화면 중앙 하단 이미지
                     Box(
@@ -174,31 +180,23 @@ fun MembersSpace(
                             )
                         }
                     }
-
-                    // 이미지 배경을 화면 중앙 오른쪽에 추가
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(top = 220.dp, end = 50.dp)
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_button_next_38),
-                            contentDescription = "Image Background",
-                            modifier = Modifier
-                                .size(38.dp) // 이미지 크기 조정
-                        )
-                    }
                 }
             }
         }
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable
 fun Preview4() {
-    MembersSpace()
+    // NavController 생성
+    val navController = rememberNavController()
+
+    // AddViewModel의 더미 인스턴스 생성
+    val dummyViewModel = object : AddViewModel(navController) {
+        // 필요한 프로퍼티나 메소드 오버라이드
+    }
+
+    // MembersSpace에 navController와 dummyViewModel 전달 -> viewModel
+    MembersSpace(viewModel = dummyViewModel)
 }
 
 

@@ -29,12 +29,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.StartTopCloud
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.theme.LightWhite
+import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -51,14 +54,13 @@ fun MembersLoading(
             StateLoadingScreen()
         }
 
-        
         LoadState.ERROR -> {
             StateErrorScreen()
         }
 
         LoadState.SUCCESS -> {
             Scaffold(
-                containerColor = Color.Black // 여기를 수정
+                containerColor = lightSkyBlue // 여기를 수정
             ) { padding ->
                 //구름 배경 Box
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -138,6 +140,11 @@ fun MembersLoading(
                     }
                 }
             }
+
+            // 5초 후 MembersFolder로 이동
+            LaunchedEffect(Unit) {
+                viewModel.addGroup5() // 5초 후 MembersFolder로 이동
+            }
         }
     }
 }
@@ -146,7 +153,16 @@ fun MembersLoading(
 @Preview(showBackground = true)
 @Composable
 fun Preview5() {
-    MembersLoading()
+    // NavController 생성
+    val navController = rememberNavController()
+
+    // AddViewModel의 더미 인스턴스 생성
+    val dummyViewModel = object : AddViewModel(navController) {
+        // 필요한 프로퍼티나 메소드 오버라이드
+    }
+
+    // MembersLoading에 viewModel과 dummyViewModel 전달
+    MembersLoading(viewModel = dummyViewModel)
 }
 
 

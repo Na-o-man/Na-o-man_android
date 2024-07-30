@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -24,15 +25,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.presentation.theme.NaOManTheme
 import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
-import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptInviteScreen
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersInviteScreen
+import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersNameScreen
 import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptScreen
-import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptWhoScreen1
-import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptWhoScreen2
-import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptWhoScreen3
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.reflect.Modifier
-
 
 @AndroidEntryPoint
 class AddGroupActivity : ComponentActivity() {
@@ -56,10 +52,39 @@ class AddGroupActivity : ComponentActivity() {
         NavHost(navController as NavHostController, startDestination = if (intent.getBooleanExtra(ADD_GROUP, true)) "acceptInvite" else "membersInvite") {
 
             composable("membersInvite") {
-                MembersInviteScreen(navController)
+                val viewModel: AddViewModel = viewModel()
+                MembersInviteScreen(viewModel)
             }
-            composable("acceptWho") { // 새로운 목적지 추가
-                AcceptScreen() // AcceptWhoScreen 호출
+            composable("acceptInvite") { // "acceptWho"에서 "acceptInvite"로 변경
+                AcceptScreen() // AcceptScreen 호출
+            }
+            composable("members_name_screen") {
+                val viewModel: AddViewModel = viewModel() // AddViewModel 인스턴스를 가져옴
+                MembersNameScreen(viewModel) // MembersNameScreen 호출
+            }
+            composable("members_adjective") {
+                val viewModel: AddViewModel = viewModel() // AddViewModel 인스턴스를 가져옴
+                MembersNameScreen(viewModel) // MembersAdjective 호출
+            }
+            composable("members_space") {
+                val viewModel: AddViewModel = viewModel() // AddViewModel 인스턴스를 가져옴
+                MembersNameScreen(viewModel) // MembersSpace 호출
+            }
+            composable("members_loading") {
+                val viewModel: AddViewModel = viewModel() // AddViewModel 인스턴스를 가져옴
+                MembersNameScreen(viewModel) // MembersSpace 호출
+            }
+            composable("members_folder") {
+                val viewModel: AddViewModel = viewModel() // AddViewModel 인스턴스를 가져옴
+                MembersNameScreen(viewModel) // MembersSpace 호출
+            }
+            composable("accept_check_screen") {
+                val viewModel: AddViewModel = viewModel() // AddViewModel 인스턴스를 가져옴
+                MembersNameScreen(viewModel) // MembersSpace 호출
+            }
+            composable("accept_who_screen") {
+                val viewModel: AddViewModel = viewModel() // AddViewModel 인스턴스를 가져옴
+                MembersNameScreen(viewModel) // MembersSpace 호출
             }
         }
     }
