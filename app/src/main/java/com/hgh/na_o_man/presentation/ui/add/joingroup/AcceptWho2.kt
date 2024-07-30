@@ -304,7 +304,7 @@ fun AcceptWhoScreen2(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview9() {
+fun Preview10() {
     AcceptWhoScreen2()
 }
 

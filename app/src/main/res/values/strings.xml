@@ -4,4 +4,6 @@
     <string name="my_page_description">마이페이지</string>
     <string name="error_tex">서버와 연결을 실패했습니다.</string>
     <string name="checkable">체크</string>
+    <string name="next1_description">다음</string>
+    <string name="next2_description">다음(ver.구름)</string>
 </resources>

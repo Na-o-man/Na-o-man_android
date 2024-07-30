@@ -2,6 +2,7 @@ package com.hgh.na_o_man.presentation.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -41,4 +42,5 @@ abstract class BaseViewModel<S : ViewState, A : ViewSideEffect, E : ViewEvent>(
     private fun deliverEvent(event : E) = viewModelScope.launch {
         handleEvents(event)
     }
+
 }

@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -36,6 +37,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,16 +49,18 @@ import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
+import com.hgh.na_o_man.presentation.component.NextAppBar1
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
+import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 
 @Composable
 fun MembersAdjective(
     viewModel: AddViewModel = hiltViewModel(),
-    navController: NavController // NavController 추가
+//    navController: NavController // NavController 추가
 ) {
     val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블", "MembersAdjective")
@@ -79,7 +83,7 @@ fun MembersAdjective(
                         onStartClick = { }
                     )
                 },
-                containerColor = Color.Black // 여기를 수정
+                containerColor = lightSkyBlue // 여기를 수정
             ) { padding ->
                 //구름 배경 Box
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -213,7 +217,10 @@ fun MembersAdjective(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 25.dp, bottom = 10.dp)
-                                .border(BorderStroke(1.dp, LightWhite), shape = RoundedCornerShape(50.dp)), // 테두리 설정
+                                .border(
+                                    BorderStroke(1.dp, LightWhite),
+                                    shape = RoundedCornerShape(50.dp)
+                                ), // 테두리 설정
                             colors = TextFieldDefaults.colors(
                                 focusedContainerColor = LightWhite.copy(alpha = 0.3f), // 포커스 시 배경색
                                 unfocusedContainerColor = LightWhite.copy(alpha = 0.3f), // 포커스 해제 시 배경색
@@ -234,27 +241,43 @@ fun MembersAdjective(
                                 .clickable {
                                     val index = buttonLabels.indexOf(inputText)
                                     if (index != -1) {
-                                        selectedButtons[index] = !selectedButtons[index] // 입력한 버튼을 선택 상태로 변경
+                                        selectedButtons[index] =
+                                            !selectedButtons[index] // 입력한 버튼을 선택 상태로 변경
                                     }
                                 },
                             contentAlignment = Alignment.CenterEnd // 이미지 중앙 정렬
                         ) {
-                            Image(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_button_next_38), // 이미지 리소스
-                                contentDescription = "선택하기 버튼", // 이미지 설명
-                                modifier = Modifier.size(38.dp) // 이미지 크기 설정
-                            )
+                                val context = LocalContext.current // 현재 컨텍스트 가져오기
+
+                                NextAppBar1(
+                                    onStartClick = { },
+                                    onEndClick = { },
+                                    onNextClick = {
+                                        // ViewModel의 selectedButtons 값을 참조하여 선택된 버튼 수 확인
+                                        val selectedButtons = viewModel.viewState.value.selectedButtons // 선택된 버튼 리스트
+//                                        val inputText = /* 입력 필드에서 가져온 텍스트 */ // 여기서 입력 필드를 통해 텍스트를 가져와야 합니다.
+
+                                        // 선택된 버튼이 하나 이상일 경우
+                                        if (selectedButtons.isNotEmpty()) {
+                                            // AddGroup3 이벤트 발생
+                                            viewModel.handleEvents(AddContract.AddEvent.AddGroup3(selectedButtons, inputText))
+                                        } else {
+                                            // 선택된 버튼이 없을 경우 에러 메시지 표시
+                                            Toast.makeText(context, "최소 하나의 옵션을 선택하세요.", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(16.dp),)
 
-                        Text(text = "Selected Buttons: ${selectedButtons.mapIndexed { index, isSelected -> if (isSelected) index + 1 else null }.filterNotNull()}")
+//                        Text(text = "Selected Buttons: ${selectedButtons.mapIndexed { index, isSelected -> if (isSelected) index + 1 else null }.filterNotNull()}")
                     }
                 }
             }
         }
     }
-}
 
 @Preview(showBackground = true)
 @Composable
@@ -263,11 +286,11 @@ fun Preview3() {
     val navController = rememberNavController()
 
     // AddViewModel의 더미 인스턴스 생성
-    val dummyViewModel = object : AddViewModel() {
+    val dummyViewModel = object : AddViewModel(navController) {
         // 필요한 프로퍼티나 메소드 오버라이드
     }
 
-    // MembersNameScreen에 navController와 dummyViewModel 전달
-    MembersAdjective(viewModel = dummyViewModel, navController = navController)
+    // MembersAdjective에 viewModel와 dummyViewModel 전달
+    MembersAdjective(viewModel = dummyViewModel)
 }
 

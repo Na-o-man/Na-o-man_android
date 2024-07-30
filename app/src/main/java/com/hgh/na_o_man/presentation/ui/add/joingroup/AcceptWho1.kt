@@ -1,6 +1,5 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
-import android.hardware.lights.Light
 import androidx.compose.runtime.Composable
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -313,7 +312,7 @@ fun AcceptWhoScreen1(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview8() {
+fun Preview9() {
     AcceptWhoScreen1()
 }
 
