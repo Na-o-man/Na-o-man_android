@@ -18,31 +18,31 @@ val Typography = Typography(
         fontFamily = Pretendard,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
-        lineHeight = 36.sp
+        lineHeight = 28.sp
     ),
     displayMedium = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.SemiBold,
         fontSize = 20.sp,
-        lineHeight = 30.sp
+        lineHeight = 24.sp
     ),
     displaySmall = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp,
-        lineHeight = 28.sp
+        lineHeight = 22.sp
     ),
     headlineLarge = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
-        lineHeight = 24.sp
+        lineHeight = 20.sp
     ),
     headlineMedium = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.SemiBold,
         fontSize = 14.sp,
-        lineHeight = 20.sp
+        lineHeight = 18.sp
     ),
     bodyLarge = TextStyle(
         fontFamily = Pretendard,

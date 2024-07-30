@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.Utill
+package com.hgh.na_o_man.presentation.util
 
 import android.content.Context
 import android.content.Intent
@@ -9,12 +9,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.hgh.na_o_man.domain.model.Dummy
 import com.kakao.sdk.user.UserApiClient
 
 class SocialLoginUtil(private val context: Context, private val callback: LoginCallback) {
 
     interface LoginCallback {
-        fun onLoginSuccess(token: String)
+        fun onLoginSuccess(dummy: Dummy)
         fun onLoginFailure(error: Throwable)
     }
 
@@ -60,8 +61,9 @@ class SocialLoginUtil(private val context: Context, private val callback: LoginC
             } else if (user != null) {
                 val authId = user.id.toString()
                 val email = user.kakaoAccount?.email ?: ""
+                val name = user.kakaoAccount?.profile?.nickname ?: ""
                 val profileUrl = user.kakaoAccount?.profile?.thumbnailImageUrl ?: ""
-                callback.onLoginSuccess(authId)
+                callback.onLoginSuccess(Dummy(dummyString2 = email, dummyString = profileUrl, dummyString3 = name ))
             }
             kakaoSignOut()
         }
@@ -83,9 +85,10 @@ class SocialLoginUtil(private val context: Context, private val callback: LoginC
             Log.d("구글", "로그인 성공: ${account.email}")
             val authId = account.id.toString()
             val email = account.email ?: ""
+            val name = account.displayName ?: ""
             val profileUrl = account.photoUrl.toString() ?: ""
             val token = account.idToken ?: ""
-            callback.onLoginSuccess(authId)
+            callback.onLoginSuccess(Dummy(dummyString2 = email, dummyString = profileUrl, dummyString3 = name ))
             googleSignOut()
         } catch (e: ApiException) {
             Log.d("구글", "로그인 실패: ${e}")

@@ -1,9 +1,9 @@
 package com.hgh.na_o_man.presentation.component.homeIcon
 
-import android.media.metrics.Event
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,11 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.hgh.na_o_man.R
 
 @Composable
@@ -25,20 +29,59 @@ fun EventCard(
     imageRes: Int,
     title: String,
     participantCount: Int,
-    date: String
+    date: String,
+    onClick: () -> Unit = {}
 ) {
-    Row(
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
-            .padding(15.dp)
-            .fillMaxWidth()
-            .border(width = 2.dp, color = Color.White, shape = RoundedCornerShape(30))
-            .background(Color(0xFFC5D6E9), shape = RoundedCornerShape(30.dp))
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(12.dp)
+            .clickable(onClick = onClick) // 클릭 이벤트 추가
     ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_group_box_button_299),
+            contentDescription = "그룹 리스트",
+            tint = Color(0xAA8D8D8D),
+        )
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_group_box_button_299),
+            contentDescription = "그룹 리스트",
+            tint = Color.Unspecified,
+        )
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(start = 80.dp, end = 16.dp) // 끝쪽 패딩 추가
+        ) {
+            Text(
+                text = title,
+                fontSize = 20.sp,
+                color = Color.Black,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                modifier = Modifier.widthIn(min = 0.dp, max = 160.dp) // 텍스트의 최대 너비 설정
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_person_13),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(15.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(text = "$participantCount", color = Color.White, fontSize = 20.sp)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = date, color = Color.White, fontSize = 20.sp)
+            }
+        }
+
         Box(
             modifier = Modifier
-                .offset(x = (20).dp, y = (-20).dp)
+                .offset(x = -90.dp, y = (-15).dp)
+                .clickable(onClick = onClick) // 클릭 이벤트 추가
+                .zIndex(1f) // 이미지가 다른 요소들 위에 렌더링되도록 설정
         ) {
             Image(
                 painter = painterResource(id = imageRes),
@@ -50,53 +93,11 @@ fun EventCard(
                     .border(width = 2.dp, color = Color.White, shape = CircleShape)
             )
         }
-        Spacer(modifier = Modifier.width(50.dp))
-        Column {
-            Text(text = title, fontSize = 20.sp, color = Color.Black)
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(painter = painterResource(id = R.drawable.ic_person_13), contentDescription = null, tint = Color.White, modifier = Modifier.size(15.dp))
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "$participantCount", color = Color.White, fontSize = 20.sp)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = date, color = Color.White, fontSize = 20.sp)
-            }
-        }
     }
 }
 
-@Composable
-fun EventListScreen() {
-    Column {
-        EventCard(
-            imageRes = R.drawable.ic_launcher_foreground,
-            title = "2024 졸업 전시",
-            participantCount = 6,
-            date = "2024.04.16"
-        )
-        EventCard(
-            imageRes = R.drawable.ic_launcher_foreground,
-            title = "보라카이 여행",
-            participantCount = 5,
-            date = "2024.04.16"
-        )
-        EventCard(
-            imageRes = R.drawable.ic_launcher_foreground,
-            title = "제주도",
-            participantCount = 2,
-            date = "2024.04.16"
-        )
-        EventCard(
-            imageRes = R.drawable.ic_cloud_138,
-            title = "제주도 에코랜드",
-            participantCount = 6,
-            date = "2024.04.16"
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EventCardPreview() {
-    EventListScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun EventCardPreview() {
+//    EventCard(imageRes = R.drawable.ic_example, title = "제목", participantCount = 5, date = "2024.07.20")
+//}

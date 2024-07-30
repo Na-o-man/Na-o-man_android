@@ -41,8 +41,10 @@ import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersInviteScreen
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
+import com.hgh.na_o_man.presentation.ui.main.home.HomeScreenWithButton
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
 
 @Composable
@@ -91,21 +93,36 @@ fun MainScreen(
                     HomeScreen(
                         navigationMyPage = {
                             navController.navigate(MainScreenRoute.MY_PAGE.route)
+                        },
+                        navigationToMembersInvite = {
+                            navController.navigate(MainScreenRoute.MEMBERS_INVITE.route)
                         }
                     )
                 }
 
                 composable(route = MainScreenRoute.ADD.route) {
+                    HomeScreenWithButton(navigationMyPage = {
+                        navController.navigate(MainScreenRoute.MY_PAGE.route)
+                    })
                 }
 
                 composable(route = MainScreenRoute.ALARM.route) {
-                    AlarmScreen()
+                    AlarmScreen(
+                        navigationHome = {
+                            navController.popBackStack()
+                        }
+                    )
                 }
                 composable(route = MainScreenRoute.MY_PAGE.route) {
                     MyPageScreen(
                         navigationBack = {
                             navController.popBackStack()
                         }
+                    )
+                }
+                composable(route = MainScreenRoute.MEMBERS_INVITE.route) {  // 이 경로가 추가되었는지 확인
+                    MembersInviteScreen(
+                        navController = navController
                     )
                 }
             }
@@ -138,7 +155,7 @@ fun BottomNavigation(
             .padding(horizontal = 28.dp)
             .padding(bottom = 21.dp)
             .height(90.dp)
-            .border(1.dp, gradient, RoundedCornerShape(50))
+            .border(2.dp, gradient, RoundedCornerShape(50))
     ) {
         Row(
             modifier = Modifier
@@ -194,8 +211,8 @@ enum class BottomNavigationItem(
      ),
      ADD(
          route = MainScreenRoute.ADD.route,
-         icon = R.drawable.ic_button_nav_plus_new_31,
-         color = Color.Unspecified
+         icon = R.drawable.ic_bottom_nav_plus_button_last_33,
+         color = Color.White
      ),
      ALARM(
          route = MainScreenRoute.ALARM.route,
@@ -209,6 +226,7 @@ enum class MainScreenRoute(val route: String) {
     ADD("add_group"),
     ALARM("alarm"),
     MY_PAGE("my_page"),
+    MEMBERS_INVITE("members_invite") // 공유 그룹 추가하기 경로
 }
 
 //@Preview

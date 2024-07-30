@@ -168,7 +168,7 @@ private fun MainAppBar(
             Icon(
                 imageVector = ImageVector.vectorResource(id = menu.icon),
                 tint = (if (isMenuClick) {
-                    Color.Yellow
+                    Color(0xBF7C93CD)
                 } else {
                     Color.Unspecified
                 }) as Color,

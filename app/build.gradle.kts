@@ -73,6 +73,26 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
+    implementation ("com.google.accompanist:accompanist-pager:0.20.1")
+    implementation ("com.google.accompanist:accompanist-pager-indicators:0.20.1")
+    
+    //Retrofit + OkHttp + Gson
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+
+
+    //datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
+
+    //WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation("androidx.hilt:hilt-work:1.0.0")
+
     // hilt
     implementation("com.google.dagger:hilt-android:2.50")
     ksp("com.google.dagger:hilt-compiler:2.50")
@@ -80,7 +100,6 @@ dependencies {
 
     //coil
     implementation("io.coil-kt:coil-compose:2.6.0")
-
 
     // KaKao Login
     implementation("com.kakao.sdk:v2-user:2.19.0")

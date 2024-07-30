@@ -9,4 +9,5 @@ data class Dummy(
     val is2 : Boolean = false,
     val is3 : Boolean = false,
     val dummyString2 : String = "2019.01.01",
+    val dummyString3 :String = "하하"
 )
