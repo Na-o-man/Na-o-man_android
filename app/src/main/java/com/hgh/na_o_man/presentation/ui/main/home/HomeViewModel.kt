@@ -12,6 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeContract.HomeViewState, HomeContract.HomeSideEffect, HomeContract.HomeEvent>(
+
     HomeContract.HomeViewState(
         groupList = listOf(
             GroupDummy(

@@ -20,6 +20,7 @@ class HomeContract {
 
         // "공유그룹 입장" 버튼 눌렀을 때 이벤트
         object NaviAcceptInviteScreen : HomeSideEffect()
+        data class NaviGroupDetail(val id : Long) : HomeSideEffect()
     }
 
     sealed class HomeEvent : ViewEvent {
