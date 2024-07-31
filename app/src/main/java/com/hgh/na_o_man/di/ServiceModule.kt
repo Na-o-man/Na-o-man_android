@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.di
 
 import com.hgh.na_o_man.data.source.remote.api.AuthService
+import com.hgh.na_o_man.data.source.remote.api.ShareGroupsService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +21,9 @@ object ServiceModule {
         return retrofit.buildService()
     }
 
+    @Provides
+    @Singleton
+    fun ShareGroupsService(@RemoteModule.Auth retrofit: Retrofit): ShareGroupsService {
+        return retrofit.buildService()
+    }
 }
