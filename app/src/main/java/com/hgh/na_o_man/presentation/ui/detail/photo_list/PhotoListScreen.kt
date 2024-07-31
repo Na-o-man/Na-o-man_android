@@ -63,6 +63,10 @@ fun PhotoListScreen(
 
     Log.d("리컴포저블", "PhotoListScreen")
 
+    LaunchedEffect(key1 = true) {
+        viewModel.setEvent(PhotoListContract.PhotoListEvent.InitPhotoListScreen)
+    }
+
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {

@@ -8,14 +8,16 @@ import com.hgh.na_o_man.presentation.base.ViewState
 class GroupDetailFolderContract {
 
     data class GroupDetailFolderViewState(
-        val loadState: LoadState = LoadState.SUCCESS
+        val loadState: LoadState = LoadState.SUCCESS,
+        val groupId : Long = 0L
     ) : ViewState
 
     sealed class GroupDetailFolderSideEffect : ViewSideEffect{
-
+        data class NaviPhotoList(val groupId: Long, val memberId: Long) :  GroupDetailFolderSideEffect()
     }
 
     sealed class GroupDetailFolderEvent : ViewEvent{
         object InitGroupDetailFolderScreen : GroupDetailFolderEvent()
+        data class OnUserFolderClicked( val memberId: Long) :  GroupDetailFolderEvent()
     }
 }

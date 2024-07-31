@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.main.home
 
+import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +31,9 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.EventCard
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
+import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity
+import com.hgh.na_o_man.presentation.ui.detail.GroupDetailScreen
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun HomeScreen(
@@ -38,6 +43,7 @@ fun HomeScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val sideEffect by viewModel.effect.collectAsState(initial = null)
+    val context = LocalContext.current as Activity
 
     Log.d("리컴포저블", "HomeScreen")
 //    LaunchedEffect(key1 = true) {
@@ -45,16 +51,24 @@ fun HomeScreen(
 //        viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
 //    }
 
-    LaunchedEffect(sideEffect) {
-        when (sideEffect) {
-            is HomeContract.HomeSideEffect.NaviMembersInviteScreen -> {
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is HomeContract.HomeSideEffect.NaviMembersInviteScreen -> {
 //                Log.d("HomeScreen", "Navigating to MembersInviteScreen")
-                navigationToMembersInvite()
-            }
-            is HomeContract.HomeSideEffect.NaviAcceptInviteScreen -> {
+                    navigationToMembersInvite()
+                }
 
+                is HomeContract.HomeSideEffect.NaviAcceptInviteScreen -> {
+
+                }
+
+                is HomeContract.HomeSideEffect.NaviGroupDetail -> {
+                    context.startActivity(GroupDetailActivity.newIntent(context, effect.id))
+                }
+
+                else -> Unit
             }
-            else -> Unit
         }
     }
 
@@ -85,9 +99,10 @@ fun HomeScreen(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(end = 4.dp, bottom = 120.dp)
-                            .zIndex(1f))
+                            .zIndex(1f)
+                    )
                 }
-                if(viewState.groupList.isEmpty()) {
+                if (viewState.groupList.isEmpty()) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -96,10 +111,11 @@ fun HomeScreen(
                     ) {
                         NoGroupBox(message = "아직 공유그룹이 없어요.\n\n그룹을 추가해 주세요.",
                             "공유 그룹 추가하기",
-                            onAddGroupInBoxClicked = {viewModel.setEvent(HomeContract.HomeEvent.OnAddGroupInBoxClicked)})
+                            onAddGroupInBoxClicked = { viewModel.setEvent(HomeContract.HomeEvent.OnAddGroupInBoxClicked) })
                     }
-                } else{
+                } else {
                     GroupListScreen(
+                        viewModel = viewModel,
                         groupList = viewState.groupList,
                         modifier = Modifier.padding(padding)
                     )
@@ -131,7 +147,8 @@ fun HomeSuccessScreen(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 4.dp, bottom = 190.dp)
-                    .zIndex(1f))
+                    .zIndex(1f)
+            )
         }
 
         Box(
@@ -150,14 +167,16 @@ fun HomeSuccessScreen(
 
 @Composable
 fun GroupListScreen(
-    groupList : List<GroupDummy>,
+    viewModel: HomeViewModel = hiltViewModel(),
+    groupList: List<GroupDummy>,
     modifier: Modifier = Modifier
 ) {
+
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
-        LazyColumn (
+        LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
@@ -166,7 +185,10 @@ fun GroupListScreen(
                     imageRes = group.imageRes,
                     title = group.name,
                     participantCount = group.participantCount,
-                    date = group.date
+                    date = group.date,
+                    onClick = {
+                        viewModel.setEvent(HomeContract.HomeEvent.OnGroupListClicked(it))
+                    }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }

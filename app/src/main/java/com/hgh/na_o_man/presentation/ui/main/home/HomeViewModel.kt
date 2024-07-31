@@ -15,54 +15,54 @@ class HomeViewModel @Inject constructor(
 
     HomeContract.HomeViewState(
         groupList = listOf(
-//            GroupDummy(
-//                imageRes = R.drawable.ic_example,
-//                name = "예제",
-//                participantCount = 5,
-//                date = "2024-07-20"
-//            ),
-//            GroupDummy(
-//                imageRes = R.drawable.ic_example,
-//                name = "예제 2",
-//                participantCount = 3,
-//                date = "2024-07-21"
-//            ),
-//            GroupDummy(
-//                imageRes = R.drawable.ic_example,
-//                name = "예제 2",
-//                participantCount = 3,
-//                date = "2024-07-21"
-//            ),
-//            GroupDummy(
-//                imageRes = R.drawable.ic_example,
-//                name = "예제 2",
-//                participantCount = 3,
-//                date = "2024-07-21"
-//            ),
-//            GroupDummy(
-//                imageRes = R.drawable.ic_example,
-//                name = "예제 2",
-//                participantCount = 3,
-//                date = "2024-07-21"
-//            ),
-//            GroupDummy(
-//                imageRes = R.drawable.ic_example,
-//                name = "예제 2",
-//                participantCount = 3,
-//                date = "2024-07-21"
-//            ),
-//            GroupDummy(
-//                imageRes = R.drawable.ic_example,
-//                name = "예제 2",
-//                participantCount = 3,
-//                date = "2024-07-21"
-//            ),
-//            GroupDummy(
-//                imageRes = R.drawable.ic_example,
-//                name = "예제 2",
-//                participantCount = 3,
-//                date = "2024-07-21"
-//            )
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제",
+                participantCount = 5,
+                date = "2024-07-20"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            ),
+            GroupDummy(
+                imageRes = R.drawable.ic_example,
+                name = "예제 2",
+                participantCount = 3,
+                date = "2024-07-21"
+            )
         )
     )
 ) {
@@ -81,11 +81,13 @@ class HomeViewModel @Inject constructor(
             is HomeContract.HomeEvent.OnAddGroupClicked -> {
 
             }
-            is HomeContract.HomeEvent.onEnterGroupClicked -> {
+            is HomeContract.HomeEvent.OnEnterGroupClicked -> {
 
             }
-            is HomeContract.HomeEvent.onGroupListClicked -> {
-
+            is HomeContract.HomeEvent.OnGroupListClicked -> {
+                sendEffect(
+                    { HomeContract.HomeSideEffect.NaviGroupDetail(event.id)}
+                )
             }
         }
     }
