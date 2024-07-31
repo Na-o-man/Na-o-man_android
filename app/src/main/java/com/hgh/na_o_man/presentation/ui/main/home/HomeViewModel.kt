@@ -14,54 +14,54 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeContract.HomeViewState, HomeContract.HomeSideEffect, HomeContract.HomeEvent>(
     HomeContract.HomeViewState(
         groupList = listOf(
-            GroupDummy(
-                imageRes = R.drawable.ic_example,
-                name = "예제",
-                participantCount = 5,
-                date = "2024-07-20"
-            ),
-            GroupDummy(
-                imageRes = R.drawable.ic_example,
-                name = "예제 2",
-                participantCount = 3,
-                date = "2024-07-21"
-            ),
-            GroupDummy(
-                imageRes = R.drawable.ic_example,
-                name = "예제 2",
-                participantCount = 3,
-                date = "2024-07-21"
-            ),
-            GroupDummy(
-                imageRes = R.drawable.ic_example,
-                name = "예제 2",
-                participantCount = 3,
-                date = "2024-07-21"
-            ),
-            GroupDummy(
-                imageRes = R.drawable.ic_example,
-                name = "예제 2",
-                participantCount = 3,
-                date = "2024-07-21"
-            ),
-            GroupDummy(
-                imageRes = R.drawable.ic_example,
-                name = "예제 2",
-                participantCount = 3,
-                date = "2024-07-21"
-            ),
-            GroupDummy(
-                imageRes = R.drawable.ic_example,
-                name = "예제 2",
-                participantCount = 3,
-                date = "2024-07-21"
-            ),
-            GroupDummy(
-                imageRes = R.drawable.ic_example,
-                name = "예제 2",
-                participantCount = 3,
-                date = "2024-07-21"
-            )
+//            GroupDummy(
+//                imageRes = R.drawable.ic_example,
+//                name = "예제",
+//                participantCount = 5,
+//                date = "2024-07-20"
+//            ),
+//            GroupDummy(
+//                imageRes = R.drawable.ic_example,
+//                name = "예제 2",
+//                participantCount = 3,
+//                date = "2024-07-21"
+//            ),
+//            GroupDummy(
+//                imageRes = R.drawable.ic_example,
+//                name = "예제 2",
+//                participantCount = 3,
+//                date = "2024-07-21"
+//            ),
+//            GroupDummy(
+//                imageRes = R.drawable.ic_example,
+//                name = "예제 2",
+//                participantCount = 3,
+//                date = "2024-07-21"
+//            ),
+//            GroupDummy(
+//                imageRes = R.drawable.ic_example,
+//                name = "예제 2",
+//                participantCount = 3,
+//                date = "2024-07-21"
+//            ),
+//            GroupDummy(
+//                imageRes = R.drawable.ic_example,
+//                name = "예제 2",
+//                participantCount = 3,
+//                date = "2024-07-21"
+//            ),
+//            GroupDummy(
+//                imageRes = R.drawable.ic_example,
+//                name = "예제 2",
+//                participantCount = 3,
+//                date = "2024-07-21"
+//            ),
+//            GroupDummy(
+//                imageRes = R.drawable.ic_example,
+//                name = "예제 2",
+//                participantCount = 3,
+//                date = "2024-07-21"
+//            )
         )
     )
 ) {

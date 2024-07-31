@@ -51,7 +51,7 @@ import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MembersInviteScreen(
-//    navController: NavController, // NavController 전달
+    navController: NavController, // NavController 전달
     viewModel: AddViewModel = hiltViewModel(),
     ) {
     val viewState by viewModel.viewState.collectAsState()
