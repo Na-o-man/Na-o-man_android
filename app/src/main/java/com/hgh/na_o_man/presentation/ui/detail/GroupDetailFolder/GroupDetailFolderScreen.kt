@@ -111,17 +111,6 @@ fun GroupDetailFolderScreen(
                         }
                     )
                 },
-                bottomBar = {
-                    BottomNavigation(
-                        currentDestination = navController.currentDestination,
-                        navigateToScreen = { navigationItem ->
-                            navigateBottomNavigationScreen(
-                                navController = navController,
-                                navigationItem = navigationItem,
-                            )
-                        }
-                    )
-                },
                 containerColor = Color(0xFFBBCFE5)
 
             ) { padding ->
@@ -173,6 +162,7 @@ fun GroupDetailFolderScreen(
                         }
 
                         Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .offset(y = 90.dp)

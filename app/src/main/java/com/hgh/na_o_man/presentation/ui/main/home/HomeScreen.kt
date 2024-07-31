@@ -42,7 +42,6 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    val sideEffect by viewModel.effect.collectAsState(initial = null)
     val context = LocalContext.current as Activity
 
     Log.d("리컴포저블", "HomeScreen")

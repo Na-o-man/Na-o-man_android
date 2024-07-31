@@ -41,10 +41,9 @@ import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersInviteScreen
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
-import com.hgh.na_o_man.presentation.ui.main.home.HomeScreenWithButton
+import com.hgh.na_o_man.presentation.ui.main.home.AddMainScreen
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
 
 @Composable
@@ -101,9 +100,11 @@ fun MainScreen(
                 }
 
                 composable(route = MainScreenRoute.ADD.route) {
-                    HomeScreenWithButton(navigationMyPage = {
-                        navController.navigate(MainScreenRoute.MY_PAGE.route)
-                    })
+                    AddMainScreen(
+                        naviBack = {
+                            navController.popBackStack()
+                        }
+                    )
                 }
 
                 composable(route = MainScreenRoute.ALARM.route) {
