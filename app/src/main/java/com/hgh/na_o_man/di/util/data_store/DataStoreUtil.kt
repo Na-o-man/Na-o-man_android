@@ -48,7 +48,7 @@ class DataStoreUtil @Inject constructor(
     }
 
     suspend fun getAutoLogin(): Boolean {
-        return context.dataStore.data.map { it[KEY_AUTO_LOGIN] }.firstOrNull() ?: false
+        return context.dataStore.data.map { it[KEY_AUTO_LOGIN] }.firstOrNull() ?: true
     }
 
     suspend fun clearDataStore() {
