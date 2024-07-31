@@ -59,7 +59,7 @@ fun MainScreen(
     Log.d("리컴포저블", "MainScreen")
 
     bottomBarState = when (currentDestination?.route) {
-        MainScreenRoute.HOME.route, MainScreenRoute.ALARM.route, MainScreenRoute.ADD.route -> true
+        MainScreenRoute.HOME.route, MainScreenRoute.ADD.route -> true
         else -> false
     }
 
