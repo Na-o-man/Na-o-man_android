@@ -4,7 +4,7 @@ import com.hgh.na_o_man.domain.model.auth.UserTokenModel
 
 data class UserTokenDto(
     val accessToken: String,
-    val memberId: Int,
+    val memberId: Long,
     val refreshToken: String,
 ) {
     fun toModel() = UserTokenModel(

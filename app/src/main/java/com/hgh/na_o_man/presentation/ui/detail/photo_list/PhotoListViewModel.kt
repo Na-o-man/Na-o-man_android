@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.presentation.ui.detail.photo_list
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
@@ -9,9 +10,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PhotoListViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
+
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
+
+    //private var memberId: Long = savedStateHandle.get<Long>(MEMBER_ID) ?: -1L
 
     init {
         Log.d("리컴포저블", "PhotoListViewModel")

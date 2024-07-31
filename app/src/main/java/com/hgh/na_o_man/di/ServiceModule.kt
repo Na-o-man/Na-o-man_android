@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.di
 
 import com.hgh.na_o_man.data.source.remote.api.AuthService
+import com.hgh.na_o_man.data.source.remote.api.ShareGroupsService
 import com.hgh.na_o_man.data.source.remote.api.NotificationsService
 import dagger.Module
 import dagger.Provides
@@ -20,7 +21,11 @@ object ServiceModule {
     fun provideAuthService(@RemoteModule.NoAuth retrofit: Retrofit): AuthService {
         return retrofit.buildService()
     }
-
+    @Provides
+    @Singleton
+    fun ShareGroupsService(@RemoteModule.Auth retrofit: Retrofit): ShareGroupsService {
+        return retrofit.buildService()
+    }
     @Provides
     @Singleton
     fun provideNotificationsService(@RemoteModule.Auth retrofit: Retrofit): NotificationsService {

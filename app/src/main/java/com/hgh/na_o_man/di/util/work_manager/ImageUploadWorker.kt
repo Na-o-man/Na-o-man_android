@@ -15,16 +15,16 @@ class ImageUploadWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
 ) : CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
-        val filePaths = inputData.getStringArray("file_paths") ?: return Result.failure()
+        val fileUris = inputData.getStringArray("file_uris") ?: return Result.failure()
         val signedUrls = inputData.getStringArray("signed_urls") ?: return Result.failure()
 
-        if (filePaths.size != signedUrls.size) {
+        if (fileUris.size != signedUrls.size) {
             return Result.failure()
         }
 
         return try {
-            for (i in filePaths.indices) {
-                val file = File(filePaths[i])
+            for (i in fileUris.indices) {
+                val file = File(fileUris[i])
                 //uploadImageWithPresignedUrl(file, signedUrls[i])
             }
             Result.success()
