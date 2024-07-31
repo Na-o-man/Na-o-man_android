@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.hgh.na_o_man.presentation.component.LineSymbol
 import com.hgh.na_o_man.presentation.component.SignBtn
 import com.hgh.na_o_man.presentation.component.UserProfile
@@ -73,7 +74,7 @@ fun UserScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            UserProfile(userInfo = viewState.value.userInfo, modifier = Modifier.size(160.dp))
+            UserProfile(userInfo = viewState.value.authInfo, modifier = Modifier.size(160.dp))
             Spacer(modifier = Modifier.height(16.dp))
             LineSymbol(Modifier.padding(horizontal = 60.dp))
             Spacer(modifier = Modifier.height(12.dp))
@@ -112,7 +113,7 @@ fun UserScreenPv() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            UserProfile(userInfo = Dummy(), modifier = Modifier.size(160.dp))
+            UserProfile(userInfo = AuthInfoModel(), modifier = Modifier.size(160.dp))
             Spacer(modifier = Modifier.height(16.dp))
             LineSymbol(Modifier.padding(horizontal = 60.dp))
             Spacer(modifier = Modifier.height(12.dp))
@@ -125,7 +126,7 @@ fun UserScreenPv() {
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(30.dp))
-            SignBtn{
+            SignBtn {
 
             }
 

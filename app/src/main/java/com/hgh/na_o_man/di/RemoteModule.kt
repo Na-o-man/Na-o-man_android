@@ -1,17 +1,20 @@
 package com.hgh.na_o_man.di
 
+import android.content.Context
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.di.util.auth.AccessTokenInterceptor
+import com.hgh.na_o_man.di.util.auth.Authenticator
 import com.hgh.na_o_man.di.util.data_store.DataStoreUtil
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-//import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -47,13 +50,14 @@ object RemoteModule {
     fun provideAuthOKHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         dataStoreUtil: DataStoreUtil,
+        authenticator: Authenticator
     ): OkHttpClient =
         OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
-            //.authenticator()
+            .authenticator(authenticator)
             .addNetworkInterceptor(AccessTokenInterceptor(dataStoreUtil))
             .retryOnConnectionFailure(false)
             .build()
@@ -61,11 +65,14 @@ object RemoteModule {
     @Provides
     @Singleton
     @Auth
-    fun provideAuthRetrofit(@Auth okHttpClient: OkHttpClient): Retrofit =
+    fun provideAuthRetrofit(
+        @Auth okHttpClient: OkHttpClient,
+        @ApplicationContext context: Context
+    ): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(R.string.base_url.toString())
-//            .addConverterFactory(ScalarsConverterFactory.create())
+            .baseUrl(context.getString(R.string.base_url))
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -86,15 +93,15 @@ object RemoteModule {
     @Provides
     @Singleton
     @NoAuth
-    fun provideNoAuthRetrofit(@NoAuth okHttpClient: OkHttpClient): Retrofit =
+    fun provideNoAuthRetrofit(
+        @NoAuth okHttpClient: OkHttpClient,
+        @ApplicationContext context: Context
+    ): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(R.string.base_url.toString())
-//            .addConverterFactory(ScalarsConverterFactory.create())
+            .baseUrl(context.getString(R.string.base_url))
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-    private inline fun <reified T> Retrofit.buildService(): T {
-        return this.create(T::class.java)
-    }
 }

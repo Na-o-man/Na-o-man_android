@@ -34,7 +34,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
+import com.hgh.na_o_man.presentation.ui.main.MainActivity
 import com.hgh.na_o_man.presentation.util.SocialLoginUtil
 import com.hgh.na_o_man.presentation.util.getActivity
 
@@ -46,8 +48,8 @@ fun SignScreen(
     val context = LocalContext.current as Activity
     val socialLoginUtil = remember {
         SocialLoginUtil(context, object : SocialLoginUtil.LoginCallback {
-            override fun onLoginSuccess(dummy: Dummy) {
-                viewModel.setEvent(SignContract.SignEvent.OnClickLogin(dummy))
+            override fun onLoginSuccess(authInfo: AuthInfoModel) {
+                viewModel.setEvent(SignContract.SignEvent.OnClickLogin(authInfo))
             }
 
             override fun onLoginFailure(error: Throwable) {
@@ -74,6 +76,10 @@ fun SignScreen(
 
                 is SignContract.SignSideEffect.ShowToast -> {
                     Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                }
+
+                SignContract.SignSideEffect.NaviMain -> {
+                    MainActivity.goMain(context)
                 }
 
                 else -> {}

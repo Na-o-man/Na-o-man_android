@@ -10,12 +10,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.kakao.sdk.user.UserApiClient
 
 class SocialLoginUtil(private val context: Context, private val callback: LoginCallback) {
 
     interface LoginCallback {
-        fun onLoginSuccess(dummy: Dummy)
+        fun onLoginSuccess(authInfo: AuthInfoModel)
         fun onLoginFailure(error: Throwable)
     }
 
@@ -48,9 +49,9 @@ class SocialLoginUtil(private val context: Context, private val callback: LoginC
         }
     }
 
-    fun kakaoSignOut(){
+    fun kakaoSignOut() {
         fun kakaoSignOut() {
-            UserApiClient.instance.logout{}
+            UserApiClient.instance.logout {}
         }
     }
 
@@ -63,7 +64,12 @@ class SocialLoginUtil(private val context: Context, private val callback: LoginC
                 val email = user.kakaoAccount?.email ?: ""
                 val name = user.kakaoAccount?.profile?.nickname ?: ""
                 val profileUrl = user.kakaoAccount?.profile?.thumbnailImageUrl ?: ""
-                callback.onLoginSuccess(Dummy(dummyString2 = email, dummyString = profileUrl, dummyString3 = name ))
+                callback.onLoginSuccess(
+                    AuthInfoModel(
+                        authId = authId, email = email, name = name,
+                        profileUrl = profileUrl, socialType = "KAKAO"
+                    )
+                )
             }
             kakaoSignOut()
         }
@@ -87,8 +93,12 @@ class SocialLoginUtil(private val context: Context, private val callback: LoginC
             val email = account.email ?: ""
             val name = account.displayName ?: ""
             val profileUrl = account.photoUrl.toString() ?: ""
-            val token = account.idToken ?: ""
-            callback.onLoginSuccess(Dummy(dummyString2 = email, dummyString = profileUrl, dummyString3 = name ))
+            callback.onLoginSuccess(
+                AuthInfoModel(
+                    authId = authId, email = email, name = name,
+                    profileUrl = profileUrl, socialType = "GOOGLE"
+                )
+            )
             googleSignOut()
         } catch (e: ApiException) {
             Log.d("구글", "로그인 실패: ${e}")
