@@ -48,7 +48,7 @@ fun GroupDetailScreen(
                         navigationPhotoList = { groupId, memberId ->
                             navController.navigate(
                                 GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
-                                    .plus("/${memberId}").plus("/${true}")
+                                    .plus("/${memberId}").plus("/${false}")
                             )
                         },
                         navigationMyPage = {},

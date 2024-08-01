@@ -204,7 +204,15 @@ fun PhotoListScreen(
                             PhotoMenu(
                                 isMine = false,
                                 modifier = modifier,
-                                onCLickDown = {})
+                                onCLickDown = {
+
+                                },
+                                onClickDelete = {
+
+                                },
+                                onClickAgenda = {
+
+                                })
                         }
                     )
                 }
@@ -221,6 +229,7 @@ fun PhotoMenu(
     modifier: Modifier = Modifier,
     onCLickDown: () -> Unit,
     onClickDelete: () -> Unit = {},
+    onClickAgenda : () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -256,7 +265,7 @@ fun PhotoMenu(
         ) {
             if (isAgenda) {
                 CloudWhiteBtn(title = "사진 추가") {
-                    onCLickDown()
+                    onClickAgenda()
                 }
             } else {
                 CloudWhiteBtn(title = "다운 받기") {
