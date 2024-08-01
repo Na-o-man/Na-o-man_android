@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.BackAndSelectAppBar
+import com.hgh.na_o_man.presentation.component.BackAppBar
 import com.hgh.na_o_man.presentation.component.DecorationCloud
 import com.hgh.na_o_man.presentation.component.ImageCard
 import com.hgh.na_o_man.presentation.component.ImageDialog
@@ -56,6 +57,8 @@ import com.hgh.na_o_man.presentation.theme.Typography
 
 @Composable
 fun PhotoListScreen(
+    navigationBack: () -> Unit,
+    navigationAgenda: (Array<String>) -> Unit,
     viewModel: PhotoListViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -101,15 +104,22 @@ fun PhotoListScreen(
         LoadState.SUCCESS -> {
             Scaffold(
                 topBar = {
-                    BackAndSelectAppBar(
-                        isMenuClick = viewState.isSelectMode,
-                        onStartClick = {
-                            viewModel.setEvent(PhotoListContract.PhotoListEvent.OnBackClicked)
-                        },
-                        onEndClick = {
-                            viewModel.setEvent(PhotoListContract.PhotoListEvent.OnSelectModeClicked)
+                    if (viewState.isAgenda) {
+                        BackAppBar {
+                            navigationBack()
+                            //viewModel.setEvent(PhotoListContract.PhotoListEvent.OnBackClicked)
                         }
-                    )
+                    } else {
+                        BackAndSelectAppBar(
+                            isMenuClick = viewState.isSelectMode,
+                            onStartClick = {
+                                viewModel.setEvent(PhotoListContract.PhotoListEvent.OnBackClicked)
+                            },
+                            onEndClick = {
+                                viewModel.setEvent(PhotoListContract.PhotoListEvent.OnSelectModeClicked)
+                            }
+                        )
+                    }
                 },
                 containerColor = Color.Transparent
             ) { padding ->
@@ -156,7 +166,7 @@ fun PhotoListScreen(
                                         .fillMaxWidth()
                                         .aspectRatio(1.25f),
                                     image = photo,
-                                    isSelectMode = viewState.isSelectMode,
+                                    isSelectMode = viewState.isSelectMode || viewState.isAgenda,
                                     onClick = {
                                         viewModel.setEvent(
                                             PhotoListContract.PhotoListEvent.OnImageClicked(
@@ -179,6 +189,7 @@ fun PhotoListScreen(
                     if (viewState.photoList.count { it.is1 } > 0) {
                         PhotoMenu(
                             isMine = true,
+                            isAgenda = viewState.isAgenda,
                             modifier = Modifier.align(alignment = Alignment.BottomCenter),
                             onCLickDown = {}
                         )
@@ -206,6 +217,7 @@ fun PhotoListScreen(
 @Composable
 fun PhotoMenu(
     isMine: Boolean = false,
+    isAgenda: Boolean = false,
     modifier: Modifier = Modifier,
     onCLickDown: () -> Unit,
     onClickDelete: () -> Unit = {},
@@ -242,13 +254,19 @@ fun PhotoMenu(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            CloudWhiteBtn(title = "다운 받기") {
-                onCLickDown()
-            }
-            if (isMine) {
-                Spacer(modifier = Modifier.width(20.dp))
-                CloudWhiteBtn(title = "삭제하기") {
-                    onClickDelete()
+            if (isAgenda) {
+                CloudWhiteBtn(title = "사진 추가") {
+                    onCLickDown()
+                }
+            } else {
+                CloudWhiteBtn(title = "다운 받기") {
+                    onCLickDown()
+                }
+                if (isMine) {
+                    Spacer(modifier = Modifier.width(20.dp))
+                    CloudWhiteBtn(title = "삭제하기") {
+                        onClickDelete()
+                    }
                 }
             }
         }

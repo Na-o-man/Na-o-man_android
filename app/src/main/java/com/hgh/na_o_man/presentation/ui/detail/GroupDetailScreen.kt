@@ -48,7 +48,7 @@ fun GroupDetailScreen(
                         navigationPhotoList = { groupId, memberId ->
                             navController.navigate(
                                 GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
-                                    .plus("/${memberId}")
+                                    .plus("/${memberId}").plus("/${true}")
                             )
                         },
                         navigationMyPage = {},
@@ -57,13 +57,23 @@ fun GroupDetailScreen(
 
                 composable(route = GroupDetailScreenRoute.LIST.route
                     .plus("/{$KEY_GROUP_ID}")
-                    .plus("/{$KEY_MEMBER_ID}"),
+                    .plus("/{$KEY_MEMBER_ID}")
+                    .plus("/{$KEY_IS_AGENDA}"),
                     arguments = listOf(
                         navArgument(KEY_GROUP_ID) { type = NavType.LongType },
-                        navArgument(KEY_MEMBER_ID) { type = NavType.LongType }
+                        navArgument(KEY_MEMBER_ID) { type = NavType.LongType },
+                        navArgument(KEY_IS_AGENDA) { type = NavType.BoolType }
                     )
                 ) {
-                    PhotoListScreen()
+                    PhotoListScreen(
+                        navigationBack = {
+                            navController.popBackStack()
+                        },
+                        navigationAgenda = {
+                            navController.currentBackStackEntry?.savedStateHandle?.set("data", arrayOf<String>("gd","dg"))
+                            navController.popBackStack()
+                        }
+                    )
                 }
 
                 composable(route = GroupDetailScreenRoute.VOTE.route) {
@@ -84,3 +94,4 @@ enum class GroupDetailScreenRoute(val route: String) {
 
 const val KEY_GROUP_ID = "group-id"
 const val KEY_MEMBER_ID = "member-id"
+const val KEY_IS_AGENDA = "is-agenda"

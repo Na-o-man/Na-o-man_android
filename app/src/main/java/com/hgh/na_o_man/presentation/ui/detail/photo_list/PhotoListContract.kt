@@ -12,6 +12,7 @@ class PhotoListContract {
         val loadState: LoadState = LoadState.SUCCESS,
         val isSelectMode : Boolean = false,
         val isDialogVisible: Boolean = false,
+        val isAgenda : Boolean = false,
         val dialogPhoto: Dummy = Dummy(),
         val photoList : List<Dummy> = listOf(),
         val selectPhotoList : List<Dummy> = listOf(),
