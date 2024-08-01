@@ -96,8 +96,8 @@ fun NoAlarmBox(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewNoGroupBox() {
-//    NoGroupBox(message = "아직 공유그룹이 없어요.\n그룹을 추가해 주세요.")
-//}
+@Preview(showBackground = true)
+@Composable
+fun PreviewNoGroupBox() {
+    NoGroupBox(message = "아직 공유그룹이 없어요.\n그룹을 추가해 주세요.", "ddd") {}
+}

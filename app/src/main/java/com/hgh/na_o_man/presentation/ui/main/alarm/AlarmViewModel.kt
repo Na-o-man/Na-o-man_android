@@ -17,7 +17,7 @@ class AlarmViewModel @Inject constructor(
         alarmList = listOf(
             AlarmDummy(
                 imageRes = R.drawable.ic_example,
-                detail = "개구쟁이 친구들과 발리 한마 : 해변 히어로즈]에 김봉순 님이 n장 사진을 업로드 했습니다.",
+                detail = "개구쟁이 친구들과 발리 한마 : 해변 히어로즈]에 김봉순 님이 n장 사진을 업로드 했습@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@니다.",
                 date = "2024-07-20"
             ),
             AlarmDummy(

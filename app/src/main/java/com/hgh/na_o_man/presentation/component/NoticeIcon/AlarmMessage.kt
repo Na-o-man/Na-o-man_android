@@ -67,8 +67,8 @@ fun AlarmRead(
                     lineHeight = 16.sp,
                     fontSize = 11.sp,
                     color = Color.Black,
-                    overflow = TextOverflow.Visible,
-                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
                     modifier = Modifier
                         .widthIn(max = 210.dp)
                 )
@@ -150,7 +150,7 @@ fun AlarmMessagePreview() {
     Column {
         AlarmRead(
             imageRes = R.drawable.ic_example,
-            detail = "[개구쟁어로즈]ㄹㅁㄴㅇㄹㄴㅇㅁㄹㅁㄴㅇㄹㅁㄴㄹㄴㅁㄹㅁㄴㄹㅇㅁㄴㄹㄴㅁㅇㄹㅁㄴㅇㄹㅁㄴㅇ해변히어럼ㄴ에했습니다.",
+            detail = "[개구쟁어로즈]ㄹㅁㄴㅇㄹㄴㅇㅁㄹㅁdfdffdfdfdfdfdfdfdfdfdfdffdfdffdfdfㄴㅇㄹㅁㄴㄹㄴㅁㄹㅁㄴㄹㅇㅁㄴㄹㄴㅁㅇㄹㅁㄴㅇㄹㅁㄴㅇ해변히어럼ㄴ에했습니다.",
             date = "2024.07.20"
         )
         Spacer(modifier = Modifier.height(16.dp))
