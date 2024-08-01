@@ -25,12 +25,11 @@ object RepositoryModule {
 
     @Provides
     @ViewModelScoped
-    fun providesAuthRepository(api: ShareGroupsService): ShareGroupRepository =
+    fun providesShareGroupRepository(api: ShareGroupsService): ShareGroupRepository =
         ShareGroupRepositoryImpl(api)
 
     @Provides
     @ViewModelScoped
-    fun providesAuthRepository(api: NotificationsService): NotificationsRepository =
+    fun providesNotificationRepository(api: NotificationsService): NotificationsRepository =
         NotificationRepositoryImpl(api)
-
 }

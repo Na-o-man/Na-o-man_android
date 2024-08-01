@@ -2,9 +2,13 @@ package com.hgh.na_o_man.data.source.remote.api
 
 import com.hgh.na_o_man.data.dto.ApiResult
 import com.hgh.na_o_man.data.dto.notification.request.FcmRequestDto
+import com.hgh.na_o_man.data.dto.notification.request.PageNotificationDto
+import com.hgh.na_o_man.data.dto.notification.response.DeletedCountDto
+import com.hgh.na_o_man.data.dto.notification.response.NotificationInfoListDto
 import com.hgh.na_o_man.data.dto.notification.response.UnreadDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 
@@ -20,4 +24,11 @@ interface NotificationsService {
     @GET("notifications/unread")
     suspend fun getNotificationUnreadAPI(): Response<ApiResult<UnreadDto>>
 
+    @GET("notifications/my")
+    suspend fun getNotificationMyAPI(
+        @Body pageNotificationDto : PageNotificationDto
+    ) : Response<ApiResult<NotificationInfoListDto>>
+
+    @DELETE("notifications")
+    suspend fun deleteNotifiationCountAPI() : Response<ApiResult<DeletedCountDto>>
 }
