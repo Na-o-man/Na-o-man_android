@@ -7,7 +7,9 @@ import com.hgh.na_o_man.data.dto.share_group.response.GroupAddDto
 import com.hgh.na_o_man.data.dto.share_group.response.GroupJoinDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ShareGroupsService {
     @POST("shareGroups")
@@ -19,4 +21,9 @@ interface ShareGroupsService {
     suspend fun postJoinGroup(
         @Body joinGroupJoinRequest: GroupJoinRequestDto
     ) : Response<ApiResult<GroupJoinDto>>
+
+    @GET("shareGroups/{shareGroupId}")
+    suspend fun groupSearch(
+        @Path("shareGroupId") shareGroupId : Long // 맞는지 확인해야 함
+    ) : Response<ApiResult<GroupAddDto>> // 재활용 가능한지 확인
 }

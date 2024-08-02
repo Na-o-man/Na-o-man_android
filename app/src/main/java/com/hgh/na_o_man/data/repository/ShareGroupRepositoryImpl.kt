@@ -27,4 +27,10 @@ import javax.inject.Singleton
         return apiHandler({ api.postJoinGroup(groupJoinRequestDto)}) { response: ApiResult<GroupJoinDto> -> response.data.toModel() }
     }
 
+    override suspend fun searchGroup(shareGroupId: Long): RetrofitResult<GroupAddModel> {
+        return apiHandler({ api.groupSearch(shareGroupId)}) { response: ApiResult<GroupAddDto> -> response.data.toModel() }
+    }
+
+
+
 }

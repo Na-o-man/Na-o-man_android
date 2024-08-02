@@ -1,8 +1,10 @@
 package com.hgh.na_o_man.di
 
 import com.hgh.na_o_man.data.source.remote.api.AuthService
+import com.hgh.na_o_man.data.source.remote.api.MembersService
 import com.hgh.na_o_man.data.source.remote.api.ShareGroupsService
 import com.hgh.na_o_man.data.source.remote.api.NotificationsService
+import com.hgh.na_o_man.data.source.remote.api.PhotosService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,5 +33,15 @@ object ServiceModule {
     fun provideNotificationsService(@RemoteModule.Auth retrofit: Retrofit): NotificationsService {
         return retrofit.buildService()
     }
+    @Provides
+    @Singleton
+    fun provideMembersService(@RemoteModule.Auth retrofit: Retrofit) : MembersService {
+        return retrofit.buildService()
+    }
 
+    @Provides
+    @Singleton
+    fun providePhotosService(@RemoteModule.Auth retrofit: Retrofit): PhotosService {
+        return retrofit.buildService()
+    }
 }
