@@ -27,7 +27,7 @@ class HomeContract {
         object InitHomeScreen : HomeEvent()
         object OnAddGroupInBoxClicked : HomeEvent()
         object OnAddGroupClicked : HomeEvent()
-        object onEnterGroupClicked : HomeEvent()
-        object onGroupListClicked : HomeEvent()
+        object OnEnterGroupClicked : HomeEvent()
+        data class OnGroupListClicked(val id : Long) : HomeEvent()
     }
 }

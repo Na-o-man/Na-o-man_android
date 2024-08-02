@@ -2,6 +2,7 @@ package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 
 import CloudBtn
 import SmallCloudBtn
+import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,13 +17,16 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +45,7 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.groupdetail.Bigfolder
 import com.hgh.na_o_man.presentation.component.groupdetail.GroupInfo
+import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
 import com.hgh.na_o_man.presentation.ui.main.BottomNavigation
 import com.hgh.na_o_man.presentation.ui.main.navigateBottomNavigationScreen
 
@@ -49,11 +54,29 @@ import com.hgh.na_o_man.presentation.ui.main.navigateBottomNavigationScreen
 @Composable
 fun GroupDetailFolderScreen(
     navigationMyPage: () -> Unit,
+    navigationPhotoList : (Long, Long) -> Unit,
     navigationBack: () -> Unit,
     navController: NavHostController = rememberNavController(),
     viewModel: GroupDetailFolderViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
+    val context = LocalContext.current as Activity
+    val groupId = remember { context.intent.getLongExtra(GROUP_DETAIL, 0L) }
+    LaunchedEffect(groupId) {
+        viewModel.initGroupId(groupId)
+    }
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoList -> {
+                    navigationPhotoList(effect.groupId, effect.memberId)
+                }
+                else -> Unit
+            }
+        }
+    }
+
 
     Log.d("리컴포저블", "GroupDetailScreen")
 
@@ -85,17 +108,6 @@ fun GroupDetailFolderScreen(
                         },
                         onEndClick = {
                             navigationMyPage()
-                        }
-                    )
-                },
-                bottomBar = {
-                    BottomNavigation(
-                        currentDestination = navController.currentDestination,
-                        navigateToScreen = { navigationItem ->
-                            navigateBottomNavigationScreen(
-                                navController = navController,
-                                navigationItem = navigationItem,
-                            )
                         }
                     )
                 },
@@ -141,7 +153,8 @@ fun GroupDetailFolderScreen(
                                     .requiredSize(625.dp, 140.dp) // 아이콘 크기를 명시적으로 설정
                                     .offset(y = 57.dp)
                             )
-                            FolderProfile(Dummy(),
+                            FolderProfile(
+                                Dummy(),
                                 modifier = Modifier
                                     .offset(y = 10.dp)
                                     .requiredSize(160.dp)
@@ -149,13 +162,21 @@ fun GroupDetailFolderScreen(
                         }
 
                         Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .offset(y = 90.dp)
                         ) {
-                            SmallCloudBtn(title = "이미지\n분류")
-                            CloudBtn(title = "다운로드")
-                            SmallCloudBtn(title = "지난 안건")
+                            SmallCloudBtn(title = "이미지\n분류"){
+
+                            }
+                            CloudBtn(title = "다운로드") {
+                                // 테스트용 - 삭제해야함
+                                viewModel.setEvent( GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(38L))
+                            }
+                            SmallCloudBtn(title = "지난 안건"){
+
+                            }
                         }
                     }
                 }
@@ -172,5 +193,6 @@ fun PreView(
 ) {
     GroupDetailFolderScreen(
         navigationMyPage = {},
+        navigationPhotoList = {_ , _ ->},
         navigationBack = {})
 }

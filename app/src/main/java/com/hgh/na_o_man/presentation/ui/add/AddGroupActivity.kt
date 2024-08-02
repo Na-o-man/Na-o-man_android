@@ -1,5 +1,7 @@
 package com.hgh.na_o_man.presentation.ui.add
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Layout
 import androidx.activity.ComponentActivity
@@ -28,6 +30,7 @@ import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersInviteScreen
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersNameScreen
 import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptScreen
+import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -86,6 +89,10 @@ class AddGroupActivity : ComponentActivity() {
                 val viewModel: AddViewModel = viewModel() // AddViewModel 인스턴스를 가져옴
                 MembersNameScreen(viewModel) // MembersSpace 호출
             }
+
+            composable("membersInvite") {
+                MembersInviteScreen(navController = navController)
+            }
         }
     }
 
@@ -95,5 +102,11 @@ class AddGroupActivity : ComponentActivity() {
 
     companion object {
         const val ADD_GROUP = "addGroup"
+
+        fun newIntent(context: Context, isJoin: Boolean) =
+            Intent(context, AddGroupActivity::class.java).apply {
+                putExtra(ADD_GROUP, isJoin)
+            }
+
     }
 }

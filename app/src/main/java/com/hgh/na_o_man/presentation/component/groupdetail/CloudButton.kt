@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -123,7 +124,8 @@ fun SmallCloudBtn(
         Text(
             text = title,
             color = Color(0xFF748292),
-            style = com.hgh.na_o_man.presentation.theme.Typography.labelMedium
+            style = com.hgh.na_o_man.presentation.theme.Typography.labelMedium,
+            textAlign = TextAlign.Center
         )
     }
 }

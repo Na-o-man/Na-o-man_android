@@ -30,13 +30,14 @@ fun EventCard(
     title: String,
     participantCount: Int,
     date: String,
-    onClick: () -> Unit = {}
+    groupId: Long = 33L,
+    onClick: (Long) -> Unit = {}
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .padding(12.dp)
-            .clickable(onClick = onClick) // 클릭 이벤트 추가
+            .clickable(onClick = { onClick(groupId) }) // 클릭 이벤트 추가
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_group_box_button_299),
@@ -80,7 +81,7 @@ fun EventCard(
         Box(
             modifier = Modifier
                 .offset(x = -90.dp, y = (-15).dp)
-                .clickable(onClick = onClick) // 클릭 이벤트 추가
+                .clickable(onClick = { onClick(groupId) }) // 클릭 이벤트 추가
                 .zIndex(1f) // 이미지가 다른 요소들 위에 렌더링되도록 설정
         ) {
             Image(
