@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.ui.detail.vote
+package com.hgh.na_o_man.presentation.ui.detail.agenda
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.hgh.na_o_man.R
+import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.PlusAppBar
 import com.hgh.na_o_man.presentation.component.StartAppBar
@@ -64,8 +65,20 @@ import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 
 
 @Composable
-fun VoteScreen2(navController: NavController) {
+fun AgendaScreen(
+    navigationBack: () -> Unit,
+    navigationPhotoList: (Long, Long) -> Unit,
+    navController: NavController,
+    // viewModel: PhotoListViewModel = hiltViewModel(),
+) {
     Log.d("리컴포저블", "VoteScreen2")
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val data = remember {
+        savedStateHandle?.get<List<Dummy>>("agendaData")
+    }
+
+    Log.d("더미", "${data}")
+
     var showDialog by remember { mutableStateOf(false) } // 다이얼로그 표시 상태
     var images by remember { mutableStateOf(listOf<String>()) }
     var agendaText by remember { mutableStateOf("") }
@@ -83,7 +96,7 @@ fun VoteScreen2(navController: NavController) {
             ) {
                 PlusAppBar(
                     onPlusClick = {
-                        navController.navigate("votescreen2")
+                        navigationPhotoList(22, 24)
                     }
                 )
             }
@@ -204,7 +217,11 @@ fun AgendaLabel() {
 }
 
 @Composable
-fun AgendaInputField(value: String, onValueChange: (String) -> Unit, onFocusChange: (Boolean) -> Unit) {
+fun AgendaInputField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    onFocusChange: (Boolean) -> Unit
+) {
     var isFocused by remember { mutableStateOf(false) } // 이 부분을 여기로 이동
     var agendaText by remember { mutableStateOf("") }
 
@@ -414,6 +431,7 @@ fun DropDownImageButton() {
         }
     }
 }
+
 @Composable
 fun AddImageButton(
     images: List<String>,  // 이미지 리스트를 매개변수로 받음
@@ -453,6 +471,7 @@ fun AddImageButton(
         )
     }
 }
+
 @Composable
 fun ShowWarningDialog(onDismiss: () -> Unit) {
     AlertDialog(
@@ -471,5 +490,7 @@ fun ShowWarningDialog(onDismiss: () -> Unit) {
 @Composable
 fun PreviewVote2() {
     val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-    VoteScreen2(navController = navController) // 초기화한 navController 전달
+    AgendaScreen({}, { _, _ ->
+
+    }, navController) // 초기화한 navController 전달
 }

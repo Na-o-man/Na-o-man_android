@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.sign.signin
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.data.dto.auth.request.LoginRequestDto
@@ -51,6 +52,10 @@ class SignViewModel @Inject constructor(
 
             SignContract.SignEvent.OnClickFinish -> {
                 sendEffect({ SignContract.SignSideEffect.NaviMain })
+            }
+
+            SignContract.SignEvent.OnClickPhotoPicker -> {
+                sendEffect({ SignContract.SignSideEffect.NaviPhotoPicker })
             }
         }
     }
@@ -127,5 +132,9 @@ class SignViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.e("예외받기", "$e")
         }
+    }
+
+    fun patchUris(uris: List<Uri>) = viewModelScope.launch {
+        updateState { copy(photos = uris) }
     }
 }

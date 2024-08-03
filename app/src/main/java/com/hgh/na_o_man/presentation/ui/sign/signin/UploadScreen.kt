@@ -1,6 +1,10 @@
 package com.hgh.na_o_man.presentation.ui.sign.signin
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -13,7 +17,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -39,21 +47,33 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.base.LoadState
+import com.hgh.na_o_man.presentation.component.CommonBtn
 import com.hgh.na_o_man.presentation.component.Line
 import com.hgh.na_o_man.presentation.component.LineSymbol
 import com.hgh.na_o_man.presentation.component.SignBtn
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
+import com.hgh.na_o_man.presentation.component.UriImageCard
 
 @Composable
 fun UploadScreen(
     viewModel: SignViewModel = hiltViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2)
+    ) { uris: List<Uri> ->
+        viewModel.patchUris(uris)
+    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
+                is SignContract.SignSideEffect.NaviPhotoPicker -> {
+                    imagePickerLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
+                    )
+                }
 
                 else -> {}
             }
@@ -74,7 +94,6 @@ fun UploadScreen(
             Surface(
                 modifier = Modifier.fillMaxSize(),
             ) {
-
                 Image(
                     painter = painterResource(R.drawable.background_1),
                     contentDescription = "",
@@ -83,69 +102,147 @@ fun UploadScreen(
                         .fillMaxSize()
                 )
 
-                Surface(
-                    color = Color(0x4DFFFFFF),
-                    shape = RoundedCornerShape(24.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(horizontal = 24.dp)
-                        .border(
-                            2.dp, Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0x00FFFFFF),
-                                    Color(0x8CFFFFFF),
-                                    Color(0x33FFFFFF),
-                                    Color(0xFFFFFFFF),
-                                ),
-                                start = Offset.Zero,
-                                end = Offset.Infinite,
-                            ), RoundedCornerShape(24.dp)
-                        )
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                if (viewState.photos.isEmpty()) {
+                    Surface(
+                        color = Color(0x4DFFFFFF),
+                        shape = RoundedCornerShape(24.dp),
                         modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(horizontal = 24.dp)
+                            .border(
+                                2.dp, Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0x00FFFFFF),
+                                        Color(0x8CFFFFFF),
+                                        Color(0x33FFFFFF),
+                                        Color(0xFFFFFFFF),
+                                    ),
+                                    start = Offset.Zero,
+                                    end = Offset.Infinite,
+                                ), RoundedCornerShape(24.dp)
+                            )
                     ) {
-                        Spacer(modifier = Modifier.height(30.dp))
-                        Text(text = "가이드라인", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
-                        Spacer(modifier = Modifier.height(20.dp))
-                        LineSymbol(modifier = Modifier.padding(horizontal = 24.dp))
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Row(
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(24.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            ExampleImg(
-                                modifier = Modifier.weight(1f),
-                                imageId = R.drawable.background_1,
-                                iconId = R.drawable.ic_yes_13,
-                                "정면이 보이는 사진으로 선택해주세요."
-                            )
-                            ExampleImg(
+                            Spacer(modifier = Modifier.height(30.dp))
+                            Text(text = "가이드라인", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
+                            Spacer(modifier = Modifier.height(20.dp))
+                            LineSymbol(modifier = Modifier.padding(horizontal = 24.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(24.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                ExampleImg(
                                     modifier = Modifier.weight(1f),
-                            imageId = R.drawable.background_2,
-                            iconId = R.drawable.ic_no_13,
-                            "~~~~한 사진은 제외해주세요."
+                                    imageId = R.drawable.background_1,
+                                    iconId = R.drawable.ic_yes_13,
+                                    "정면 사진"
+                                )
+                                ExampleImg(
+                                    modifier = Modifier.weight(1f),
+                                    imageId = R.drawable.background_1,
+                                    iconId = R.drawable.ic_yes_13,
+                                    "측면 사진"
+                                )
+                                ExampleImg(
+                                    modifier = Modifier.weight(1f),
+                                    imageId = R.drawable.background_2,
+                                    iconId = R.drawable.ic_no_13,
+                                    "너무 작게 나온 사진"
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Line(modifier = Modifier.padding(horizontal = 24.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Text(
+                                text = "위 가이드 라인을 준수하는 사진\n 2장을 입력해주세요.",
+                                textAlign = TextAlign.Center,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Normal
                             )
+                            Spacer(modifier = Modifier.height(20.dp))
+                            SignBtn(
+                                title = "사진 추가하기",
+                                modifier = Modifier
+                                    .size(200.dp, 60.dp)
+                            ) {
+                                viewModel.setEvent(SignContract.SignEvent.OnClickPhotoPicker)
+                            }
+                            Spacer(modifier = Modifier.height(30.dp))
                         }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Line(modifier = Modifier.padding(horizontal = 24.dp))
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Text(
-                            text = "위 가이드 라인을 준수하는 사진\n N장을 입력해주세요.",
-                            textAlign = TextAlign.Center,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Normal
-                        )
-                        Spacer(modifier = Modifier.height(20.dp))
-                        SignBtn {
+                    }
+                } else {
+                    Surface(
+                        color = Color(0x4DFFFFFF),
+                        shape = RoundedCornerShape(24.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(horizontal = 24.dp)
+                            .border(
+                                2.dp, Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0x00FFFFFF),
+                                        Color(0x8CFFFFFF),
+                                        Color(0x33FFFFFF),
+                                        Color(0xFFFFFFFF),
+                                    ),
+                                    start = Offset.Zero,
+                                    end = Offset.Infinite,
+                                ), RoundedCornerShape(24.dp)
+                            )
+                    ) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                        ) {
+                            Spacer(modifier = Modifier.height(30.dp))
+                            Text(
+                                text = "정면,측면 사진을 각각 한 장씩 추가 해주세요.",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Line(modifier = Modifier.padding(horizontal = 24.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
+                            LazyRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(24.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                itemsIndexed(viewState.photos, key = { _, it ->
+                                    it
+                                }) { _, photo ->
+                                    UriImageCard(
+                                        imageUri = photo,
+                                        modifier = Modifier.size(128.dp, 128.dp)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            SignBtn(
+                                title = "다시 선택하기",
+                                modifier = Modifier
+                                    .size(200.dp, 60.dp)
+                            ) {
+                                viewModel.setEvent(SignContract.SignEvent.OnClickPhotoPicker)
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            CommonBtn(title = "사진 선택 완료") {
 
+                            }
+                            Spacer(modifier = Modifier.height(30.dp))
                         }
-                        Spacer(modifier = Modifier.height(30.dp))
                     }
                 }
             }
@@ -246,26 +343,34 @@ fun UploadScreenPv() {
                         modifier = Modifier.weight(1f),
                         imageId = R.drawable.background_1,
                         iconId = R.drawable.ic_yes_13,
-                        "정면이 보이는 사진으로 선택해주세요."
+                        "정면 사진"
+                    )
+                    ExampleImg(
+                        modifier = Modifier.weight(1f),
+                        imageId = R.drawable.background_1,
+                        iconId = R.drawable.ic_yes_13,
+                        "측면 사진"
                     )
                     ExampleImg(
                         modifier = Modifier.weight(1f),
                         imageId = R.drawable.background_2,
                         iconId = R.drawable.ic_no_13,
-                        "~~~~한 사진은 제외해주세요."
+                        "너무 작게 나온 사진"
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Line(modifier = Modifier.padding(horizontal = 24.dp))
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "위 가이드 라인을 준수하는 사진\n N장을 입력해주세요.",
+                    text = "위 가이드 라인을 준수하는 사진\n 2장을 입력해주세요.",
                     textAlign = TextAlign.Center,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Normal
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                SignBtn {
+                SignBtn(
+                    title = "사진 추가하기"
+                ) {
 
                 }
                 Spacer(modifier = Modifier.height(30.dp))

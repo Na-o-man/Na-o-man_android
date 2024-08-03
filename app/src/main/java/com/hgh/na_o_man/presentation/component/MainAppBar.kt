@@ -33,6 +33,22 @@ fun EndAppBar(
 }
 
 @Composable
+fun BackAppBar(
+    modifier: Modifier = Modifier,
+    onStartClick: () -> Unit,
+) {
+    MainAppBar(
+        modifier = modifier,
+        back = AppBarMenu.BACK,
+        menu = null,
+        onStartClick = onStartClick,
+        onEndClick = { },
+        onNextClick = { }, // next 버튼 클릭 이벤트 추가
+        onPlusClick = { }
+    )
+}
+
+@Composable
 fun StartAppBar(
     modifier: Modifier = Modifier,
     onStartClick: () -> Unit,

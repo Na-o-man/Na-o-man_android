@@ -54,7 +54,8 @@ import com.hgh.na_o_man.presentation.ui.main.navigateBottomNavigationScreen
 @Composable
 fun GroupDetailFolderScreen(
     navigationMyPage: () -> Unit,
-    navigationPhotoList : (Long, Long) -> Unit,
+    navigationPhotoList: (Long, Long) -> Unit,
+    navigationVote: (Long) -> Unit,
     navigationBack: () -> Unit,
     navController: NavHostController = rememberNavController(),
     viewModel: GroupDetailFolderViewModel = hiltViewModel(),
@@ -72,6 +73,11 @@ fun GroupDetailFolderScreen(
                 is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoList -> {
                     navigationPhotoList(effect.groupId, effect.memberId)
                 }
+
+                is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviVote -> {
+                    navigationVote(effect.groupId)
+                }
+
                 else -> Unit
             }
         }
@@ -167,15 +173,21 @@ fun GroupDetailFolderScreen(
                                 .align(Alignment.CenterHorizontally)
                                 .offset(y = 90.dp)
                         ) {
-                            SmallCloudBtn(title = "이미지\n분류"){
+                            SmallCloudBtn(title = "이미지\n분류") {
 
                             }
                             CloudBtn(title = "다운로드") {
                                 // 테스트용 - 삭제해야함
-                                viewModel.setEvent( GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(38L))
+                                viewModel.setEvent(
+                                    GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(
+                                        38L
+                                    )
+                                )
                             }
-                            SmallCloudBtn(title = "지난 안건"){
-
+                            SmallCloudBtn(title = "지난 안건") {
+                                viewModel.setEvent(
+                                    GroupDetailFolderContract.GroupDetailFolderEvent.OnVoteClicked
+                                )
                             }
                         }
                     }
@@ -193,6 +205,7 @@ fun PreView(
 ) {
     GroupDetailFolderScreen(
         navigationMyPage = {},
-        navigationPhotoList = {_ , _ ->},
+        navigationPhotoList = { _, _ -> },
+        navigationVote = { _ -> },
         navigationBack = {})
 }

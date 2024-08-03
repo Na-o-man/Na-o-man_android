@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,8 +29,10 @@ import com.hgh.na_o_man.R
 
 
 @Composable
-fun SignBtn(
-    onClick : () -> Unit,
+fun CommonBtn(
+    title: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
 ) {
     val gradient = Brush.linearGradient(
         colors = listOf(
@@ -45,10 +48,10 @@ fun SignBtn(
     Surface(
         color = Color(0x66FFFFFF),
         shape = RoundedCornerShape(18.dp),
-        modifier = Modifier
+        modifier = modifier
             .size(200.dp, 60.dp)
             .border(2.dp, gradient, RoundedCornerShape(18.dp))
-            .clickable{
+            .clickable {
                 onClick()
             }
     ) {
@@ -58,7 +61,54 @@ fun SignBtn(
 
             ) {
             Text(
-                text = "사진 추가하기",
+                text = title,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF4879AF),
+                modifier = Modifier
+                    .weight(1f),
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+            )
+        }
+    }
+}
+
+@Composable
+fun SignBtn(
+    title: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    val gradient = Brush.linearGradient(
+        colors = listOf(
+            Color(0x00FFFFFF),
+            Color(0xCCFFFFFF),
+            Color(0x33FFFFFF),
+            Color(0xB3FFFFFF),
+        ),
+        start = Offset.Zero,
+        end = Offset.Infinite,
+    )
+
+    Surface(
+        color = Color(0x66FFFFFF),
+        shape = RoundedCornerShape(18.dp),
+        modifier = modifier
+            .size(200.dp, 60.dp)
+            .border(2.dp, gradient, RoundedCornerShape(18.dp))
+            .clickable {
+                onClick()
+            }
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxSize(),
+
+            ) {
+            Text(
+                text = title,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF4879AF),
@@ -80,8 +130,8 @@ fun SignBtn(
 
 @Composable
 fun MyPageBtn(
-    onClick : () -> Unit,
-    text : String,
+    onClick: () -> Unit,
+    text: String,
 ) {
     val gradient = Brush.verticalGradient(
         colors = listOf(
@@ -123,10 +173,17 @@ fun MyPageBtn(
 @Preview
 @Composable
 fun MyPageBtnPreview() {
-    MyPageBtn (onClick = {}, text = "로그아웃")
+    MyPageBtn(onClick = {}, text = "로그아웃")
 }
+
 @Preview
 @Composable
 fun SignBtnPreview() {
-    SignBtn {}
+    SignBtn(title = "사진 추가하기") {}
+}
+
+@Preview
+@Composable
+fun CommonBtnPreview() {
+    CommonBtn(title = "사진 추가하기") {}
 }

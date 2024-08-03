@@ -6,6 +6,7 @@ import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.ui.detail.KEY_GROUP_ID
+import com.hgh.na_o_man.presentation.ui.detail.KEY_IS_AGENDA
 import com.hgh.na_o_man.presentation.ui.detail.KEY_MEMBER_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -16,13 +17,13 @@ class PhotoListViewModel @Inject constructor(
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
-
     private val groupId: Long
         get() = savedStateHandle[KEY_GROUP_ID] ?: 0L
     private val memberId: Long
         get() = savedStateHandle[KEY_MEMBER_ID] ?: 0L
 
     init {
+        updateState { copy(isAgenda = savedStateHandle[KEY_IS_AGENDA] ?: false) }
         Log.d("리컴포저블", "PhotoListViewModel")
         updateState {
             copy(
@@ -102,7 +103,7 @@ class PhotoListViewModel @Inject constructor(
             }
 
             PhotoListContract.PhotoListEvent.OnBackClicked -> {
-
+                sendEffect({ PhotoListContract.PhotoListSideEffect.NaviBack })
             }
 
             PhotoListContract.PhotoListEvent.OnDeleteClicked -> {
@@ -139,12 +140,13 @@ class PhotoListViewModel @Inject constructor(
                 updateState { copy(isSelectMode = !isSelectMode) }
             }
 
-            PhotoListContract.PhotoListEvent.OnVoteClicked -> {
-
-            }
-
             PhotoListContract.PhotoListEvent.OnDialogClosed -> {
                 updateState { copy(isDialogVisible = false) }
+            }
+
+            PhotoListContract.PhotoListEvent.OnAgendaClicked -> {
+                updateState { copy(selectPhotoList = photoList.filter { it.is1 }) }
+                sendEffect({ PhotoListContract.PhotoListSideEffect.NaviAgenda })
             }
         }
     }

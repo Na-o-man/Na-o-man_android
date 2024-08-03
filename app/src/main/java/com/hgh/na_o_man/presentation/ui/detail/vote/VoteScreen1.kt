@@ -41,7 +41,10 @@ import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 
 
 @Composable
-fun VoteScreen1(navController: NavHostController) {
+fun VoteScreen1(
+    navigationAgenda: () -> Unit,
+    navigationBack: () -> Unit,
+) {
     Log.d("리컴포저블", "Vote1Screen")
 
     Scaffold(
@@ -55,7 +58,7 @@ fun VoteScreen1(navController: NavHostController) {
             ) {
                 PlusAppBar(
                     onPlusClick = {
-                        navController.navigate("votescreen2")
+                        navigationBack()
                     }
                 )
             }
@@ -153,7 +156,7 @@ fun VoteScreen1(navController: NavHostController) {
                     modifier = Modifier
                         .size(166.dp) // 같은 크기로 설정
                         .offset(y = 40.dp) // 원하는 오프셋 조정
-                        .clickable(onClick = { /* 버튼 클릭 시 동작 */ }), // 클릭 가능하게 설정
+                        .clickable(onClick = { navigationAgenda() }), // 클릭 가능하게 설정
                     contentAlignment = Alignment.Center // 내용 중앙 정렬
                 ) {
                     Image(
@@ -181,5 +184,5 @@ fun VoteScreen1(navController: NavHostController) {
 @Composable
 fun PreviewVote1() {
     val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-    VoteScreen1(navController = navController) // 초기화한 navController 전달
+    VoteScreen1(navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
 }
