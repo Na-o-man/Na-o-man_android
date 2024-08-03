@@ -193,7 +193,7 @@ fun AcceptInviteScreen(
                             // URL이 유효하지 않을 때 사용자에게 알림
                             Toast.makeText(context, "유효한 URL을 입력하세요.", Toast.LENGTH_SHORT).show()
                         }
-                    }
+                    },
                 )
             }
 
