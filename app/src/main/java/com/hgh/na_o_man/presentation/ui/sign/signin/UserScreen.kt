@@ -87,7 +87,11 @@ fun UserScreen(
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(30.dp))
-            SignBtn {
+            SignBtn(
+                title = "사진 추가하기",
+                modifier = Modifier
+                    .size(200.dp, 60.dp)
+            ) {
                 viewModel.setEvent(SignContract.SignEvent.OnClickUpload)
             }
 
@@ -126,8 +130,12 @@ fun UserScreenPv() {
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(30.dp))
-            SignBtn {
-
+            SignBtn(
+                title = "사진 추가하기",
+                modifier = Modifier
+                    .size(200.dp, 60.dp)
+            ) {
+                //viewModel.setEvent(SignContract.SignEvent.OnClickUpload)
             }
 
         }

@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.component
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -16,9 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 
@@ -65,6 +69,35 @@ fun ImageCard(
                         .background(Color.Gray.copy(alpha = 0.5f))
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun UriImageCard(
+    modifier:Modifier = Modifier,
+    imageUri: Uri,
+    onClick: (Dummy) -> Unit = {},
+) {
+    SideEffect {
+        Log.d("리컴포저블", " ${imageUri} ")
+    }
+
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(2.dp, SteelBlue),
+        modifier = modifier
+    ) {
+        Box {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageUri)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.clip(RoundedCornerShape(16.dp))
+            )
         }
     }
 }
