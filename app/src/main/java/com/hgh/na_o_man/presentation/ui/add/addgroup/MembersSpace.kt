@@ -75,7 +75,7 @@ fun MembersSpace(
                             onEndClick = { },
                             onNextClick = {
                                 viewModel.handleEvents(AddContract.AddEvent.AddGroup4(textValue)) // 텍스트 값을 포함하여 이벤트 전송
-                            }
+                            },
                         )
                     }
                 },

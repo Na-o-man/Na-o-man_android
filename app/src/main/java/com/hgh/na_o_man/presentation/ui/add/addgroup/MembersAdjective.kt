@@ -265,7 +265,7 @@ fun MembersAdjective(
                                             // 선택된 버튼이 없을 경우 에러 메시지 표시
                                             Toast.makeText(context, "최소 하나의 옵션을 선택하세요.", Toast.LENGTH_SHORT).show()
                                         }
-                                    }
+                                    },
                                 )
                             }
                         }

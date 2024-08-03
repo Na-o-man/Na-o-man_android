@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -28,9 +27,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -50,9 +48,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
+import com.hgh.na_o_man.presentation.component.PlusAppBar
 import com.hgh.na_o_man.presentation.component.StartAppBar
+import com.hgh.na_o_man.presentation.component.StartBottomCloud
 import com.hgh.na_o_man.presentation.component.voteIcon.DropDownMenu
 import com.hgh.na_o_man.presentation.theme.DeepBlue
 import com.hgh.na_o_man.presentation.theme.LightNavy
@@ -62,8 +64,8 @@ import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 
 
 @Composable
-fun VoteScreen2() {
-    Log.d("리컴포저블", "Vote2Screen")
+fun VoteScreen2(navController: NavController) {
+    Log.d("리컴포저블", "VoteScreen2")
     var showDialog by remember { mutableStateOf(false) } // 다이얼로그 표시 상태
     var images by remember { mutableStateOf(listOf<String>()) }
     var agendaText by remember { mutableStateOf("") }
@@ -75,6 +77,16 @@ fun VoteScreen2() {
             StartAppBar(
                 onStartClick = { /* TODO: Handle start click */ }
             )
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                PlusAppBar(
+                    onPlusClick = {
+                        navController.navigate("votescreen2")
+                    }
+                )
+            }
         },
         containerColor = lightSkyBlue
     ) { padding ->
@@ -82,6 +94,10 @@ fun VoteScreen2() {
         Box(modifier = Modifier.fillMaxSize()) {
             EndTopCloud()
         }
+
+//        Box(modifier = Modifier.fillMaxSize()) {
+//            StartBottomCloud()
+//        }
 
         Box(
             modifier = Modifier
@@ -150,6 +166,9 @@ fun VoteScreen2() {
         ShowWarningDialog(onDismiss = { showDialog = false })
     }
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        StartBottomCloud()
+    }
 }
 
 
@@ -280,13 +299,18 @@ fun ImagePairContainer(
     onShowDialogChange: (Boolean) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(start = 90.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 90.dp),
         verticalArrangement = Arrangement.Center, // 중앙 정렬
         horizontalAlignment = Alignment.End
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(3), // 3열로 구성
-            modifier = Modifier.fillMaxSize().weight(2.5f).padding(top = 380.dp), // 가변적인 공간을 차지
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(2.5f)
+                .padding(top = 380.dp), // 가변적인 공간을 차지
             contentPadding = PaddingValues(10.dp),
         ) {
             items(images) { imagePair ->
@@ -309,7 +333,8 @@ fun CombinedImage(imageId1: Int, imageId2: Int) {
         Image(
             painter = painterResource(id = imageId1), // 첫 번째 이미지
             contentDescription = "첫 번째 이미지",
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .fillMaxWidth() // Box가 전체 폭을 차지하도록 설정
         )
 
@@ -334,7 +359,9 @@ fun DynamicImageContainer(images: List<Pair<Int, Int>>) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(start = 20.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -402,7 +429,9 @@ fun AddImageButton(
         Image(
             painter = painterResource(id = R.drawable.ic_cloud_138), // 네 번째 이미지 리소스
             contentDescription = "네 번째 이미지",
-            modifier = Modifier.blur(0.1.dp).size(90.dp)
+            modifier = Modifier
+                .blur(0.1.dp)
+                .size(90.dp)
                 .clickable {
                     // 이미지 개수 확인
                     if (images.size >= 2) {
@@ -429,7 +458,7 @@ fun ShowWarningDialog(onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss, // 다이얼로그 닫기
         title = { Text("경고") },
-        text = { Text("이미지가 두 개 이상 있어야 합니다.") },
+        text = { Text("안건은 두 장 이상의 사진이 필요합\n니다. 사진을 더 선택해주세요. ") },
         confirmButton = {
             Button(onClick = onDismiss) {
                 Text("확인")
@@ -441,5 +470,6 @@ fun ShowWarningDialog(onDismiss: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewVote2() {
-    VoteScreen2()
+    val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
+    VoteScreen2(navController = navController) // 초기화한 navController 전달
 }
