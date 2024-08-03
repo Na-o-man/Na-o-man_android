@@ -40,12 +40,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
@@ -56,16 +53,15 @@ import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.add.AddContract
 
 @Composable
 fun MembersAdjective(
-    viewModel: AddViewModel = hiltViewModel(),
-//    navController: NavController // NavController 추가
+    viewModel: AddViewModel,
+    navController: NavController
 ) {
     val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블", "MembersAdjective")
-    var nameText by remember { mutableStateOf("이름") }
-    val isEditing by remember { mutableStateOf(false) }
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
@@ -250,13 +246,10 @@ fun MembersAdjective(
                                 val context = LocalContext.current // 현재 컨텍스트 가져오기
 
                                 NextAppBar1(
-                                    onStartClick = { },
-                                    onEndClick = { },
                                     onNextClick = {
                                         // ViewModel의 selectedButtons 값을 참조하여 선택된 버튼 수 확인
                                         val selectedButtons = viewModel.viewState.value.selectedButtons // 선택된 버튼 리스트
 //                                        val inputText = /* 입력 필드에서 가져온 텍스트 */ // 여기서 입력 필드를 통해 텍스트를 가져와야 합니다.
-
                                         // 선택된 버튼이 하나 이상일 경우
                                         if (selectedButtons.isNotEmpty()) {
                                             // AddGroup3 이벤트 발생

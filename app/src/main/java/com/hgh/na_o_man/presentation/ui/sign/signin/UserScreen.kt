@@ -28,11 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.hgh.na_o_man.presentation.component.LineSymbol
 import com.hgh.na_o_man.presentation.component.SignBtn
-import com.hgh.na_o_man.presentation.component.UserProfile
+import com.hgh.na_o_man.presentation.component.userIcon.UserProfile
 
 @Composable
 fun UserScreen(
