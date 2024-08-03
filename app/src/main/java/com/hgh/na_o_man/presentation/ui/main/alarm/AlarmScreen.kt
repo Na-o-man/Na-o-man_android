@@ -96,7 +96,7 @@ fun AlarmScreen(
                                 .padding(padding),
                             contentAlignment = Alignment.Center
                         ) {
-                            NoAlarmBox(message = "알림이 없습니다.","하이루")
+                            NoAlarmBox(message = "알림이 없습니다.")
                         }
                     } else{
                         AlarmListScreen(

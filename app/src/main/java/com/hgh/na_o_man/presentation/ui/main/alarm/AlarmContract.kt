@@ -14,10 +14,12 @@ class AlarmContract {
     ): ViewState
 
     sealed class AlarmSideEffect : ViewSideEffect {
-
     }
 
     sealed class AlarmEvent : ViewEvent {
         object InitAlarmScreen : AlarmEvent()
+        object OnReadAllClicked : AlarmEvent()
+        object OnDeleteAllClicked : AlarmEvent()
+        data class OnAlarmListClicked(val notificationID : Long) : AlarmEvent()
     }
 }
