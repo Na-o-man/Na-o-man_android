@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add
 
+import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -27,6 +29,7 @@ fun AddJoinHostScreen(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+    val context = LocalContext.current as Activity
     Log.d("리컴포저블", "AddJoinHostScreen")
     Scaffold(
         containerColor = lightSkyBlue
@@ -37,7 +40,12 @@ fun AddJoinHostScreen(
             NavHost(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,
-                startDestination = "members_name_screen"
+                startDestination = if (context.intent.getBooleanExtra(
+                        AddGroupActivity.ADD_GROUP,
+                        false
+                    )
+                ) "accept_invite"
+                else "members_name_screen"
             ) {
                 composable("members_name_screen") {
                     MembersNameScreen(viewModel, navController)
