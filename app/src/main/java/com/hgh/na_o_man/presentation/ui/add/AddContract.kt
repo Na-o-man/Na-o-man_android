@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.ui.add.addgroup
+package com.hgh.na_o_man.presentation.ui.add
 
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
@@ -18,15 +18,13 @@ class AddContract {
     ) : ViewState
 
     sealed class AddSideEffect : ViewSideEffect {
-        object NavigateToMembersInviteScreen : AddSideEffect() // 멤버 초대 화면으로 이동
-        object NavigateToAddGroup2Screen : AddSideEffect() // AddGroup2 화면으로 이동
+        object NavigatetoName : AddSideEffect() // 이름 입력 화면
         object NavigateToNextScreen : AddSideEffect() // 다음 화면으로 이동
         data class ShowErrorMessage(val message: String) : AddSideEffect() // 에러 메시지 표시
-        object ShowNicknameChangedToast : AddSideEffect() // 닉네임 변경 알림
+        object ShowNicknameChange : AddSideEffect() // 닉네임 변경 알림
     }
 
     sealed class AddEvent : ViewEvent {
-        object InitAddScreen : AddEvent() // 이름 변경
         data class ChangeNickname(val newNickname: String) : AddEvent() // 닉네임 변경 이벤트 추가
         object AddGroup2 : AddEvent() // AddGroup2 기능 추가
         data class AddGroup1(val textValue: String) : AddEvent() // AddGroup1 기능 추가

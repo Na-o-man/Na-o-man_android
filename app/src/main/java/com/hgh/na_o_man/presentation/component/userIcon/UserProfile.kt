@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.component
+package com.hgh.na_o_man.presentation.component.userIcon
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column

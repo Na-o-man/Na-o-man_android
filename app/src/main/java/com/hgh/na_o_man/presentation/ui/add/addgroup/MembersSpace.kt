@@ -31,26 +31,24 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.NextAppBar1
 import com.hgh.na_o_man.presentation.component.StartAppBar
-import com.hgh.na_o_man.presentation.component.StateErrorScreen
-import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.add.AddContract
 
 
 @Composable
 fun MembersSpace(
     viewModel: AddViewModel = hiltViewModel(),
+    navController: NavController,
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -71,8 +69,6 @@ fun MembersSpace(
                         contentAlignment = Alignment.Center // 중앙 정렬
                     ) {
                         NextAppBar1(
-                            onStartClick = { },
-                            onEndClick = { },
                             onNextClick = {
                                 viewModel.handleEvents(AddContract.AddEvent.AddGroup4(textValue)) // 텍스트 값을 포함하여 이벤트 전송
                             },

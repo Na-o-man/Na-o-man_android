@@ -1,23 +1,17 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddEvent
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddSideEffect
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddSideEffect.*
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddViewState
+import com.hgh.na_o_man.presentation.ui.add.AddContract.AddEvent
+import com.hgh.na_o_man.presentation.ui.add.AddContract.AddSideEffect
+import com.hgh.na_o_man.presentation.ui.add.AddContract.AddSideEffect.*
+import com.hgh.na_o_man.presentation.ui.add.AddContract.AddViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 open class AddViewModel @Inject constructor(
-//    private val navController: NavController // NavController 주입
 ) : BaseViewModel<AddViewState, AddSideEffect, AddEvent>(
     AddViewState() // 초기 상태 설정
 ) {
@@ -44,21 +38,8 @@ open class AddViewModel @Inject constructor(
         }
     }
 
-    // 뒤로가기 처리 메서드
-//    fun navigateUp() {
-//        navController.navigateUp() // NavController를 사용하여 뒤로가기
-//    }
-
-    // 특정 화면으로 이동하는 메서드
-//    fun navigate(route: String) {
-//        navController.navigate(route) // NavController를 사용하여 특정 route로 이동
-//    }
-
     override fun handleEvents(event: AddEvent) {
         when (event) {
-            is AddEvent.InitAddScreen -> {
-                // 초기화 로직을 작성합니다.
-            }
             is AddEvent.ChangeNickname -> {
                 // 닉네임 변경 로직을 작성합니다.
                 updateState { copy(nickname = event.newNickname) }
