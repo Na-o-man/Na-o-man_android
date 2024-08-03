@@ -32,15 +32,12 @@ import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.CommonDialog
 import com.hgh.na_o_man.presentation.component.DecorationCloud
-import com.hgh.na_o_man.presentation.component.ImageDialog
 import com.hgh.na_o_man.presentation.component.MyPageBtn
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StartTopCloud
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
-import com.hgh.na_o_man.presentation.component.UserProfile
-import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
-import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoMenu
+import com.hgh.na_o_man.presentation.component.userIcon.UserProfile
 
 @Composable
 fun MyPageScreen(

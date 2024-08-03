@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -90,8 +89,6 @@ fun BackAndSelectAppBar(
 @Composable
 fun NextAppBar1(
     modifier: Modifier = Modifier,
-    onStartClick: () -> Unit,
-    onEndClick: () -> Unit,
     onNextClick: () -> Unit
 ) {
     MainAppBar(
@@ -110,8 +107,6 @@ fun NextAppBar1(
 @Composable
 fun NextAppBar2(
     modifier: Modifier = Modifier,
-    onStartClick: () -> Unit,
-    onEndClick: () -> Unit,
     onNextClick: () -> Unit
 ) {
     MainAppBar(

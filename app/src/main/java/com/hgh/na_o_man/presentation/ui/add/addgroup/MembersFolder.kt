@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.base.LoadState
@@ -44,6 +45,7 @@ import java.time.format.TextStyle
 @Composable
 fun MembersFolder(
     viewModel: AddViewModel = hiltViewModel(),
+    navController: NavController,
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
 ) {
     val viewState by viewModel.viewState.collectAsState()
