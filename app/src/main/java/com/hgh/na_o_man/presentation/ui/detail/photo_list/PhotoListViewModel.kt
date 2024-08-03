@@ -21,8 +21,9 @@ class PhotoListViewModel @Inject constructor(
         get() = savedStateHandle[KEY_GROUP_ID] ?: 0L
     private val memberId: Long
         get() = savedStateHandle[KEY_MEMBER_ID] ?: 0L
+
     init {
-        updateState { copy(isAgenda =  savedStateHandle[KEY_IS_AGENDA] ?: false) }
+        updateState { copy(isAgenda = savedStateHandle[KEY_IS_AGENDA] ?: false) }
         Log.d("리컴포저블", "PhotoListViewModel")
         updateState {
             copy(
@@ -102,7 +103,7 @@ class PhotoListViewModel @Inject constructor(
             }
 
             PhotoListContract.PhotoListEvent.OnBackClicked -> {
-
+                sendEffect({ PhotoListContract.PhotoListSideEffect.NaviBack })
             }
 
             PhotoListContract.PhotoListEvent.OnDeleteClicked -> {
@@ -139,12 +140,13 @@ class PhotoListViewModel @Inject constructor(
                 updateState { copy(isSelectMode = !isSelectMode) }
             }
 
-            PhotoListContract.PhotoListEvent.OnVoteClicked -> {
-
-            }
-
             PhotoListContract.PhotoListEvent.OnDialogClosed -> {
                 updateState { copy(isDialogVisible = false) }
+            }
+
+            PhotoListContract.PhotoListEvent.OnAgendaClicked -> {
+                updateState { copy(selectPhotoList = photoList.filter { it.is1 }) }
+                sendEffect({ PhotoListContract.PhotoListSideEffect.NaviAgenda })
             }
         }
     }

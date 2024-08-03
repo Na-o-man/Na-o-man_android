@@ -44,7 +44,8 @@ fun BackAppBar(
         menu = null,
         onStartClick = onStartClick,
         onEndClick = { },
-        onNextClick = { } // next 버튼 클릭 이벤트 추가
+        onNextClick = { }, // next 버튼 클릭 이벤트 추가
+        onPlusClick = { }
     )
 }
 

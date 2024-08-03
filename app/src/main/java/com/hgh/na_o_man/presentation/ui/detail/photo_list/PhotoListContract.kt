@@ -21,7 +21,7 @@ class PhotoListContract {
 
     sealed class PhotoListSideEffect : ViewSideEffect {
         object NaviBack : PhotoListSideEffect()
-        object NaviVote : PhotoListSideEffect()
+        object NaviAgenda : PhotoListSideEffect()
         data class ShowToast(val msg: String) : PhotoListSideEffect()
     }
 
@@ -29,9 +29,9 @@ class PhotoListContract {
         object InitPhotoListScreen : PhotoListEvent()
         object OnBackClicked : PhotoListEvent()
         object OnSelectModeClicked : PhotoListEvent()
-        object OnVoteClicked : PhotoListEvent()
         object OnDownloadClicked : PhotoListEvent()
         object OnDeleteClicked : PhotoListEvent()
+        object OnAgendaClicked : PhotoListEvent()
         data class OnImageClicked(val photo : Dummy) : PhotoListEvent()
         data class OnImageSelected(val photo: Dummy) : PhotoListEvent()
         object OnDialogClosed : PhotoListEvent()

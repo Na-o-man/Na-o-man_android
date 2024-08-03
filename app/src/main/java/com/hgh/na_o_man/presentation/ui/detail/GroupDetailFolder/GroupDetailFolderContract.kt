@@ -14,10 +14,12 @@ class GroupDetailFolderContract {
 
     sealed class GroupDetailFolderSideEffect : ViewSideEffect{
         data class NaviPhotoList(val groupId: Long, val memberId: Long) :  GroupDetailFolderSideEffect()
+        data class NaviVote(val groupId: Long) : GroupDetailFolderSideEffect()
     }
 
     sealed class GroupDetailFolderEvent : ViewEvent{
         object InitGroupDetailFolderScreen : GroupDetailFolderEvent()
+        object OnVoteClicked : GroupDetailFolderEvent()
         data class OnUserFolderClicked( val memberId: Long) :  GroupDetailFolderEvent()
     }
 }

@@ -29,6 +29,7 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         delay(2000)
         if (dateStoreUtil.getAutoLogin()) {
+            Log.d("엑세스", "${dateStoreUtil.getAccessToken()}")
             MainActivity.goMain(context)
         } else {
             naviSignScreen()

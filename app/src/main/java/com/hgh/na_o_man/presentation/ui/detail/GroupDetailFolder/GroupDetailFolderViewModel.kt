@@ -32,6 +32,10 @@ class GroupDetailFolderViewModel @Inject constructor(
                     )
                 })
             }
+
+            GroupDetailFolderContract.GroupDetailFolderEvent.OnVoteClicked -> {
+                sendEffect({ GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviVote(viewState.value.groupId)})
+            }
         }
     }
 

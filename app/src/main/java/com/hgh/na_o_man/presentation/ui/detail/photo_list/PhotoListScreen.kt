@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.R
+import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.BackAndSelectAppBar
 import com.hgh.na_o_man.presentation.component.BackAppBar
@@ -74,7 +75,7 @@ import com.hgh.na_o_man.presentation.theme.Typography
 @Composable
 fun PhotoListScreen(
     navigationBack: () -> Unit,
-    navigationAgenda: (Array<String>) -> Unit,
+    navigationAgenda: (List<Dummy>) -> Unit,
     viewModel: PhotoListViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -93,15 +94,15 @@ fun PhotoListScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 PhotoListContract.PhotoListSideEffect.NaviBack -> {
-
-                }
-
-                PhotoListContract.PhotoListSideEffect.NaviVote -> {
-
+                    navigationBack()
                 }
 
                 is PhotoListContract.PhotoListSideEffect.ShowToast -> {
                     Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                }
+
+                PhotoListContract.PhotoListSideEffect.NaviAgenda -> {
+                    navigationAgenda(viewState.selectPhotoList)
                 }
             }
         }
@@ -269,7 +270,15 @@ fun PhotoListScreen(
                             isMine = true,
                             isAgenda = viewState.isAgenda,
                             modifier = Modifier.align(alignment = Alignment.BottomCenter),
-                            onCLickDown = {}
+                            onCLickDown = {
+
+                            },
+                            onClickDelete = {
+
+                            },
+                            onClickAgenda ={
+                                viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)
+                            }
                         )
                     }
                 }
@@ -289,7 +298,7 @@ fun PhotoListScreen(
 
                                 },
                                 onClickAgenda = {
-
+                                    viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)
                                 })
                         }
                     )

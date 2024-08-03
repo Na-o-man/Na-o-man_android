@@ -18,8 +18,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFolderScreen
+import com.hgh.na_o_man.presentation.ui.detail.agenda.AgendaScreen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
+import com.hgh.na_o_man.presentation.ui.detail.vote.VoteScreen1
 import com.hgh.na_o_man.presentation.ui.sign.SignScreenRoute
 
 @OptIn(ExperimentalPagerApi::class)
@@ -51,6 +54,11 @@ fun GroupDetailScreen(
                                     .plus("/${memberId}").plus("/${false}")
                             )
                         },
+                        navigationVote = { groupId ->
+                            navController.navigate(
+                                GroupDetailScreenRoute.VOTE.route
+                            )
+                        },
                         navigationMyPage = {},
                     )
                 }
@@ -70,14 +78,36 @@ fun GroupDetailScreen(
                             navController.popBackStack()
                         },
                         navigationAgenda = {
-                            navController.currentBackStackEntry?.savedStateHandle?.set("data", arrayOf<String>("gd","dg"))
+                            navController.previousBackStackEntry?.savedStateHandle?.set("agendaData", it)
                             navController.popBackStack()
                         }
                     )
                 }
 
                 composable(route = GroupDetailScreenRoute.VOTE.route) {
+                    VoteScreen1(
+                        navigationBack = {
+                            navController.popBackStack()
+                        }, navigationAgenda = {
+                            navController.navigate(
+                                GroupDetailScreenRoute.AGENDA.route
+                            )
+                        }
+                    )
+                }
 
+                composable(route = GroupDetailScreenRoute.AGENDA.route) {
+                    AgendaScreen(
+                        navController = navController,
+                        navigationBack = {
+                            navController.popBackStack()
+                        }, navigationPhotoList = { groupId, memberId ->
+                            navController.navigate(
+                                GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
+                                    .plus("/${memberId}").plus("/${true}")
+                            )
+                        }
+                    )
                 }
             }
         }
@@ -90,6 +120,7 @@ enum class GroupDetailScreenRoute(val route: String) {
     DETAIL("detail"),
     LIST("list"),
     VOTE("vote"),
+    AGENDA("agenda"),
 }
 
 const val KEY_GROUP_ID = "group-id"
