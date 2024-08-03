@@ -75,7 +75,8 @@ fun MembersInviteScreen(
                         // AddGroup1 이벤트 발생
                         viewModel.handleEvents(AddContract.AddEvent.AddGroup1(textValue))
                     }
-                }
+                },
+
             )
         },
 
