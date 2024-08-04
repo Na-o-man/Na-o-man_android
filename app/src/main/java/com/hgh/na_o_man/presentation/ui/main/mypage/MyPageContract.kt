@@ -30,6 +30,8 @@ class MyPageContract {
         object OnClickLogOut : MyPageEvent()
         object OnClickSignOut : MyPageEvent()
         object OnDialogClosed : MyPageEvent()
+        object OnClickDialogLogOut : MyPageEvent()
+        object OnClickDialogSignOut : MyPageEvent()
     }
 }
 

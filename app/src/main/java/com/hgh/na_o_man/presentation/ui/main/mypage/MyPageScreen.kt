@@ -38,6 +38,7 @@ import com.hgh.na_o_man.presentation.component.StartTopCloud
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.userIcon.UserProfile
+import com.hgh.na_o_man.presentation.ui.sign.SignActivity
 
 @Composable
 fun MyPageScreen(
@@ -61,7 +62,7 @@ fun MyPageScreen(
                 }
 
                 MyPageContract.MyPageSideEffect.LogOut -> {
-
+                    SignActivity.goAuth(context)
                 }
 
                 MyPageContract.MyPageSideEffect.SignOut -> {
@@ -134,7 +135,17 @@ fun MyPageScreen(
                     CommonDialog(
                         title = viewState.dialogMod.title,
                         onCancelButtonClick = { viewModel.setEvent(MyPageContract.MyPageEvent.OnDialogClosed) },
-                        onClickPositive = {}
+                        onClickPositive = {
+                            when (viewState.dialogMod) {
+                                DialogMode.SING_OUT -> {
+                                    viewModel.setEvent(MyPageContract.MyPageEvent.OnClickDialogSignOut)
+                                }
+
+                                DialogMode.LOGOUT -> {
+                                    viewModel.setEvent(MyPageContract.MyPageEvent.OnClickDialogLogOut)
+                                }
+                            }
+                        }
                     )
                 }
             }
