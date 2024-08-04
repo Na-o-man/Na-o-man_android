@@ -24,16 +24,17 @@ import javax.inject.Inject
 class AlarmViewModel @Inject constructor(
     private val acknowledgedCountUsecase : AcknowledgedCountUsecase,
     private val deleteAcknowledgedCountUsecase: DeleteAcknowledgedCountUsecase,
-    private val deletedCountUsecase: DeletedCountUsecase,
-    private val notificationInfoListUsecase: NotificationInfoListUsecase,
+    private val deletedCountUsecase : DeletedCountUsecase,
+    private val notificationInfoListUsecase : NotificationInfoListUsecase,
     private val postFcmUsecase : PostFcmUsecase,
-    private val unreadNotificationUsecase: UnreadNotificationUsecase
+    private val unreadNotificationUsecase : UnreadNotificationUsecase
 
 ) : BaseViewModel<AlarmContract.AlarmViewState, AlarmContract.AlarmSideEffect, AlarmContract.AlarmEvent>(
     AlarmContract.AlarmViewState()
 ) {
     init {
         Log.d("리컴포저블","AlarmViewModel")
+        setEvent(AlarmContract.AlarmEvent.InitAlarmScreen)
     }
 
 
@@ -44,15 +45,17 @@ class AlarmViewModel @Inject constructor(
             }
 
             is AlarmContract.AlarmEvent.OnReadAllClicked -> {
-
+                readAll()
             }
 
             is AlarmContract.AlarmEvent.OnDeleteAllClicked -> {
-
+                deleteAll()
             }
+
             is AlarmContract.AlarmEvent.OnAlarmListClicked -> {
 
             }
+
         }
     }
 
@@ -86,10 +89,20 @@ class AlarmViewModel @Inject constructor(
     }
 
     private fun readAll()  = viewModelScope.launch{
+        try {
 
+        } catch (e:Exception) {
+            Log.e("AlarmViewModel","Error reading all alarms",e)
+            updateState { copy(loadState = LoadState.ERROR) }
+        }
     }
 
     private fun deleteAll() = viewModelScope.launch {
+        try {
 
+        } catch (e:Exception) {
+            Log.e("AlarmViewModel","Error delete all alarms",e)
+            updateState { copy(loadState = LoadState.ERROR) }
+        }
     }
 }

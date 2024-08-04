@@ -85,9 +85,9 @@ fun AlarmScreen(
                             .align(Alignment.TopEnd)
                             .offset(x = -43.dp, y = 60.dp)
                     ) {
-                        ReadAllButton(title = "모두 읽음")
+                        ReadAllButton(title = "모두 읽음", onClick = {viewModel.setEvent(AlarmContract.AlarmEvent.OnReadAllClicked)})
                         Spacer(modifier = Modifier.width(5.dp))
-                        ReadAllButton(title = "전체 삭제")
+                        ReadAllButton(title = "전체 삭제", onClick = {viewModel.setEvent(AlarmContract.AlarmEvent.OnDeleteAllClicked)})
                     }
                     if(viewState.alarmList.isEmpty()) {
                         Box(
