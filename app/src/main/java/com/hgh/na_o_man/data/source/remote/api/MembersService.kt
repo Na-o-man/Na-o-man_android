@@ -9,12 +9,15 @@ import retrofit2.http.Path
 
 interface MembersService {
     @GET("members/{memberId}")
-    suspend fun getMemberIdAPI (
-        @Path("memberId") memberId : Long
-    ) : Response<ApiResult<SearchSuccessDto>>
+    suspend fun getMemberIdAPI(
+        @Path("memberId") memberId: Long
+    ): Response<ApiResult<SearchSuccessDto>>
 
     @GET("members/terms/{memberId}")
     suspend fun getMarketingAgreedAPI(
         @Path("memberId") memberId: Long
-    ) : Response<ApiResult<MarketingAgreedDto>>
+    ): Response<ApiResult<MarketingAgreedDto>>
+
+    @GET("members/my")
+    suspend fun getMyInfoAPI(): Response<ApiResult<SearchSuccessDto>>
 }

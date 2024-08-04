@@ -50,6 +50,11 @@ fun MyPageScreen(
 
     Log.d("리컴포저블", "MyPageScreen")
 
+    LaunchedEffect(true) {
+        Log.d("한건희", "InitMyPageScreen")
+        viewModel.setEvent(MyPageContract.MyPageEvent.InitMyPageScreen)
+    }
+
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
@@ -111,7 +116,7 @@ fun MyPageScreen(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    UserProfile(userInfo = AuthInfoModel(), modifier = Modifier.size(160.dp))
+                    UserProfile(userInfo = viewState.userInfo, modifier = Modifier.size(160.dp))
                     Spacer(modifier = Modifier.height(10.dp))
                     Image(
                         painter = painterResource(id = R.drawable.logo),
