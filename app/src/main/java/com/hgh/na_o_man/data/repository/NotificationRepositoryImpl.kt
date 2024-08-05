@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.data.repository
 
+import android.util.Log
 import com.hgh.na_o_man.data.dto.ApiResult
 import com.hgh.na_o_man.data.dto.auth.response.UserTokenDto
 import com.hgh.na_o_man.data.dto.notification.request.FcmRequestDto
@@ -24,7 +25,7 @@ class NotificationRepositoryImpl @Inject constructor(
         return apiHandler({ api.postNotificationAPI(fcmRequestDto) }) { response: ApiResult<Nothing> -> response.data }
     }
 
-    override suspend fun postacknowledgeCount() : RetrofitResult<AcknowledgedCountModel> {
+    override suspend fun postAcknowledgeCount() : RetrofitResult<AcknowledgedCountModel> {
         return apiHandler({ api.postNotificationAckAPI() }) { response : ApiResult<AcknowledgedCountDto> -> response.data.toModel()}
     }
 

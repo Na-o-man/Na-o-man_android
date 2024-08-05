@@ -8,6 +8,6 @@ class AcknowledgedCountUsecase @Inject constructor(
     private val repository: NotificationsRepository
 ) {
     suspend operator fun invoke() = flow {
-        emit(repository.postacknowledgeCount())
+        emit(repository.postAcknowledgeCount())
     }
 }
