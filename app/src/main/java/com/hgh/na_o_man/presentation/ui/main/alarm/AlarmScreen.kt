@@ -47,14 +47,17 @@ fun AlarmScreen(
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
+            Log.d("알람","로딩중")
             StateLoadingScreen()
         }
 
         LoadState.ERROR -> {
+            Log.d("알람","에러")
             StateErrorScreen()
         }
 
         LoadState.SUCCESS -> {
+            Log.d("알람","성공")
             Scaffold(
                 topBar = {
                     StartAppBar(

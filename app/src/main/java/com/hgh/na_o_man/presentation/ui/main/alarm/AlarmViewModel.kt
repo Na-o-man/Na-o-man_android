@@ -3,7 +3,6 @@ package com.hgh.na_o_man.presentation.ui.main.alarm
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.data.dto.notification.request.PageNotificationDto
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.domain.model.AlarmDummy
@@ -61,9 +60,11 @@ class AlarmViewModel @Inject constructor(
 
     private fun showAlarmList() = viewModelScope.launch{
         updateState { copy(loadState = LoadState.LOADING) }
+        Log.d("AlarmViewModel", "showAlarmList: Loading started")
         try {
-            notificationInfoListUsecase(PageNotificationDto(0,20, listOf("date,desc"))).collect{result ->
+            notificationInfoListUsecase(0,20, listOf("date,desc")).collect{result ->
                 result.onSuccess { notificationInfoListModel ->
+                    Log.d("AlarmViewModel", "Successfully fetched alarm list")
                     val alarmList = notificationInfoListModel.notificationInfoList.map { notificationInfo ->
                         AlarmDummy(
                             url = notificationInfo.url,
@@ -78,7 +79,9 @@ class AlarmViewModel @Inject constructor(
                             alarmList = alarmList
                         )
                     }
+                    Log.d("AlarmViewModel", "showAlarmList: State updated to SUCCESS with ${alarmList.size} items")
                 }.onFail {
+                    Log.d("AlarmViewModel", "Failed to fetch alarm list")
                     updateState { copy(loadState = LoadState.ERROR) }
                 }
             }
