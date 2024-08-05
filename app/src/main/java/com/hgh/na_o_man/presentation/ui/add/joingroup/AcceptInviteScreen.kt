@@ -1,6 +1,5 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
-import androidx.compose.runtime.Composable
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -20,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,20 +45,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
-import com.hgh.na_o_man.presentation.component.NextAppBar1
-import com.hgh.na_o_man.presentation.component.NextAppBar2
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 import com.hgh.na_o_man.presentation.ui.add.JoinScreenRoute
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
-import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersSpace
 
 
 @Composable
@@ -69,7 +62,6 @@ fun AcceptInviteScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블", "MembersSpace")
-    var url by remember { mutableStateOf("URL을 입력해 주세요.") }
 
     Scaffold(
         topBar = {
@@ -91,7 +83,7 @@ fun AcceptInviteScreen(
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .offset(x = 60.dp, y = -65.dp),
+                    .offset(x = 60.dp, y = -(65.dp)),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 왼쪽 이미지 (30도 회전)
@@ -183,8 +175,6 @@ fun AcceptInviteScreen(
                         is JoinContract.JoinSideEffect._ShowToast -> {
                             Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
                         }
-
-                        else -> {}
                     }
                 }
             }

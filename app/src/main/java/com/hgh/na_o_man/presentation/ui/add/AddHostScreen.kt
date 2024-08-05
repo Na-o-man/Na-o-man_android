@@ -19,8 +19,6 @@ import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersFolder
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersLoading
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersNameScreen
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersSpace
-import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptCheckScreen
-import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptScreen
 
 @Composable
 fun AddHostScreen(

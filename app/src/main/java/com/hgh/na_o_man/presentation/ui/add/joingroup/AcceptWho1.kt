@@ -19,7 +19,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.hgh.na_o_man.presentation.component.userIcon.UserInfo
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
 
 @Composable

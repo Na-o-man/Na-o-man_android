@@ -1,6 +1,5 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
-import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
 import com.hgh.na_o_man.presentation.base.ViewState
