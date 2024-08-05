@@ -32,7 +32,6 @@ interface NotificationsService {
     suspend fun getNotificationMyAPI(
         @Query("page") page : Int,
         @Query("size") size : Int,
-        @Query("sort") sort : List<String>
     ) : Response<ApiResult<NotificationInfoListDto>>
 
     @DELETE("notifications")

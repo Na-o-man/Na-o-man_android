@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.presentation.ui.main.alarm
 
 import com.hgh.na_o_man.domain.model.AlarmDummy
+import com.hgh.na_o_man.domain.model.notification.DeletedCountModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect

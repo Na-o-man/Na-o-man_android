@@ -4,5 +4,6 @@ data class AlarmDummy(
     val url : String,
     val imageRes : Int,
     val detail : String,
-    val date: String
+    val date: String,
+    val isRead: Boolean = false
 )

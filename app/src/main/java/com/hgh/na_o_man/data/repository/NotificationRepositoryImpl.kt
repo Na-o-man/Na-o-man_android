@@ -33,8 +33,8 @@ class NotificationRepositoryImpl @Inject constructor(
         return apiHandler({ api.getNotificationUnreadAPI() }) { response: ApiResult<UnreadDto> -> response.data.toModel() }
     }
 
-    override suspend fun getNotificationInfoList(page : Int, size : Int, sort : List<String>): RetrofitResult<NotificationInfoListModel> {
-        return apiHandler({ api.getNotificationMyAPI(page,size,sort) }) { response: ApiResult<NotificationInfoListDto> -> response.data.toModel() }
+    override suspend fun getNotificationInfoList(page : Int, size : Int): RetrofitResult<NotificationInfoListModel> {
+        return apiHandler({ api.getNotificationMyAPI(page,size) }) { response: ApiResult<NotificationInfoListDto> -> response.data.toModel() }
     }
 
     override suspend fun deleteDeletedCount(): RetrofitResult<DeletedCountModel> {

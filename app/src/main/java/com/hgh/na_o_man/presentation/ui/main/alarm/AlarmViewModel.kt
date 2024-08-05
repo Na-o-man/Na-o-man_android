@@ -3,6 +3,8 @@ package com.hgh.na_o_man.presentation.ui.main.alarm
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.R
+import com.hgh.na_o_man.data.dto.notification.response.DeletedCountDto
+import com.hgh.na_o_man.data.dto.notification.response.UnreadDto
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.domain.model.AlarmDummy
@@ -91,17 +93,48 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    private fun readAll()  = viewModelScope.launch{
-        try {
 
+    // 모두 읽음 기능
+    private fun readAll()  = viewModelScope.launch{
+        updateState { copy(loadState = LoadState.LOADING) }
+        Log.d("AlarmViewModel","readAll : Reading all alarms")
+        try {
+            unreadNotificationUsecase().collect{ result ->
+                result.onSuccess {
+                    Log.d("AlarmViewModel","Successfully read all alarms")
+                    val updatedAlarmList = viewState.value.alarmList.map{
+                        it.copy(isRead = true)
+                    }
+                    updateState { copy(
+                        loadState = LoadState.SUCCESS,
+                        alarmList = updatedAlarmList
+                        )
+                    }
+                }.onFail {
+                    Log.d("AlarmViewModel","Failed to read all alarms")
+                    updateState { copy(loadState = LoadState.ERROR) }
+                }
+            }
         } catch (e:Exception) {
             Log.e("AlarmViewModel","Error reading all alarms",e)
             updateState { copy(loadState = LoadState.ERROR) }
         }
     }
 
+    // 전체 삭제 기능
     private fun deleteAll() = viewModelScope.launch {
+        updateState { copy(loadState = LoadState.LOADING) }
+        Log.d("AlarmViewModel","deleteAll : Deleting all alarms")
         try {
+            deletedCountUsecase().collect{ result ->
+                result.onSuccess {
+                    Log.d("AlarmViewModel","Successfully deleted all alarms")
+                    updateState { copy(loadState = LoadState.SUCCESS, alarmList = emptyList()) }
+                } .onFail {
+                    Log.d("AlarmViewModel","Failed to delete all alarms")
+                    updateState { copy(loadState = LoadState.ERROR) }
+                }
+            }
 
         } catch (e:Exception) {
             Log.e("AlarmViewModel","Error delete all alarms",e)

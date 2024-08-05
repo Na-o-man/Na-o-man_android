@@ -10,6 +10,6 @@ class NotificationInfoListUsecase @Inject constructor(
     private val repository: NotificationsRepository
 ){
     suspend operator fun invoke(page : Int, size : Int, sort : List<String>) = flow {
-        emit(repository.getNotificationInfoList(page,size,sort ))
+        emit(repository.getNotificationInfoList(page,size ))
     }
 }

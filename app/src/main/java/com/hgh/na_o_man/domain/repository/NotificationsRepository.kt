@@ -12,7 +12,7 @@ interface NotificationsRepository {
     suspend fun postFcm(fcmRequestDto: FcmRequestDto) : RetrofitResult<Nothing>
     suspend fun postAcknowledgeCount() : RetrofitResult<AcknowledgedCountModel>
     suspend fun getUnread() : RetrofitResult<UnreadModel>
-    suspend fun getNotificationInfoList(page : Int ,size : Int, sort : List<String>) : RetrofitResult<NotificationInfoListModel>
+    suspend fun getNotificationInfoList(page : Int ,size : Int) : RetrofitResult<NotificationInfoListModel>
     suspend fun deleteDeletedCount() : RetrofitResult<DeletedCountModel>
     suspend fun deleteAcknowledgedCount(notificationId : Long) : RetrofitResult<AcknowledgedCountModel>
 }
