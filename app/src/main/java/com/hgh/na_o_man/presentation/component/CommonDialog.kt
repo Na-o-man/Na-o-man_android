@@ -116,7 +116,7 @@ fun CommonDialog(
                                 ), RoundedCornerShape(18.dp)
                             )
                             .clickable {
-
+                                onClickPositive()
                             }
                     ) {
                         Text(

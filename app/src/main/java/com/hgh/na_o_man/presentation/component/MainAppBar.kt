@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -28,6 +27,22 @@ fun EndAppBar(
         menu = AppBarMenu.MYPAGE,
         onEndClick = onEndClick,
         onStartClick = { },
+        onNextClick = { }, // next 버튼 클릭 이벤트 추가
+        onPlusClick = { }
+    )
+}
+
+@Composable
+fun BackAppBar(
+    modifier: Modifier = Modifier,
+    onStartClick: () -> Unit,
+) {
+    MainAppBar(
+        modifier = modifier,
+        back = AppBarMenu.BACK,
+        menu = null,
+        onStartClick = onStartClick,
+        onEndClick = { },
         onNextClick = { }, // next 버튼 클릭 이벤트 추가
         onPlusClick = { }
     )
@@ -90,8 +105,6 @@ fun BackAndSelectAppBar(
 @Composable
 fun NextAppBar1(
     modifier: Modifier = Modifier,
-    onStartClick: () -> Unit,
-    onEndClick: () -> Unit,
     onNextClick: () -> Unit
 ) {
     MainAppBar(
@@ -110,8 +123,6 @@ fun NextAppBar1(
 @Composable
 fun NextAppBar2(
     modifier: Modifier = Modifier,
-    onStartClick: () -> Unit,
-    onEndClick: () -> Unit,
     onNextClick: () -> Unit
 ) {
     MainAppBar(

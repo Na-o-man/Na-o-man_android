@@ -1,6 +1,8 @@
 package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 
+import android.net.Uri
 import android.util.Log
+import com.hgh.na_o_man.di.util.work_manager.enqueue.UploadEnqueuer
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,6 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GroupDetailFolderViewModel @Inject constructor(
+    private val uploadEnqueuer: UploadEnqueuer
 ) : BaseViewModel<GroupDetailFolderContract.GroupDetailFolderViewState, GroupDetailFolderContract.GroupDetailFolderSideEffect, GroupDetailFolderContract.GroupDetailFolderEvent>(
     GroupDetailFolderContract.GroupDetailFolderViewState()
 ) {
@@ -32,7 +35,26 @@ class GroupDetailFolderViewModel @Inject constructor(
                     )
                 })
             }
+
+            GroupDetailFolderContract.GroupDetailFolderEvent.OnVoteClicked -> {
+                sendEffect({
+                    GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviVote(
+                        viewState.value.groupId
+                    )
+                })
+            }
+
+            GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadClicked -> {
+                sendEffect({ GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoPicker })
+            }
         }
+    }
+
+    fun uploadUri(uris: List<Uri>) {
+        updateState { copy(uris = uris) }
+        uploadEnqueuer.enqueueUploadWork(
+            viewState.value.groupId,
+            viewState.value.uris.map { it.toString() })
     }
 
     fun initGroupId(id: Long) {

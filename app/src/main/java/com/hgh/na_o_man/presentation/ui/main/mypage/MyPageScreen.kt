@@ -32,15 +32,13 @@ import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.CommonDialog
 import com.hgh.na_o_man.presentation.component.DecorationCloud
-import com.hgh.na_o_man.presentation.component.ImageDialog
 import com.hgh.na_o_man.presentation.component.MyPageBtn
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StartTopCloud
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
-import com.hgh.na_o_man.presentation.component.UserProfile
-import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
-import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoMenu
+import com.hgh.na_o_man.presentation.component.userIcon.UserProfile
+import com.hgh.na_o_man.presentation.ui.sign.SignActivity
 
 @Composable
 fun MyPageScreen(
@@ -51,6 +49,11 @@ fun MyPageScreen(
     val context = LocalContext.current as Activity
 
     Log.d("리컴포저블", "MyPageScreen")
+
+    LaunchedEffect(true) {
+        Log.d("한건희", "InitMyPageScreen")
+        viewModel.setEvent(MyPageContract.MyPageEvent.InitMyPageScreen)
+    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -64,7 +67,7 @@ fun MyPageScreen(
                 }
 
                 MyPageContract.MyPageSideEffect.LogOut -> {
-
+                    SignActivity.goAuth(context)
                 }
 
                 MyPageContract.MyPageSideEffect.SignOut -> {
@@ -113,7 +116,7 @@ fun MyPageScreen(
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    UserProfile(userInfo = AuthInfoModel(), modifier = Modifier.size(160.dp))
+                    UserProfile(userInfo = viewState.userInfo, modifier = Modifier.size(160.dp))
                     Spacer(modifier = Modifier.height(10.dp))
                     Image(
                         painter = painterResource(id = R.drawable.logo),
@@ -137,7 +140,17 @@ fun MyPageScreen(
                     CommonDialog(
                         title = viewState.dialogMod.title,
                         onCancelButtonClick = { viewModel.setEvent(MyPageContract.MyPageEvent.OnDialogClosed) },
-                        onClickPositive = {}
+                        onClickPositive = {
+                            when (viewState.dialogMod) {
+                                DialogMode.SING_OUT -> {
+                                    viewModel.setEvent(MyPageContract.MyPageEvent.OnClickDialogSignOut)
+                                }
+
+                                DialogMode.LOGOUT -> {
+                                    viewModel.setEvent(MyPageContract.MyPageEvent.OnClickDialogLogOut)
+                                }
+                            }
+                        }
                     )
                 }
             }
