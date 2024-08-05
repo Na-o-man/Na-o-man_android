@@ -51,129 +51,117 @@ fun MembersFolder(
     val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블", "MembersSpace")
 
-    when (viewState.loadState) {
-        LoadState.LOADING -> {
-            StateLoadingScreen()
+    Scaffold(
+        containerColor = lightSkyBlue // 여기를 수정
+    ) { padding ->
+        //구름 배경 Box
+        Box(modifier = Modifier.fillMaxSize()) {
+            StartTopCloud()
         }
 
-        LoadState.ERROR -> {
-            StateErrorScreen()
-        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
 
-        LoadState.SUCCESS -> {
-            Scaffold(
-                containerColor = lightSkyBlue // 여기를 수정
-            ) { padding ->
-                //구름 배경 Box
-                Box(modifier = Modifier.fillMaxSize()) {
-                    StartTopCloud()
-                }
+            Image(
+                painter = painterResource(id = R.drawable.ic_share_folder_144), // 첫 번째 이미지 리소스
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(bottom = 35.dp)
+                    .size(225.dp) // 원하는 크기로 설정
+            )
+            Text(
+                text = "제주도 2024", // 텍스트 내용
+                color = DeepBlue, // 텍스트 색상
+                style = androidx.compose.ui.text.TextStyle(
+                    fontSize = 24.sp, // 텍스트 크기 설정
+                    fontWeight = FontWeight.Bold // 텍스트를 Semibold로 설정
+                )
+            )
 
+            // 두 번째 이미지 (겹쳐서 놓기)
+            Box(
+                modifier = Modifier.size(375.dp)
+                    .graphicsLayer(translationY = 595f), // 살짝 겹치게
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_button_copy_cloud_228), // 두 번째 이미지 리소스
+                    contentDescription = null,
+                    modifier = Modifier.padding(bottom = 310.dp, start = 217.dp)
+                        .width(250.dp).height(300.dp),
+
+                    )
+            }
+
+            // 세 번째와 네 번째 이미지 (아래에 배치)
+            Box(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .size(1000.dp), // 내용을 감싸도록 설정
+                contentAlignment = Alignment.Center
+            ) {
+                // 세 번째와 네 번째 이미지 (아래에 배치)
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .size(1000.dp), // 내용을 감싸도록 설정
                     contentAlignment = Alignment.Center
                 ) {
-
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_share_folder_144), // 첫 번째 이미지 리소스
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(bottom = 35.dp)
-                            .size(225.dp) // 원하는 크기로 설정
-                    )
-                    Text(
-                        text = "제주도 2024", // 텍스트 내용
-                        color = DeepBlue, // 텍스트 색상
-                        style = androidx.compose.ui.text.TextStyle(
-                            fontSize = 24.sp, // 텍스트 크기 설정
-                            fontWeight = FontWeight.Bold // 텍스트를 Semibold로 설정
-                        )
-                    )
-
-                    // 두 번째 이미지 (겹쳐서 놓기)
+                    // 세 번째 이미지와 텍스트
                     Box(
-                        modifier = Modifier.size(375.dp)
-                            .graphicsLayer(translationY = 595f), // 살짝 겹치게
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier
+                            .width(240.dp)
+                            .height(357.dp)
+                            .padding(top = 310.dp)
+                            .clip(RoundedCornerShape(50.dp)) // 둥근 모서리 설정
+                            .background(LightWhite), // 배경을 LightWhite 40%로 설정
+                        contentAlignment = Alignment.Center // 텍스트를 중앙에 배치
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_button_copy_cloud_228), // 두 번째 이미지 리소스
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_info_151), // 세 번째 이미지 리소스
                             contentDescription = null,
-                            modifier = Modifier.padding(bottom = 310.dp, start = 217.dp)
-                                .width(250.dp).height(300.dp),
-
+                            modifier = Modifier.fillMaxSize(), // 버튼 크기에 맞추기
+                            contentScale = ContentScale.FillBounds // 비율 무시하고 크기 조정
+                        )
+                        Text(
+                            text = "링크 공유해서 친구 초대하기", // 텍스트 내용
+                            color = DeepBlue, // 텍스트 색상
+                            style = androidx.compose.ui.text.TextStyle(
+                                fontSize = 16.sp, // 텍스트 크기 설정
+                                fontWeight = FontWeight.SemiBold // 텍스트를 Semibold로 설정
+                            )
                         )
                     }
 
-                    // 세 번째와 네 번째 이미지 (아래에 배치)
+                    // 네 번째 이미지와 텍스트
                     Box(
                         modifier = Modifier
-                            .wrapContentSize()
-                            .size(1000.dp), // 내용을 감싸도록 설정
-                        contentAlignment = Alignment.Center
+                            .width(240.dp)
+                            .height(472.dp)
+                            .padding(top = 425.dp)
+                            .clip(RoundedCornerShape(50.dp)) // 둥근 모서리 설정
+                            .background(LightWhite), // 배경을 LightWhite 40%로 설정
+                        contentAlignment = Alignment.Center // 텍스트를 중앙에 배치
                     ) {
-                        // 세 번째와 네 번째 이미지 (아래에 배치)
-                        Box(
-                            modifier = Modifier
-                                .wrapContentSize()
-                                .size(1000.dp), // 내용을 감싸도록 설정
-                            contentAlignment = Alignment.Center
-                        ) {
-                            // 세 번째 이미지와 텍스트
-                            Box(
-                                modifier = Modifier
-                                    .width(240.dp)
-                                    .height(357.dp)
-                                    .padding(top = 310.dp)
-                                    .clip(RoundedCornerShape(50.dp)) // 둥근 모서리 설정
-                                    .background(LightWhite), // 배경을 LightWhite 40%로 설정
-                                contentAlignment = Alignment.Center // 텍스트를 중앙에 배치
-                            ) {
-                                Image(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_info_151), // 세 번째 이미지 리소스
-                                    contentDescription = null,
-                                    modifier = Modifier.fillMaxSize(), // 버튼 크기에 맞추기
-                                    contentScale = ContentScale.FillBounds // 비율 무시하고 크기 조정
-                                )
-                                Text(
-                                    text = "링크 공유해서 친구 초대하기", // 텍스트 내용
-                                    color = DeepBlue, // 텍스트 색상
-                                    style = androidx.compose.ui.text.TextStyle(
-                                        fontSize = 16.sp, // 텍스트 크기 설정
-                                        fontWeight = FontWeight.SemiBold // 텍스트를 Semibold로 설정
-                                    )
-                                )
-                            }
-
-                            // 네 번째 이미지와 텍스트
-                            Box(
-                                modifier = Modifier
-                                    .width(240.dp)
-                                    .height(472.dp)
-                                    .padding(top = 425.dp)
-                                    .clip(RoundedCornerShape(50.dp)) // 둥근 모서리 설정
-                                    .background(LightWhite), // 배경을 LightWhite 40%로 설정
-                                contentAlignment = Alignment.Center // 텍스트를 중앙에 배치
-                            ) {
-                                Image(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_info_151), // 네 번째 이미지 리소스
-                                    contentDescription = null,
-                                    modifier = Modifier.fillMaxSize(), // 버튼 크기에 맞추기
-                                    contentScale = ContentScale.FillBounds // 비율 무시하고 크기 조정
-                                )
-                                Text(
-                                    text = "공유 폴더 가기", // 텍스트 내용
-                                    color = DeepBlue, // 텍스트 색상
-                                    style = androidx.compose.ui.text.TextStyle(
-                                        fontSize = 16.sp, // 텍스트 크기 설정
-                                        fontWeight = FontWeight.SemiBold // 텍스트를 Semibold로 설정
-                                    )
-                                )
-                            }
-                        }
-
+                        Image(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_info_151), // 네 번째 이미지 리소스
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(), // 버튼 크기에 맞추기
+                            contentScale = ContentScale.FillBounds // 비율 무시하고 크기 조정
+                        )
+                        Text(
+                            text = "공유 폴더 가기", // 텍스트 내용
+                            color = DeepBlue, // 텍스트 색상
+                            style = androidx.compose.ui.text.TextStyle(
+                                fontSize = 16.sp, // 텍스트 크기 설정
+                                fontWeight = FontWeight.SemiBold // 텍스트를 Semibold로 설정
+                            )
+                        )
                     }
                 }
+
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add
 
+import android.graphics.Paint.Join
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,11 +24,11 @@ import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptCheckScreen
 import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptScreen
 
 @Composable
-fun AddJoinHostScreen(
+fun JoinHostScreen(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    Log.d("리컴포저블", "AddJoinHostScreen")
+    Log.d("리컴포저블", "JoinHostScreen")
     Scaffold(
         containerColor = lightSkyBlue
     ) { innerPadding ->
@@ -37,27 +38,12 @@ fun AddJoinHostScreen(
             NavHost(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,
-                startDestination = "members_name_screen"
+                startDestination = JoinScreenRoute.INVITE.route
             ) {
-                composable("members_name_screen") {
-                    MembersNameScreen(viewModel, navController)
-                }
-                composable("members_adjective") {
-                    MembersAdjective(viewModel, navController)
-                }
-                composable("members_space") {
-                    MembersSpace(viewModel, navController)
-                }
-                composable("members_loading") {
-                    MembersLoading(viewModel, navController)
-                }
-                composable("members_folder") {
-                    MembersFolder(viewModel, navController)
-                }
-                composable("accept_invite") {
+                composable(route = JoinScreenRoute.INVITE.route) {
                     AcceptScreen(viewModel, navController)
                 }
-                composable("accept_check_screen") {
+                composable(route = JoinScreenRoute.CHECK.route) {
                     AcceptCheckScreen(viewModel, navController)
                 }
             }
@@ -65,4 +51,8 @@ fun AddJoinHostScreen(
     }
 }
 
+enum class JoinScreenRoute(val route: String){
+    INVITE("accept_invite_screen"),
+    CHECK("accept_check_screen")
+}
 

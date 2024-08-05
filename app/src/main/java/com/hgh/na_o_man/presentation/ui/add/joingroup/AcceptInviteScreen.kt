@@ -47,7 +47,7 @@ import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.add.AddContract
+import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract
 import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
 
@@ -179,7 +179,7 @@ fun AcceptInviteScreen(
                     onNextClick = {
                         // URL 검증 로직
                         if (isValidUrl(url)) {
-                            viewModel.handleEvents(AddContract.AddEvent.AddGroup6) // 다음 스크린으로 이동
+//                            viewModel.handleEvents(AddContract.AddEvent.AddGroup6) // 다음 스크린으로 이동
                         } else {
                             // URL이 유효하지 않을 때 사용자에게 알림
                             Toast.makeText(context, "유효한 URL을 입력하세요.", Toast.LENGTH_SHORT).show()

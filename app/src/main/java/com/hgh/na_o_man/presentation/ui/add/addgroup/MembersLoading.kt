@@ -48,107 +48,94 @@ fun MembersLoading(
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    Log.d("리컴포저블","MembersSpace")
+    Log.d("리컴포저블", "MembersSpace")
     var textValue by remember { mutableStateOf("공간을 입력해 주세요.") }
 
-    when (viewState.loadState) {
-        LoadState.LOADING -> {
-            StateLoadingScreen()
+    Scaffold(
+        containerColor = lightSkyBlue // 여기를 수정
+    ) { padding ->
+        //구름 배경 Box
+        Box(modifier = Modifier.fillMaxSize()) {
+            StartTopCloud()
         }
 
-        LoadState.ERROR -> {
-            StateErrorScreen()
-        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
 
-        LoadState.SUCCESS -> {
-            Scaffold(
-                containerColor = lightSkyBlue // 여기를 수정
-            ) { padding ->
-                //구름 배경 Box
-                Box(modifier = Modifier.fillMaxSize()) {
-                    StartTopCloud()
-                }
+            // 회전 각도 상태
+            val rotationState = remember { Animatable(0f) }
 
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-
-                    // 회전 각도 상태
-                    val rotationState = remember { Animatable(0f) }
-
-                    // 로딩 애니메이션 루프
-                    LaunchedEffect(Unit) {
-                        while (true) {
-                            rotationState.animateTo(
-                                targetValue = 360f,
-                                animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
-                            )
-                            rotationState.snapTo(0f) // 애니메이션 끝나면 0도로 재설정
-                        }
-                    }
-
-                    // 로딩 이미지
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.Center),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
-                            contentDescription = "Center Image",
-                            modifier = Modifier
-                                .graphicsLayer(rotationZ = rotationState.value) // 회전 적용
-                                .graphicsLayer(rotationZ = -120f) // 30도 회전
-                                .size(60.dp)
-                        )
-                    }
-
-                    // 애니메이션 상태 초기화
-                    val offsetY = remember { Animatable(0f) }
-
-                    // 애니메이션 루프
-                    LaunchedEffect(Unit) {
-                        while (true) {
-                            offsetY.animateTo(
-                                targetValue = 10f, // 위로 이동하는 거리
-                                animationSpec = tween(durationMillis = 500, easing = LinearEasing)
-                            )
-                            offsetY.animateTo(
-                                targetValue = -10f, // 아래로 이동하는 거리
-                                animationSpec = tween(durationMillis = 500, easing = LinearEasing)
-                            )
-                            offsetY.animateTo(
-                                targetValue = 0f, // 원래 위치로 복귀
-                                animationSpec = tween(durationMillis = 500, easing = LinearEasing)
-                            )
-                        }
-                    }
-
-                    // 텍스트
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(top = 150.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "그룹 생성 중입니다...",
-                            modifier = Modifier.graphicsLayer(translationY = offsetY.value), // Y축으로 이동
-                            color = LightWhite,
-                            fontWeight = FontWeight.SemiBold, // 굵게 설정
-                            fontSize = 16.sp // 크기를 16sp로 설정
-                        )
-                    }
+            // 로딩 애니메이션 루프
+            LaunchedEffect(Unit) {
+                while (true) {
+                    rotationState.animateTo(
+                        targetValue = 360f,
+                        animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
+                    )
+                    rotationState.snapTo(0f) // 애니메이션 끝나면 0도로 재설정
                 }
             }
 
-            // 5초 후 MembersFolder로 이동
+            // 로딩 이미지
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
+                    contentDescription = "Center Image",
+                    modifier = Modifier
+                        .graphicsLayer(rotationZ = rotationState.value) // 회전 적용
+                        .graphicsLayer(rotationZ = -120f) // 30도 회전
+                        .size(60.dp)
+                )
+            }
+
+            // 애니메이션 상태 초기화
+            val offsetY = remember { Animatable(0f) }
+
+            // 애니메이션 루프
             LaunchedEffect(Unit) {
-                viewModel.addGroup5() // 5초 후 MembersFolder로 이동
+                while (true) {
+                    offsetY.animateTo(
+                        targetValue = 10f, // 위로 이동하는 거리
+                        animationSpec = tween(durationMillis = 500, easing = LinearEasing)
+                    )
+                    offsetY.animateTo(
+                        targetValue = -10f, // 아래로 이동하는 거리
+                        animationSpec = tween(durationMillis = 500, easing = LinearEasing)
+                    )
+                    offsetY.animateTo(
+                        targetValue = 0f, // 원래 위치로 복귀
+                        animationSpec = tween(durationMillis = 500, easing = LinearEasing)
+                    )
+                }
+            }
+
+            // 텍스트
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(top = 150.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "그룹 생성 중입니다...",
+                    modifier = Modifier.graphicsLayer(translationY = offsetY.value), // Y축으로 이동
+                    color = LightWhite,
+                    fontWeight = FontWeight.SemiBold, // 굵게 설정
+                    fontSize = 16.sp // 크기를 16sp로 설정
+                )
             }
         }
     }
+
+    // 5초 후 MembersFolder로 이동
+//    LaunchedEffect(Unit) {
+//        viewModel.addGroup5() // 5초 후 MembersFolder로 이동
 }
 
 
