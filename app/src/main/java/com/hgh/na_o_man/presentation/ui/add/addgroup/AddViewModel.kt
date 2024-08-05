@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddViewModel @Inject constructor(
+    //private val repository: ShareGroupRepository // Repository 주입
 ) : BaseViewModel<AddViewState, AddSideEffect, AddEvent>(
     AddViewState() // 초기 상태 설정
 ) {
@@ -29,6 +30,18 @@ class AddViewModel @Inject constructor(
                 sendEffect ({ NavigateToNextScreen })
             }
             is AddEvent.TextInput -> {
+            }
+            is AddEvent.LoadData -> {
+                // 데이터 로드 처리 로직
+                loadPhotos()
+            }
+            is AddEvent.ClearTextInput -> {
+                // 텍스트 입력 초기화 처리
+            }
+            is AddEvent.OnCloudButtonClicked -> {
+                // 구름 버튼 클릭 처리 로직
+                // 사진 로드 또는 다른 작업 수행
+                loadPhotos()
             }
         }
     }
@@ -49,5 +62,24 @@ class AddViewModel @Inject constructor(
     fun onTextInput(text: String) {
         // 입력 값에 따라 버튼 클릭 이벤트 처리
         setEvent(AddEvent.TextInput(text))
+    }
+
+    private fun loadPhotos() {
+        // 사진 로드 로직 구현
+        // 로딩 상태 업데이트
+        updateState {
+            copy(isLoading = true)
+        }
+
+        // 데이터 로드 후 상태 업데이트
+        val loadedPhotos = listOf<Int>() // 실제 사진 로드 로직을 구현해야 합니다.
+        updateState {
+            copy(photos = loadedPhotos, isLoading = false)
+        }
+    }
+
+    // public 메소드 추가
+    fun showToast(message: String) {
+        sendEffect({ ShowToast(message) })
     }
 }

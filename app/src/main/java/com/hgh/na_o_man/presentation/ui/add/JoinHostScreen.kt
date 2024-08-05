@@ -22,10 +22,11 @@ import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersNameScreen
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersSpace
 import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptCheckScreen
 import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptScreen
+import com.hgh.na_o_man.presentation.ui.add.joingroup.JoinViewModel
 
 @Composable
 fun JoinHostScreen(
-    viewModel: AddViewModel = hiltViewModel(),
+    viewModel: JoinViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     Log.d("리컴포저블", "JoinHostScreen")

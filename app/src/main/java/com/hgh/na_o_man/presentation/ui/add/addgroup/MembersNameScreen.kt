@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
@@ -56,7 +57,7 @@ import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 @Composable
 fun MembersNameScreen(
     viewModel: AddViewModel = hiltViewModel(),
-    navController: NavController,
+    navController: NavHostController = rememberNavController()
 ) {
     Log.d("리컴포저블", "members_name_screen")
 
@@ -283,6 +284,7 @@ fun MembersNameScreen(
                                             .show()
                                     }
                                     // 다른 사이드 이펙트가 있다면 추가
+                                    else -> {}
                                 }
                             }
                         }
@@ -333,7 +335,7 @@ fun MembersNameScreen(
 @Composable
 fun Preview2() {
     // NavController 생성
-    val navController = rememberNavController()
+    val navController = NavHostController(context = LocalContext.current)
     MembersNameScreen(navController = navController)
 }
 

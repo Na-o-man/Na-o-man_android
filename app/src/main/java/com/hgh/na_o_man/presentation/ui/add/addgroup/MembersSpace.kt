@@ -1,11 +1,10 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
-import android.hardware.lights.Light
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,13 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +29,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
@@ -56,11 +54,10 @@ import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 @Composable
 fun MembersSpace(
     viewModel: AddViewModel = hiltViewModel(),
-    navController: NavController,
+    navController: NavHostController = rememberNavController(),
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
 ) {
     Log.d("리컴포저블", "members_space")
-    var textValue by remember { mutableStateOf("공간을 입력해 주세요.") }
     Scaffold(
         topBar = {
             StartAppBar(
@@ -169,6 +166,24 @@ fun MembersSpace(
                         }
                     }
                 )
+
+                val context = LocalContext.current // 현재의 컨텍스트 가져오기
+
+                LaunchedEffect(Unit) {
+                    viewModel.effect.collect { effect ->
+                        when (effect) {
+                            is AddContract.AddSideEffect.NavigateToNextScreen -> {
+                                navController.navigate(AddScreenRoute._LOADING.route)
+                            }
+
+                            is AddContract.AddSideEffect.ShowToast -> {
+                                Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                            }
+                            // 다른 사이드 이펙트가 있다면 추가
+                            else -> {}
+                        }
+                    }
+                }
                 // 다음 버튼
                 Box(
                     modifier = Modifier
@@ -182,7 +197,8 @@ fun MembersSpace(
                                 navController.navigate(AddScreenRoute._LOADING.route)
                             }
                             else {
-                                AddContract.AddSideEffect.ShowToast("텍스트를 입력해주세요.") // 토스트 메시지 표시
+                                // showToast 메소드를 통해 토스트 메시지 전달
+                                viewModel.showToast("텍스트를 입력해주세요.")
                             }
                         },
                     )
@@ -195,7 +211,7 @@ fun MembersSpace(
 @Preview(showBackground = true)
 @Composable
 fun Preview4() {
-    val navController = rememberNavController()
+    val navController = NavHostController(context = LocalContext.current)
     MembersSpace(navController = navController)
 }
 

@@ -13,43 +13,34 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.StartTopCloud
-import com.hgh.na_o_man.presentation.component.StateErrorScreen
-import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 import kotlinx.coroutines.delay
 
 
 @Composable
 fun MembersLoading(
     viewModel: AddViewModel = hiltViewModel(),
-    navController: NavController,
-    showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
+    navController: NavHostController = rememberNavController()
 ) {
-    val viewState by viewModel.viewState.collectAsState()
-    Log.d("리컴포저블", "MembersSpace")
-    var textValue by remember { mutableStateOf("공간을 입력해 주세요.") }
+    Log.d("리컴포저블", "members_loading")
 
     Scaffold(
         containerColor = lightSkyBlue // 여기를 수정
@@ -131,27 +122,20 @@ fun MembersLoading(
                 )
             }
         }
-    }
 
-    // 5초 후 MembersFolder로 이동
-//    LaunchedEffect(Unit) {
-//        viewModel.addGroup5() // 5초 후 MembersFolder로 이동
+        // 5초 후에 MembersFolder로 이동
+        LaunchedEffect(Unit) {
+            delay(5000) // 5초 대기
+            navController.navigate(AddScreenRoute.FOLDER.route) // MembersFolder로 네비게이션
+        }
+    }
 }
 
-
-//@Preview(showBackground = true)
-//@Composable
-//fun Preview5() {
-//    // NavController 생성
-//    val navController = rememberNavController()
-//
-//    // AddViewModel의 더미 인스턴스 생성
-//    val dummyViewModel = object : AddViewModel(navController) {
-//        // 필요한 프로퍼티나 메소드 오버라이드
-//    }
-//
-//    // MembersLoading에 viewModel과 dummyViewModel 전달
-//    MembersLoading(viewModel = dummyViewModel)
-//}
+@Preview(showBackground = true)
+@Composable
+fun Preview5() {
+    val navController = NavHostController(context = LocalContext.current)
+    MembersLoading(navController = navController)
+}
 
 

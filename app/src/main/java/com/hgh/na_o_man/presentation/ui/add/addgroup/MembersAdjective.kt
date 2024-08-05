@@ -42,6 +42,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -88,7 +89,7 @@ fun MembersAdjective(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 140.dp),
+                    .offset(y = 110.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -101,7 +102,7 @@ fun MembersAdjective(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .offset(y = 180.dp),
+                    .offset(y = 145.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -125,14 +126,15 @@ fun MembersAdjective(
 
 ////////////중복 선택
 
-            val buttonLabels = listOf("친구", "연인", "여행", "가족", "정기 모임", "동아리", "행사", "나들이", "스냅 사진")
+            val buttonLabels = listOf("친구", "연인", "여행", "가족", "모임", "동아리", "행사", "나들이", "스냅")
             val buttonCount = 9
             val selectedButtons = remember { mutableStateListOf<Boolean>().apply { repeat(buttonCount) { add(false) } } }
             var inputText by remember { mutableStateOf("") } // 사용자 입력을 저장할 상태 변수
 
             Column(
                 modifier = Modifier
-                    .padding(start = 35.dp, end = 35.dp, bottom = 20.dp, top = 150.dp)
+                    .padding(start = 30.dp, end = 30.dp)
+                    .offset(y = 90.dp)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -149,7 +151,7 @@ fun MembersAdjective(
                                 Box(
                                     modifier = Modifier
                                         .offset(y = 1.dp)
-                                        .width(99.dp) // 각 버튼의 너비를 99.dp로 설정
+                                        .width(90.dp) // 각 버튼의 너비를 99.dp로 설정
                                         .height(42.dp) // 버튼의 높이를 42.dp로 설정
                                 ) {
                                     Button(
@@ -171,19 +173,19 @@ fun MembersAdjective(
                                         Text(
                                             text = buttonLabels[index], // 버튼 텍스트 설정
                                             fontWeight = FontWeight.SemiBold, // 글씨를 굵게 설정
-                                            fontSize = 13.sp // 글씨 크기를 14sp로 설정
+                                            fontSize = 12.sp // 글씨 크기를 14sp로 설정
                                         )
                                     }
                                 }
 
                                 // 버튼 사이에 Spacer 추가 (가로 간격 조절)
                                 if (col < 2) { // 마지막 열에는 Spacer 추가하지 않음
-                                    Spacer(modifier = Modifier.width(5.dp)) // 원하는 간격 설정
+                                    Spacer(modifier = Modifier.width(1.dp)) // 원하는 간격 설정
                                 }
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(16.dp)) // 각 행 사이의 세로 간격 조절
+                    Spacer(modifier = Modifier.height(17.dp)) // 각 행 사이의 세로 간격 조절
                 }
 
                 Column {
@@ -201,7 +203,7 @@ fun MembersAdjective(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 25.dp, bottom = 10.dp)
+                            .padding(top = 20.dp, bottom = 10.dp)
                             .border(
                                 BorderStroke(1.dp, LightWhite),
                                 shape = RoundedCornerShape(50.dp)
@@ -230,13 +232,12 @@ fun MembersAdjective(
                     )
 
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(15.dp))
 
                     // 입력한 텍스트와 버튼 레이블이 같으면 선택 상태 변경
                     Box(
                         modifier = Modifier
-                            .padding(start = 270.dp)
-                            .size(48.dp) // 이미지 크기 조절
+                            .size(110.dp).width(60.dp).height(60.dp) // 이미지 크기 조절
                             .clickable {
                                 val index = buttonLabels.indexOf(inputText)
                                 if (index != -1) {
@@ -254,7 +255,6 @@ fun MembersAdjective(
                             repeat(buttonCount) { selectedButtons.add(false) }
                         }
 
-
                         // 사이드 이펙트 수집
                         LaunchedEffect(Unit) {
                             viewModel.effect.collect { effect ->
@@ -266,10 +266,10 @@ fun MembersAdjective(
 
                                     is AddContract.AddSideEffect.ShowToast -> {
                                         // 토스트 메시지 출력
-                                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT)
-                                            .show()
+                                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                                     }
                                     // 다른 사이드 이펙트가 있다면 추가
+                                    else -> {}
                                 }
                             }
                         }
@@ -278,11 +278,12 @@ fun MembersAdjective(
                             onNextClick = {
                                 // 선택된 버튼이 하나 이상일 경우 처리
                                 viewModel.onNextButtonClick(selectedButtons)
-                            }
+                            },
+                            modifier = Modifier
+                                .offset(x = 200.dp, y = -(10.dp)) // 원하는 높이로 설정
                         )
                     }
                 }
-
 //                        Spacer(modifier = Modifier.height(16.dp),)
 
 //                        Text(text = "Selected Buttons: ${selectedButtons.mapIndexed { index, isSelected -> if (isSelected) index + 1 else null }.filterNotNull()}")

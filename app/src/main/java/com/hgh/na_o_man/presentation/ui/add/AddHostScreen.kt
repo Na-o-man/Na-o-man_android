@@ -1,6 +1,5 @@
 package com.hgh.na_o_man.presentation.ui.add
 
-import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -25,12 +23,11 @@ import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptCheckScreen
 import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptScreen
 
 @Composable
-fun AddJoinHostScreen(
+fun AddHostScreen(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    val context = LocalContext.current as Activity
-    Log.d("리컴포저블", "AddJoinHostScreen")
+    Log.d("리컴포저블", "AddHostScreen")
     Scaffold(
         containerColor = lightSkyBlue
     ) { innerPadding ->
@@ -40,37 +37,33 @@ fun AddJoinHostScreen(
             NavHost(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,
-                startDestination = if (context.intent.getBooleanExtra(
-                        AddGroupActivity.ADD_GROUP,
-                        false
-                    )
-                ) "accept_invite"
-                else "members_name_screen"
+                startDestination = AddScreenRoute.NAMEINPUT.route
             ) {
-                composable("members_name_screen") {
+                composable(route = AddScreenRoute.NAMEINPUT.route) {
                     MembersNameScreen(viewModel, navController)
                 }
-                composable("members_adjective") {
+                composable(route = AddScreenRoute.ADJECTIVE.route) {
                     MembersAdjective(viewModel, navController)
                 }
-                composable("members_space") {
+                composable(route = AddScreenRoute.SPACEINPUT.route) {
                     MembersSpace(viewModel, navController)
                 }
-                composable("members_loading") {
+                composable(route = AddScreenRoute._LOADING.route) {
                     MembersLoading(viewModel, navController)
                 }
-                composable("members_folder") {
+                composable(route = AddScreenRoute.FOLDER.route) {
                     MembersFolder(viewModel, navController)
-                }
-                composable("accept_invite") {
-                    AcceptScreen(viewModel, navController)
-                }
-                composable("accept_check_screen") {
-                    AcceptCheckScreen(viewModel, navController)
                 }
             }
         }
     }
 }
 
+enum class AddScreenRoute(val route: String){
+    NAMEINPUT("members_name_screen"),
+    ADJECTIVE("members_adjective_screen"),
+    SPACEINPUT("members_space_screen"),
+    _LOADING("members_loading"),
+    FOLDER("members_folder")
+}
 
