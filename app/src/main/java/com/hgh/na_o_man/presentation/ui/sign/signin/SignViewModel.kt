@@ -7,6 +7,7 @@ import com.hgh.na_o_man.data.dto.auth.request.LoginRequestDto
 import com.hgh.na_o_man.data.dto.auth.request.SignUpRequestDto
 import com.hgh.na_o_man.di.util.data_store.DataStoreUtil
 import com.hgh.na_o_man.di.util.remote.onError
+import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.domain.usecase.auth.CheckRegistrationUsecase
@@ -73,7 +74,7 @@ class SignViewModel @Inject constructor(
                     }
                 }.onFail {
                     sendEffect({ SignContract.SignSideEffect.ShowToast("서버와 연결을 실패했습니다.") })
-                }.onError {
+                }.onException {
                     throw it
                 }
             }
@@ -97,7 +98,7 @@ class SignViewModel @Inject constructor(
                     sendEffect({ SignContract.SignSideEffect.NaviMain })
                 }.onFail {
                     sendEffect({ SignContract.SignSideEffect.ShowToast("서버와 연결을 실패했습니다.") })
-                }.onError {
+                }.onException {
                     throw it
                 }
             }
@@ -125,7 +126,7 @@ class SignViewModel @Inject constructor(
                     sendEffect({ SignContract.SignSideEffect.NaviUser })
                 }.onFail {
                     sendEffect({ SignContract.SignSideEffect.ShowToast("서버와 연결을 실패했습니다.") })
-                }.onError {
+                }.onException {
                     throw it
                 }
             }

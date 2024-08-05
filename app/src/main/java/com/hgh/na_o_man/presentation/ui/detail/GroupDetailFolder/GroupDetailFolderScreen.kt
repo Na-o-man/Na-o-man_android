@@ -3,7 +3,11 @@ package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 import CloudBtn
 import SmallCloudBtn
 import android.app.Activity
+import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,8 +50,6 @@ import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.groupdetail.Bigfolder
 import com.hgh.na_o_man.presentation.component.groupdetail.GroupInfo
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
-import com.hgh.na_o_man.presentation.ui.main.BottomNavigation
-import com.hgh.na_o_man.presentation.ui.main.navigateBottomNavigationScreen
 
 
 @ExperimentalPagerApi
@@ -62,6 +64,11 @@ fun GroupDetailFolderScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current as Activity
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia()
+    ) { uris: List<Uri> ->
+        viewModel.uploadUri(uris)
+    }
     val groupId = remember { context.intent.getLongExtra(GROUP_DETAIL, 0L) }
     LaunchedEffect(groupId) {
         viewModel.initGroupId(groupId)
@@ -76,6 +83,12 @@ fun GroupDetailFolderScreen(
 
                 is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviVote -> {
                     navigationVote(effect.groupId)
+                }
+
+                is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoPicker -> {
+                    imagePickerLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
+                    )
                 }
 
                 else -> Unit
@@ -174,7 +187,9 @@ fun GroupDetailFolderScreen(
                                 .offset(y = 90.dp)
                         ) {
                             SmallCloudBtn(title = "이미지\n분류") {
-
+                                viewModel.setEvent(
+                                    GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadClicked
+                                )
                             }
                             CloudBtn(title = "다운로드") {
                                 // 테스트용 - 삭제해야함
