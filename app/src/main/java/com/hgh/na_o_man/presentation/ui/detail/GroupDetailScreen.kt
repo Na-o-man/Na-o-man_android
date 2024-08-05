@@ -18,8 +18,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFolderScreen
+import com.hgh.na_o_man.presentation.ui.detail.agenda.AgendaScreen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
+import com.hgh.na_o_man.presentation.ui.detail.vote.VoteScreen1
 import com.hgh.na_o_man.presentation.ui.sign.SignScreenRoute
 
 @OptIn(ExperimentalPagerApi::class)
@@ -48,7 +51,12 @@ fun GroupDetailScreen(
                         navigationPhotoList = { groupId, memberId ->
                             navController.navigate(
                                 GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
-                                    .plus("/${memberId}")
+                                    .plus("/${memberId}").plus("/${false}")
+                            )
+                        },
+                        navigationVote = { groupId ->
+                            navController.navigate(
+                                GroupDetailScreenRoute.VOTE.route
                             )
                         },
                         navigationMyPage = {},
@@ -57,17 +65,49 @@ fun GroupDetailScreen(
 
                 composable(route = GroupDetailScreenRoute.LIST.route
                     .plus("/{$KEY_GROUP_ID}")
-                    .plus("/{$KEY_MEMBER_ID}"),
+                    .plus("/{$KEY_MEMBER_ID}")
+                    .plus("/{$KEY_IS_AGENDA}"),
                     arguments = listOf(
                         navArgument(KEY_GROUP_ID) { type = NavType.LongType },
-                        navArgument(KEY_MEMBER_ID) { type = NavType.LongType }
+                        navArgument(KEY_MEMBER_ID) { type = NavType.LongType },
+                        navArgument(KEY_IS_AGENDA) { type = NavType.BoolType }
                     )
                 ) {
-                    PhotoListScreen()
+                    PhotoListScreen(
+                        navigationBack = {
+                            navController.popBackStack()
+                        },
+                        navigationAgenda = {
+                            navController.previousBackStackEntry?.savedStateHandle?.set("agendaData", it)
+                            navController.popBackStack()
+                        }
+                    )
                 }
 
                 composable(route = GroupDetailScreenRoute.VOTE.route) {
+                    VoteScreen1(
+                        navigationBack = {
+                            navController.popBackStack()
+                        }, navigationAgenda = {
+                            navController.navigate(
+                                GroupDetailScreenRoute.AGENDA.route
+                            )
+                        }
+                    )
+                }
 
+                composable(route = GroupDetailScreenRoute.AGENDA.route) {
+                    AgendaScreen(
+                        navController = navController,
+                        navigationBack = {
+                            navController.popBackStack()
+                        }, navigationPhotoList = { groupId, memberId ->
+                            navController.navigate(
+                                GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
+                                    .plus("/${memberId}").plus("/${true}")
+                            )
+                        }
+                    )
                 }
             }
         }
@@ -80,7 +120,9 @@ enum class GroupDetailScreenRoute(val route: String) {
     DETAIL("detail"),
     LIST("list"),
     VOTE("vote"),
+    AGENDA("agenda"),
 }
 
 const val KEY_GROUP_ID = "group-id"
 const val KEY_MEMBER_ID = "member-id"
+const val KEY_IS_AGENDA = "is-agenda"

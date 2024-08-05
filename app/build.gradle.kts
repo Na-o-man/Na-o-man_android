@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
+    id("kotlin-kapt")
 }
 
 
@@ -90,12 +91,13 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
 
     //WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation("androidx.work:work-runtime-ktx:2.8.0")
     implementation("androidx.hilt:hilt-work:1.0.0")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.50")
-    ksp("com.google.dagger:hilt-compiler:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     //coil
@@ -108,3 +110,4 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
 }
+

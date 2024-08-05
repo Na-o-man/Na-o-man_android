@@ -63,7 +63,7 @@ fun HomeScreen(
                 }
 
                 is HomeContract.HomeSideEffect.NaviGroupDetail -> {
-                    context.startActivity(GroupDetailActivity.newIntent(context, effect.id))
+                    context.startActivity(GroupDetailActivity.newIntent(context, 1))
                 }
 
                 else -> Unit

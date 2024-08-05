@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,7 +39,7 @@ fun UserScreen(
     naviUploadScreen: () -> Unit,
     viewModel: SignViewModel = hiltViewModel()
 ) {
-    val viewState = viewModel.viewState.collectAsState()
+    val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current as Activity
 
     LaunchedEffect(key1 = viewModel.effect) {
@@ -73,7 +74,7 @@ fun UserScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            UserProfile(userInfo = viewState.value.authInfo, modifier = Modifier.size(160.dp))
+            UserProfile(userInfo = viewState.authInfo, modifier = Modifier.size(160.dp))
             Spacer(modifier = Modifier.height(16.dp))
             LineSymbol(Modifier.padding(horizontal = 60.dp))
             Spacer(modifier = Modifier.height(12.dp))
@@ -86,7 +87,11 @@ fun UserScreen(
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(30.dp))
-            SignBtn {
+            SignBtn(
+                title = "사진 추가하기",
+                modifier = Modifier
+                    .size(200.dp, 60.dp)
+            ) {
                 viewModel.setEvent(SignContract.SignEvent.OnClickUpload)
             }
 
@@ -125,8 +130,12 @@ fun UserScreenPv() {
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(30.dp))
-            SignBtn {
-
+            SignBtn(
+                title = "사진 추가하기",
+                modifier = Modifier
+                    .size(200.dp, 60.dp)
+            ) {
+                //viewModel.setEvent(SignContract.SignEvent.OnClickUpload)
             }
 
         }

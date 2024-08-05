@@ -1,6 +1,8 @@
 package com.hgh.na_o_man.presentation.ui.main.mypage
 
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
+import com.hgh.na_o_man.domain.model.member.SearchSuccessModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
@@ -10,8 +12,8 @@ import com.hgh.na_o_man.presentation.ui.sign.signin.SignContract
 class MyPageContract {
 
     data class MyPageViewState(
-        val loadState: LoadState = LoadState.SUCCESS,
-        val userInfo : Dummy = Dummy(),
+        val loadState: LoadState = LoadState.LOADING,
+        val userInfo : AuthInfoModel = AuthInfoModel(),
         val isDialogVisible: Boolean = false,
         val dialogMod : DialogMode = DialogMode.LOGOUT,
     ): ViewState
@@ -30,6 +32,8 @@ class MyPageContract {
         object OnClickLogOut : MyPageEvent()
         object OnClickSignOut : MyPageEvent()
         object OnDialogClosed : MyPageEvent()
+        object OnClickDialogLogOut : MyPageEvent()
+        object OnClickDialogSignOut : MyPageEvent()
     }
 }
 
