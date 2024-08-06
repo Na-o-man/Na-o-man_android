@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +18,16 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,17 +44,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
-import com.hgh.na_o_man.presentation.component.NextAppBar2
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.theme.DeepBlue
 import com.hgh.na_o_man.presentation.theme.LightWhite
+import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AcceptScreen(
-    viewModel: AddViewModel = hiltViewModel(),
+    viewModel: JoinViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     Scaffold(
@@ -86,34 +92,30 @@ fun AcceptScreen(
                 )
             }
 
-            // Column은 Row 아래에 위치
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .offset(y = 40.dp) // Row 아래에 위치하도록 패딩 추가
             ) {
-                val pagerState = rememberPagerState(pageCount = { 3 }) // 페이지 수를 설정
-
+                val pagerState = rememberPagerState(pageCount = { 10 }) // 페이지 수를 설정
                 HorizontalPager(
                     state = pagerState,
                     modifier = Modifier.weight(1f) // 남은 공간을 차지하게 설정
                 ) { page ->
-                    when (page) {
-                        0 -> AcceptWho1(navController, viewModel)
-                        1 -> AcceptWho2(navController, viewModel)
-                        2 -> AcceptWho3(navController, viewModel)
-                    }
+                    AcceptWho1(navController, viewModel) // 각 페이지의 콘텐츠
                 }
 
                 // 페이지 인디케이터
                 PageIndicator(pagerState)
+
+                var showDialog by remember { mutableStateOf(false) }
 
                 // 이미지 배경을 화면 중앙 오른쪽에 추가
                 Box(
                     modifier = Modifier
                         .offset(x = 240.dp, y = -160.dp)
                         .clickable(onClick = {
-                            navController.navigate("members_name_screen") // 다음 화면으로 이동
+                            showDialog = true // 클릭 시 다이얼로그 표시
                         }),
                     contentAlignment = Alignment.TopEnd // 내용 정렬을 오른쪽 아래로 설정
                 ) {
@@ -125,20 +127,58 @@ fun AcceptScreen(
                             .width(78.dp) // 이미지 크기 조정
                     )
                 }
+
+                // 다이얼로그 구현
+                if (showDialog) {
+                    AlertDialog(
+                        onDismissRequest = { viewModel.setShowDialog(false) }, // 다이얼로그 바깥을 클릭하면 닫기
+                        title = { Text(text = "당사자가 맞나요?", color = LightWhite) },
+                        text = { Text(text = "확인해 주세요.", color = LightWhite) },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    // "네" 클릭 시 다음 화면으로 이동
+                                    viewModel.setShowDialog(false)
+                                    navController.navigate("members_name_screen") // "네" 클릭 시 다음 화면으로 이동
+                                    // 여기서 네 클릭 시의 로직 추가
+                                },
+                                colors = ButtonDefaults.buttonColors(lightSkyBlue) // 배경색 설정
+                                ) {
+                                Text("네", color = LightWhite)
+                            }
+                        },
+                        dismissButton = {
+                            Button(
+                                onClick = {
+                                    viewModel.setShowDialog(false)
+                                },
+                                colors = ButtonDefaults.buttonColors(lightSkyBlue) // 배경색 설정
+                            ) {
+                                Text("아니오", color = LightWhite) // 버튼 텍스트 색상 설정
+                            }
+                        },
+                        containerColor = SteelBlue, // 다이얼로그 배경색
+                        textContentColor = LightWhite, // 다이얼로그 내용 색
+                    )
+                }
             }
         }
     }
 }
 
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PageIndicator(pagerState: PagerState) {
+    val totalPages = 10 // 표시할 페이지 수 (예: 3페이지)
     Row(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center, // 가로 방향 가운데 정렬
+        verticalAlignment = Alignment.CenterVertically // 세로 방향 가운데 정렬
     ) {
-        repeat(3) { index ->
-            val color = if (pagerState.currentPage == index) Color.Blue else Color.Gray
+        repeat(totalPages) { index ->
+            val color = if (pagerState.currentPage % totalPages == index) DeepBlue else Color.Gray // 현재 페이지에 따라 색상 변경
             Box(
                 modifier = Modifier
                     .size(8.dp)
@@ -147,18 +187,6 @@ fun PageIndicator(pagerState: PagerState) {
             )
         }
     }
-}
-
-
-@Composable
-fun IndicatorDot(index: Int, currentPage: Int) {
-    val color = if (index == currentPage) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-    Box(
-        modifier = Modifier
-            .size(10.dp)
-            .padding(4.dp)
-            .background(DeepBlue, shape = CircleShape)
-    )
 }
 
 @Preview(showBackground = true)
