@@ -31,6 +31,17 @@ import javax.inject.Singleton
         return apiHandler({ api.groupSearch(shareGroupId)}) { response: ApiResult<GroupAddDto> -> response.data.toModel() }
     }
 
-
-
+//    // 공유 그룹 삭제
+//    override suspend fun deleteAddGroup(shareGroupId: Long): RetrofitResult<Unit> {
+//        return apiHandler({ api.deleteGroup(shareGroupId) }) { response: ApiResult<Unit> ->
+//            response.data
+//        }
+//    }
+//
+//    // 내가 참여한 공유 그룹 목록 조회
+//    override suspend fun getMyGroup(page: Int, size: Int): RetrofitResult<MyShareGroupsResponse> {
+//        return apiHandler({ api.getMyGroups(page, size) }) { response: ApiResult<MyShareGroupsDto> ->
+//            response.data.toMyShareGroupsResponse()
+//        }
+//    }
 }

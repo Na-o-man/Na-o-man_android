@@ -20,7 +20,7 @@ class JoinContract {
         data class UpdateUrl(val newUrl: String) : JoinEvent() // URL 업데이트 이벤트
         object ValidateUrl : JoinEvent() // URL 검증 이벤트
         object ShowConfirmationDialog : JoinEvent() // 다이얼로그 표시 이벤트
-        object onCorrect : JoinEvent() // 맞아요 이벤트
+        data class onCorrect(val groupId: Long) : JoinEvent() // groupId 추가
         object onFind : JoinEvent() // 다시 찾기 이벤트
     }
 }
