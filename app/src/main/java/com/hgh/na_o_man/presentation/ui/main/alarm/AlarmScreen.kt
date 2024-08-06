@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,8 +25,9 @@ import com.hgh.na_o_man.domain.model.AlarmDummy
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.DecorationCloud
 import com.hgh.na_o_man.presentation.component.EndTopCloud
+import com.hgh.na_o_man.presentation.component.NoticeIcon.AlarmButton
 import com.hgh.na_o_man.presentation.component.NoticeIcon.NoticeBox
-import com.hgh.na_o_man.presentation.component.NoticeIcon.ReadAllButton
+import com.hgh.na_o_man.presentation.component.NoticeIcon.ReadAllUnClickableButton
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
@@ -42,9 +44,9 @@ fun AlarmScreen(
     val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블","AlarmScreen")
 
-//    LaunchedEffect(key1 = true) {
-//        viewModel.setEvent(AlarmContract.AlarmEvent.InitAlarmScreen)
-//    }
+    LaunchedEffect(key1 =viewModel.effect) {
+        viewModel.setEvent(AlarmContract.AlarmEvent.InitAlarmScreen)
+    }
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
@@ -89,9 +91,18 @@ fun AlarmScreen(
                             .align(Alignment.TopEnd)
                             .offset(x = -43.dp, y = 60.dp)
                     ) {
-                        ReadAllButton(title = "모두 읽음", onClick = {viewModel.setEvent(AlarmContract.AlarmEvent.OnReadAllClicked)})
+                        val hasUnread = viewState.alarmList.any { !it.isRead }
+                        if(hasUnread) {
+                            AlarmButton(title = "모두 읽음", onClick = {
+                                Log.d("AlarmButton","모두 읽음 버튼 클릭")
+                                viewModel.setEvent(AlarmContract.AlarmEvent.OnReadAllClicked)})
+                        } else {
+                            ReadAllUnClickableButton(title = "모두 읽음")
+                        }
                         Spacer(modifier = Modifier.width(5.dp))
-                        ReadAllButton(title = "전체 삭제", onClick = {viewModel.setEvent(AlarmContract.AlarmEvent.OnDeleteAllClicked)})
+                        AlarmButton(title = "전체 삭제", onClick = {
+                            Log.d("AlarmButton","전체 삭제 버튼 클릭")
+                            viewModel.setEvent(AlarmContract.AlarmEvent.OnDeleteAllClicked)})
                     }
                     if(viewState.alarmList.isEmpty()) {
                         Box(
