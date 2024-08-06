@@ -60,6 +60,7 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
+    // 알람 리스트 구현
     private fun showAlarmList() = viewModelScope.launch{
         updateState { copy(loadState = LoadState.LOADING) }
         Log.d("AlarmViewModel", "showAlarmList: Loading started")

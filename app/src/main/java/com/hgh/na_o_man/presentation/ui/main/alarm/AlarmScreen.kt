@@ -29,6 +29,7 @@ import com.hgh.na_o_man.presentation.component.NoticeIcon.ReadAllButton
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
+import com.hgh.na_o_man.presentation.component.homeIcon.AlarmNotRead
 import com.hgh.na_o_man.presentation.component.homeIcon.AlarmRead
 import com.hgh.na_o_man.presentation.component.homeIcon.NoAlarmBox
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
@@ -160,11 +161,18 @@ fun AlarmListScreen(
             modifier = Modifier
         ) {
             items(alarmList) { group ->
-                AlarmRead(
-                    imageRes = group.imageRes,
-                    detail = group.detail,
-                    date = group.date
-                )
+                if (group.isRead == false) {
+                    AlarmNotRead(
+                        imageRes = group.imageRes,
+                        detail = group.detail,
+                        date = group.date
+                    )
+                } else {
+                    AlarmRead(
+                        imageRes = group.imageRes,
+                        detail = group.detail,
+                        date = group.date)
+                }
             }
         }
     }
