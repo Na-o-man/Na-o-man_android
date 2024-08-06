@@ -19,13 +19,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.hgh.na_o_man.presentation.component.userIcon.UserInfo
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
 
 @Composable
 fun AcceptWho1(
     navController: NavController,
-    viewModel: AddViewModel = hiltViewModel(),
+    viewModel: JoinViewModel = hiltViewModel(),
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
 ) {
     Log.d("리컴포저블", "AcceptWho1")

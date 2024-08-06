@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,10 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,13 +33,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
@@ -46,14 +50,15 @@ import com.hgh.na_o_man.presentation.theme.LightNavy
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 
 @Composable
 fun MembersNameScreen(
     viewModel: AddViewModel = hiltViewModel(),
-    navController: NavController,
+    navController: NavHostController = rememberNavController()
 ) {
-    val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블", "members_name_screen")
+
     var nameText by remember { mutableStateOf("이름") }
     var isEditing by remember { mutableStateOf(false) }
 
@@ -92,7 +97,7 @@ fun MembersNameScreen(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .offset(y = -5.dp),
+                    .offset(y = -(5.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -250,17 +255,72 @@ fun MembersNameScreen(
                                 .align(Alignment.CenterEnd)
                                 .height(24.dp)
                                 .width(26.dp)// 이미지 크기 조정
-                                .offset(x = -10.dp, y = 0.dp),
+                                .offset(x = -(10.dp), y = 0.dp),
                             contentScale = ContentScale.FillBounds // 비율 무시하고 채우기
                         )
                     }
+
+                    val context = LocalContext.current // 현재 컨텍스트 가져오기
+                    var showDialog by remember { mutableStateOf(false) }
+                    var selectedAnswer by remember { mutableStateOf("") }
+
                     Box(
-                        modifier = Modifier.offset(x = -55.dp, y = 30.dp)
+                        modifier = Modifier.offset(x = -(55.dp), y = 30.dp)
                     ) {
+                        // 사이드 이펙트 수집
+                        LaunchedEffect(Unit) {
+                            viewModel.effect.collect { effect ->
+                                when (effect) {
+                                    is AddContract.AddSideEffect.NavigateToNextScreen -> {
+                                        // 지정된 화면으로 네비게이션
+                                        navController.navigate(AddScreenRoute.ADJECTIVE.route)
+                                    }
+
+                                    is AddContract.AddSideEffect.ShowToast -> {
+                                        // 토스트 메시지 출력
+                                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                    // 다른 사이드 이펙트가 있다면 추가
+                                    else -> {}
+                                }
+                            }
+                        }
+
+                        var isNextEnabled by remember { mutableStateOf(false) } // 다음 버튼 활성화 상태
+
+// 그룹 확인 다이얼로그
+                        if (showDialog) {
+                            AlertDialog(
+                                onDismissRequest = { showDialog = false },
+                                title = { Text("그룹 확인") },
+                                text = { Text("더 이상\n추가할 이름이 없으신가요?") },
+                                confirmButton = {
+                                    Button(onClick = {
+                                        selectedAnswer = "네"
+                                        showDialog = false // 다이얼로그 닫기
+                                        isNextEnabled = true // 다음 버튼 활성화
+                                    }) {
+                                        Text("네")
+                                    }
+                                },
+                                dismissButton = {
+                                    Button(onClick = {
+                                        selectedAnswer = "아니오"
+                                        showDialog = false
+                                    }) {
+                                        Text("아니오")
+                                    }
+                                }
+                            )
+                        }
+
                         NextAppBar1(
                             onNextClick = {
-                                navController.navigate("members_adjective")
-                            },
+                                if (isNextEnabled) {
+                                    navController.navigate(AddScreenRoute.ADJECTIVE.route)
+                                }
+                            }
                         )
                     }
                 }
@@ -273,7 +333,7 @@ fun MembersNameScreen(
 @Composable
 fun Preview2() {
     // NavController 생성
-    val navController = rememberNavController()
+    val navController = NavHostController(context = LocalContext.current)
     MembersNameScreen(navController = navController)
 }
 
