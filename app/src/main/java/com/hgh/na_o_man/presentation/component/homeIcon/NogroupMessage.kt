@@ -62,7 +62,7 @@ fun NoGroupBox(
 @Composable
 fun NoAlarmBox(
     message : String,
-    buttonMessage: String,
+//    buttonMessage: String,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -90,7 +90,7 @@ fun NoAlarmBox(
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
-                AddGroupButton(buttonMessage)
+//                AddGroupButton(buttonMessage)
             }
         }
     }

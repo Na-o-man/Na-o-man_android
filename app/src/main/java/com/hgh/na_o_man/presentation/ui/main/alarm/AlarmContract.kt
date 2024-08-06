@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.presentation.ui.main.alarm
 
 import com.hgh.na_o_man.domain.model.AlarmDummy
+import com.hgh.na_o_man.domain.model.notification.DeletedCountModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
@@ -14,10 +15,12 @@ class AlarmContract {
     ): ViewState
 
     sealed class AlarmSideEffect : ViewSideEffect {
-
     }
 
     sealed class AlarmEvent : ViewEvent {
         object InitAlarmScreen : AlarmEvent()
+        object OnReadAllClicked : AlarmEvent()
+        object OnDeleteAllClicked : AlarmEvent()
+        data class OnAlarmListClicked(val notificationID : Long) : AlarmEvent()
     }
 }

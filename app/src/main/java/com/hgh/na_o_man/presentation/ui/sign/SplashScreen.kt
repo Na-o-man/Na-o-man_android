@@ -27,6 +27,12 @@ fun SplashScreen(
     val context = LocalContext.current as Activity
 
     LaunchedEffect(Unit) {
+
+        //커밋시 이부분 지우고 커밋
+        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUzMjFAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfREVGQVVMVCIsImlhdCI6MTcyMjQwOTQwMCwiZXhwIjoxNzIzMDE0MjAwfQ.1V1tcbFqnLgjtBotxfPEtKniiAG5rXNCWU-c_aVuZKA")
+        dateStoreUtil.setAutoLogin(true)
+        //~~~~//
+
         delay(2000)
         if (dateStoreUtil.getAutoLogin()) {
             Log.d("엑세스", "${dateStoreUtil.getAccessToken()}")

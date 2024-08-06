@@ -29,6 +29,7 @@ import com.hgh.na_o_man.presentation.component.NoticeIcon.ReadAllButton
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
+import com.hgh.na_o_man.presentation.component.homeIcon.AlarmNotRead
 import com.hgh.na_o_man.presentation.component.homeIcon.AlarmRead
 import com.hgh.na_o_man.presentation.component.homeIcon.NoAlarmBox
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
@@ -47,14 +48,17 @@ fun AlarmScreen(
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
+            Log.d("알람","로딩중")
             StateLoadingScreen()
         }
 
         LoadState.ERROR -> {
+            Log.d("알람","에러")
             StateErrorScreen()
         }
 
         LoadState.SUCCESS -> {
+            Log.d("알람","성공")
             Scaffold(
                 topBar = {
                     StartAppBar(
@@ -85,9 +89,9 @@ fun AlarmScreen(
                             .align(Alignment.TopEnd)
                             .offset(x = -43.dp, y = 60.dp)
                     ) {
-                        ReadAllButton(title = "모두 읽음")
+                        ReadAllButton(title = "모두 읽음", onClick = {viewModel.setEvent(AlarmContract.AlarmEvent.OnReadAllClicked)})
                         Spacer(modifier = Modifier.width(5.dp))
-                        ReadAllButton(title = "전체 삭제")
+                        ReadAllButton(title = "전체 삭제", onClick = {viewModel.setEvent(AlarmContract.AlarmEvent.OnDeleteAllClicked)})
                     }
                     if(viewState.alarmList.isEmpty()) {
                         Box(
@@ -96,7 +100,7 @@ fun AlarmScreen(
                                 .padding(padding),
                             contentAlignment = Alignment.Center
                         ) {
-                            NoAlarmBox(message = "알림이 없습니다.","하이루")
+                            NoAlarmBox(message = "알림이 없습니다.")
                         }
                     } else{
                         AlarmListScreen(
@@ -157,11 +161,18 @@ fun AlarmListScreen(
             modifier = Modifier
         ) {
             items(alarmList) { group ->
-                AlarmRead(
-                    imageRes = group.imageRes,
-                    detail = group.detail,
-                    date = group.date
-                )
+                if (group.isRead == false) {
+                    AlarmNotRead(
+                        imageRes = group.imageRes,
+                        detail = group.detail,
+                        date = group.date
+                    )
+                } else {
+                    AlarmRead(
+                        imageRes = group.imageRes,
+                        detail = group.detail,
+                        date = group.date)
+                }
             }
         }
     }
