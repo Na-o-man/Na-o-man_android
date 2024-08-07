@@ -50,6 +50,7 @@ class HomeViewModel @Inject constructor(
                     { HomeContract.HomeSideEffect.NaviGroupDetail(event.id)}
                 )
             }
+            else -> {}
         }
     }
 
