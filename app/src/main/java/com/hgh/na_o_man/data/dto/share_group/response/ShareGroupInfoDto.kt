@@ -8,7 +8,7 @@ data class ShareGroupInfoDto(
     val inviteUrl: String,
     val memberCount: Int,
     val name: String,
-    val shareGroupId: Int
+    val shareGroupId: Long
 ) {
     fun toModel() = ShareGroupInfoModel(
         createdAt = this.createdAt,

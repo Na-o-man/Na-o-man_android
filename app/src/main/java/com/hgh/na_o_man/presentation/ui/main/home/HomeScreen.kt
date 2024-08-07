@@ -64,7 +64,7 @@ fun HomeScreen(
                 }
 
                 is HomeContract.HomeSideEffect.NaviGroupDetail -> {
-                    context.startActivity(GroupDetailActivity.newIntent(context, 1))
+                    context.startActivity(GroupDetailActivity.newIntent(context, effect.id))
                 }
 
                 else -> Unit
@@ -187,7 +187,9 @@ fun GroupListScreen(
                     participantCount = group.participantCount,
                     date = group.date,
                     onClick = {
-                        viewModel.setEvent(HomeContract.HomeEvent.OnGroupListClicked(it))
+                        Log.d("HomeViewModel","send start")
+                        viewModel.setEvent(HomeContract.HomeEvent.OnGroupListClicked(group.groupId))
+                        Log.d("HomeViewModel","send end")
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))

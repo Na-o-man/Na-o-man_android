@@ -46,9 +46,11 @@ class HomeViewModel @Inject constructor(
 
             }
             is HomeContract.HomeEvent.OnGroupListClicked -> {
+                Log.d("HomeViewModel","send id start")
                 sendEffect(
                     { HomeContract.HomeSideEffect.NaviGroupDetail(event.id)}
                 )
+                Log.d("HomeViewModel","send id end")
             }
             else -> {}
         }
@@ -70,7 +72,8 @@ class HomeViewModel @Inject constructor(
                             imageRes = imageResID,  //수정 필요
                             name = groupInfo.name,
                             participantCount = groupInfo.memberCount,
-                            date = groupInfo.createdAt
+                            date = groupInfo.createdAt,
+                            groupId = groupInfo.shareGroupId
                         )
                     }
                     updateState {

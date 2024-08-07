@@ -6,5 +6,5 @@ data class ShareGroupInfoModel(
     val inviteUrl: String,
     val memberCount: Int,
     val name: String,
-    val shareGroupId: Int
+    val shareGroupId: Long
 )
