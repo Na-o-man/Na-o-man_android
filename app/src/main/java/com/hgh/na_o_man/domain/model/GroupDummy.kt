@@ -4,5 +4,6 @@ data class GroupDummy(
     val imageRes: Int,
     val name: String,
     val participantCount: Int,
-    val date: String
+    val date: String,
+    val groupId : Long
 )

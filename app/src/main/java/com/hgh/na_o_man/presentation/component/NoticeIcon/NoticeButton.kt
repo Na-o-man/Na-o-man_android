@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.component.NoticeIcon
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -16,13 +17,13 @@ import androidx.compose.ui.unit.sp
 import com.hgh.na_o_man.R
 
 @Composable
-fun ReadAllButton(
+fun AlarmButton(
     title: String,
     onClick: () -> Unit = {}
 ){
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
+        modifier = Modifier.clickable ( onClick = onClick )
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_notice_rec_63),

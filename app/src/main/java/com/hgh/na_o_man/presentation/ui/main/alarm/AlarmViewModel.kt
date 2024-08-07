@@ -46,10 +46,12 @@ class AlarmViewModel @Inject constructor(
             }
 
             is AlarmContract.AlarmEvent.OnReadAllClicked -> {
+                Log.d("AlarmViewModel", "OnReadAllClicked 이벤트 처리")
                 readAll()
             }
 
             is AlarmContract.AlarmEvent.OnDeleteAllClicked -> {
+                Log.d("AlarmViewModel", "OnDeleteAllClicked 이벤트 처리")
                 deleteAll()
             }
 
@@ -73,6 +75,7 @@ class AlarmViewModel @Inject constructor(
                             url = notificationInfo.url,
                             detail = notificationInfo.body,
                             date = notificationInfo.createdAt,
+                            //url 통해서 이미지 로드
                             imageRes = R.drawable.ic_example // 예시 이미지 리소스 ID --> 이거 알림인데 그냥 프사 넣을건데 왜 필요하지...??
                         )
                     }

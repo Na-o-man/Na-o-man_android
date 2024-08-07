@@ -23,6 +23,7 @@ import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFold
 import com.hgh.na_o_man.presentation.ui.detail.agenda.AgendaScreen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
 import com.hgh.na_o_man.presentation.ui.detail.vote.VoteScreen1
+import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 import com.hgh.na_o_man.presentation.ui.sign.SignScreenRoute
 
 @OptIn(ExperimentalPagerApi::class)
@@ -47,7 +48,9 @@ fun GroupDetailScreen(
 
                 composable(route = GroupDetailScreenRoute.DETAIL.route) {
                     GroupDetailFolderScreen(
-                        navigationBack = {},
+                        navigationBack = {
+                            navController.popBackStack() // 수정 필요
+                        },
                         navigationPhotoList = { groupId, memberId ->
                             navController.navigate(
                                 GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
@@ -59,7 +62,9 @@ fun GroupDetailScreen(
                                 GroupDetailScreenRoute.VOTE.route
                             )
                         },
-                        navigationMyPage = {},
+                        navigationMyPage = {
+                            navController.navigate(MainScreenRoute.MY_PAGE.route) // 수정 필요
+                        },
                     )
                 }
 

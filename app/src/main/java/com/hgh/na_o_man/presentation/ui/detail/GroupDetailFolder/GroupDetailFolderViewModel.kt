@@ -3,6 +3,7 @@ package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 import android.net.Uri
 import android.util.Log
 import com.hgh.na_o_man.di.util.work_manager.enqueue.UploadEnqueuer
+import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GroupDetailFolderViewModel @Inject constructor(
+    private val checkSpecificGroupUsecase: CheckSpecificGroupUsecase,
     private val uploadEnqueuer: UploadEnqueuer
 ) : BaseViewModel<GroupDetailFolderContract.GroupDetailFolderViewState, GroupDetailFolderContract.GroupDetailFolderSideEffect, GroupDetailFolderContract.GroupDetailFolderEvent>(
     GroupDetailFolderContract.GroupDetailFolderViewState()
