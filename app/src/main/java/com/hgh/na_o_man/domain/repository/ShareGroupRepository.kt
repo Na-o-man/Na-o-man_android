@@ -2,6 +2,7 @@ package com.hgh.na_o_man.domain.repository
 
 import android.adservices.adid.AdId
 import android.provider.ContactsContract.CommonDataKinds.Email
+import android.util.Log
 import com.hgh.na_o_man.data.dto.share_group.request.GroupAddRequestDto
 import com.hgh.na_o_man.data.dto.share_group.request.GroupJoinRequestDto
 import com.hgh.na_o_man.data.dto.share_group.response.GroupAddDto

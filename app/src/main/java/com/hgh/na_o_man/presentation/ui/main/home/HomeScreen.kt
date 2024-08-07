@@ -44,11 +44,12 @@ fun HomeScreen(
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current as Activity
 
+    LaunchedEffect(key1 = viewModel.effect) {
+        Log.d("HomeScreen", "InitHomeScreen event triggered")
+        viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
+    }
+
     Log.d("리컴포저블", "HomeScreen")
-//    LaunchedEffect(key1 = true) {
-//        Log.d("리컴포저블","InitHomeScreen")
-//        viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
-//    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
