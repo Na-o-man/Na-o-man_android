@@ -13,7 +13,8 @@ class AddContract {
         val selectedAttributes: List<String> = emptyList(), // 새로운 속성 필드 추가
         val place: String = "", // 공간 업뎃,
         val isGroupCreated: Boolean = false, // 그룹 생성 완료 상태 추가
-        val inviteLink: String = "" // 초대 링크 추가
+        val inviteLink: String = "", // 초대 링크 추가
+        val isLoading: Boolean = false // 로딩 상태 추가
     ) : ViewState
 
     sealed class AddEvent : ViewEvent {
