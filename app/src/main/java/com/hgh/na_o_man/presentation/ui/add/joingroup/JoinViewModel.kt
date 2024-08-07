@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.data.dto.share_group.request.GroupJoinRequestDto
 import com.hgh.na_o_man.di.util.remote.RetrofitResult
-import com.hgh.na_o_man.domain.usecase.share_group.InviteCodeUsecase
 import com.hgh.na_o_man.domain.usecase.share_group.JoinGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
@@ -17,7 +16,6 @@ import javax.inject.Inject
 @HiltViewModel
 open class JoinViewModel @Inject constructor(
     val joinGroupUsecase: JoinGroupUsecase,
-    val inviteCodeUsecase: InviteCodeUsecase,
 
 ) : BaseViewModel<JoinContract.JoinViewState, JoinSideEffect, JoinContract.JoinEvent>(
     JoinContract.JoinViewState() // 초기 상태 설정
@@ -64,22 +62,6 @@ open class JoinViewModel @Inject constructor(
         if (groupId == null) {
             sendEffect({ _ShowToast("유효하지 않은 초대 코드입니다.") })
             return
-        }
-
-        viewModelScope.launch {
-            inviteCodeUsecase.invoke(groupId).collect { result ->  // groupId를 사용
-                when (result) {
-                    is RetrofitResult.Success -> {
-                        sendEffect({ _ShowToast("초대 코드가 유효합니다.") })
-                    }
-                    is RetrofitResult.Error -> {
-                        sendEffect({ _ShowToast("초대 코드 검증에 실패했습니다: ${result.exception.message}") })
-                    }
-                    is RetrofitResult.Fail -> {
-                        sendEffect({ _ShowToast("초대 코드 검증 실패.") })
-                    }
-                }
-            }
         }
     }
 

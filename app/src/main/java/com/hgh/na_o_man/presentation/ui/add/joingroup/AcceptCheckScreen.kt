@@ -212,9 +212,9 @@ fun AcceptCheckScreen(
             ) {
                 Button(
                     onClick = {
-                        // 다시 찾기 버튼 클릭 시 Toast 메시지 표시
-                        viewModel.handleEvents(JoinContract.JoinEvent.onFind) // 다시 찾기 이벤트 호출
-                        Toast.makeText(context, "다시 찾는 중입니다.", Toast.LENGTH_SHORT).show()
+//                        // 다시 찾기 버튼 클릭 시 Toast 메시지 표시
+//                        viewModel.handleEvents(JoinContract.JoinEvent.onFind) // 다시 찾기 이벤트 호출
+//                        Toast.makeText(context, "다시 찾는 중입니다.", Toast.LENGTH_SHORT).show()
                     },
                     modifier = Modifier
                         .padding(start = 70.dp, top = 20.dp)
@@ -248,7 +248,7 @@ fun AcceptCheckScreen(
                     onClick = {
                         isCorrect = true
                         // 맞아요 버튼 클릭 시 AcceptWhoScreen으로 이동
-                        viewModel.handleEvents(JoinContract.JoinEvent.onCorrect)
+//                        viewModel.handleEvents(JoinContract.JoinEvent.onCorrect)
                     },
                     modifier = Modifier
                         .padding(end = 70.dp, top = 20.dp)

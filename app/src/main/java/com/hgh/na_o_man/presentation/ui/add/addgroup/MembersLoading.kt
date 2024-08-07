@@ -13,6 +13,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -123,10 +125,13 @@ fun MembersLoading(
             }
         }
 
-        // 5초 후에 MembersFolder로 이동
-        LaunchedEffect(Unit) {
-            delay(5000) // 5초 대기
-            navController.navigate(AddScreenRoute.FOLDER.route) // MembersFolder로 네비게이션
+        // 상태를 수집하여 그룹 생성 완료 시 네비게이션
+        val state by viewModel.viewState.collectAsState()
+        LaunchedEffect(state.isGroupCreated) {
+            if (state.isGroupCreated) {
+                // 그룹 생성 완료 상태일 때 네비게이션
+                navController.navigate(AddScreenRoute.FOLDER.route)
+            }
         }
     }
 }

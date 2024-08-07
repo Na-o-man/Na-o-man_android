@@ -72,9 +72,8 @@ fun MembersAdjective(
                 onStartClick = { }
             )
         },
-        containerColor = lightSkyBlue // 여기를 수정
+        containerColor = lightSkyBlue
     ) { padding ->
-        //구름 배경 Box
         Box(modifier = Modifier.fillMaxSize()) {
             EndTopCloud()
         }
@@ -83,7 +82,6 @@ fun MembersAdjective(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            // 화면 중앙 이미지
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -96,7 +94,6 @@ fun MembersAdjective(
                 )
             }
 
-            // 텍스트
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
@@ -122,12 +119,10 @@ fun MembersAdjective(
                 )
             }
 
-////////////중복 선택
-
             val buttonLabels = listOf("친구", "연인", "여행", "가족", "모임", "동아리", "행사", "나들이", "스냅")
-            val buttonCount = 9
+            val buttonCount = buttonLabels.size
             val selectedButtons = remember { mutableStateListOf<Boolean>().apply { repeat(buttonCount) { add(false) } } }
-            var inputText by remember { mutableStateOf("") } // 사용자 입력을 저장할 상태 변수
+            var inputText by remember { mutableStateOf("") }
 
             Column(
                 modifier = Modifier
@@ -137,7 +132,6 @@ fun MembersAdjective(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // 3x3 버튼 배열
                 for (row in 0 until 3) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -145,58 +139,56 @@ fun MembersAdjective(
                     ) {
                         for (col in 0 until 3) {
                             val index = row * 3 + col
-                            if (index < buttonCount) { // 버튼 수를 체크하여 범위 내에서만 처리
+                            if (index < buttonCount) {
                                 Box(
                                     modifier = Modifier
                                         .offset(y = 1.dp)
-                                        .width(90.dp) // 각 버튼의 너비를 99.dp로 설정
-                                        .height(42.dp) // 버튼의 높이를 42.dp로 설정
+                                        .width(90.dp)
+                                        .height(42.dp)
                                 ) {
                                     Button(
                                         onClick = {
                                             selectedButtons[index] = !selectedButtons[index]
                                         },
-                                        modifier = Modifier.fillMaxSize(), // Box의 크기에 맞게 버튼 크기 조절
-                                        shape = RoundedCornerShape(20.dp), // 둥근 모서리 설정
+                                        modifier = Modifier.fillMaxSize(),
+                                        shape = RoundedCornerShape(20.dp),
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = if (selectedButtons[index]) SteelBlue else LightWhite.copy(
                                                 alpha = 0.3f
-                                            ) // 버튼 색상 LightWhite 30% // 선택된 경우 색상 변경
+                                            )
                                         ),
                                         border = BorderStroke(
                                             1.dp,
                                             LightWhite
-                                        ) // 테두리 색상 LightWhite 100%
+                                        )
                                     ) {
                                         Text(
-                                            text = buttonLabels[index], // 버튼 텍스트 설정
-                                            fontWeight = FontWeight.SemiBold, // 글씨를 굵게 설정
-                                            fontSize = 12.sp // 글씨 크기를 14sp로 설정
+                                            text = buttonLabels[index],
+                                            fontWeight = FontWeight.SemiBold,
+                                            fontSize = 12.sp
                                         )
                                     }
                                 }
 
-                                // 버튼 사이에 Spacer 추가 (가로 간격 조절)
-                                if (col < 2) { // 마지막 열에는 Spacer 추가하지 않음
-                                    Spacer(modifier = Modifier.width(1.dp)) // 원하는 간격 설정
+                                if (col < 2) {
+                                    Spacer(modifier = Modifier.width(1.dp))
                                 }
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(17.dp)) // 각 행 사이의 세로 간격 조절
+                    Spacer(modifier = Modifier.height(17.dp))
                 }
 
                 Column {
-                    // 사용자 입력을 위한 TextField 추가
                     TextField(
                         value = inputText,
                         onValueChange = { inputText = it },
                         placeholder = {
                             Text(
-                                text = "직접 입력", // 플레이스홀더 텍스트
+                                text = "직접 입력",
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 16.sp,
-                                color = LightWhite.copy(alpha = 0.6f) // 플레이스홀더 색상
+                                color = LightWhite.copy(alpha = 0.6f)
                             )
                         },
                         modifier = Modifier
@@ -205,68 +197,59 @@ fun MembersAdjective(
                             .border(
                                 BorderStroke(1.dp, LightWhite),
                                 shape = RoundedCornerShape(50.dp)
-                            ), // 테두리 설정
+                            ),
                         colors = TextFieldDefaults.colors(
-                            focusedContainerColor = LightWhite.copy(alpha = 0.3f), // 포커스 시 배경색
-                            unfocusedContainerColor = LightWhite.copy(alpha = 0.3f), // 포커스 해제 시 배경색
-                            focusedIndicatorColor = Color.Transparent, // 포커스 시 밑줄 색상
-                            unfocusedIndicatorColor = Color.Transparent // 포커스 해제 시 밑줄 색상
+                            focusedContainerColor = LightWhite.copy(alpha = 0.3f),
+                            unfocusedContainerColor = LightWhite.copy(alpha = 0.3f),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
                         ),
-                        shape = RoundedCornerShape(50.dp), // 배경색 설정
+                        shape = RoundedCornerShape(50.dp),
                         keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Done // Enter 키를 '완료'로 설정
+                            imeAction = ImeAction.Done
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                // Enter 키 눌렀을 때의 동작
                                 buttonLabels.forEachIndexed { index, label ->
                                     if (label == inputText) {
-                                        selectedButtons[index] = !selectedButtons[index] // 버튼 상태 토글
+                                        selectedButtons[index] = !selectedButtons[index]
                                     }
                                 }
-                                inputText = "" // 입력창 초기화
+                                inputText = ""
                             }
                         )
                     )
 
-
                     Spacer(modifier = Modifier.height(15.dp))
 
-                    // 입력한 텍스트와 버튼 레이블이 같으면 선택 상태 변경
                     Box(
                         modifier = Modifier
-                            .size(110.dp).width(60.dp).height(60.dp) // 이미지 크기 조절
+                            .size(110.dp).width(60.dp).height(60.dp)
                             .clickable {
                                 val index = buttonLabels.indexOf(inputText)
                                 if (index != -1) {
                                     selectedButtons[index] =
-                                        !selectedButtons[index] // 입력한 버튼을 선택 상태로 변경
+                                        !selectedButtons[index]
                                 }
                             },
-                        contentAlignment = Alignment.CenterEnd // 이미지 중앙 정렬
+                        contentAlignment = Alignment.CenterEnd
                     ) {
-                        val context = LocalContext.current // 현재 컨텍스트 가져오기
+                        val context = LocalContext.current
 
-                        // 버튼 수 초기화
                         fun initializeButtons(buttonCount: Int) {
                             selectedButtons.clear()
                             repeat(buttonCount) { selectedButtons.add(false) }
                         }
 
-                        // 사이드 이펙트 수집
                         LaunchedEffect(Unit) {
                             viewModel.effect.collect { effect ->
                                 when (effect) {
                                     is AddContract.AddSideEffect.NavigateToNextScreen -> {
-                                        // 지정된 화면으로 네비게이션
                                         navController.navigate(AddScreenRoute.SPACEINPUT.route)
                                     }
-
                                     is AddContract.AddSideEffect.ShowToast -> {
-                                        // 토스트 메시지 출력
                                         Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                                     }
-                                    // 다른 사이드 이펙트가 있다면 추가
                                     else -> {}
                                 }
                             }
@@ -274,17 +257,14 @@ fun MembersAdjective(
 
                         NextAppBar1(
                             onNextClick = {
-                                // 선택된 버튼이 하나 이상일 경우 처리
-                                viewModel.onNextButtonClick(selectedButtons)
+                                // ViewModel의 createGroup 함수 호출
+                                viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
                             },
                             modifier = Modifier
-                                .offset(x = 200.dp, y = -(10.dp)) // 원하는 높이로 설정
+                                .offset(x = 200.dp, y = -(10.dp))
                         )
                     }
                 }
-//                        Spacer(modifier = Modifier.height(16.dp),)
-
-//                        Text(text = "Selected Buttons: ${selectedButtons.mapIndexed { index, isSelected -> if (isSelected) index + 1 else null }.filterNotNull()}")
             }
         }
     }
@@ -293,10 +273,10 @@ fun MembersAdjective(
 @Preview(showBackground = true)
 @Composable
 fun Preview3() {
-    // NavController 생성
-    val navController = NavHostController(context = LocalContext.current) 
+    val navController = NavHostController(context = LocalContext.current)
     MembersAdjective(navController = navController)
 }
+
 
 
 

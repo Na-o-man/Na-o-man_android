@@ -117,7 +117,7 @@ fun MembersSpace(
                 modifier = Modifier
                     .size(width = 295.dp, height = 55.dp)
                     .background(
-                        color = LightWhite.copy(alpha = 0.7f), // 투명도 0.8로 설정
+                        color = LightWhite.copy(alpha = 0.7f), // 투명도 0.7로 설정
                         shape = RoundedCornerShape(20.dp)
                     )
                     .border(
@@ -130,7 +130,11 @@ fun MembersSpace(
 
                 BasicTextField(
                     value = textValue,
-                    onValueChange = { newValue -> textValue = newValue }, // 상태 업데이트
+                    onValueChange = { newValue ->
+                        textValue = newValue
+                        // 화면에서 입력하는 즉시 viewModel의 상태를 업데이트
+                        viewModel.updatePlace(newValue)
+                    }, // 상태 업데이트
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.Center)
@@ -183,12 +187,13 @@ fun MembersSpace(
                         }
                     }
                 }
+
                 // 다음 버튼
                 Box(
                     modifier = Modifier
                         .fillMaxSize() // 전체 크기로 채우기
                         .offset(y = 70.dp),
-                            contentAlignment = Alignment.CenterEnd // 중앙 정렬
+                    contentAlignment = Alignment.CenterEnd // 중앙 정렬
                 ) {
                     NextAppBar1(
                         onNextClick = {
@@ -197,7 +202,7 @@ fun MembersSpace(
                             }
                             else {
                                 // showToast 메소드를 통해 토스트 메시지 전달
-                                viewModel.showToast("텍스트를 입력해주세요.")
+                                AddContract.AddSideEffect.ShowToast("텍스트를 입력해주세요.")
                             }
                         },
                     )
@@ -206,6 +211,7 @@ fun MembersSpace(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
