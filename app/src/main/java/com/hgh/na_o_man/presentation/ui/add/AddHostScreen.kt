@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add
 
+import MembersNameScreen
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +18,6 @@ import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersAdjective
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersFolder
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersLoading
-import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersNameScreen
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersSpace
 
 @Composable
