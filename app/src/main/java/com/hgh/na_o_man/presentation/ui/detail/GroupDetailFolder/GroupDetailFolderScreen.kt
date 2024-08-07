@@ -151,7 +151,14 @@ fun GroupDetailFolderScreen(
                         Box(
                             modifier = Modifier.padding(start = 200.dp)
                         ) {
-                            GroupInfo(title = "제목", participantCount = 5, date = "2024.07.20")
+//                            GroupInfo(title = "제목", participantCount = 5, date = "2024.07.20")
+                            viewState.groupDetail?.let { groupDetail ->
+                                GroupInfo(
+                                    title = groupDetail.name,
+                                    participantCount = groupDetail.memberCount,
+                                    date = groupDetail.createdAt
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(20.dp))
@@ -213,14 +220,14 @@ fun GroupDetailFolderScreen(
 }
 
 
-@OptIn(ExperimentalPagerApi::class)
-@Preview
-@Composable
-fun PreView(
-) {
-    GroupDetailFolderScreen(
-        navigationMyPage = {},
-        navigationPhotoList = { _, _ -> },
-        navigationVote = { _ -> },
-        navigationBack = {})
-}
+//@OptIn(ExperimentalPagerApi::class)
+//@Preview
+//@Composable
+//fun PreView(
+//) {
+//    GroupDetailFolderScreen(
+//        navigationMyPage = {},
+//        navigationPhotoList = { _, _ -> },
+//        navigationVote = { _ -> },
+//        navigationBack = {})
+//}
