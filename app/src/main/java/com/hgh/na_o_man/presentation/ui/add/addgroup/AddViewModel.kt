@@ -3,9 +3,12 @@ package com.hgh.na_o_man.presentation.ui.add.addgroup
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.data.dto.share_group.request.GroupAddRequestDto
+import com.hgh.na_o_man.data.dto.share_group.response.MyGroupListResponseDto
 import com.hgh.na_o_man.di.util.remote.RetrofitResult
 import com.hgh.na_o_man.domain.model.share_group.GroupAddModel
 import com.hgh.na_o_man.domain.usecase.share_group.CreateGroupUsecase
+import com.hgh.na_o_man.domain.usecase.share_group.DeleteGroupUsecase
+import com.hgh.na_o_man.domain.usecase.share_group.MyGroupListUsecase
 import com.hgh.na_o_man.domain.usecase.share_group.SearchGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddEvent
@@ -21,6 +24,8 @@ import javax.inject.Inject
 class AddViewModel @Inject constructor(
     val createGroupUsecase: CreateGroupUsecase,
     val searchGroupUsecase: SearchGroupUsecase,
+    val deleteGroupUsecase: DeleteGroupUsecase,
+    val myGroupListUsecase: MyGroupListUsecase,
 ) : BaseViewModel<AddViewState, AddSideEffect, AddEvent>(
     AddViewState() // 초기 상태 설정
 ) {
@@ -56,6 +61,14 @@ class AddViewModel @Inject constructor(
 
             is AddEvent.CreateGroup -> {
                 createGroup(event.groupAddRequestDto)
+            }
+
+            is AddEvent.DeleteGroup -> {
+                deleteGroup(event.groupId) // 그룹 삭제 처리
+            }
+
+            is AddEvent.LoadMyGroups -> {
+                loadMyGroups() // 내 그룹 목록 로드
             }
         }
     }
@@ -151,6 +164,54 @@ class AddViewModel @Inject constructor(
                     is RetrofitResult.Fail -> {
                         // 실패 처리
                         sendEffect ({ ShowToast("그룹 생성 실패: ${result.message}") })
+                    }
+                }
+            }
+        }
+    }
+
+    private fun deleteGroup(groupId: Long) {
+        viewModelScope.launch {
+            deleteGroupUsecase(groupId).collect { result ->
+                when (result) {
+                    is RetrofitResult.Success -> {
+                        sendEffect ({ ShowToast("그룹이 성공적으로 삭제되었습니다.") })
+                        // 필요시 그룹 목록 다시 로드
+                        loadMyGroups()
+                    }
+                    is RetrofitResult.Error -> {
+                        sendEffect ({ ShowToast("그룹 삭제 오류: ${result.exception.message}") })
+                    }
+                    is RetrofitResult.Fail -> {
+                        sendEffect ({ ShowToast("그룹 삭제 실패: ${result.message}") })
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadMyGroups(page: Int = 1, size: Int = 2) {
+        viewModelScope.launch {
+            myGroupListUsecase(page, size).collect { result ->
+                when (result) {
+                    is RetrofitResult.Success -> {
+                        val myGroups: List<MyGroupListResponseDto> = result.data.shareGroupInfoList.map {
+                            MyGroupListResponseDto(
+                                shareGroupInfoList = listOf(it), // 변환 로직
+                                page = result.data.page,
+                                totalElements = result.data.totalElements,
+                                first = result.data.first,
+                                last = result.data.last
+                            )
+                        }
+                        updateState { copy(myGroups = myGroups) } // 변환된 리스트 사용
+                        sendEffect({ ShowToast("내 그룹 목록을 성공적으로 가져왔습니다.") })
+                    }
+                    is RetrofitResult.Error -> {
+                        sendEffect ({ ShowToast("내 그룹 목록 가져오기 오류: ${result.exception.message}") })
+                    }
+                    is RetrofitResult.Fail -> {
+                        sendEffect ({ ShowToast("내 그룹 목록 가져오기 실패: ${result.message}") })
                     }
                 }
             }

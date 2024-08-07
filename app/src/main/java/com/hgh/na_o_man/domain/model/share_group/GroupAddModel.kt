@@ -6,6 +6,7 @@ data class GroupAddModel(
     val inviteUrl: String,
     val memberCount: Int,
     val name: String,
-    val profileInfoList: List<ProfileInfoModel>,
-    val shareGroupId: Int
-)
+    val profileInfoList: List<ProfileInfoModel>, //= emptyList(),
+    val shareGroupId: Int,
+
+    )

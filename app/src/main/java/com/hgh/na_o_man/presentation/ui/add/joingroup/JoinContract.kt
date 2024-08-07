@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
+import com.hgh.na_o_man.data.dto.share_group.response.GroupShareInfoDto
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
 import com.hgh.na_o_man.presentation.base.ViewState
@@ -9,7 +10,9 @@ class JoinContract {
     data class JoinViewState(
         val url: String = "", // 입력된 URL
         val isUrlValid: Boolean = false, // URL 유효성 상태
-        val showDialog: Boolean = false // 다이얼로그 표시 여부
+        val showDialog: Boolean = false, // 다이얼로그 표시 여부
+        val myGroups: List<GroupShareInfoDto> = emptyList() // 그룹 목록 추가
+
     ) : ViewState
 
     sealed class JoinSideEffect : ViewSideEffect {
@@ -21,6 +24,6 @@ class JoinContract {
         object ValidateUrl : JoinEvent() // URL 검증 이벤트
         object ShowConfirmationDialog : JoinEvent() // 다이얼로그 표시 이벤트
         data class onCorrect(val groupId: Long) : JoinEvent() // groupId 추가
-        object onFind : JoinEvent() // 다시 찾기 이벤트
+        data class onFind(val inviteCode: String) : JoinEvent() // 초대 코드 검증 이벤트 추가
     }
 }
