@@ -53,7 +53,7 @@ fun GroupDetailScreen(
                             navController.navigate(
                                 MainScreenRoute.HOME.route
                             )
-                        },
+                        }, // 이쪽도 매끄럽지 못해서 수정 필요
                         navigationPhotoList = { groupId, memberId ->
                             navController.navigate(
                                 GroupDetailScreenRoute.LIST.route.plus("/${groupId}")

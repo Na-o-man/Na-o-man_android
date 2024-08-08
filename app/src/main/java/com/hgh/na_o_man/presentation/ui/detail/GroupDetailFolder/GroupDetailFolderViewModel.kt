@@ -53,6 +53,8 @@ class GroupDetailFolderViewModel @Inject constructor(
             GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadClicked -> {
                 sendEffect({ GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoPicker })
             }
+
+            else -> {}
         }
     }
 

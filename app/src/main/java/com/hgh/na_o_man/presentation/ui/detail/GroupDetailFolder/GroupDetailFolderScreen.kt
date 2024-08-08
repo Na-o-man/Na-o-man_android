@@ -8,8 +8,11 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +56,7 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.groupdetail.Bigfolder
 import com.hgh.na_o_man.presentation.component.groupdetail.GroupInfo
+import com.hgh.na_o_man.presentation.component.groupdetail.SmallFolder
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
 
 
@@ -168,27 +173,45 @@ fun GroupDetailFolderScreen(
                             HorizontalPager(
                                 count = itemCount,
                                 state = pagerState,
+                                contentPadding = PaddingValues(horizontal = 40.dp), // Set padding to create partial view
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(220.dp)
-                            ) { page ->
+                            )
+                            { page ->
+                            val scale by animateFloatAsState(
+                                targetValue = 1.1f
+                            )
                                 Box(
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier
-//                                        .fillMaxWidth()
+                                          .scale(scale)
                                 ) {
                                     Bigfolder()
 
-                                    FolderProfile(
-                                        Dummy(),
-                                        modifier = Modifier
-                                            .offset(y = 20.dp)
-                                            .align(Alignment.Center)
-                                            .requiredSize(160.dp)
-                                    )
-                                }
+//                                    FolderProfile(
+//                                        FolderDummy(),
+//                                        modifier = Modifier
+//                                            .offset(y = 20.dp)
+//                                            .align(Alignment.Center)
+//                                            .requiredSize(160.dp)
+//                                    )
+                                    groupDetail.profileInfoList.getOrNull(page)?.let { profileInfo ->
+                                        FolderProfile(
+                                            folderInfo = FolderDummy(
+                                                imageRes = profileInfo.image,
+                                                name = profileInfo.name
+                                            ),
+                                            modifier = Modifier
+                                                .offset(y = 20.dp)
+                                                .align(Alignment.Center)
+                                                .requiredSize(160.dp)
+                                        )
 
+                                    }
+                                }
                             }
+
                             HorizontalPagerIndicator(
                                 pagerState = pagerState,
                                 modifier = Modifier

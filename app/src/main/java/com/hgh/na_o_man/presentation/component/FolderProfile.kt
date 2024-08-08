@@ -23,11 +23,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.FolderDummy
 import com.hgh.na_o_man.presentation.theme.Typography
 
 @Composable
 fun FolderProfile(
-    folderInfo : Dummy,
+    folderInfo : FolderDummy,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -39,7 +40,7 @@ fun FolderProfile(
             modifier = Modifier
         ) {
             AsyncImage(
-                model = folderInfo.dummyString,
+                model = folderInfo.imageRes,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(id = R.drawable.ic_add_group_avatar_94),
@@ -51,7 +52,7 @@ fun FolderProfile(
         }
         Spacer(modifier = Modifier.height(3.dp))
         Text(
-            text = folderInfo.dummyString3,
+            text = folderInfo.name,
             color = Color.Black,
             fontSize = 20.sp
         )
@@ -75,8 +76,19 @@ fun FolderProfile(
 //    }
 }
 
+//@Preview(showBackground = true, backgroundColor = 0x000000)
+//@Composable
+//fun FolderPreview(Dummy(), Modifier.size(150.dp))
+//}
+
 @Preview(showBackground = true, backgroundColor = 0x000000)
 @Composable
 fun FolderPreview() {
-    FolderProfile(Dummy(), Modifier.size(150.dp))
+    FolderProfile(
+        folderInfo = FolderDummy(
+            imageRes = R.drawable.ic_add_group_avatar_94.toString(),
+            name = "Sample Folder"
+        ),
+        modifier = Modifier.size(150.dp)
+    )
 }
