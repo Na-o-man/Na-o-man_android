@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
+import android.hardware.lights.Light
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -119,6 +120,7 @@ fun MembersAdjective(
                 )
             }
 
+            val context = LocalContext.current
             val buttonLabels = listOf("친구", "연인", "여행", "가족", "모임", "동아리", "행사", "나들이", "스냅")
             val buttonCount = buttonLabels.size
             val selectedButtons = remember { mutableStateListOf<Boolean>().apply { repeat(buttonCount) { add(false) } } }
@@ -140,6 +142,7 @@ fun MembersAdjective(
                         for (col in 0 until 3) {
                             val index = row * 3 + col
                             if (index < buttonCount) {
+                                val isSelected = selectedButtons[index]
                                 Box(
                                     modifier = Modifier
                                         .offset(y = 1.dp)
@@ -149,13 +152,19 @@ fun MembersAdjective(
                                     Button(
                                         onClick = {
                                             selectedButtons[index] = !selectedButtons[index]
+                                            val currentAttributes = viewModel.viewState.value.selectedAttributes.toMutableList()
+                                            if (selectedButtons[index]) {
+                                                currentAttributes.add(buttonLabels[index])
+                                            } else {
+                                                currentAttributes.remove(buttonLabels[index])
+                                            }
+                                            viewModel.handleEvents(AddContract.AddEvent.UpdateSelectedAttributes(currentAttributes))
                                         },
                                         modifier = Modifier.fillMaxSize(),
                                         shape = RoundedCornerShape(20.dp),
                                         colors = ButtonDefaults.buttonColors(
-                                            containerColor = if (selectedButtons[index]) SteelBlue else LightWhite.copy(
-                                                alpha = 0.3f
-                                            )
+                                            containerColor = if (isSelected) Color.Gray.copy(alpha = 0.6f) else LightWhite.copy(alpha = 0.3f),
+                                            contentColor = LightWhite
                                         ),
                                         border = BorderStroke(
                                             1.dp,
@@ -165,7 +174,8 @@ fun MembersAdjective(
                                         Text(
                                             text = buttonLabels[index],
                                             fontWeight = FontWeight.SemiBold,
-                                            fontSize = 12.sp
+                                            fontSize = 12.sp,
+                                            color = if (isSelected) SteelBlue else LightWhite
                                         )
                                     }
                                 }
@@ -210,12 +220,19 @@ fun MembersAdjective(
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                buttonLabels.forEachIndexed { index, label ->
-                                    if (label == inputText) {
+                                if (inputText.isNotBlank()) {
+                                    val index = buttonLabels.indexOf(inputText)
+                                    if (index != -1) {
                                         selectedButtons[index] = !selectedButtons[index]
+                                        val currentAttributes = viewModel.viewState.value.selectedAttributes.toMutableList()
+                                        if (selectedButtons[index])
+                                            currentAttributes.add(buttonLabels[index]) else {
+                                            currentAttributes.remove(buttonLabels[index])
+                                        }
+                                        viewModel.handleEvents(AddContract.AddEvent.UpdateSelectedAttributes(currentAttributes))
                                     }
+                                    inputText = ""
                                 }
-                                inputText = ""
                             }
                         )
                     )
@@ -228,8 +245,14 @@ fun MembersAdjective(
                             .clickable {
                                 val index = buttonLabels.indexOf(inputText)
                                 if (index != -1) {
-                                    selectedButtons[index] =
-                                        !selectedButtons[index]
+                                    selectedButtons[index] = !selectedButtons[index]
+                                    val currentAttributes = viewModel.viewState.value.selectedAttributes.toMutableList()
+                                    if (selectedButtons[index]) {
+                                        currentAttributes.add(buttonLabels[index])
+                                    } else {
+                                        currentAttributes.remove(buttonLabels[index])
+                                    }
+                                    viewModel.handleEvents(AddContract.AddEvent.UpdateSelectedAttributes(currentAttributes))
                                 }
                             },
                         contentAlignment = Alignment.CenterEnd
@@ -241,6 +264,7 @@ fun MembersAdjective(
                             repeat(buttonCount) { selectedButtons.add(false) }
                         }
 
+                        // LaunchedEffect to handle side effects from ViewModel
                         LaunchedEffect(Unit) {
                             viewModel.effect.collect { effect ->
                                 when (effect) {

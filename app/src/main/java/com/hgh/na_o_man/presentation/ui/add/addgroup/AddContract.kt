@@ -1,6 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
-import com.hgh.na_o_man.data.dto.share_group.request.GroupAddRequestDto
+import com.hgh.na_o_man.domain.model.share_group.ProfileInfoModel
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
 import com.hgh.na_o_man.presentation.base.ViewState

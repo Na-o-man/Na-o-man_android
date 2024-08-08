@@ -1,23 +1,35 @@
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterEnd
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -25,7 +37,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -53,7 +64,7 @@ fun MembersNameScreen(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-    var groupName by remember { mutableStateOf("") }
+//    var groupName by remember { mutableStateOf("") }
     var memberCount by remember { mutableIntStateOf(0) }
     var memberNames by remember { mutableStateOf(listOf<String>()) }
     var newMemberName by remember { mutableStateOf("") }
@@ -64,9 +75,7 @@ fun MembersNameScreen(
 
     Scaffold(
         topBar = {
-            StartAppBar(
-                onStartClick = { navController.navigateUp() }
-            )
+            StartAppBar(onStartClick = { navController.navigateUp() })
         },
         containerColor = lightSkyBlue
     ) { padding ->
@@ -97,15 +106,14 @@ fun MembersNameScreen(
                             Image(
                                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
                                 contentDescription = "Center Image",
-                                modifier = Modifier
-                                    .offset(y = 70.dp)
+                                modifier = Modifier.offset(y = 40.dp)
                             )
                         }
 
                         Text(
                             text = "사진을 공유할 사람들의 이름을 추가해주세요.",
                             modifier = Modifier
-                                .offset(y = -(105.dp))
+                                .offset(y = -(125.dp))
                                 .drawBehind {
                                     val strokeWidth = 1.dp.toPx()
                                     val y = size.height - strokeWidth / 2 + 10.dp.toPx()
@@ -120,38 +128,55 @@ fun MembersNameScreen(
                             fontWeight = FontWeight.SemiBold
                         )
 
-//                        Column(
-//                            modifier = Modifier
-//                                .fillMaxSize()
-//                                .padding(16.dp),
-//                            horizontalAlignment = Alignment.CenterHorizontally,
-//                            verticalArrangement = Arrangement.Center {
                         Image(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_share_folder_144),
-                            contentDescription = "그룹 이미지",
+                            contentDescription = "ADD",
                             modifier = Modifier
-                                .offset(y = -(100.dp))
-                                .size(240.dp)
-                                .fillMaxSize()
+                                .offset(y = -(60.dp))
+                                .size(230.dp)
+                                .fillMaxSize(),
+                            contentScale = ContentScale.FillBounds,
                         )
-                        // Names overlaid on the image
-                        Column(
-                            modifier = Modifier
-                                .padding(16.dp) // Add padding around names
-                        ) {
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 16.dp) // Adjust padding as needed
+                            .height(40.dp)
+                            .width(225.dp)
+                            .clip(RoundedCornerShape(30.dp))
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
                             memberNames.chunked(3).forEach { rowNames ->
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
+                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     rowNames.forEach { name ->
-                                        Text(
-                                            text = name,
-                                            fontWeight = FontWeight.Bold,
-                                            color = SteelBlue,
+                                        Row(
                                             modifier = Modifier
                                                 .background(Color.White.copy(alpha = 0.7f))
                                                 .padding(4.dp)
-                                        )
+                                                .clickable {
+                                                    viewModel.handleEvents(AddContract.AddEvent.RemoveMember(name))
+                                                },
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Text(
+                                                text = name,
+                                                fontWeight = FontWeight.Bold,
+                                                color = SteelBlue,
+                                                modifier = Modifier.weight(1f)
+                                            )
+
+                                            // 만약 이 이름이 클릭된 상태라면 "X" 버튼 표시
+                                            Image(
+                                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
+                                                contentDescription = "Remove Button",
+                                                modifier = Modifier
+                                                    .clickable {
+                                                        viewModel.handleEvents(AddContract.AddEvent.RemoveMember(name))
+                                                    }
+                                                    .size(24.dp)
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -163,41 +188,38 @@ fun MembersNameScreen(
                         modifier = Modifier
                             .height(40.dp)
                             .width(225.dp)
+                            .offset(y = 150.dp)
                             .clip(RoundedCornerShape(30.dp))
                             .background(LightWhite.copy(alpha = 0.5f))
                     ) {
                         BasicTextField(
                             value = newMemberName,
-                            onValueChange = { newValue ->
-                                newMemberName = newValue
-                            },
+                            onValueChange = { newMemberName = it },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 10.dp)
-                                .align(Alignment.Center)
-                                .onFocusChanged { state ->
-                                    isFocused = state.isFocused
-                                },
+                                .padding(start = 15.dp)
+                                .align(Alignment.CenterStart)
+                                .onFocusChanged { state -> isFocused = state.isFocused },
                             textStyle = TextStyle(
                                 color = SteelBlue,
                                 background = Color.Transparent,
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 14.sp,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Start
                             ),
                             cursorBrush = SolidColor(SteelBlue),
                             decorationBox = { innerTextField ->
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .align(Alignment.Center),
-                                    contentAlignment = Alignment.Center
+                                        .align(Alignment.CenterStart),
+                                    contentAlignment = Alignment.CenterStart
                                 ) {
                                     if (newMemberName.isEmpty() && !isFocused) {
                                         Text(
                                             text = "이름",
                                             color = SteelBlue,
-                                            textAlign = TextAlign.Center,
+                                            textAlign = TextAlign.Start,
                                             fontWeight = FontWeight.SemiBold
                                         )
                                     }
@@ -222,15 +244,11 @@ fun MembersNameScreen(
                                     }
                                 },
                             contentScale = ContentScale.FillBounds,
-                            colorFilter = ColorFilter.tint(SteelBlue)
                         )
                     }
 
-                    Column(
-                        modifier = Modifier
-//                                .align(Alignment.CenterHorizontally)
-                            .padding(vertical = 10.dp)
-                    ) {
+                    // Display selected member names with "X" button
+                    Column(modifier = Modifier.padding(vertical = 10.dp)) {
                         memberNames.forEach { name ->
                             Row(
                                 modifier = Modifier
@@ -249,38 +267,45 @@ fun MembersNameScreen(
                                     modifier = Modifier
                                         .clickable {
                                             memberNames = memberNames - name
-                                            memberCount = memberNames.size
                                         }
                                         .size(24.dp)
                                 )
                             }
                         }
-                    }
-
-                    Text(text = "현재 멤버 수: $memberCount")
-
-                    LaunchedEffect(Unit) {
-                        viewModel.effect.collect { effect ->
-                            when (effect) {
-                                is AddContract.AddSideEffect.NavigateToNextScreen -> {
+                        // NextAppBar1 버튼을 맨 마지막에 위치
+                        NextAppBar1(
+                            onNextClick = {
+                                if (memberNames.isNotEmpty()) {
+                                    // Call ViewModel to update members and navigate
+                                    viewModel.handleEvents(AddContract.AddEvent.AddMember(newMemberName))
                                     navController.navigate(AddScreenRoute.ADJECTIVE.route)
                                 }
+                            }
+                        )
+                    }
+                }
 
-                                is AddContract.AddSideEffect.ShowToast -> {
-                                    Toast.makeText(
-                                        context,
-                                        effect.message,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                LaunchedEffect(Unit) {
+                    viewModel.effect.collect { effect ->
+                        when (effect) {
+                            is AddContract.AddSideEffect.NavigateToNextScreen -> {
+                                navController.navigate(AddScreenRoute.ADJECTIVE.route)
+                            }
 
-                                is AddContract.AddSideEffect.ShowError -> {
-                                    Toast.makeText(
-                                        context,
-                                        effect.error,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                            is AddContract.AddSideEffect.ShowToast -> {
+                                Toast.makeText(
+                                    context,
+                                    effect.message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            is AddContract.AddSideEffect.ShowError -> {
+                                Toast.makeText(
+                                    context,
+                                    effect.error,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
