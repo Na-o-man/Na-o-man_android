@@ -97,33 +97,32 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-
-    // 모두 읽음 기능
-    private fun readAll()  = viewModelScope.launch{
-        //updateState { copy(loadState = LoadState.LOADING) }
+    private fun readAll() = viewModelScope.launch {
         Log.d("AlarmViewModel","readAll : Reading all alarms")
         try {
-            unreadNotificationUsecase().collect{ result ->
+            acknowledgedCountUsecase().collect { result ->
                 result.onSuccess {
-                    Log.d("AlarmViewModel","Successfully read all alarms")
-                    val updatedAlarmList = viewState.value.alarmList.map{
+                    Log.d("AlarmViewModel", "Successfully read all alarms")
+                    val updatedAlarmList = viewState.value.alarmList.map {
                         it.copy(isRead = true)
                     }
-                    updateState { copy(
-                        loadState = LoadState.SUCCESS,
-                        alarmList = updatedAlarmList
+                    updateState {
+                        copy(
+                            loadState = LoadState.SUCCESS,
+                            alarmList = updatedAlarmList
                         )
                     }
                 }.onFail {
-                    Log.d("AlarmViewModel","Failed to read all alarms")
+                    Log.d("AlarmViewModel", "Failed to read all alarms")
                     updateState { copy(loadState = LoadState.ERROR) }
                 }
             }
-        } catch (e:Exception) {
-            Log.e("AlarmViewModel","Error reading all alarms",e)
+        } catch (e : Exception) {
+            Log.e("AlarmViewModel", "Error reading all alarms", e)
             updateState { copy(loadState = LoadState.ERROR) }
         }
     }
+
 
     // 전체 삭제 기능
     private fun deleteAll() = viewModelScope.launch {
