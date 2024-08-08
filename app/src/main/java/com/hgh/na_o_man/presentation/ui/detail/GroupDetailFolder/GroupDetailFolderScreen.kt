@@ -189,45 +189,8 @@ fun GroupDetailFolderScreen(
                                 ) {
                                     Bigfolder()
 
-//                                    if (page < groupDetail.profileInfoList.size) {
-//                                        val profileInfo = groupDetail.profileInfoList[page]
-//                                        FolderProfile(
-//                                            folderInfo = FolderDummy(
-//                                                imageRes = profileInfo.image,
-//                                                name = profileInfo.name
-//                                            ),
-//                                            modifier = Modifier
-//                                                .offset(y = 20.dp)
-//                                                .align(Alignment.Center)
-//                                                .requiredSize(160.dp)
-//                                        )
-//                                    } else {
-//                                        val folderInfo = when (page - groupDetail.profileInfoList.size) {
-//                                            0 -> FolderDummy(
-//                                                imageRes = R.drawable.ic_example.toString(),
-//                                                name = "단체사진"
-//                                            )
-//                                            1 -> FolderDummy(
-//                                                imageRes = R.drawable.ic_example.toString(),
-//                                                name = "기타"
-//                                            )
-//                                            else -> FolderDummy(
-//                                                imageRes = R.drawable.ic_example.toString(),
-//                                                name = "알 수 없음"
-//                                            )
-//                                        }
-//                                        FolderProfile(
-//                                            folderInfo = folderInfo,
-//                                            modifier = Modifier
-//                                                .offset(y = 20.dp)
-//                                                .align(Alignment.Center)
-//                                                .requiredSize(160.dp)
-//                                        )
-//                                    }
-//                                }
-//                            }
-
-                                    groupDetail.profileInfoList.getOrNull(page)?.let { profileInfo ->
+                                    if (page < groupDetail.profileInfoList.size) {
+                                        val profileInfo = groupDetail.profileInfoList[page]
                                         FolderProfile(
                                             folderInfo = FolderDummy(
                                                 imageRes = profileInfo.image,
@@ -238,10 +201,31 @@ fun GroupDetailFolderScreen(
                                                 .align(Alignment.Center)
                                                 .requiredSize(160.dp)
                                         )
+                                    } else {
+                                        val folderInfo = when (page - groupDetail.profileInfoList.size) {
+                                            0 -> FolderDummy(
+                                                imageRes = R.drawable.ic_example.toString(),
+                                                name = "단체사진"
+                                            )
+                                            1 -> FolderDummy(
+                                                imageRes = R.drawable.ic_example.toString(),
+                                                name = "기타"
+                                            )
+                                            else -> FolderDummy(
+                                                imageRes = R.drawable.ic_example.toString(),
+                                                name = "알 수 없음"
+                                            )
+                                        }
+                                        FolderProfile(
+                                            folderInfo = folderInfo,
+                                            modifier = Modifier
+                                                .offset(y = 20.dp)
+                                                .align(Alignment.Center)
+                                                .requiredSize(160.dp)
+                                        )
                                     }
                                 }
                             }
-
                             HorizontalPagerIndicator(
                                 pagerState = pagerState,
                                 modifier = Modifier
