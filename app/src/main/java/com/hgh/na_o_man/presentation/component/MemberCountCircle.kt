@@ -104,11 +104,14 @@ fun PeopleAgenda(
 }
 
 @Composable
-fun CircleImage(imageUrl: Dummy) {
+fun CircleImage(
+    imageUrl: Dummy,
+    modifier: Modifier = Modifier
+) {
     AsyncImage(
         model = imageUrl.dummyString,
         contentDescription = null,
-        modifier = Modifier
+        modifier = modifier
             .size(28.dp)
             .clip(CircleShape)
             .background(Color.Gray),

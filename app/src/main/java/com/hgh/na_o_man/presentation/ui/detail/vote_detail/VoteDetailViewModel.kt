@@ -43,7 +43,7 @@ class VoteDetailViewModel @Inject constructor(
             }
 
             is VoteDetailContract.VoteDetailEvent.OnCLickNotVoteModeImage -> {
-
+                updateState { copy(isDialogVisible = true, clickPhoto = event.photo) }
             }
 
             is VoteDetailContract.VoteDetailEvent.OnClickVoteModeImage -> {

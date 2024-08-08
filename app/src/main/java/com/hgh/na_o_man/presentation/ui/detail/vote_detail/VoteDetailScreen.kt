@@ -33,6 +33,7 @@ import com.hgh.na_o_man.presentation.component.ImageCardWithProfile
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
+import com.hgh.na_o_man.presentation.component.VoteAfterDialog
 import com.hgh.na_o_man.presentation.component.VoteBeforeDialog
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageContract
 
@@ -169,7 +170,13 @@ fun VoteDetailScreen(
 
                 if (viewState.isDialogVisible) {
                     if (viewState.isVoteMode.not()) {
-                        //VoteAfterDialog
+                        VoteAfterDialog(
+                            image = viewState.clickPhoto,
+                            options = viewState.photos,
+                            onCancelButtonClick = {
+                                viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnDialogClosed)
+                            }
+                        )
                     } else {
                         VoteBeforeDialog(
                             image = viewState.clickPhoto,

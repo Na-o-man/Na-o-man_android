@@ -53,8 +53,7 @@ fun ImageDialog(
             Surface(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .wrapContentHeight()
-                    .padding(horizontal = 24.dp, vertical = 12.dp),
+                    .wrapContentHeight(),
                 shape = RoundedCornerShape(16.dp),
                 border = BorderStroke(2.dp, SteelBlue),
                 color = LightWhite.copy(alpha = 0.8f)
