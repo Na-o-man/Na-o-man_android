@@ -16,10 +16,13 @@ class JoinContract {
     // SideEffect
     sealed class JoinSideEffect : ViewSideEffect {
         data class _ShowToast(val message: String) : JoinSideEffect()
+        object NavigateToNextScreen : JoinSideEffect()
     }
 
     // Event
     sealed class JoinEvent : ViewEvent {
         data class ValidateUrl(val url: String) : JoinEvent()
+        object onFind : JoinEvent()
+        object onCorrect : JoinEvent()
     }
 }

@@ -183,6 +183,8 @@ fun AcceptInviteScreen(
                         is JoinContract.JoinSideEffect._ShowToast -> {
                             Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
                         }
+
+                        else -> {}
                     }
                 }
             }

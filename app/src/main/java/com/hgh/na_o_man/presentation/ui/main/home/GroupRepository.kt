@@ -2,12 +2,13 @@ package com.hgh.na_o_man.domain.repository
 
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.GroupDummy
+import javax.inject.Inject
 
 interface GroupRepository {
     suspend fun getGroups(): List<GroupDummy>
 }
 
-class GroupRepositoryImpl : GroupRepository {
+class GroupRepositoryImpl @Inject constructor(): GroupRepository {
     override suspend fun getGroups(): List<GroupDummy> {
         return listOf(
             GroupDummy(

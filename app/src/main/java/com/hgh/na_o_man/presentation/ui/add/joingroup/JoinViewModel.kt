@@ -29,11 +29,16 @@ class JoinViewModel @Inject constructor(
             is JoinContract.JoinEvent.ValidateUrl -> {
                 validateUrl(event.url)
             }
-            // 다른 이벤트 처리
+            is JoinContract.JoinEvent.onFind -> {
+                // 다시 찾기 이벤트 처리
+                sendEffect ({ JoinContract.JoinSideEffect._ShowToast("다시 찾는 중입니다.") })
+            }
+            is JoinContract.JoinEvent.onCorrect -> {
+                // 맞아요 이벤트 처리
+                sendEffect ({ JoinContract.JoinSideEffect.NavigateToNextScreen })
+            }
         }
     }
-
-
 
     private fun validateUrl(url: String) = viewModelScope.launch {
         try {
@@ -49,6 +54,7 @@ class JoinViewModel @Inject constructor(
                     .onSuccess {
                         // 성공 처리
                         updateState { copy(isUrlValid = true) }
+                        sendEffect ({ JoinContract.JoinSideEffect._ShowToast("URL 검증에 성공했습니다.") })
                     }
                     .onFail {
                         // 실패 처리
@@ -68,3 +74,4 @@ class JoinViewModel @Inject constructor(
         }
     }
 }
+
