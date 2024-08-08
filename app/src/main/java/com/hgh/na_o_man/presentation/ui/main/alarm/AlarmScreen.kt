@@ -1,10 +1,13 @@
 package com.hgh.na_o_man.presentation.ui.main.alarm
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -42,25 +45,25 @@ fun AlarmScreen(
     navigationHome: () -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    Log.d("리컴포저블","AlarmScreen")
+    Log.d("리컴포저블", "AlarmScreen")
 
-    LaunchedEffect(key1 =viewModel.effect) {
+    LaunchedEffect(key1 = viewModel.effect) {
         viewModel.setEvent(AlarmContract.AlarmEvent.InitAlarmScreen)
     }
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
-            Log.d("알람","로딩중")
+            Log.d("알람", "로딩중")
             StateLoadingScreen()
         }
 
         LoadState.ERROR -> {
-            Log.d("알람","에러")
+            Log.d("알람", "에러")
             StateErrorScreen()
         }
 
         LoadState.SUCCESS -> {
-            Log.d("알람","성공")
+            Log.d("알람", "성공")
             Scaffold(
                 topBar = {
                     StartAppBar(
@@ -81,30 +84,33 @@ fun AlarmScreen(
                     )
                 }
 
-                Box(
+                Column(
                     modifier = Modifier
                         .padding(padding)
                 ) {
                     NoticeBox(title = "알림")
-                    Row (
+                    Row(
                         modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .offset(x = -43.dp, y = 60.dp)
+                            .fillMaxWidth()
+                            .padding(end = 40.dp),
+                        horizontalArrangement = Arrangement.End
                     ) {
                         val hasUnread = viewState.alarmList.any { !it.isRead }
-                        if(hasUnread) {
+                        if (hasUnread) {
                             AlarmButton(title = "모두 읽음", onClick = {
-                                Log.d("AlarmButton","모두 읽음 버튼 클릭")
-                                viewModel.setEvent(AlarmContract.AlarmEvent.OnReadAllClicked)})
+                                Log.d("AlarmButton", "모두 읽음 버튼 클릭")
+                                viewModel.setEvent(AlarmContract.AlarmEvent.OnReadAllClicked)
+                            })
                         } else {
                             ReadAllUnClickableButton(title = "모두 읽음")
                         }
                         Spacer(modifier = Modifier.width(5.dp))
                         AlarmButton(title = "전체 삭제", onClick = {
-                            Log.d("AlarmButton","전체 삭제 버튼 클릭")
-                            viewModel.setEvent(AlarmContract.AlarmEvent.OnDeleteAllClicked)})
+                            Log.d("AlarmButton", "전체 삭제 버튼 클릭")
+                            viewModel.setEvent(AlarmContract.AlarmEvent.OnDeleteAllClicked)
+                        })
                     }
-                    if(viewState.alarmList.isEmpty()) {
+                    if (viewState.alarmList.isEmpty()) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -113,10 +119,9 @@ fun AlarmScreen(
                         ) {
                             NoAlarmBox(message = "알림이 없습니다.")
                         }
-                    } else{
+                    } else {
                         AlarmListScreen(
                             alarmList = viewState.alarmList,
-                            modifier = Modifier.padding(padding)
                         )
                     }
                 }
@@ -160,14 +165,15 @@ fun AlarmScreen(
 
 @Composable
 fun AlarmListScreen(
-    alarmList : List<AlarmDummy>,
+    alarmList: List<AlarmDummy>,
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = 12.dp),
     ) {
-        LazyColumn (
+        LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
         ) {
@@ -182,7 +188,8 @@ fun AlarmListScreen(
                     AlarmRead(
                         imageRes = group.imageRes,
                         detail = group.detail,
-                        date = group.date)
+                        date = group.date
+                    )
                 }
             }
         }
