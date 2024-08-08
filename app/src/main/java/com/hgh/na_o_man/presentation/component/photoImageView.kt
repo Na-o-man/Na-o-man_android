@@ -6,13 +6,16 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -21,16 +24,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 
 @Composable
 fun ImageCard(
-    modifier:Modifier = Modifier,
+    modifier: Modifier = Modifier,
     image: Dummy,
-    isSelectMode : Boolean ,
+    isSelectMode: Boolean,
     onClick: (Dummy) -> Unit = {},
     onSelect: (Dummy) -> Unit = {},
 ) {
@@ -49,7 +51,7 @@ fun ImageCard(
             .clickable {
                 if (isSelectMode) {
                     onSelect(image)
-                }else{
+                } else {
                     onClick(image)
                 }
             }
@@ -75,7 +77,7 @@ fun ImageCard(
 
 @Composable
 fun UriImageCard(
-    modifier:Modifier = Modifier,
+    modifier: Modifier = Modifier,
     imageUri: Uri,
     onClick: (Dummy) -> Unit = {},
 ) {
@@ -103,11 +105,82 @@ fun UriImageCard(
 }
 
 @Composable
+fun ImageCardWithProfile(
+    modifier: Modifier = Modifier,
+    image: Dummy,
+    profiles: List<Dummy>,
+    isSelectMode: Boolean,
+    isVoteMode: Boolean = false,
+    isVote: Boolean = false,
+    myProfile: Dummy = Dummy(),
+    agendaText: String = "",
+    onClick: (Dummy) -> Unit = {},
+    onProfileClick: () -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(vertical = 18.dp)
+    ) {
+        ImageCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1.25f),
+            image = image,
+            isSelectMode = isSelectMode,
+            onClick = {
+                onClick(it)
+            },
+            onSelect = {}
+        )
+        if (isVoteMode) {
+            if (isVote) {
+                PeopleAgenda(
+                    profile = myProfile, text = agendaText, modifier = Modifier
+                        .align(
+                            Alignment.BottomStart
+                        )
+                        .offset(y = (14).dp)
+                        .clickable {
+                            onProfileClick()
+                        }
+                )
+            }
+        } else {
+            PeopleCountCircle(
+                member = profiles,
+                modifier = Modifier
+                    .align(
+                        Alignment.BottomStart
+                    )
+                    .offset(y = (14).dp)
+            )
+        }
+    }
+}
+
+@Composable
 @Preview
 fun preView() {
     ImageCard(
         image = Dummy(dummyString = ""),
         isSelectMode = false
+    ) {
+
+    }
+}
+
+@Composable
+@Preview
+fun preView2() {
+    ImageCardWithProfile(
+        modifier = Modifier.fillMaxWidth(),
+        image = Dummy(dummyString = ""),
+        profiles = listOf(Dummy(), Dummy()),
+        isSelectMode = false,
+        isVoteMode = true,
+        isVote = true
     ) {
 
     }

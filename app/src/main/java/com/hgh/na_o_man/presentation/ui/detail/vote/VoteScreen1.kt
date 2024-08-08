@@ -154,7 +154,7 @@ fun VoteScreen1(
                 // 두 번째 버튼 (안건 추가하기)
                 Box(
                     modifier = Modifier
-                        .size(166.dp) // 같은 크기로 설정
+                        .width(166.dp) // 같은 크기로 설정
                         .offset(y = 40.dp) // 원하는 오프셋 조정
                         .clickable(onClick = { navigationAgenda() }), // 클릭 가능하게 설정
                     contentAlignment = Alignment.Center // 내용 중앙 정렬
@@ -162,7 +162,7 @@ fun VoteScreen1(
                     Image(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_add_group_166),
                         contentDescription = "안건 추가하기", // 적절한 설명 추가
-                        modifier = Modifier.size(166.dp) // 이미지 크기 설정
+                        modifier = Modifier.width(166.dp) // 이미지 크기 설정
                     )
                     Text(
                         text = "안건 추가하기", // 텍스트 내용

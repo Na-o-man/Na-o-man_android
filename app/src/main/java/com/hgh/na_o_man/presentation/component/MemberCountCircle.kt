@@ -1,12 +1,19 @@
 package com.hgh.na_o_man.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,33 +26,81 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import com.hgh.na_o_man.domain.model.Dummy
 
 @Composable
 fun PeopleCountCircle(
     member: List<Dummy>,
-    maxSize : Int = 3,
+    maxSize: Int = 3,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.wrapContentSize()) {
-
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy((-10).dp),
+        Row(
+            modifier = Modifier.wrapContentSize()
         ) {
-            items(maxSize) { index ->
-                CircleImage(imageUrl = member[index])
-            }
-
-            if (member.size - maxSize > 0) {
-                item {
-                    CircleText("+${member.size - maxSize}")
+            member.take(maxSize).forEachIndexed { index, imageUrl ->
+                Box(
+                    modifier = Modifier
+                        .offset(x = (-10).dp * index)
+                ) {
+                    CircleImage(imageUrl = imageUrl)
                 }
             }
 
+            if (member.size > maxSize) {
+                Box(
+                    modifier = Modifier
+                        .offset(x = (-10).dp * maxSize)
+                ) {
+                    CircleText("+${member.size - maxSize}")
+                }
+            }
         }
     }
+}
 
+@Composable
+fun PeopleAgenda(
+    profile: Dummy = Dummy(),
+    text: String = "",
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp),
+    ) {
+        if (text.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .height(30.dp)
+                    .fillMaxWidth()
+                    .background(Color.White.copy(alpha = 0.8f), shape = RoundedCornerShape(15.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = text,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Normal,
+                    color = Color(0xFF1D3A72),
+                    fontSize = 12.sp,
+                    maxLines = 1,
+                )
+            }
+        }
+        AsyncImage(
+            model = profile.dummyString,
+            contentDescription = null,
+            modifier = Modifier
+                .size(30.dp)
+                .clip(CircleShape)
+                .border(width = 1.dp, color = Color.White, shape = CircleShape)
+                .background(Color.Gray),
+            contentScale = ContentScale.Crop
+        )
+    }
 }
 
 @Composable
@@ -67,7 +122,7 @@ fun CircleText(text: String) {
         modifier = Modifier
             .size(28.dp)
             .clip(CircleShape)
-            .background(Color.Gray),
+            .background(Color(0xFF8BA5C1)),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -83,5 +138,11 @@ fun CircleText(text: String) {
 @Preview
 @Composable
 fun preview() {
-    PeopleCountCircle(listOf(Dummy(), Dummy(), Dummy(), Dummy(),Dummy()))
+    PeopleCountCircle(listOf(Dummy(), Dummy(), Dummy(), Dummy(), Dummy()))
+}
+
+@Preview
+@Composable
+fun angPreview() {
+    PeopleAgenda(profile = Dummy())
 }

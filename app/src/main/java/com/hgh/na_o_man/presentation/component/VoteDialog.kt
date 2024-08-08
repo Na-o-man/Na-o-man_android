@@ -48,20 +48,17 @@ fun VoteBeforeDialog(
 
     Dialog(onDismissRequest = { onCancelButtonClick() }) {
 
-        Box(
-            Modifier.fillMaxSize()
-        ) {
+        Box{
 
             Column(
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box {
+                Box{
                     ImageCard(
                         image = image, isSelectMode = false, modifier = Modifier
-                            .fillMaxWidth()
                             .wrapContentHeight()
-                            .height(160.dp)
                             .shadow(3.dp, RoundedCornerShape(16.dp))
                     )
 

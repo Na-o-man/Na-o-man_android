@@ -26,7 +26,7 @@ fun StartTopCloud() {
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_start_cloud_430),
         contentDescription = stringResource(R.string.back_description),
-        tint = LightWhite,
+        tint = Color(0x408D8D8D),
         modifier = Modifier
             .fillMaxWidth()
             .blur(10.dp)
@@ -48,7 +48,7 @@ fun StartBottomCloud() {
         Icon(
             painter = painterResource(R.drawable.ic_bottom_cloud_73),
             contentDescription = stringResource(R.string.back_description),
-            tint = LightWhite,
+            tint = Color(0x408D8D8D),
             modifier = Modifier
                 .fillMaxWidth()
                 .blur(10.dp)
@@ -70,11 +70,11 @@ fun EndTopCloud() {
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_end_cloud_386),
         contentDescription = stringResource(R.string.back_description),
-        tint = LightWhite,
+        tint = Color(0x408D8D8D),
         modifier = Modifier
             .fillMaxWidth()
+            .offset(x = 20.dp)
             .blur(10.dp)
-            .offset(x = 30.dp)
     )
     Icon(
         imageVector = ImageVector.vectorResource(R.drawable.ic_top_end_cloud_386),
@@ -82,7 +82,7 @@ fun EndTopCloud() {
         tint = LightWhite,
         modifier = Modifier
             .fillMaxWidth()
-            .offset(x = 30.dp)
+            .offset(x = 20.dp)
     )
 }
 
@@ -106,6 +106,27 @@ fun TopCloud() {
             .padding(horizontal = 33.dp)
             .offset(y = (-50).dp)
             .fillMaxWidth()
+    )
+}
+
+@Composable
+fun BottomStartCloud(modifier: Modifier = Modifier) {
+    Icon(
+        imageVector = ImageVector.vectorResource(R.drawable.ic_bottom_cloud_400),
+        contentDescription = "",
+        tint = Color(0x408D8D8D),
+        modifier = modifier
+            .fillMaxWidth()
+            .offset(x = (-30).dp)
+            .blur(10.dp)
+    )
+    Icon(
+        imageVector = ImageVector.vectorResource(R.drawable.ic_bottom_cloud_400),
+        contentDescription = "",
+        tint = LightWhite,
+        modifier = modifier
+            .fillMaxWidth()
+            .offset(x = (-30).dp)
     )
 }
 

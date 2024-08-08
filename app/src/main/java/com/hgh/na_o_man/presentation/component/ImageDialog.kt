@@ -58,7 +58,6 @@ fun ImageDialog(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .wrapContentHeight()
-                    .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 12.dp),
                 shape = RoundedCornerShape(16.dp),
                 border = BorderStroke(2.dp, SteelBlue),
@@ -68,7 +67,6 @@ fun ImageDialog(
                     Box {
                         ImageCard(
                             image = image, isSelectMode = false, modifier = Modifier
-                                .fillMaxWidth()
                                 .wrapContentHeight()
                                 .shadow(3.dp, RoundedCornerShape(16.dp))
                         )
@@ -87,7 +85,6 @@ fun ImageDialog(
                     Row(
                         modifier = Modifier
                             .height(height = 45.dp)
-                            .fillMaxWidth()
                             .padding(horizontal = 12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically

@@ -7,7 +7,7 @@ import javax.inject.Inject
 class CheckRegistrationUsecase @Inject constructor(
     private val repository: AuthRepository
 ) {
-    suspend operator fun invoke(email: String) = flow {
-        emit(repository.getCheckRegistration(email))
+    suspend operator fun invoke(socialType: String, authId: String) = flow {
+        emit(repository.getCheckRegistration(socialType, authId))
     }
 }

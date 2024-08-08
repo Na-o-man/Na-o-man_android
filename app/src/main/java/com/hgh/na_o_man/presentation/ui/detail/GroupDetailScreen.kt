@@ -23,6 +23,7 @@ import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFold
 import com.hgh.na_o_man.presentation.ui.detail.agenda.AgendaScreen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
 import com.hgh.na_o_man.presentation.ui.detail.vote.VoteScreen1
+import com.hgh.na_o_man.presentation.ui.detail.vote_detail.VoteDetailScreen
 import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 import com.hgh.na_o_man.presentation.ui.sign.SignScreenRoute
 
@@ -43,7 +44,7 @@ fun GroupDetailScreen(
             NavHost(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,
-                startDestination = GroupDetailScreenRoute.DETAIL.route
+                startDestination = GroupDetailScreenRoute.VOTE_DETAIL.route
             ) {
 
                 composable(route = GroupDetailScreenRoute.DETAIL.route) {
@@ -114,6 +115,14 @@ fun GroupDetailScreen(
                         }
                     )
                 }
+
+                composable(route = GroupDetailScreenRoute.VOTE_DETAIL.route) {
+                    VoteDetailScreen(
+                        navigationBack = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
             }
         }
 
@@ -126,6 +135,7 @@ enum class GroupDetailScreenRoute(val route: String) {
     LIST("list"),
     VOTE("vote"),
     AGENDA("agenda"),
+    VOTE_DETAIL("vote-detail"),
 }
 
 const val KEY_GROUP_ID = "group-id"
