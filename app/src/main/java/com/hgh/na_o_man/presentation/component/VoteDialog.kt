@@ -42,7 +42,7 @@ import com.hgh.na_o_man.domain.model.Dummy
 fun VoteBeforeDialog(
     image: Dummy,
     onCancelButtonClick: () -> Unit,
-    onVoteClick: (String) -> Unit,
+    onVoteClick: (String, Long) -> Unit,
 ) {
     var text = remember { mutableStateOf(TextFieldValue("")) }
 
@@ -117,7 +117,7 @@ fun VoteBeforeDialog(
                             .background(color = Color(0xCCFFFFFF), shape = RoundedCornerShape(6.dp))
                             .padding(horizontal = 6.dp, vertical = 4.dp)
                             .clickable {
-                                onVoteClick(text.value.text)
+                                onVoteClick(text.value.text, image.id.toLong())
                             },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -252,7 +252,7 @@ fun VoteAfterDialog(
 @Composable
 @Preview
 fun AfterPreView() {
-    VoteBeforeDialog(Dummy(), {}) {
+    VoteBeforeDialog(Dummy(), {}) { _, _ ->
 
     }
 }

@@ -63,7 +63,7 @@ fun PeopleCountCircle(
 
 @Composable
 fun PeopleAgenda(
-    profile: Dummy = Dummy(),
+    profile: String = "",
     text: String = "",
     modifier: Modifier = Modifier,
 ) {
@@ -91,7 +91,7 @@ fun PeopleAgenda(
             }
         }
         AsyncImage(
-            model = profile.dummyString,
+            model = profile,
             contentDescription = null,
             modifier = Modifier
                 .size(30.dp)
@@ -144,5 +144,5 @@ fun preview() {
 @Preview
 @Composable
 fun angPreview() {
-    PeopleAgenda(profile = Dummy())
+    PeopleAgenda(profile = "")
 }

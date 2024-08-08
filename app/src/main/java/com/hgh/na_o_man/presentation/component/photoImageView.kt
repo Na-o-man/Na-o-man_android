@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 
 @Composable
@@ -111,9 +112,7 @@ fun ImageCardWithProfile(
     profiles: List<Dummy>,
     isSelectMode: Boolean,
     isVoteMode: Boolean = false,
-    isVote: Boolean = false,
-    myProfile: Dummy = Dummy(),
-    agendaText: String = "",
+    myProfile: AuthInfoModel = AuthInfoModel(),
     onClick: (Dummy) -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
@@ -135,9 +134,9 @@ fun ImageCardWithProfile(
             onSelect = {}
         )
         if (isVoteMode) {
-            if (isVote) {
+            if (image.is3) {
                 PeopleAgenda(
-                    profile = myProfile, text = agendaText, modifier = Modifier
+                    profile = myProfile.profileUrl, text = image.dummyString3, modifier = Modifier
                         .align(
                             Alignment.BottomStart
                         )
@@ -180,7 +179,6 @@ fun preView2() {
         profiles = listOf(Dummy(), Dummy()),
         isSelectMode = false,
         isVoteMode = true,
-        isVote = true
     ) {
 
     }

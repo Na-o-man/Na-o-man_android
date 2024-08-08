@@ -3,6 +3,7 @@ package com.hgh.na_o_man.presentation.ui.detail.vote_detail
 import CloudWhiteBtn
 import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.VoteBeforeDialog
+import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageContract
 
 @Composable
 fun VoteDetailScreen(
@@ -56,6 +58,10 @@ fun VoteDetailScreen(
         }
     }
 
+    BackHandler(enabled = viewState.isVoteMode) {
+        viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnClickBackOnVote)
+    }
+
     when (viewState.loadState) {
         LoadState.LOADING -> {
             StateLoadingScreen()
@@ -70,7 +76,11 @@ fun VoteDetailScreen(
                 topBar = {
                     StartAppBar(
                         onStartClick = {
-                            navigationBack()
+                            if (viewState.isVoteMode) {
+                                viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnClickBackOnVote)
+                            } else {
+                                viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnCLickBack)
+                            }
                         }
                     )
                 },
@@ -114,19 +124,28 @@ fun VoteDetailScreen(
                                     profiles = viewState.photos,
                                     isSelectMode = false,
                                     isVoteMode = viewState.isVoteMode,
+                                    myProfile = viewState.userInfo,
                                     onClick = {
                                         if (viewState.isVoteMode.not()) {
                                             viewModel.setEvent(
-                                                VoteDetailContract.VoteDetailEvent.OnCLickNotVoteModeImage(photo)
+                                                VoteDetailContract.VoteDetailEvent.OnCLickNotVoteModeImage(
+                                                    photo
+                                                )
                                             )
                                         } else {
                                             viewModel.setEvent(
-                                                VoteDetailContract.VoteDetailEvent.OnClickVoteModeImage(photo)
+                                                VoteDetailContract.VoteDetailEvent.OnClickVoteModeImage(
+                                                    photo
+                                                )
                                             )
                                         }
                                     },
                                     onProfileClick = {
-
+                                        viewModel.setEvent(
+                                            VoteDetailContract.VoteDetailEvent.OnClickCancelVote(
+                                                photo.id.toLong()
+                                            )
+                                        )
                                     }
                                 )
                             }
@@ -142,7 +161,7 @@ fun VoteDetailScreen(
                         if (viewState.isVoteMode.not()) {
                             viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnClickVote)
                         } else {
-
+                            viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnClickFinish)
                         }
                     }
 
@@ -150,14 +169,19 @@ fun VoteDetailScreen(
 
                 if (viewState.isDialogVisible) {
                     if (viewState.isVoteMode.not()) {
-
+                        //VoteAfterDialog
                     } else {
                         VoteBeforeDialog(
                             image = viewState.clickPhoto,
                             onCancelButtonClick = {
                                 viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnDialogClosed)
-                            }, onVoteClick = {
-
+                            }, onVoteClick = { text, id ->
+                                viewModel.setEvent(
+                                    VoteDetailContract.VoteDetailEvent.OnClickInject(
+                                        text = text,
+                                        photoId = id,
+                                    )
+                                )
                             }
                         )
                     }

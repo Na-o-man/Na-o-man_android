@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
+import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.usecase.member.GetMyInfoUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
@@ -27,9 +28,15 @@ class VoteDetailViewModel @Inject constructor(
             VoteDetailContract.VoteDetailEvent.InitVoteDetailScreen -> {
 
             }
+
             VoteDetailContract.VoteDetailEvent.OnClickFinish -> {
 
             }
+
+            VoteDetailContract.VoteDetailEvent.OnCLickBack -> {
+                sendEffect({ VoteDetailContract.VoteDetailSideEffect.NaviBack })
+            }
+
             VoteDetailContract.VoteDetailEvent.OnClickVote -> {
                 updateState { copy(isVoteMode = true) }
                 getMyInfo()
@@ -38,29 +45,58 @@ class VoteDetailViewModel @Inject constructor(
             is VoteDetailContract.VoteDetailEvent.OnCLickNotVoteModeImage -> {
 
             }
+
             is VoteDetailContract.VoteDetailEvent.OnClickVoteModeImage -> {
                 updateState { copy(isDialogVisible = true, clickPhoto = event.photo) }
             }
 
-            VoteDetailContract.VoteDetailEvent.OnClickInject -> {
-
-            }
-
             VoteDetailContract.VoteDetailEvent.OnDialogClosed -> {
                 updateState { copy(isDialogVisible = false) }
+            }
+
+            VoteDetailContract.VoteDetailEvent.OnClickBackOnVote -> {
+                updateState { copy(isVoteMode = false) }
+            }
+
+            is VoteDetailContract.VoteDetailEvent.OnClickInject -> {
+                updateState {
+                    copy(
+                        photos = photos.map {
+                            if (it.id == event.photoId.toInt()) {
+                                it.copy(is3 = true, dummyString3 = event.text)
+                            } else {
+                                it
+                            }
+                        },
+                        isDialogVisible = false
+                    )
+                }
+            }
+
+            is VoteDetailContract.VoteDetailEvent.OnClickCancelVote -> {
+                updateState {
+                    copy(
+                        photos = photos.map {
+                            if (it.id == event.photoId.toInt()) {
+                                it.copy(is3 = false, dummyString3 = "")
+                            } else {
+                                it
+                            }
+                        },
+                    )
+                }
             }
         }
     }
 
     private fun getMyInfo() {
         viewModelScope.launch {
-            updateState { copy(loadState = LoadState.LOADING) }
             try {
                 getMyInfoUsecase().collect { result ->
                     result.onSuccess {
                         updateState { copy(userInfo = it) }
                     }.onFail {
-                        updateState { copy( loadState = LoadState.ERROR) }
+                        updateState { copy(loadState = LoadState.ERROR) }
                     }.onException {
                         throw it
                     }

@@ -51,9 +51,12 @@ class VoteDetailContract {
         object InitVoteDetailScreen : VoteDetailEvent()
         data class OnCLickNotVoteModeImage(val photo : Dummy): VoteDetailEvent()
         data class OnClickVoteModeImage(val photo : Dummy) : VoteDetailEvent()
+        object OnClickBackOnVote : VoteDetailEvent()
+        object OnCLickBack : VoteDetailEvent()
+        data class OnClickCancelVote(val photoId: Long): VoteDetailEvent()
         object OnClickVote : VoteDetailEvent()
         object OnClickFinish :VoteDetailEvent()
-        object OnClickInject : VoteDetailEvent()
+        data class OnClickInject(val text: String, val photoId : Long) : VoteDetailEvent()
         object OnDialogClosed : VoteDetailEvent()
 
     }
