@@ -8,8 +8,11 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +42,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.FolderDummy
@@ -49,6 +56,7 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.groupdetail.Bigfolder
 import com.hgh.na_o_man.presentation.component.groupdetail.GroupInfo
+import com.hgh.na_o_man.presentation.component.groupdetail.SmallFolder
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
 
 
@@ -99,13 +107,11 @@ fun GroupDetailFolderScreen(
 
     Log.d("리컴포저블", "GroupDetailScreen")
 
-    val dummyFolderData = listOf(
-        FolderDummy(R.drawable.ic_example, "Folder1"),
-        FolderDummy(R.drawable.ic_example, "Folder2"),
-        FolderDummy(R.drawable.ic_example, "Folder3")
-    )
-
     val scope = rememberCoroutineScope()
+
+    // 페이저용
+    val pagerState = rememberPagerState()
+
 //    val pagerState = rememberPagerState(initialPage = {dummyFolderData.size})
 //    val selectedTabIndex = remember{ derivedStateOf { pagerState.currentPage }  }
 
@@ -151,33 +157,96 @@ fun GroupDetailFolderScreen(
                         Box(
                             modifier = Modifier.padding(start = 200.dp)
                         ) {
-                            GroupInfo(title = "제목", participantCount = 5, date = "2024.07.20")
+                            viewState.groupDetail?.let { groupDetail ->
+                                GroupInfo(
+                                    title = groupDetail.name,
+                                    participantCount = groupDetail.memberCount,
+                                    date = groupDetail.createdAt
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(20.dp))
 
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-
-                        ) {
-                            Bigfolder()
-
-                            Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_half_circle_625),
-                                contentDescription = "반원",
-                                tint = Color.Unspecified,
+                        viewState.groupDetail?.let { groupDetail ->
+                            val itemCount = groupDetail.memberCount + 2
+                            HorizontalPager(
+                                count = itemCount,
+                                state = pagerState,
+                                contentPadding = PaddingValues(horizontal = 40.dp), // Set padding to create partial view
                                 modifier = Modifier
-                                    .requiredSize(625.dp, 140.dp) // 아이콘 크기를 명시적으로 설정
-                                    .offset(y = 57.dp)
+                                    .fillMaxWidth()
+                                    .height(220.dp)
                             )
-                            FolderProfile(
-                                Dummy(),
+                            { page ->
+                            val scale by animateFloatAsState(
+                                targetValue = 1.1f
+                            )
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+                                          .scale(scale)
+                                ) {
+                                    Bigfolder()
+
+//                                    if (page < groupDetail.profileInfoList.size) {
+//                                        val profileInfo = groupDetail.profileInfoList[page]
+//                                        FolderProfile(
+//                                            folderInfo = FolderDummy(
+//                                                imageRes = profileInfo.image,
+//                                                name = profileInfo.name
+//                                            ),
+//                                            modifier = Modifier
+//                                                .offset(y = 20.dp)
+//                                                .align(Alignment.Center)
+//                                                .requiredSize(160.dp)
+//                                        )
+//                                    } else {
+//                                        val folderInfo = when (page - groupDetail.profileInfoList.size) {
+//                                            0 -> FolderDummy(
+//                                                imageRes = R.drawable.ic_example.toString(),
+//                                                name = "단체사진"
+//                                            )
+//                                            1 -> FolderDummy(
+//                                                imageRes = R.drawable.ic_example.toString(),
+//                                                name = "기타"
+//                                            )
+//                                            else -> FolderDummy(
+//                                                imageRes = R.drawable.ic_example.toString(),
+//                                                name = "알 수 없음"
+//                                            )
+//                                        }
+//                                        FolderProfile(
+//                                            folderInfo = folderInfo,
+//                                            modifier = Modifier
+//                                                .offset(y = 20.dp)
+//                                                .align(Alignment.Center)
+//                                                .requiredSize(160.dp)
+//                                        )
+//                                    }
+//                                }
+//                            }
+
+                                    groupDetail.profileInfoList.getOrNull(page)?.let { profileInfo ->
+                                        FolderProfile(
+                                            folderInfo = FolderDummy(
+                                                imageRes = profileInfo.image,
+                                                name = profileInfo.name
+                                            ),
+                                            modifier = Modifier
+                                                .offset(y = 20.dp)
+                                                .align(Alignment.Center)
+                                                .requiredSize(160.dp)
+                                        )
+                                    }
+                                }
+                            }
+
+                            HorizontalPagerIndicator(
+                                pagerState = pagerState,
                                 modifier = Modifier
-                                    .offset(y = 10.dp)
-                                    .requiredSize(160.dp)
-                            )
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(16.dp))
                         }
 
                         Row(
