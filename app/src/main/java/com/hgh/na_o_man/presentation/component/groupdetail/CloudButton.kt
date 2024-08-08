@@ -81,7 +81,7 @@ fun CloudWhiteBtn(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cloud_138), // 아이콘 리소스 ID를 사용
             contentDescription = "Example Icon",
             tint = Color(0xAA8D8D8D),
-            modifier = modifier.blur(5.dp)
+            modifier = Modifier.blur(5.dp)
         )
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_cloud_138), // 아이콘 리소스 ID를 사용

@@ -44,11 +44,12 @@ fun HomeScreen(
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current as Activity
 
+    LaunchedEffect(key1 = viewModel.effect) {
+        Log.d("HomeScreen", "InitHomeScreen event triggered")
+        viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
+    }
+
     Log.d("리컴포저블", "HomeScreen")
-//    LaunchedEffect(key1 = true) {
-//        Log.d("리컴포저블","InitHomeScreen")
-//        viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
-//    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -63,7 +64,7 @@ fun HomeScreen(
                 }
 
                 is HomeContract.HomeSideEffect.NaviGroupDetail -> {
-                    context.startActivity(GroupDetailActivity.newIntent(context, 1))
+                    context.startActivity(GroupDetailActivity.newIntent(context, effect.id))
                 }
 
                 else -> Unit
@@ -186,7 +187,9 @@ fun GroupListScreen(
                     participantCount = group.participantCount,
                     date = group.date,
                     onClick = {
-                        viewModel.setEvent(HomeContract.HomeEvent.OnGroupListClicked(it))
+                        Log.d("HomeViewModel","send start")
+                        viewModel.setEvent(HomeContract.HomeEvent.OnGroupListClicked(group.groupId))
+                        Log.d("HomeViewModel","send end")
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))

@@ -127,11 +127,13 @@ fun AlarmNotRead(
             ) {
                 Text(
                     text = detail,
+                    lineHeight = 16.sp,
                     fontSize = 11.sp,
                     color = Color.Black,
-                    overflow = TextOverflow.Visible,
-                    maxLines = 3,
-                    modifier = Modifier.widthIn(max = 210.dp)
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
+                    modifier = Modifier
+                        .widthIn(max = 210.dp)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(

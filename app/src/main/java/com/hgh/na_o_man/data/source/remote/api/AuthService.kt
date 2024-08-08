@@ -24,7 +24,8 @@ interface AuthService {
 
     @GET("auth/check-registration")
     suspend fun getCheckRegistrationAPI(
-        @Query("email") email: String
+        @Query("socialType") socialType: String,
+        @Query("authId") authId: String,
     ): Response<ApiResult<CheckRegistrationDto>>
 
 }

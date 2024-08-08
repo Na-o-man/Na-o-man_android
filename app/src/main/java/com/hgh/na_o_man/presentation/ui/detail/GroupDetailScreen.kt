@@ -23,6 +23,8 @@ import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFold
 import com.hgh.na_o_man.presentation.ui.detail.agenda.AgendaScreen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
 import com.hgh.na_o_man.presentation.ui.detail.vote.VoteScreen1
+import com.hgh.na_o_man.presentation.ui.detail.vote_detail.VoteDetailScreen
+import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 import com.hgh.na_o_man.presentation.ui.sign.SignScreenRoute
 
 @OptIn(ExperimentalPagerApi::class)
@@ -47,7 +49,9 @@ fun GroupDetailScreen(
 
                 composable(route = GroupDetailScreenRoute.DETAIL.route) {
                     GroupDetailFolderScreen(
-                        navigationBack = {},
+                        navigationBack = {
+                            navController.popBackStack() // 수정 필요
+                        },
                         navigationPhotoList = { groupId, memberId ->
                             navController.navigate(
                                 GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
@@ -59,7 +63,9 @@ fun GroupDetailScreen(
                                 GroupDetailScreenRoute.VOTE.route
                             )
                         },
-                        navigationMyPage = {},
+                        navigationMyPage = {
+                            navController.navigate(GroupDetailScreenRoute.VOTE_DETAIL.route) // 수정 필요
+                        },
                     )
                 }
 
@@ -109,6 +115,14 @@ fun GroupDetailScreen(
                         }
                     )
                 }
+
+                composable(route = GroupDetailScreenRoute.VOTE_DETAIL.route) {
+                    VoteDetailScreen(
+                        navigationBack = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
             }
         }
 
@@ -121,8 +135,10 @@ enum class GroupDetailScreenRoute(val route: String) {
     LIST("list"),
     VOTE("vote"),
     AGENDA("agenda"),
+    VOTE_DETAIL("vote-detail"),
 }
 
 const val KEY_GROUP_ID = "group-id"
 const val KEY_MEMBER_ID = "member-id"
+const val KEY_AGENDA_ID = "agenda-id"
 const val KEY_IS_AGENDA = "is-agenda"

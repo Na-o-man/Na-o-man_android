@@ -37,15 +37,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFolderScreen
+import com.hgh.na_o_man.presentation.ui.detail.GroupDetailScreenRoute
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
 import com.hgh.na_o_man.presentation.ui.main.home.AddMainScreen
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun MainScreen(
     intentToAccept: () -> Unit,
@@ -121,6 +125,7 @@ fun MainScreen(
                         }
                     )
                 }
+
 //                composable(route = MainScreenRoute.MEMBERS_INVITE.route) {  // 이 경로가 추가되었는지 확인
 //                    MembersInviteScreen(
 //                        navController = navController
