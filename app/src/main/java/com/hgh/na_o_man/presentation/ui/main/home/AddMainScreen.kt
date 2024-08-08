@@ -1,6 +1,5 @@
 package com.hgh.na_o_man.presentation.ui.main.home
 
-//import com.hgh.na_o_man.presentation.Utill.composableActivityViewModel
 import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.clickable

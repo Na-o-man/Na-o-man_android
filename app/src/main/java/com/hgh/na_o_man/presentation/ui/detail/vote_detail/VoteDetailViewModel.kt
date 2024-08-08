@@ -55,7 +55,11 @@ class VoteDetailViewModel @Inject constructor(
             }
 
             VoteDetailContract.VoteDetailEvent.OnClickBackOnVote -> {
-                updateState { copy(isVoteMode = false) }
+                updateState {
+                    copy(photos = photos.map {
+                        if (it.is3) it.copy(is3 = false) else it
+                    }, isVoteMode = false)
+                }
             }
 
             is VoteDetailContract.VoteDetailEvent.OnClickInject -> {

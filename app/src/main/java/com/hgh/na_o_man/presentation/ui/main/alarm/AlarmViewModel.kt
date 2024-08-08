@@ -100,7 +100,7 @@ class AlarmViewModel @Inject constructor(
 
     // 모두 읽음 기능
     private fun readAll()  = viewModelScope.launch{
-        updateState { copy(loadState = LoadState.LOADING) }
+        //updateState { copy(loadState = LoadState.LOADING) }
         Log.d("AlarmViewModel","readAll : Reading all alarms")
         try {
             unreadNotificationUsecase().collect{ result ->
