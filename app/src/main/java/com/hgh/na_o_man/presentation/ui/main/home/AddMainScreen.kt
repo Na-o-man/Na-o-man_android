@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -67,6 +68,7 @@ fun AddMainScreen(
                         .align(Alignment.Center)
                         .padding(start = 12.dp, bottom = 120.dp)
                         .zIndex(1f)
+                        .size(100.dp, 60.dp)
                 )
                 DecorationCloud(
                     modifier = Modifier

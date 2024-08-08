@@ -44,7 +44,7 @@ fun GroupDetailScreen(
             NavHost(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,
-                startDestination = GroupDetailScreenRoute.VOTE_DETAIL.route
+                startDestination = GroupDetailScreenRoute.DETAIL.route
             ) {
 
                 composable(route = GroupDetailScreenRoute.DETAIL.route) {
@@ -64,7 +64,7 @@ fun GroupDetailScreen(
                             )
                         },
                         navigationMyPage = {
-                            navController.navigate(MainScreenRoute.MY_PAGE.route) // 수정 필요
+                            navController.navigate(GroupDetailScreenRoute.VOTE_DETAIL.route) // 수정 필요
                         },
                     )
                 }
@@ -140,4 +140,5 @@ enum class GroupDetailScreenRoute(val route: String) {
 
 const val KEY_GROUP_ID = "group-id"
 const val KEY_MEMBER_ID = "member-id"
+const val KEY_AGENDA_ID = "agenda-id"
 const val KEY_IS_AGENDA = "is-agenda"
