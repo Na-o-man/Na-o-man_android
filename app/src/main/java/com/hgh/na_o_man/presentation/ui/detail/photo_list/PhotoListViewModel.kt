@@ -29,7 +29,7 @@ class PhotoListViewModel @Inject constructor(
             copy(
                 loadState = LoadState.SUCCESS, photoList = listOf(
                     Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
+                        "https://cdn.huffingtonpost.kr/news/photo/202108/112938_215427.jpeg",
                         1,
                         is2 = true,
                     ),

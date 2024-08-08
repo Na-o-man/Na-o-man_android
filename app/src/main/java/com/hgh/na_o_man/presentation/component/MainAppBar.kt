@@ -54,9 +54,7 @@ fun StartAppBar(
     onStartClick: () -> Unit,
 ) {
     MainAppBar(
-        modifier = modifier
-            .padding(start = 10.dp, top = 10.dp)
-            .size(76.dp),
+        modifier = modifier,
         back = AppBarMenu.BACK,
         menu = null,
         onStartClick = onStartClick,

@@ -51,7 +51,6 @@ fun MyPageScreen(
     Log.d("리컴포저블", "MyPageScreen")
 
     LaunchedEffect(true) {
-        Log.d("한건희", "InitMyPageScreen")
         viewModel.setEvent(MyPageContract.MyPageEvent.InitMyPageScreen)
     }
 
