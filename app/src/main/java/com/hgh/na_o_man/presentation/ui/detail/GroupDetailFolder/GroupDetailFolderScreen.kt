@@ -38,6 +38,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.FolderDummy
@@ -99,13 +102,11 @@ fun GroupDetailFolderScreen(
 
     Log.d("리컴포저블", "GroupDetailScreen")
 
-    val dummyFolderData = listOf(
-        FolderDummy(R.drawable.ic_example, "Folder1"),
-        FolderDummy(R.drawable.ic_example, "Folder2"),
-        FolderDummy(R.drawable.ic_example, "Folder3")
-    )
-
     val scope = rememberCoroutineScope()
+
+    // 페이저용
+    val pagerState = rememberPagerState()
+
 //    val pagerState = rememberPagerState(initialPage = {dummyFolderData.size})
 //    val selectedTabIndex = remember{ derivedStateOf { pagerState.currentPage }  }
 
@@ -151,7 +152,6 @@ fun GroupDetailFolderScreen(
                         Box(
                             modifier = Modifier.padding(start = 200.dp)
                         ) {
-//                            GroupInfo(title = "제목", participantCount = 5, date = "2024.07.20")
                             viewState.groupDetail?.let { groupDetail ->
                                 GroupInfo(
                                     title = groupDetail.name,
@@ -163,28 +163,37 @@ fun GroupDetailFolderScreen(
 
                         Spacer(modifier = Modifier.height(20.dp))
 
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-
-                        ) {
-                            Bigfolder()
-
-                            Icon(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_half_circle_625),
-                                contentDescription = "반원",
-                                tint = Color.Unspecified,
+                        viewState.groupDetail?.let { groupDetail ->
+                            val itemCount = groupDetail.memberCount + 2
+                            HorizontalPager(
+                                count = itemCount,
+                                state = pagerState,
                                 modifier = Modifier
-                                    .requiredSize(625.dp, 140.dp) // 아이콘 크기를 명시적으로 설정
-                                    .offset(y = 57.dp)
-                            )
-                            FolderProfile(
-                                Dummy(),
+                                    .fillMaxWidth()
+                                    .height(220.dp)
+                            ) { page ->
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier
+//                                        .fillMaxWidth()
+                                ) {
+                                    Bigfolder()
+
+                                    FolderProfile(
+                                        Dummy(),
+                                        modifier = Modifier
+                                            .offset(y = 20.dp)
+                                            .align(Alignment.Center)
+                                            .requiredSize(160.dp)
+                                    )
+                                }
+
+                            }
+                            HorizontalPagerIndicator(
+                                pagerState = pagerState,
                                 modifier = Modifier
-                                    .offset(y = 10.dp)
-                                    .requiredSize(160.dp)
-                            )
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(16.dp))
                         }
 
                         Row(
@@ -220,14 +229,14 @@ fun GroupDetailFolderScreen(
 }
 
 
-//@OptIn(ExperimentalPagerApi::class)
-//@Preview
-//@Composable
-//fun PreView(
-//) {
-//    GroupDetailFolderScreen(
-//        navigationMyPage = {},
-//        navigationPhotoList = { _, _ -> },
-//        navigationVote = { _ -> },
-//        navigationBack = {})
-//}
+@OptIn(ExperimentalPagerApi::class)
+@Preview
+@Composable
+fun PreView(
+) {
+    GroupDetailFolderScreen(
+        navigationMyPage = {},
+        navigationPhotoList = { _, _ -> },
+        navigationVote = { _ -> },
+        navigationBack = {})
+}

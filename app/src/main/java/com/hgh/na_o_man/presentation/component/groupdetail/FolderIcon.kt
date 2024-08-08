@@ -18,20 +18,24 @@ import com.hgh.na_o_man.presentation.component.FolderProfile
 @Composable
 fun Bigfolder(){
 
-    Icon(
-        imageVector = ImageVector.vectorResource(id = R.drawable.ic_folder),
-        contentDescription = null,
-        tint = Color.Unspecified
-
-    )
-
-    Icon(
-        imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
-        contentDescription = "낭만 로고",
-        tint = Color.Unspecified,
+    Box(
         modifier = Modifier
-            .offset(x = 240.dp, y = 60.dp)
-    )
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_folder),
+            contentDescription = null,
+            tint = Color.Unspecified
+
+        )
+
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
+            contentDescription = "낭만 로고",
+            tint = Color.Unspecified,
+            modifier = Modifier
+                .offset(x = 210.dp, y = 50.dp)
+        )
+    }
 }
 
 

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -49,7 +50,9 @@ fun GroupDetailScreen(
                 composable(route = GroupDetailScreenRoute.DETAIL.route) {
                     GroupDetailFolderScreen(
                         navigationBack = {
-                            navController.popBackStack() // 수정 필요
+                            navController.navigate(
+                                MainScreenRoute.HOME.route
+                            )
                         },
                         navigationPhotoList = { groupId, memberId ->
                             navController.navigate(
@@ -63,7 +66,10 @@ fun GroupDetailScreen(
                             )
                         },
                         navigationMyPage = {
-                            navController.navigate(MainScreenRoute.MY_PAGE.route) // 수정 필요
+                            Log.d("Navigation", "Navigating to MyPage")
+                            navController.navigate(
+                                MainScreenRoute.MY_PAGE.route
+                            ) // 수정 필요
                         },
                     )
                 }
@@ -116,9 +122,7 @@ fun GroupDetailScreen(
                 }
             }
         }
-
     }
-
 }
 
 enum class GroupDetailScreenRoute(val route: String) {

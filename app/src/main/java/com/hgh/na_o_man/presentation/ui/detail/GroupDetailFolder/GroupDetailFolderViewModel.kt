@@ -80,11 +80,6 @@ class GroupDetailFolderViewModel @Inject constructor(
 
                 result.onSuccess { group ->
                     Log.d("GroupDetailViewModel", "Successfully fetched group detail: $group")
-                    val fixedGroup = group.copy(
-                        profileInfoList = group.profileInfoList.map {
-                            it.copy(image = it.image ?: "")
-                        }
-                    )
                     updateState {
                         copy(
                             loadState = LoadState.SUCCESS,
@@ -105,8 +100,4 @@ class GroupDetailFolderViewModel @Inject constructor(
             updateState { copy(loadState = LoadState.ERROR) }
         }
     }
-
-
-
-
 }
