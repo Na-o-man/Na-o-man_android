@@ -84,12 +84,10 @@ fun PhotoListScreen(
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current as Activity
     var expanded by remember { mutableStateOf(false) }
-    val items = listOf("member1", "member2", "팜하니")
-    var selectedIndex by remember { mutableIntStateOf(0) }
 
     val lazyGridState = rememberLazyGridState()
     lazyGridState.OnBottomListener(2) {
-        viewModel.setEvent(PhotoListContract.PhotoListEvent.OnReachBottom)
+        viewModel.setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
     }
 
     Log.d("리컴포저블", "PhotoListScreen")
@@ -134,8 +132,7 @@ fun PhotoListScreen(
                 topBar = {
                     if (viewState.isAgenda) {
                         BackAppBar {
-                            navigationBack()
-                            //viewModel.setEvent(PhotoListContract.PhotoListEvent.OnBackClicked)
+                            viewModel.setEvent(PhotoListContract.PhotoListEvent.OnBackClicked)
                         }
                     } else {
                         BackAndSelectAppBar(
@@ -189,8 +186,10 @@ fun PhotoListScreen(
                                         tint = Color.Unspecified,
                                     )
                                     BasicTextField(
-                                        value = items[selectedIndex],
-                                        onValueChange = {},
+                                        value = viewState.memberList.find {
+                                            it.memberId == viewState.memberId.toInt()
+                                        }?.name ?: "",
+                                        onValueChange = { },
                                         readOnly = true,
                                         textStyle = TextStyle(
                                             color = Color.Black,
@@ -210,18 +209,24 @@ fun PhotoListScreen(
                                     expanded = expanded,
                                     onDismissRequest = { expanded = false },
                                 ) {
-                                    items.forEachIndexed { index, item ->
+                                    viewState.memberList.filter {
+                                        it.memberId != viewState.memberId.toInt()
+                                    }.forEachIndexed { index, member ->
                                         DropdownMenuItem(
                                             text = {
                                                 Text(
-                                                    item,
+                                                    member.name,
                                                     textAlign = TextAlign.Center,
                                                     fontSize = 16.sp,
                                                     modifier = Modifier.fillMaxWidth()
                                                 )
                                             },
                                             onClick = {
-                                                selectedIndex = index
+                                                viewModel.setEvent(
+                                                    PhotoListContract.PhotoListEvent.OnClickDropBoxItem(
+                                                        member = member
+                                                    )
+                                                )
                                                 expanded = false
                                             },
                                         )

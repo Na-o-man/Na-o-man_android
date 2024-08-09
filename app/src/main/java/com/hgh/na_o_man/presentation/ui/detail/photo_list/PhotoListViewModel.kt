@@ -7,6 +7,7 @@ import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.domain.usecase.photo.PhotoAllUsecase
+import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.ui.detail.ALL_PHOTO_ID
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class PhotoListViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getPhotoAllUsecase: PhotoAllUsecase,
+    private val getMemberUsecase: CheckSpecificGroupUsecase,
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
@@ -40,6 +42,7 @@ class PhotoListViewModel @Inject constructor(
                 memberId = savedStateHandle[KEY_MEMBER_ID] ?: 0L
             )
         }
+        getGroupMember()
         getAllPhoto()
 
         Log.d("리컴포저블", "PhotoListViewModel")
@@ -103,7 +106,7 @@ class PhotoListViewModel @Inject constructor(
                 sendEffect({ PhotoListContract.PhotoListSideEffect.NaviAgenda })
             }
 
-            PhotoListContract.PhotoListEvent.OnReachBottom -> {
+            PhotoListContract.PhotoListEvent.OnPagingPhoto -> {
                 if (viewState.value.memberId == ALL_PHOTO_ID) {
                     getAllPhoto()
                 } else if (viewState.value.memberId == OTHER_PHOTO_ID) {
@@ -111,6 +114,18 @@ class PhotoListViewModel @Inject constructor(
                 } else {
 
                 }
+            }
+
+            is PhotoListContract.PhotoListEvent.OnClickDropBoxItem -> {
+                hasNextPage.value = true
+                nextPage.value = 0
+                updateState {
+                    copy(
+                        memberId = event.member.memberId.toLong(),
+                        photoList = listOf()
+                    )
+                }
+                setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
             }
         }
     }
@@ -139,6 +154,31 @@ class PhotoListViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             Log.e("예외받기", "$e")
+            updateState { copy(loadState = LoadState.ERROR) }
+        }
+    }
+
+    private fun getGroupMember() = viewModelScope.launch {
+        try {
+            getMemberUsecase(groupId).collect { result ->
+                result.onSuccess { response ->
+                    updateState {
+                        copy(
+                            loadState = LoadState.SUCCESS,
+                            memberList = response.profileInfoList + viewState.value.memberList
+                        )
+                    }
+                }.onFail { error ->
+                    updateState {
+                        copy(loadState = LoadState.ERROR)
+                    }
+                }.onException {
+                    throw it
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("예외받기", "$e")
+            updateState { copy(loadState = LoadState.ERROR) }
         }
     }
 
