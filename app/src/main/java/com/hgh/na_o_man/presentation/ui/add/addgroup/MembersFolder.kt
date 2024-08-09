@@ -1,5 +1,8 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -17,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -41,6 +45,7 @@ import com.hgh.na_o_man.presentation.component.StartTopCloud
 import com.hgh.na_o_man.presentation.theme.DeepBlue
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 
 
 @Composable
@@ -48,132 +53,117 @@ fun MembersFolder(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
-    Log.d("리컴포저블", "MembersSpace")
+    Log.d("리컴포저블", "MembersFolder")
 
     val context = LocalContext.current
     val state by viewModel.viewState.collectAsState()
-    val photoList = remember { mutableStateListOf("") } // 복사할 이미지 리소스 목록
-    val copiedPhotos = remember { mutableStateListOf<Int>() } // 복사된 이미지 목록
+
+    val groupName = state.groupName
+    val isGroupCreated = state.isGroupCreated
+    val inviteLink = state.inviteLink // 초대 링크 가져오기
+
+    LaunchedEffect(isGroupCreated) {
+        if (isGroupCreated) {
+            navController.navigate(AddScreenRoute.FOLDER.route)
+        }
+    }
 
     Scaffold(
-        containerColor = lightSkyBlue // 여기를 수정
+        containerColor = lightSkyBlue // 배경 색상 설정
     ) { padding ->
-        //구름 배경 Box
         Box(modifier = Modifier.fillMaxSize()) {
-            StartTopCloud()
-        }
+            StartTopCloud() // 구름 배경
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-
-            Image(
-                painter = painterResource(id = R.drawable.ic_share_folder_144), // 첫 번째 이미지 리소스
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(1.dp)
-                    .offset(y = -(20.dp))
-                    .size(200.dp) // 원하는 크기로 설정
-            )
-            Text(
-                text = "제주도 2024", // 텍스트 내용
-                color = DeepBlue, // 텍스트 색상
-                style = androidx.compose.ui.text.TextStyle(
-                    fontSize = 23.sp, // 텍스트 크기 설정
-                    fontWeight = FontWeight.Bold // 텍스트를 Semibold로 설정
-                ),
-                modifier = Modifier
-                    .offset(y = -(10.dp)) // 텍스트를 위로 올리기 위한 offset 추가
-            )
-
-            // 두 번째 이미지 (겹쳐서 놓기)
             Box(
-                modifier = Modifier.size(360.dp)
-                    .clickable {
-                        // 구름 버튼 클릭 시 복사 이벤트
-                        copiedPhotos.clear() // 이전 복사 목록 초기화
-                        //copiedPhotos.addAll(photoList) // 모든 사진 복사
-                        viewModel.onTextInput("사진 복사 이벤트 발생") // 이벤트 전송
-                        Toast.makeText(context, "사진이 복사되었습니다.", Toast.LENGTH_SHORT).show()
-                    },
-                contentAlignment = Alignment.Center
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .wrapContentSize()
+                    .align(Alignment.Center)
             ) {
+                // 그룹 이미지
                 Image(
-                    painter = painterResource(id = R.drawable.ic_button_cloud_next_140), // 두 번째 이미지 리소스
+                    painter = painterResource(id = R.drawable.ic_share_folder_144),
                     contentDescription = null,
                     modifier = Modifier
-                        .align(alignment = Alignment.Center)
-                        .size(100.dp)
-                        .offset(x = 80.dp, y = 55.dp)
+                        .padding(1.dp)
+                        .offset(y = -(20.dp))
+                        .size(200.dp)
                 )
-            }
 
-            // 세 번째와 네 번째 이미지 (아래에 배치)
-            Box(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .size(350.dp), // 내용을 감싸도록 설정
-                contentAlignment = Alignment.Center
-            ) {
-                // 세 번째와 네 번째 이미지 (아래에 배치)
+                // 그룹 이름 텍스트
+                Text(
+                    text = groupName,
+                    color = DeepBlue,
+                    style = androidx.compose.ui.text.TextStyle(
+                        fontSize = 23.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier
+                        .offset(y = -(10.dp))
+                )
+
+                // 초대 링크 공유 버튼
                 Box(
                     modifier = Modifier
-                        .wrapContentSize()
-                        .size(350.dp), // 내용을 감싸도록 설정
+                        .width(220.dp)
+                        .height(43.dp)
+                        .clip(RoundedCornerShape(50.dp))
+                        .background(LightWhite)
+                        .clickable {
+                            // 초대 링크 복사
+                            val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                            val clip = ClipData.newPlainText("Invite Link", inviteLink)
+                            clipboardManager.setPrimaryClip(clip)
+                            Toast.makeText(context, "초대 링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
+                        },
                     contentAlignment = Alignment.Center
                 ) {
-                    // 세 번째 이미지와 텍스트
-                    Box(
-                        modifier = Modifier
-                            .width(220.dp)
-                            .height(43.dp).offset(y = 135.dp)
-                            .clip(RoundedCornerShape(50.dp)) // 둥근 모서리 설정
-                            .background(LightWhite), // 배경을 LightWhite 40%로 설정
-                        contentAlignment = Alignment.Center // 텍스트를 중앙에 배치
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_info_151), // 세 번째 이미지 리소스
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(), // 버튼 크기에 맞추기
-                            contentScale = ContentScale.FillBounds // 비율 무시하고 크기 조정
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_info_151),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.FillBounds
+                    )
+                    Text(
+                        text = "링크 공유해서 친구 초대하기",
+                        color = DeepBlue,
+                        style = androidx.compose.ui.text.TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
-                        Text(
-                            text = "링크 공유해서 친구 초대하기", // 텍스트 내용
-                            color = DeepBlue, // 텍스트 색상
-                            style = androidx.compose.ui.text.TextStyle(
-                                fontSize = 16.sp, // 텍스트 크기 설정
-                                fontWeight = FontWeight.SemiBold // 텍스트를 Semibold로 설정
-                            )
-                        )
-                    }
-
-                    // 네 번째 이미지와 텍스트
-                    Box(
-                        modifier = Modifier
-                            .width(220.dp)
-                            .height(43.dp).offset(y = 190.dp)
-                            .clip(RoundedCornerShape(50.dp)) // 둥근 모서리 설정
-                            .background(LightWhite), // 배경을 LightWhite 40%로 설정
-                        contentAlignment = Alignment.Center // 텍스트를 중앙에 배치
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_info_151), // 네 번째 이미지 리소스
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(), // 버튼 크기에 맞추기
-                            contentScale = ContentScale.FillBounds // 비율 무시하고 크기 조정
-                        )
-                        Text(
-                            text = "공유 폴더 가기", // 텍스트 내용
-                            color = DeepBlue, // 텍스트 색상
-                            style = androidx.compose.ui.text.TextStyle(
-                                fontSize = 16.sp, // 텍스트 크기 설정
-                                fontWeight = FontWeight.SemiBold // 텍스트를 Semibold로 설정
-                            )
-                        )
-                    }
+                    )
                 }
 
+                // 공유 폴더 이동 버튼
+                Box(
+                    modifier = Modifier
+                        .width(220.dp)
+                        .height(43.dp)
+                        .offset(y = 60.dp)
+                        .clip(RoundedCornerShape(50.dp))
+                        .background(LightWhite)
+                        .clickable {
+                            Toast.makeText(context, "공유 폴더로 이동합니다.", Toast.LENGTH_SHORT).show()
+                            // 폴더 이동 기능 추가
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_info_151),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.FillBounds
+                    )
+                    Text(
+                        text = "공유 폴더 가기",
+                        color = DeepBlue,
+                        style = androidx.compose.ui.text.TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    )
+                }
             }
         }
     }
@@ -182,10 +172,10 @@ fun MembersFolder(
 @Preview(showBackground = true)
 @Composable
 fun PreviewFolder() {
-    // NavController 생성
-    val navController = NavHostController(context = LocalContext.current)
+    val navController = NavHostController(LocalContext.current)
     MembersFolder(navController = navController)
 }
+
 
 
 

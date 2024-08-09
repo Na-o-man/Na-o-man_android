@@ -2,21 +2,24 @@ package com.hgh.na_o_man.presentation.ui.add.addgroup
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.hgh.na_o_man.data.dto.share_group.request.GroupAddRequestDto
+import com.hgh.na_o_man.di.util.remote.RetrofitResult
+import com.hgh.na_o_man.di.util.remote.onException
+import com.hgh.na_o_man.di.util.remote.onFail
+import com.hgh.na_o_man.di.util.remote.onSuccess
+import com.hgh.na_o_man.domain.model.share_group.GroupAddModel
+import com.hgh.na_o_man.domain.usecase.share_group.CreateGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddEvent
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddSideEffect
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddSideEffect.NavigateToNextScreen
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddSideEffect.ShowToast
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddViewState
+import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddViewModel @Inject constructor(
-    //private val repository: ShareGroupRepository // Repository 주입
+open class AddViewModel @Inject constructor(
+    private val createGroupUsecase: CreateGroupUsecase
 ) : BaseViewModel<AddViewState, AddSideEffect, AddEvent>(
-    AddViewState() // 초기 상태 설정
+    AddViewState()
 ) {
 
     init {
@@ -25,61 +28,79 @@ class AddViewModel @Inject constructor(
 
     override fun handleEvents(event: AddEvent) {
         when (event) {
-            is AddEvent.NextButtonClicked -> {
-                // 다음 버튼 클릭 처리 로직
-                sendEffect ({ NavigateToNextScreen })
-            }
-            is AddEvent.TextInput -> {
-            }
-            is AddEvent.LoadData -> {
-                // 데이터 로드 처리 로직
-                loadPhotos()
-            }
-            is AddEvent.ClearTextInput -> {
-                // 텍스트 입력 초기화 처리
-            }
-            is AddEvent.OnCloudButtonClicked -> {
-                // 구름 버튼 클릭 처리 로직
-                // 사진 로드 또는 다른 작업 수행
-                loadPhotos()
-            }
+            is AddEvent.AddMember -> addMember(event.name)
+            is AddEvent.CreateGroup -> createGroup()
+            is AddEvent.RemoveMember -> removeMember(event.name)
+            is AddEvent.UpdateSelectedAttributes -> updateSelectedAttributes(event.attributes)
         }
     }
 
-    fun onNextButtonClick(selectedButtons: List<Boolean> = emptyList()) {
-        viewModelScope.launch {
-            val selectedButtonCount = selectedButtons.count { it }
-            if (selectedButtonCount > 0) {
-                // 다음 버튼 클릭 이벤트 발생
-                setEvent(AddEvent.NextButtonClicked(selectedButtonCount))
-            } else {
-                // 선택된 버튼이 없을 경우 사용자에게 알림
-                sendEffect ({ ShowToast("최소 하나의 옵션을 선택해주세요") })
+    private fun addMember(name: String) {
+        val currentMembers = viewState.value.memberNames.toMutableList()
+        if (name.isNotBlank() && !currentMembers.contains(name)) {
+            currentMembers.add(name)
+            updateState { copy(memberNames = currentMembers, memberCount = currentMembers.size) }
+        }
+    }
+
+    private fun removeMember(name: String) {
+        val currentMembers = viewState.value.memberNames.toMutableList()
+        if (currentMembers.contains(name)) {
+            currentMembers.remove(name)
+            updateState { copy(memberNames = currentMembers, memberCount = currentMembers.size) }
+        }
+    }
+
+    private fun updateSelectedAttributes(attributes: List<String>) {
+        updateState { copy(selectedAttributes = attributes) }
+    }
+
+    fun updatePlace(newPlace: String) {
+        updateState { copy(place = newPlace) }
+    }
+
+    private fun createGroup() = viewModelScope.launch {
+        try {
+            // ViewState에서 필요한 데이터를 가져옵니다.
+            val groupName = viewState.value.groupName
+            val memberNames = viewState.value.memberNames
+            val place = viewState.value.place
+            val attributes = viewState.value.selectedAttributes
+
+            // 요청 데이터 클래스를 생성합니다.
+            val requestDto = GroupAddRequestDto(
+                meetingTypeList = attributes,
+                memberCount = memberNames.size,
+                memberNameList = memberNames,
+                place = place
+            )
+
+            // Usecase 호출
+            createGroupUsecase(requestDto).collect { result ->
+                result.onSuccess { groupAddDto ->
+                    // 그룹 생성 성공, 상태 업데이트
+                    updateState {
+                        copy(
+                            isGroupCreated = true,
+                            groupName = groupAddDto.name, // 그룹 이름 업데이트
+                            inviteLink = groupAddDto.inviteUrl // 초대 링크 업데이트
+                        )
+                    }
+                    // 효과를 보내어 다음 화면으로 이동
+                    sendEffect({AddSideEffect.NavigateToNextScreen})
+                }.onFail { error ->
+                    // 실패 시, 에러 메시지 출력
+                    sendEffect({AddSideEffect.ShowToast("서버와 연결을 실패했습니다. 오류: ${error}")})
+                }.onException { e ->
+                    // 예외 발생 시, 예외 로그 출력
+                    Log.e("예외받기", "Exception: $e")
+                    sendEffect({AddSideEffect.ShowToast("알 수 없는 오류가 발생했습니다.")})
+                }
             }
+        } catch (e: Exception) {
+            // 전체 예외 처리
+            Log.e("예외받기", "Exception: $e")
+            sendEffect({AddSideEffect.ShowToast("알 수 없는 오류가 발생했습니다.")})
         }
-    }
-
-    fun onTextInput(text: String) {
-        // 입력 값에 따라 버튼 클릭 이벤트 처리
-        setEvent(AddEvent.TextInput(text))
-    }
-
-    private fun loadPhotos() {
-        // 사진 로드 로직 구현
-        // 로딩 상태 업데이트
-        updateState {
-            copy(isLoading = true)
-        }
-
-        // 데이터 로드 후 상태 업데이트
-        val loadedPhotos = listOf<Int>() // 실제 사진 로드 로직을 구현해야 합니다.
-        updateState {
-            copy(photos = loadedPhotos, isLoading = false)
-        }
-    }
-
-    // public 메소드 추가
-    fun showToast(message: String) {
-        sendEffect({ ShowToast(message) })
     }
 }

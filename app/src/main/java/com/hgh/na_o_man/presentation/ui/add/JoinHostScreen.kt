@@ -38,7 +38,7 @@ fun JoinHostScreen(
                     AcceptScreen(viewModel, navController)
                 }
                 composable(route = JoinScreenRoute.CHECK.route) {
-                    AcceptCheckScreen(viewModel, navController)
+                    AcceptCheckScreen(viewModel, navController, joinName = "")
                 }
             }
         }
