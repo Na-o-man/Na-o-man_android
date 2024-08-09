@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.DropdownMenu
@@ -59,6 +60,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.BackAndSelectAppBar
 import com.hgh.na_o_man.presentation.component.BackAppBar
@@ -70,12 +72,13 @@ import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.TopCloud
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.Typography
+import com.hgh.na_o_man.presentation.util.OnBottomListener
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoListScreen(
     navigationBack: () -> Unit,
-    navigationAgenda: (List<Dummy>) -> Unit,
+    navigationAgenda: (List<PhotoInfoModel>) -> Unit,
     viewModel: PhotoListViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -83,6 +86,11 @@ fun PhotoListScreen(
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("member1", "member2", "팜하니")
     var selectedIndex by remember { mutableIntStateOf(0) }
+
+    val lazyGridState = rememberLazyGridState()
+    lazyGridState.OnBottomListener(2) {
+        viewModel.setEvent(PhotoListContract.PhotoListEvent.OnReachBottom)
+    }
 
     Log.d("리컴포저블", "PhotoListScreen")
 
@@ -196,7 +204,7 @@ fun PhotoListScreen(
                                 }
                                 DropdownMenu(
                                     modifier = Modifier
-                                        .border(3.dp, Color(0xFFBBCFE5),RoundedCornerShape(8.dp))
+                                        .border(3.dp, Color(0xFFBBCFE5), RoundedCornerShape(8.dp))
                                         .background(Color(0xFFFFFFFF))
                                         .padding(horizontal = 24.dp),
                                     expanded = expanded,
@@ -223,6 +231,7 @@ fun PhotoListScreen(
                         }
                         //Text(text = "전체", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                         LazyVerticalGrid(
+                            state = lazyGridState,
                             columns = GridCells.Fixed(2),
                             modifier = Modifier
                                 .padding(start = 40.dp, end = 40.dp, top = 24.dp)
@@ -230,7 +239,7 @@ fun PhotoListScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             itemsIndexed(viewState.photoList, key = { _, it ->
-                                it.id
+                                it.photoId
                             }) { _, photo ->
 
                                 val isLastItem = viewState.photoList.last() == photo
@@ -265,7 +274,7 @@ fun PhotoListScreen(
                             }
                         }
                     }
-                    if (viewState.photoList.count { it.is1 } > 0) {
+                    if (viewState.photoList.count { it.isSelected } > 0) {
                         PhotoMenu(
                             isMine = true,
                             isAgenda = viewState.isAgenda,
@@ -276,7 +285,7 @@ fun PhotoListScreen(
                             onClickDelete = {
 
                             },
-                            onClickAgenda ={
+                            onClickAgenda = {
                                 viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)
                             }
                         )

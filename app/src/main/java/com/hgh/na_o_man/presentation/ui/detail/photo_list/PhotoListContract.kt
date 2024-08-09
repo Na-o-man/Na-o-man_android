@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.presentation.ui.detail.photo_list
 
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
@@ -13,9 +14,10 @@ class PhotoListContract {
         val isSelectMode : Boolean = false,
         val isDialogVisible: Boolean = false,
         val isAgenda : Boolean = false,
-        val dialogPhoto: Dummy = Dummy(),
-        val photoList : List<Dummy> = listOf(),
-        val selectPhotoList : List<Dummy> = listOf(),
+        val memberId : Long = 0,
+        val dialogPhoto: PhotoInfoModel = PhotoInfoModel(),
+        val photoList : List<PhotoInfoModel> = listOf(),
+        val selectPhotoList : List<PhotoInfoModel> = listOf(),
         val memberList : List<Dummy> = listOf(),
     ): ViewState
 
@@ -32,8 +34,9 @@ class PhotoListContract {
         object OnDownloadClicked : PhotoListEvent()
         object OnDeleteClicked : PhotoListEvent()
         object OnAgendaClicked : PhotoListEvent()
-        data class OnImageClicked(val photo : Dummy) : PhotoListEvent()
-        data class OnImageSelected(val photo: Dummy) : PhotoListEvent()
+        data class OnImageClicked(val photo : PhotoInfoModel) : PhotoListEvent()
+        data class OnImageSelected(val photo: PhotoInfoModel) : PhotoListEvent()
         object OnDialogClosed : PhotoListEvent()
+        object OnReachBottom : PhotoListEvent()
     }
 }
