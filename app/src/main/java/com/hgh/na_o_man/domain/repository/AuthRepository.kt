@@ -9,8 +9,5 @@ import com.hgh.na_o_man.domain.model.auth.UserTokenModel
 interface AuthRepository {
     suspend fun postLogin(loginRequestDto: LoginRequestDto): RetrofitResult<UserTokenModel>
     suspend fun postSignup(signUpRequestDto: SignUpRequestDto): RetrofitResult<UserTokenModel>
-    suspend fun getCheckRegistration(
-        socialType: String,
-        authId: String
-    ): RetrofitResult<CheckRegistrationModel>
+    suspend fun getCheckRegistration(loginRequestDto: LoginRequestDto): RetrofitResult<CheckRegistrationModel>
 }

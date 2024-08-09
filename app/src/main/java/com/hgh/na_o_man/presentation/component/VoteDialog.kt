@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.presentation.theme.LightWhite
 
 @Composable
@@ -66,7 +67,10 @@ fun VoteBeforeDialog(
             ) {
                 Box {
                     ImageCard(
-                        image = image, isSelectMode = false, modifier = Modifier
+                        // 포토수정필요
+                        image = PhotoInfoModel(w400PhotoUrl = image.dummyString),
+                        isSelectMode = false,
+                        modifier = Modifier
                             .wrapContentHeight()
                             .shadow(3.dp, RoundedCornerShape(16.dp))
                     )
@@ -190,7 +194,10 @@ fun VoteAfterDialog(
                         modifier = Modifier.padding(12.dp)
                     ) {
                         ImageCard(
-                            image = image, isSelectMode = false, modifier = Modifier
+                            // 포토수정필요
+                            image = PhotoInfoModel(w400PhotoUrl = image.dummyString),
+                            isSelectMode = false,
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
                                 .shadow(3.dp, RoundedCornerShape(16.dp))

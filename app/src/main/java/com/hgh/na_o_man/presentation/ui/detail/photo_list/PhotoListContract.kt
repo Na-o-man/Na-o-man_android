@@ -1,6 +1,8 @@
 package com.hgh.na_o_man.presentation.ui.detail.photo_list
 
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
+import com.hgh.na_o_man.domain.model.share_group.ProfileInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
@@ -10,14 +12,28 @@ class PhotoListContract {
 
     data class PhotoListViewState(
         val loadState: LoadState = LoadState.SUCCESS,
-        val isSelectMode : Boolean = false,
+        val isSelectMode: Boolean = false,
         val isDialogVisible: Boolean = false,
-        val isAgenda : Boolean = false,
-        val dialogPhoto: Dummy = Dummy(),
-        val photoList : List<Dummy> = listOf(),
-        val selectPhotoList : List<Dummy> = listOf(),
-        val memberList : List<Dummy> = listOf(),
-    ): ViewState
+        val isAgenda: Boolean = false,
+        val memberId: Long = 0,
+        val dialogPhoto: PhotoInfoModel = PhotoInfoModel(),
+        val photoList: List<PhotoInfoModel> = listOf(),
+        val selectPhotoList: List<PhotoInfoModel> = listOf(),
+        val memberList: List<ProfileInfoModel> = listOf(
+            ProfileInfoModel(
+                name = "전체",
+                image = null,
+                memberId = 100,
+                profileId = 100
+            ),
+            ProfileInfoModel(
+                name = "기타",
+                image = null,
+                memberId = 101,
+                profileId = 101
+            )
+        ),
+    ) : ViewState
 
     sealed class PhotoListSideEffect : ViewSideEffect {
         object NaviBack : PhotoListSideEffect()
@@ -32,8 +48,10 @@ class PhotoListContract {
         object OnDownloadClicked : PhotoListEvent()
         object OnDeleteClicked : PhotoListEvent()
         object OnAgendaClicked : PhotoListEvent()
-        data class OnImageClicked(val photo : Dummy) : PhotoListEvent()
-        data class OnImageSelected(val photo: Dummy) : PhotoListEvent()
+        data class OnImageClicked(val photo: PhotoInfoModel) : PhotoListEvent()
+        data class OnImageSelected(val photo: PhotoInfoModel) : PhotoListEvent()
         object OnDialogClosed : PhotoListEvent()
+        object OnPagingPhoto : PhotoListEvent()
+        data class OnClickDropBoxItem(val member: ProfileInfoModel) : PhotoListEvent()
     }
 }

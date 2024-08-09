@@ -12,7 +12,7 @@ data class PhotoAllDto(
     fun toModel() = PhotoAllModel(
         isFirst = this.isFirst,
         isLast = this.isLast,
-        photoInfoList = this.photoInfoList,
+        photoInfoList = this.photoInfoList.map { it.toModel() },
         totalElements = this.totalElements,
         totalPage = this.totalPage
     )

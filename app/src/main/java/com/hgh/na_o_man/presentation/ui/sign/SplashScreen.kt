@@ -33,7 +33,7 @@ fun SplashScreen(
 //        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImtreXh3QG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX0RFRkFVTFQiLCJpYXQiOjE3MjI4NDM5MTcsImV4cCI6MTcyMzQ0ODcxN30.hq5wIapK8TKo_b_ssF-96KluII8cSL_29etZMxw5X1I")
 //        dateStoreUtil.setAutoLogin(true)
         //~~~~//
-        dateStoreUtil.setAutoLogin(true)
+        //dateStoreUtil.setAutoLogin(false)
 
         delay(2000)
         if (dateStoreUtil.getAutoLogin()) {

@@ -22,10 +22,9 @@ interface AuthService {
         @Body loginRequest: LoginRequestDto
     ): Response<ApiResult<UserTokenDto>>
 
-    @GET("auth/check-registration")
+    @POST("auth/check-registration")
     suspend fun getCheckRegistrationAPI(
-        @Query("socialType") socialType: String,
-        @Query("authId") authId: String,
+        @Body loginRequest: LoginRequestDto
     ): Response<ApiResult<CheckRegistrationDto>>
 
 }

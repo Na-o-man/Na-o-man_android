@@ -28,6 +28,5 @@ interface PhotosService {
         @Query("shareGroupId") shareGroupId : Long,
         @Query("page") page: Int,
         @Query("size") size: Int,
-        @Query("sort") sort: String
     ) : Response<ApiResult<PhotoAllDto>>
 }

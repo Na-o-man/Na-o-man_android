@@ -27,7 +27,7 @@ class PhotoRepositoryImpl @Inject constructor(
         return apiHandler({ api.postPreSignedAPI(photoNameListDto) }) { response : ApiResult<PhotoPreSignedDto> -> response.data.toModel()}
     }
 
-    override suspend fun getPhotoAll(shareGroupId : Long, page : Int, size : Int, sort : String): RetrofitResult<PhotoAllModel> {
-        return apiHandler({ api.getPhotosAllAPI(shareGroupId, page, size, sort) }) { response : ApiResult<PhotoAllDto> -> response.data.toModel()}
+    override suspend fun getPhotoAll(shareGroupId : Long, page : Int, size : Int): RetrofitResult<PhotoAllModel> {
+        return apiHandler({ api.getPhotosAllAPI(shareGroupId, page, size) }) { response : ApiResult<PhotoAllDto> -> response.data.toModel()}
     }
 }

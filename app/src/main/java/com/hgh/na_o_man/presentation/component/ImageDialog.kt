@@ -31,13 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.Typography
 
 @Composable
 fun ImageDialog(
-    image: Dummy,
+    image: PhotoInfoModel,
     onCancelButtonClick: () -> Unit,
     content: @Composable (Modifier) -> Unit,
 ) {
@@ -92,7 +93,7 @@ fun ImageDialog(
                             tint = Color.Unspecified,
                         )
                         Text(
-                            text = image.dummyString2,
+                            text = image.createdAt,
                             style = Typography.labelMedium,
                             textAlign = TextAlign.End,
                         )
@@ -109,7 +110,7 @@ fun ImageDialog(
 @Composable
 @Preview
 fun PreView() {
-    ImageDialog(Dummy(), {}) {
+    ImageDialog(PhotoInfoModel(), {}) {
 
     }
 }
