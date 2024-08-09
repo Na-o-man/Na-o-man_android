@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
@@ -103,7 +104,7 @@ fun UriImageCard(
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.clip(RoundedCornerShape(16.dp))
+                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(16.dp))
             )
         }
     }
