@@ -48,5 +48,11 @@ enum class AppBarMenu(
         horizontalPadding = 20.dp,
         icon = R.drawable.ic_button_nav_plus_new_31,
         contentDescription = R.string.plus_description,
+    ),
+
+    Plus2(
+        horizontalPadding = 20.dp,
+        icon = R.drawable.ic_button_vote_add_agenda,
+        contentDescription = R.string.plus_description
     )
 }

@@ -82,6 +82,23 @@ fun StartEndAppBar(
 }
 
 @Composable
+fun StartPlusAppBar(
+    modifier: Modifier = Modifier,
+    onStartClick: () -> Unit,
+    onEndClick: () -> Unit,
+) {
+    MainAppBar(
+        modifier = modifier,
+        back = AppBarMenu.BACK,
+        plus = AppBarMenu.Plus2,
+        onEndClick = onEndClick,
+        onStartClick = onStartClick,
+        onNextClick = { }, // next 버튼 클릭 이벤트 추가
+        onPlusClick = { }
+    )
+}
+
+@Composable
 fun BackAndSelectAppBar(
     modifier: Modifier = Modifier,
     isMenuClick: Boolean,
@@ -142,8 +159,7 @@ fun PlusAppBar(
     onPlusClick: () -> Unit
 ) {
     MainAppBar(
-        modifier = modifier
-            .size(90.dp).padding(end = 20.dp, top = 10.dp),
+        modifier = modifier,
         back = null,
         menu = null,
         next1 = null,

@@ -23,7 +23,8 @@ import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFolderScreen
 import com.hgh.na_o_man.presentation.ui.detail.agenda.AgendaScreen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
-import com.hgh.na_o_man.presentation.ui.detail.vote.VoteScreen1
+import com.hgh.na_o_man.presentation.ui.detail.vote.VoteListScreen
+import com.hgh.na_o_man.presentation.ui.detail.vote.VoteMainScreen
 import com.hgh.na_o_man.presentation.ui.detail.vote_detail.VoteDetailScreen
 import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 import com.hgh.na_o_man.presentation.ui.sign.SignScreenRoute
@@ -95,7 +96,7 @@ fun GroupDetailScreen(
                 }
 
                 composable(route = GroupDetailScreenRoute.VOTE.route) {
-                    VoteScreen1(
+                    VoteMainScreen(
                         navigationBack = {
                             navController.popBackStack()
                         }, navigationAgenda = {
