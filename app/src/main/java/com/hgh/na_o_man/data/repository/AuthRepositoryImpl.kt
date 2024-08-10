@@ -26,16 +26,8 @@ class AuthRepositoryImpl @Inject constructor(
         return apiHandler({ api.postSignUpAPI(signUpRequestDto) }) { response: ApiResult<UserTokenDto> -> response.data.toModel() }
     }
 
-    override suspend fun getCheckRegistration(
-        socialType: String,
-        authId: String
-    ): RetrofitResult<CheckRegistrationModel> {
-        return apiHandler({
-            api.getCheckRegistrationAPI(
-                socialType,
-                authId
-            )
-        }) { response: ApiResult<CheckRegistrationDto> -> response.data.toModel() }
+    override suspend fun getCheckRegistration(loginRequestDto: LoginRequestDto): RetrofitResult<CheckRegistrationModel> {
+        return apiHandler({ api.getCheckRegistrationAPI(loginRequestDto) }) { response: ApiResult<CheckRegistrationDto> -> response.data.toModel() }
     }
 
 }
