@@ -57,6 +57,7 @@ import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.groupdetail.Bigfolder
 import com.hgh.na_o_man.presentation.component.groupdetail.GroupInfo
 import com.hgh.na_o_man.presentation.component.groupdetail.SmallFolder
+import com.hgh.na_o_man.presentation.ui.detail.ALL_PHOTO_ID
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
 
 
@@ -248,7 +249,7 @@ fun GroupDetailFolderScreen(
                                 // 테스트용 - 삭제해야함
                                 viewModel.setEvent(
                                     GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(
-                                        38L
+                                        ALL_PHOTO_ID
                                     )
                                 )
                             }

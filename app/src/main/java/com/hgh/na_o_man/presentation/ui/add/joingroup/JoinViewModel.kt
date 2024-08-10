@@ -1,59 +1,77 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
+import com.hgh.na_o_man.data.dto.share_group.request.GroupJoinRequestDto
+import com.hgh.na_o_man.di.util.remote.onException
+import com.hgh.na_o_man.di.util.remote.onFail
+import com.hgh.na_o_man.di.util.remote.onSuccess
+import com.hgh.na_o_man.domain.usecase.share_group.JoinGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
-import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
-import com.hgh.na_o_man.presentation.ui.add.JoinScreenRoute
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract
-import com.hgh.na_o_man.presentation.ui.add.joingroup.JoinContract.JoinSideEffect
-import com.hgh.na_o_man.presentation.ui.add.joingroup.JoinContract.JoinSideEffect._ShowToast
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel
-open class JoinViewModel @Inject constructor(
-) : BaseViewModel<JoinContract.JoinViewState, JoinSideEffect, JoinContract.JoinEvent>(
+class JoinViewModel @Inject constructor(
+    private val joinGroupUsecase: JoinGroupUsecase
+) : BaseViewModel<JoinContract.JoinViewState, JoinContract.JoinSideEffect, JoinContract.JoinEvent>(
     JoinContract.JoinViewState() // 초기 상태 설정
 ) {
 
     init {
-        Log.d("리컴포저블", "JoinViewModel")
+        Log.d("ViewModel", "JoinViewModel initialized")
     }
 
     override fun handleEvents(event: JoinContract.JoinEvent) {
         when (event) {
-            is JoinContract.JoinEvent.UpdateUrl -> {
-                // URL 업데이트
-                updateState { copy(url = event.newUrl) }
-            }
-            JoinContract.JoinEvent.ValidateUrl -> {
-                // URL 검증 로직
-                if (isValidUrl(viewState.value.url)) {
-                    updateState { copy(isUrlValid = true) }
-                } else {
-                    sendEffect ({ _ShowToast("유효한 URL을 입력하세요.") })
-                }
-            }
-            JoinContract.JoinEvent.ShowConfirmationDialog -> {
-                updateState { copy(showDialog = true) }
-            }
-            is JoinContract.JoinEvent.onCorrect -> {
-                AddScreenRoute.NAMEINPUT.route
+            is JoinContract.JoinEvent.ValidateUrl -> {
+                validateUrl(event.url)
             }
             is JoinContract.JoinEvent.onFind -> {
+                // 다시 찾기 이벤트 처리
+                sendEffect ({ JoinContract.JoinSideEffect._ShowToast("다시 찾는 중입니다.") })
+            }
+            is JoinContract.JoinEvent.onCorrect -> {
+                // 맞아요 이벤트 처리
+                sendEffect ({ JoinContract.JoinSideEffect.NavigateToNextScreen })
             }
         }
     }
 
-    // URL 유효성 검사 함수
-    private fun isValidUrl(url: String): Boolean {
-        // 정규 표현식을 사용하여 URL 검증
-        val urlPattern = "^(https?://)?(www\\.)?([\\w-]+\\.)+[\\w-]+(/\\S*)?$".toRegex()
-        return urlPattern.matches(url)
-    }
+    private fun validateUrl(url: String) = viewModelScope.launch {
+        try {
+            // GroupJoinRequestDto 객체 생성 (필요한 데이터가 무엇인지 확인하고 설정합니다)
+            val requestDto = GroupJoinRequestDto(
+                profileId = 0,  // 적절한 값을 설정합니다.
+                shareGroupId = 0 // 적절한 값을 설정합니다.
+            )
 
-    // 다이얼로그 상태 업데이트 메서드 추가
-    fun setShowDialog(show: Boolean) {
-        updateState { copy(showDialog = show) }
+            // 유스케이스 호출 및 결과 처리
+            joinGroupUsecase(requestDto).collect { result ->
+                result
+                    .onSuccess {
+                        // 성공 처리
+                        updateState { copy(isUrlValid = true) }
+                        sendEffect ({ JoinContract.JoinSideEffect._ShowToast("URL 검증에 성공했습니다.") })
+                    }
+                    .onFail {
+                        // 실패 처리
+                        updateState { copy(isUrlValid = false) }
+                        sendEffect ({ JoinContract.JoinSideEffect._ShowToast("URL 검증에 실패했습니다.") })
+                    }
+                    .onException { exception ->
+                        // 예외 처리
+                        Log.e("예외받기", "$exception")
+                        sendEffect ({ JoinContract.JoinSideEffect._ShowToast("서버와 연결을 실패했습니다.") })
+                    }
+            }
+        } catch (e: Exception) {
+            // 메서드 외부의 예외 처리
+            Log.e("예외받기", "$e")
+            sendEffect ({ JoinContract.JoinSideEffect._ShowToast("서버와 연결을 실패했습니다.") })
+        }
     }
 }
+

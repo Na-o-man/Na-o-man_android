@@ -64,8 +64,10 @@ class SignViewModel @Inject constructor(
     private fun checkRegistration() = viewModelScope.launch {
         try {
             checkRegistrationUsecase(
-                socialType = viewState.value.authInfo.socialType,
-                authId = viewState.value.authInfo.authId
+                LoginRequestDto(
+                    authId = viewState.value.authInfo.authId,
+                    socialType = viewState.value.authInfo.socialType
+                )
             ).collect { result ->
                 result.onSuccess {
                     if (it.isRegistered) {

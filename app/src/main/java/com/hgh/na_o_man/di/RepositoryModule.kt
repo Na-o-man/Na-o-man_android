@@ -44,8 +44,8 @@ object RepositoryModule {
     fun providesMemberRepository(api: MembersService): MemberRepository =
         MemberRepositoryImpl(api)
 
-    @Provides
-    @ViewModelScoped
-    fun providesPhotoRepository(api: PhotosService): PhotoRepository =
-        PhotoRepositoryImpl(api)
+//    @Provides
+//    @ViewModelScoped
+//    fun providesPhotoRepository(api: PhotosService): PhotoRepository =
+//        PhotoRepositoryImpl(api)
 }

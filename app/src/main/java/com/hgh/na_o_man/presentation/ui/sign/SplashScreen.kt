@@ -34,7 +34,7 @@ fun SplashScreen(
         //강연
         dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImtreXh3QG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX0RFRkFVTFQiLCJpYXQiOjE3MjMyODE2NTQsImV4cCI6MTcyMzg4NjQ1NH0.PBXb-ymV-d3DIITbSEeeASt_kfmoYTq7OAw58V4xckA")
         //~~~~//
-        dateStoreUtil.setAutoLogin(true)
+        //dateStoreUtil.setAutoLogin(false)
 
         delay(2000)
         if (dateStoreUtil.getAutoLogin()) {
