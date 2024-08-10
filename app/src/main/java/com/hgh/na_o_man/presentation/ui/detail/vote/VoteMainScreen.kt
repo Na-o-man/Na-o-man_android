@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,6 +44,7 @@ import com.hgh.na_o_man.presentation.component.StartPlusAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
+import com.hgh.na_o_man.presentation.component.voteIcon.getVoteList
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.main.home.GroupListScreen
@@ -154,12 +156,13 @@ fun VoteListScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
-//            items(voteList) { vote ->
-//
-//            }
+            items(voteList) { vote ->
+                getVoteList(
+                    title = vote.title,
+                    images = vote.images)
+            }
         }
     }
-
 }
 
 
