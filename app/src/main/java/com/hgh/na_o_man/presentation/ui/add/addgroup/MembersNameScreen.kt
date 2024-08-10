@@ -64,7 +64,6 @@ fun MembersNameScreen(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-//    var groupName by remember { mutableStateOf("") }
     var memberCount by remember { mutableIntStateOf(0) }
     var memberNames by remember { mutableStateOf(listOf<String>()) }
     var newMemberName by remember { mutableStateOf("") }
@@ -239,7 +238,7 @@ fun MembersNameScreen(
                                 .clickable {
                                     if (newMemberName.isNotBlank()) {
                                         memberNames = memberNames + newMemberName
-                                        memberCount = memberNames.size
+                                        viewModel.handleEvents(AddContract.AddEvent.AddMember(newMemberName))
                                         newMemberName = "" // Reset the text field after adding
                                     }
                                 },
@@ -266,7 +265,11 @@ fun MembersNameScreen(
                                     contentDescription = "Remove Button",
                                     modifier = Modifier
                                         .clickable {
+                                            //로컬 상태에서 삭제
                                             memberNames = memberNames - name
+                                            //API에도 삭제 -> 삭제하고 남은 상태 업데이트 시킴.
+                                            viewModel.handleEvents(AddContract.AddEvent.RemoveMember(name))
+
                                         }
                                         .size(24.dp)
                                 )
@@ -277,7 +280,7 @@ fun MembersNameScreen(
                             onNextClick = {
                                 if (memberNames.isNotEmpty()) {
                                     // Call ViewModel to update members and navigate
-                                    viewModel.handleEvents(AddContract.AddEvent.AddMember(newMemberName))
+                                    viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
                                     navController.navigate(AddScreenRoute.ADJECTIVE.route)
                                 }
                             }
