@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptCheckScreen
+import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptInviteScreen
 import com.hgh.na_o_man.presentation.ui.add.joingroup.AcceptScreen
 import com.hgh.na_o_man.presentation.ui.add.joingroup.JoinViewModel
 
@@ -35,10 +36,13 @@ fun JoinHostScreen(
                 startDestination = JoinScreenRoute.INVITE.route
             ) {
                 composable(route = JoinScreenRoute.INVITE.route) {
-                    AcceptScreen(viewModel, navController)
+                    AcceptInviteScreen(viewModel, navController)
                 }
                 composable(route = JoinScreenRoute.CHECK.route) {
                     AcceptCheckScreen(viewModel, navController, joinName = "")
+                }
+                composable(route = JoinScreenRoute.ACCEPT.route) {
+                    AcceptScreen(viewModel, navController)
                 }
             }
         }
@@ -47,6 +51,7 @@ fun JoinHostScreen(
 
 enum class JoinScreenRoute(val route: String){
     INVITE("accept_invite_screen"),
-    CHECK("accept_check_screen")
+    CHECK("accept_check_screen"),
+    ACCEPT("accept_screen"),
 }
 

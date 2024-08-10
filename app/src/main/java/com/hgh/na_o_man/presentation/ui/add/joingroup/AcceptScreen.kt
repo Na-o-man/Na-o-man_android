@@ -18,9 +18,11 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,11 +46,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
+import com.hgh.na_o_man.presentation.component.NextAppBar2
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.theme.DeepBlue
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -102,11 +106,11 @@ fun AcceptScreen(
                     state = pagerState,
                     modifier = Modifier.weight(1f) // 남은 공간을 차지하게 설정
                 ) { page ->
-//                    AcceptWho1(navController, viewModel) // 각 페이지의 콘텐츠
+                    AcceptWho1(navController) // 각 페이지의 콘텐츠
                 }
 
                 // 페이지 인디케이터
-//                PageIndicator(pagerState)
+                PageIndicator(pagerState)
 
                 var showDialog by remember { mutableStateOf(false) }
 
@@ -127,73 +131,37 @@ fun AcceptScreen(
                             .width(78.dp) // 이미지 크기 조정
                     )
                 }
-
-//                // 다이얼로그 구현
-//                if (showDialog) {
-//                    AlertDialog(
-//                        onDismissRequest = { viewModel.setShowDialog(false) }, // 다이얼로그 바깥을 클릭하면 닫기
-//                        title = { Text(text = "당사자가 맞나요?", color = LightWhite) },
-//                        text = { Text(text = "확인해 주세요.", color = LightWhite) },
-//                        confirmButton = {
-//                            Button(
-//                                onClick = {
-//                                    // "네" 클릭 시 다음 화면으로 이동
-//                                    viewModel.setShowDialog(false)
-//                                    navController.navigate("members_name_screen") // "네" 클릭 시 다음 화면으로 이동
-//                                    // 여기서 네 클릭 시의 로직 추가
-//                                },
-//                                colors = ButtonDefaults.buttonColors(lightSkyBlue) // 배경색 설정
-//                                ) {
-//                                Text("네", color = LightWhite)
-//                            }
-//                        },
-//                        dismissButton = {
-//                            Button(
-//                                onClick = {
-//                                    viewModel.setShowDialog(false)
-//                                },
-//                                colors = ButtonDefaults.buttonColors(lightSkyBlue) // 배경색 설정
-//                            ) {
-//                                Text("아니오", color = LightWhite) // 버튼 텍스트 색상 설정
-//                            }
-//                        },
-//                        containerColor = SteelBlue, // 다이얼로그 배경색
-//                        textContentColor = LightWhite, // 다이얼로그 내용 색
-//                    )
-//                }
-//            }
-            }
-        }
-    }
-
-
-    @OptIn(ExperimentalFoundationApi::class)
-    @Composable
-    fun PageIndicator(pagerState: PagerState) {
-        val totalPages = 10 // 표시할 페이지 수 (예: 3페이지)
-        Row(
-            modifier = Modifier
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.Center, // 가로 방향 가운데 정렬
-            verticalAlignment = Alignment.CenterVertically // 세로 방향 가운데 정렬
-        ) {
-            repeat(totalPages) { index ->
-                val color =
-                    if (pagerState.currentPage % totalPages == index) DeepBlue else Color.Gray // 현재 페이지에 따라 색상 변경
-                Box(
-                    modifier = Modifier
-                        .size(8.dp)
-                        .padding(4.dp)
-                        .background(color, shape = CircleShape)
-                )
             }
         }
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewAccept() {
-//    val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-//    AcceptScreen(navController = navController)
-//}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun PageIndicator(pagerState: PagerState) {
+    val totalPages = 10 // 표시할 페이지 수 (예: 3페이지)
+    Row(
+        modifier = Modifier
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center, // 가로 방향 가운데 정렬
+        verticalAlignment = Alignment.CenterVertically // 세로 방향 가운데 정렬
+    ) {
+        repeat(totalPages) { index ->
+            val color = if (pagerState.currentPage % totalPages == index) DeepBlue else Color.Gray // 현재 페이지에 따라 색상 변경
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .padding(4.dp)
+                    .background(color, shape = CircleShape)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewAccept() {
+    val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
+    AcceptScreen(navController = navController)
+}

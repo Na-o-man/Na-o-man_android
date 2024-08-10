@@ -70,7 +70,9 @@ fun MembersAdjective(
     Scaffold(
         topBar = {
             StartAppBar(
-                onStartClick = { }
+                onStartClick = {
+                    navController.popBackStack()
+                }
             )
         },
         containerColor = lightSkyBlue
@@ -281,8 +283,7 @@ fun MembersAdjective(
 
                         NextAppBar1(
                             onNextClick = {
-                                // ViewModel의 createGroup 함수 호출
-                                viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
+                                navController.navigate(AddScreenRoute.SPACEINPUT.route)
                             },
                             modifier = Modifier
                                 .offset(x = 200.dp, y = -(10.dp))

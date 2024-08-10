@@ -54,6 +54,7 @@ import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.Mustard
 import com.hgh.na_o_man.presentation.theme.SlateGray
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.add.JoinScreenRoute
 
 
 @Composable
@@ -64,7 +65,7 @@ fun AcceptCheckScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current
-    var textValue by remember { mutableStateOf(joinName) } // 기본 텍스트 값으로 그룹 이름 사용
+    var textValue by remember { mutableStateOf("제주도 2024") } // 기본 텍스트 값으로 그룹 이름 사용
     var isButtonPressed by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -219,6 +220,7 @@ fun AcceptCheckScreen(
                     Button(
                         onClick = {
                             viewModel.setEvent(JoinContract.JoinEvent.onCorrect)
+                            navController.navigate(JoinScreenRoute.ACCEPT.route)
                         },
                         modifier = Modifier
                             .padding(end = 70.dp, top = 20.dp)

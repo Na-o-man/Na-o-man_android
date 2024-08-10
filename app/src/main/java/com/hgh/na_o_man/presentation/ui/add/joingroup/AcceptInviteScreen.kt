@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.StartAppBar
@@ -56,8 +57,7 @@ import com.hgh.na_o_man.presentation.ui.add.JoinScreenRoute
 @Composable
 fun AcceptInviteScreen(
     viewModel: JoinViewModel = hiltViewModel(),
-    navController: NavController,
-    showBackIcon: Boolean = false
+    navController: NavHostController = rememberNavController(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current
@@ -69,7 +69,9 @@ fun AcceptInviteScreen(
     Scaffold(
         topBar = {
             StartAppBar(
-                onStartClick = { /* Handle back navigation */ }
+                onStartClick = {
+                    navController.popBackStack()
+                }
             )
         },
         containerColor = lightSkyBlue // Background color
@@ -105,6 +107,7 @@ fun AcceptInviteScreen(
             Box(
                 modifier = Modifier
                     .size(width = 295.dp, height = 55.dp)
+                    .offset(x = 35.dp, y = 326.dp)
                     .background(
                         color = LightWhite.copy(alpha = 0.7f),
                         shape = RoundedCornerShape(20.dp)
@@ -164,6 +167,7 @@ fun AcceptInviteScreen(
                         .clickable {
                             // Pass URL to ViewModel for validation
                             viewModel.setEvent(JoinContract.JoinEvent.ValidateUrl(textValue))
+                            navController.navigate(JoinScreenRoute.CHECK.route)
                         }
                         .size(78.dp)
                 )
@@ -176,18 +180,18 @@ fun AcceptInviteScreen(
                 }
             }
 
-            // Toast 메시지 처리
-            LaunchedEffect(Unit) {
-                viewModel.effect.collect { sideEffect ->
-                    when (sideEffect) {
-                        is JoinContract.JoinSideEffect._ShowToast -> {
-                            Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
-                        }
-
-                        else -> {}
-                    }
-                }
-            }
+//            // Toast 메시지 처리
+//            LaunchedEffect(Unit) {
+//                viewModel.effect.collect { sideEffect ->
+//                    when (sideEffect) {
+//                        is JoinContract.JoinSideEffect._ShowToast -> {
+//                            Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
+//                        }
+//
+//                        else -> {}
+//                    }
+//                }
+//            }
         }
     }
 }
