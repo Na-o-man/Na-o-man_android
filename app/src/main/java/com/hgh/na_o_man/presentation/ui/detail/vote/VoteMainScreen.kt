@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -76,7 +77,7 @@ fun VoteMainScreen(
                         /*TODO*/
                         },
                         onEndClick = {
-
+                        /*TODO*/
                         }
                     )
                 },
@@ -137,96 +138,27 @@ fun VoteMainScreen(
     }
 }
 
-@Composable
-fun VoteMainSuccessScreen(
-    navigationAgenda: () -> Unit,
-    navigationBack: () -> Unit,
-    viewModel: VoteMainViewModel = hiltViewModel()
-) {
-    val viewState by viewModel.viewState.collectAsState()
-    Log.d("리컴포저블", "VoteMainScreen")
-
-
-
-    when (viewState.loadState) {
-        LoadState.LOADING -> {
-            StateLoadingScreen()
-        }
-
-        LoadState.ERROR -> {
-            StateErrorScreen()
-        }
-
-        LoadState.SUCCESS -> {
-            Scaffold(
-                topBar = {
-                    StartPlusAppBar(
-                        onStartClick = {
-                            /*TODO*/
-                        },
-                        onEndClick = {
-
-                        }
-                    )
-                },
-                containerColor = lightSkyBlue
-            ) { padding ->
-                // 구름 배경 Box
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)) {
-                    EndTopCloud()
-                    StartBottomCloud()
-                }
-
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(), // 전체 화면을 채우도록 설정
-                    contentAlignment = Alignment.TopStart // 중앙 정렬
-                ) {
-                    // 위쪽 이미지
-                    Image(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_notice_yellow_box_148), // 위쪽 이미지 리소스
-                        contentDescription = "토글", // 적절한 설명 추가
-                        modifier = Modifier
-                            .size(115.dp) // 원하는 크기로 설정
-                            .offset(y = 40.dp)
-
-                    )
-                    // 텍스트 추가
-                    Text(
-                        text = "제주도", // 표시할 텍스트
-                        color = Color.Black, // 텍스트 색상
-                        modifier = Modifier
-                            .offset(x = 50.dp, y = 86.dp)
-                            .align(Alignment.TopStart), // 이미지 아래쪽에 위치
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(), // 전체 화면을 채우도록 설정
-                    contentAlignment = Alignment.Center // 중앙 정렬
-                ) {
-                    NoGroupBox(message = "아직 안건이 없어요.\n플러스 버튼을 눌러\n그룹을 추가해 주세요.",
-                        "안건 추가하기",
-                        onAddGroupInBoxClicked = { viewModel.setEvent(VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked) })
-                }
-            }
-        }
-    }
-}
 
 
 @Composable
 fun VoteListScreen(
     viewModel: VoteMainViewModel = hiltViewModel(),
     voteList:List<VoteDummy>,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        LazyColumn (
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(16.dp)
+        ) {
+//            items(voteList) { vote ->
+//
+//            }
+        }
+    }
 
 }
 
@@ -235,5 +167,5 @@ fun VoteListScreen(
 @Composable
 fun PreviewVoteMainScreen() {
     val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-    VoteMainSuccessScreen(navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
+    VoteMainScreen(navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
 }

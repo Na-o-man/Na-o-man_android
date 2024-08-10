@@ -97,8 +97,8 @@ fun EventCard(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun EventCardPreview() {
-//    EventCard(imageRes = R.drawable.ic_example, title = "제목", participantCount = 5, date = "2024.07.20")
-//}
+@Preview(showBackground = true)
+@Composable
+fun EventCardPreview() {
+    EventCard(imageRes = R.drawable.ic_example, title = "제목", participantCount = 5, date = "2024.07.20")
+}

@@ -19,9 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.domain.model.GroupDummy
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.DecorationCloud
@@ -198,13 +200,13 @@ fun GroupListScreen(
     }
 }
 
-//@Preview
-//@Composable
-//fun HomeScreenPreView() {
-//    val navController = rememberNavController()
-//
-//    HomeScreen(
-//        navigationMyPage = { /* 네비게이션 로직 추가 */ },
-//        navigationToMembersInvite = { navController.navigate("members_invite_route") }
-//    )
-//}
+@Preview
+@Composable
+fun HomeScreenPreView() {
+    val navController = rememberNavController()
+
+    HomeScreen(
+        navigationMyPage = { /* 네비게이션 로직 추가 */ },
+        navigationToMembersInvite = { navController.navigate("members_invite_route") }
+    )
+}
