@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.hgh.na_o_man.presentation.theme.NaOManTheme
 import com.hgh.na_o_man.presentation.ui.main.MainActivity
+import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

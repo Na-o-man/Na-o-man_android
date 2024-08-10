@@ -74,9 +74,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
-    implementation ("com.google.accompanist:accompanist-pager:0.20.1")
-    implementation ("com.google.accompanist:accompanist-pager-indicators:0.20.1")
-    
+    //뷰페이저 이용
+//    implementation ("com.google.accompanist:accompanist-pager:0.20.1")
+//    implementation ("com.google.accompanist:accompanist-pager-indicators:0.20.1")
+    implementation ("com.google.accompanist:accompanist-pager:0.26.2-beta") // 최신 버전 확인 필요
+    implementation ("com.google.accompanist:accompanist-pager-indicators:0.26.2-beta") // 페이저 인디케이터 사용시
+
     //Retrofit + OkHttp + Gson
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

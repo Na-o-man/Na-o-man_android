@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 
 import android.net.Uri
+import com.hgh.na_o_man.domain.model.share_group.CheckSpecificGroupModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
@@ -12,6 +13,7 @@ class GroupDetailFolderContract {
         val loadState: LoadState = LoadState.SUCCESS,
         val groupId : Long = 0L,
         val uris : List<Uri> = listOf(),
+        val groupDetail: CheckSpecificGroupModel?=null,
     ) : ViewState
 
     sealed class GroupDetailFolderSideEffect : ViewSideEffect{
