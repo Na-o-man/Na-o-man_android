@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.BottomStartCloud
 import com.hgh.na_o_man.presentation.component.CommonTitle
@@ -121,7 +122,8 @@ fun VoteDetailScreen(
                             }) { _, photo ->
 
                                 ImageCardWithProfile(
-                                    image = photo,
+                                    // 포토수정필요
+                                    image = PhotoInfoModel( w400PhotoUrl = photo.dummyString),
                                     profiles = viewState.photos,
                                     isSelectMode = false,
                                     isVoteMode = viewState.isVoteMode,

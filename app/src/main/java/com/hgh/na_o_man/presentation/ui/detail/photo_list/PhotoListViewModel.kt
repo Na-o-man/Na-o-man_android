@@ -2,96 +2,53 @@ package com.hgh.na_o_man.presentation.ui.detail.photo_list
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
-import com.hgh.na_o_man.domain.model.Dummy
+import androidx.lifecycle.viewModelScope
+import com.hgh.na_o_man.di.util.remote.onException
+import com.hgh.na_o_man.di.util.remote.onFail
+import com.hgh.na_o_man.di.util.remote.onSuccess
+import com.hgh.na_o_man.domain.usecase.photo.PhotoAllUsecase
+import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
+import com.hgh.na_o_man.presentation.ui.detail.ALL_PHOTO_ID
 import com.hgh.na_o_man.presentation.ui.detail.KEY_GROUP_ID
 import com.hgh.na_o_man.presentation.ui.detail.KEY_IS_AGENDA
 import com.hgh.na_o_man.presentation.ui.detail.KEY_MEMBER_ID
+import com.hgh.na_o_man.presentation.ui.detail.OTHER_PHOTO_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PhotoListViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val getPhotoAllUsecase: PhotoAllUsecase,
+    private val getMemberUsecase: CheckSpecificGroupUsecase,
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
     private val groupId: Long
         get() = savedStateHandle[KEY_GROUP_ID] ?: 0L
-    private val memberId: Long
-        get() = savedStateHandle[KEY_MEMBER_ID] ?: 0L
+
+    private val nextPage = MutableStateFlow(0)
+    private val hasNextPage = MutableStateFlow(true)
 
     init {
-        updateState { copy(isAgenda = savedStateHandle[KEY_IS_AGENDA] ?: false) }
+        updateState {
+            copy(
+                isAgenda = savedStateHandle[KEY_IS_AGENDA] ?: false,
+                memberId = savedStateHandle[KEY_MEMBER_ID] ?: 0L
+            )
+        }
+        getGroupMember()
+        getAllPhoto()
+
         Log.d("리컴포저블", "PhotoListViewModel")
         updateState {
             copy(
-                loadState = LoadState.SUCCESS, photoList = listOf(
-                    Dummy(
-                        "https://cdn.huffingtonpost.kr/news/photo/202108/112938_215427.jpeg",
-                        1,
-                        is2 = true,
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        2,
-                        is2 = true,
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        3,
-                        is2 = true,
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        4
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        5
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        6
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        7
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        8
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        9
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        10
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        11
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        12
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        13
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        14
-                    ),
-                    Dummy(
-                        "https://www.allurekorea.com/wp_data/allure/2024/04/style_662f367bb36c2-700x500.jpg?ver=5.0.21",
-                        15
-                    ),
-                )
+                loadState = LoadState.SUCCESS
             )
         }
     }
@@ -99,7 +56,7 @@ class PhotoListViewModel @Inject constructor(
     override fun handleEvents(event: PhotoListContract.PhotoListEvent) {
         when (event) {
             is PhotoListContract.PhotoListEvent.InitPhotoListScreen -> {
-                Log.d("id확인", "${groupId},${memberId}")
+                Log.d("id확인", "${groupId},${viewState.value.memberId}")
             }
 
             PhotoListContract.PhotoListEvent.OnBackClicked -> {
@@ -115,7 +72,7 @@ class PhotoListViewModel @Inject constructor(
             }
 
             is PhotoListContract.PhotoListEvent.OnImageClicked -> {
-                updateState { copy(dialogPhoto = event.photo.copy(is2 = false)) }
+                updateState { copy(dialogPhoto = event.photo.copy(isDownloaded = false)) }
                 updateState { copy(isDialogVisible = true) }
             }
 
@@ -126,7 +83,7 @@ class PhotoListViewModel @Inject constructor(
                     updateState {
                         copy(photoList = photoList.map {
                             if (it == photo) {
-                                it.copy(is1 = !it.is1)
+                                it.copy(isSelected = !it.isSelected)
                             } else {
                                 it
                             }
@@ -136,7 +93,7 @@ class PhotoListViewModel @Inject constructor(
             }
 
             PhotoListContract.PhotoListEvent.OnSelectModeClicked -> {
-                updateState { copy(photoList = photoList.map { it.copy(is1 = false) }) }
+                updateState { copy(photoList = photoList.map { it.copy(isSelected = false) }) }
                 updateState { copy(isSelectMode = !isSelectMode) }
             }
 
@@ -145,9 +102,84 @@ class PhotoListViewModel @Inject constructor(
             }
 
             PhotoListContract.PhotoListEvent.OnAgendaClicked -> {
-                updateState { copy(selectPhotoList = photoList.filter { it.is1 }) }
+                updateState { copy(selectPhotoList = photoList.filter { it.isSelected }) }
                 sendEffect({ PhotoListContract.PhotoListSideEffect.NaviAgenda })
+            }
+
+            PhotoListContract.PhotoListEvent.OnPagingPhoto -> {
+                if (viewState.value.memberId == ALL_PHOTO_ID) {
+                    getAllPhoto()
+                } else if (viewState.value.memberId == OTHER_PHOTO_ID) {
+
+                } else {
+
+                }
+            }
+
+            is PhotoListContract.PhotoListEvent.OnClickDropBoxItem -> {
+                hasNextPage.value = true
+                nextPage.value = 0
+                updateState {
+                    copy(
+                        memberId = event.member.memberId.toLong(),
+                        photoList = listOf()
+                    )
+                }
+                setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
             }
         }
     }
+
+    private fun getAllPhoto() = viewModelScope.launch {
+        try {
+            if (hasNextPage.value) {
+                getPhotoAllUsecase(groupId, nextPage.value, 14).collect { result ->
+                    result.onSuccess { response ->
+                        updateState {
+                            copy(
+                                photoList = viewState.value.photoList + response.photoInfoList,
+                                loadState = LoadState.SUCCESS
+                            )
+                        }
+                        response.isLast.not().let {
+                            hasNextPage.value = it
+                            nextPage.value += 1
+                        }
+                    }.onFail {
+                        updateState { copy(loadState = LoadState.ERROR) }
+                    }.onException {
+                        throw it
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("예외받기", "$e")
+            updateState { copy(loadState = LoadState.ERROR) }
+        }
+    }
+
+    private fun getGroupMember() = viewModelScope.launch {
+        try {
+            getMemberUsecase(groupId).collect { result ->
+                result.onSuccess { response ->
+                    updateState {
+                        copy(
+                            loadState = LoadState.SUCCESS,
+                            memberList = response.profileInfoList + viewState.value.memberList
+                        )
+                    }
+                }.onFail { error ->
+                    updateState {
+                        copy(loadState = LoadState.ERROR)
+                    }
+                }.onException {
+                    throw it
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("예외받기", "$e")
+            updateState { copy(loadState = LoadState.ERROR) }
+        }
+    }
+
 }

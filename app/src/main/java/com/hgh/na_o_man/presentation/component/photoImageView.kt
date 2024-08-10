@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
@@ -28,23 +29,24 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
+import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 
 @Composable
 fun ImageCard(
     modifier: Modifier = Modifier,
-    image: Dummy,
+    image: PhotoInfoModel,
     isSelectMode: Boolean,
-    onClick: (Dummy) -> Unit = {},
-    onSelect: (Dummy) -> Unit = {},
+    onClick: (PhotoInfoModel) -> Unit = {},
+    onSelect: (PhotoInfoModel) -> Unit = {},
 ) {
     SideEffect {
-        Log.d("리컴포저블", "아이디 ${image.id} ")
+        Log.d("리컴포저블", "아이디 ${image.photoId} ")
     }
 
     Card(
         shape = RoundedCornerShape(16.dp),
-        border = if (image.is1) {
+        border = if (image.isSelected) {
             BorderStroke(4.dp, Color.Yellow)
         } else {
             BorderStroke(2.dp, SteelBlue)
@@ -60,13 +62,15 @@ fun ImageCard(
     ) {
         Box {
             AsyncImage(
-                model = image.dummyString,
+                model = image.rawPhotoUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxWidth().heightIn(max = 250.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 250.dp)
             )
 
-            if (image.is2) {
+            if (image.isDownloaded) {
                 Box(
                     modifier = Modifier
                         .matchParentSize()
@@ -100,7 +104,7 @@ fun UriImageCard(
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.clip(RoundedCornerShape(16.dp))
+                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(16.dp))
             )
         }
     }
@@ -109,12 +113,12 @@ fun UriImageCard(
 @Composable
 fun ImageCardWithProfile(
     modifier: Modifier = Modifier,
-    image: Dummy,
+    image: PhotoInfoModel,
     profiles: List<Dummy>,
     isSelectMode: Boolean,
     isVoteMode: Boolean = false,
     myProfile: AuthInfoModel = AuthInfoModel(),
-    onClick: (Dummy) -> Unit = {},
+    onClick: (PhotoInfoModel) -> Unit = {},
     onProfileClick: () -> Unit = {}
 ) {
     Box(
@@ -135,9 +139,9 @@ fun ImageCardWithProfile(
             onSelect = {}
         )
         if (isVoteMode) {
-            if (image.is3) {
+            if (image.isVoted) {
                 PeopleAgenda(
-                    profile = myProfile.profileUrl, text = image.dummyString3, modifier = Modifier
+                    profile = myProfile.profileUrl, text = image.w400PhotoUrl, modifier = Modifier
                         .align(
                             Alignment.BottomStart
                         )
@@ -164,7 +168,7 @@ fun ImageCardWithProfile(
 @Preview
 fun preView() {
     ImageCard(
-        image = Dummy(dummyString = ""),
+        image = PhotoInfoModel(),
         isSelectMode = false
     ) {
 
@@ -176,7 +180,7 @@ fun preView() {
 fun preView2() {
     ImageCardWithProfile(
         modifier = Modifier.fillMaxWidth(),
-        image = Dummy(dummyString = ""),
+        image = PhotoInfoModel(),
         profiles = listOf(Dummy(), Dummy()),
         isSelectMode = false,
         isVoteMode = true,

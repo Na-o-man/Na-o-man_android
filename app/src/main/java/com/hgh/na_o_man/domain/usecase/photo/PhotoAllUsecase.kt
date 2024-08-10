@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class PhotoAllUsecase @Inject constructor(
     private val repository: PhotoRepository
-){
-    suspend operator fun invoke(shareGroupId : Long, page : Int, size : Int, sort : String) = flow {
-        emit(repository.getPhotoAll(shareGroupId,page,size,sort))
+) {
+    suspend operator fun invoke(shareGroupId: Long, page: Int, size: Int) = flow {
+        emit(repository.getPhotoAll(shareGroupId, page, size))
     }
 }
