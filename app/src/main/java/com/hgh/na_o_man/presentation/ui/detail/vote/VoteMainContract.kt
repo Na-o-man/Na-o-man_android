@@ -10,6 +10,7 @@ class VoteMainContract {
 
     data class VoteMainViewState(
         val loadState: LoadState = LoadState.SUCCESS,
+        val groupId : Long = 0L,
         val voteList : List<VoteDummy> = listOf()
     ) : ViewState
 

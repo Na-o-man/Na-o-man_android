@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.detail.vote
 
+import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,8 +18,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,19 +50,27 @@ import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
 import com.hgh.na_o_man.presentation.component.voteIcon.getVoteList
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
 import com.hgh.na_o_man.presentation.ui.main.home.GroupListScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeContract
 
 
 @Composable
 fun VoteMainScreen(
+    groupId : Long,
     navigationAgenda: () -> Unit,
     navigationBack: () -> Unit,
     viewModel: VoteMainViewModel = hiltViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
+    val context = LocalContext.current as Activity
+
     Log.d("리컴포저블", "VoteMainScreen")
 
+    LaunchedEffect(groupId) {
+        Log.d("VoteMainScreen", "Received groupId: $groupId")
+        viewModel.initGroupId(groupId)
+    }
 
 
     when (viewState.loadState) {
@@ -170,5 +181,5 @@ fun VoteListScreen(
 @Composable
 fun PreviewVoteMainScreen() {
     val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-    VoteMainScreen(navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
+    VoteMainScreen(groupId = 1L ,navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
 }

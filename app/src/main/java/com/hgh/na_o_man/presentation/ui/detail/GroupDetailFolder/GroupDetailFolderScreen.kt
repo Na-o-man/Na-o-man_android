@@ -78,7 +78,9 @@ fun GroupDetailFolderScreen(
     ) { uris: List<Uri> ->
         viewModel.uploadUri(uris)
     }
+
     val groupId = remember { context.intent.getLongExtra(GROUP_DETAIL, 0L) }
+
     LaunchedEffect(groupId) {
         viewModel.initGroupId(groupId)
     }

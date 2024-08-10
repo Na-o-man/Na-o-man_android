@@ -64,7 +64,7 @@ fun GroupDetailScreen(
                         },
                         navigationVote = { groupId ->
                             navController.navigate(
-                                GroupDetailScreenRoute.VOTE.route
+                                GroupDetailScreenRoute.VOTE.route.plus("/${groupId}")
                             )
                         },
                         navigationMyPage = {
@@ -95,8 +95,15 @@ fun GroupDetailScreen(
                     )
                 }
 
-                composable(route = GroupDetailScreenRoute.VOTE.route) {
+                composable(route = GroupDetailScreenRoute.VOTE.route
+                    .plus("/{$KEY_GROUP_ID}"),
+                    arguments = listOf(
+                        navArgument(KEY_GROUP_ID) { type = NavType.LongType }
+                    )
+                ) { backStackEntry ->
+                    val groupId = backStackEntry.arguments?.getLong(KEY_GROUP_ID) ?: 0L
                     VoteMainScreen(
+                        groupId = groupId,
                         navigationBack = {
                             navController.popBackStack()
                         }, navigationAgenda = {

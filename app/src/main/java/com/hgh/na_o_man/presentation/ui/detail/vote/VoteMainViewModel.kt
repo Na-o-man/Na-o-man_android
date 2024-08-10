@@ -26,4 +26,8 @@ class VoteMainViewModel @Inject constructor(
         }
     }
 
+    fun initGroupId(id: Long) {
+        updateState { copy(groupId = id) }
+        Log.d("VoteMainViewModel id확인", "${viewState.value.groupId}")
+    }
 }
