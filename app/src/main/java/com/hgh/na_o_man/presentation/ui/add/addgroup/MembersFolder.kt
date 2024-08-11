@@ -60,36 +60,15 @@ fun MembersFolder(
 ) {
     Log.d("리컴포저블", "MembersFolder")
 
-    val context = LocalContext.current
+    val context = LocalContext.current as Activity
     val state by viewModel.viewState.collectAsState()
 
-    val groupName = state.groupName
     val isGroupCreated = state.isGroupCreated
     val inviteLink = state.inviteLink
 
-    var backPressedOnce by remember { mutableStateOf(false) }
-
     // BackHandler를 사용하여 뒤로 가기 버튼 핸들링
     BackHandler {
-        // 상태를 변경하고 Toast 메시지를 표시
-        backPressedOnce = if (backPressedOnce) {
-            // 두 번째 클릭 시 앱 종료
-            Toast.makeText(context, "앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
-            (context as? Activity)?.finishAffinity()
-            false // 상태 리셋
-        } else {
-            // 첫 번째 클릭 시 Toast 메시지
-            Toast.makeText(context, "한 번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
-            true // 상태 변경
-        }
-    }
-
-    // 2초 후에 backPressedOnce 상태를 리셋하는 `LaunchedEffect`
-    if (backPressedOnce) {
-        LaunchedEffect(Unit) {
-            delay(2000)
-            backPressedOnce = false
-        }
+        context.finish()
     }
 
     LaunchedEffect(isGroupCreated) {

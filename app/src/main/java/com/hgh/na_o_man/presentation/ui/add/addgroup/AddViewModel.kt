@@ -32,7 +32,6 @@ open class AddViewModel @Inject constructor(
             is AddEvent.CreateGroup -> createGroup()
             is AddEvent.RemoveMember -> removeMember(event.name)
             is AddEvent.UpdateSelectedAttributes -> updateSelectedAttributes(event.attributes)
-            is AddEvent.UpdateGroupName -> updateGroupName(event.groupName) // 새로운 이벤트 추가
         }
     }
 
@@ -75,7 +74,6 @@ open class AddViewModel @Inject constructor(
     private fun createGroup() = viewModelScope.launch {
         try {
             // ViewState에서 필요한 데이터를 가져옵니다.
-            val groupName = viewState.value.groupName
             val memberNames = viewState.value.memberNames
             val place = viewState.value.place
             val attributes = viewState.value.selectedAttributes
@@ -100,13 +98,13 @@ open class AddViewModel @Inject constructor(
 
             // Usecase 호출
             createGroupUsecase(requestDto).collect { result ->
-                result.onSuccess { groupAddDto ->
+                result.onSuccess { response ->
                     // 그룹 생성 성공, 상태 업데이트
                     updateState {
                         copy(
                             isGroupCreated = true,
-                            groupName = groupAddDto.name, // 그룹 이름 업데이트
-                            inviteLink = groupAddDto.inviteUrl // 초대 링크 업데이트
+                            groupName = response.name, // 그룹 이름 업데이트
+                            inviteLink = response.inviteUrl // 초대 링크 업데이트
                         )
                     }
                     // 효과를 보내어 다음 화면으로 이동
