@@ -40,6 +40,20 @@ class PhotoRepositoryImpl @Inject constructor(
         }) { response: ApiResult<PhotoAllDto> -> response.data.toModel() }
     }
 
+    override suspend fun getPhotoEtc(
+        shareGroupId: Long,
+        page: Int,
+        size: Int
+    ): RetrofitResult<PhotoAllModel> {
+        return apiHandler({
+            api.getPhotosEtcAPI(
+                shareGroupId,
+                page,
+                size
+            )
+        }) { response: ApiResult<PhotoAllDto> -> response.data.toModel() }
+    }
+
     override suspend fun getPhotos(
         shareGroupId: Long,
         profildId: Long,

@@ -8,6 +8,7 @@ import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.di.util.work_manager.enqueue.DownloadEnqueuer
 import com.hgh.na_o_man.domain.usecase.photo.PhotoAllUsecase
+import com.hgh.na_o_man.domain.usecase.photo.PhotoEtcUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoUsecase
 import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
@@ -30,6 +31,7 @@ class PhotoListViewModel @Inject constructor(
     private val getMemberUsecase: CheckSpecificGroupUsecase,
     private val downloadEnqueuer: DownloadEnqueuer,
     private val getPhotoUsecase: PhotoUsecase,
+    private val getPhotoEtcUsecase: PhotoEtcUsecase,
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
@@ -46,9 +48,8 @@ class PhotoListViewModel @Inject constructor(
                 memberId = savedStateHandle[KEY_MEMBER_ID] ?: 0L
             )
         }
+        setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
         getGroupMember()
-        getAllPhoto()
-
         Log.d("리컴포저블", "PhotoListViewModel")
         updateState {
             copy(
@@ -114,7 +115,7 @@ class PhotoListViewModel @Inject constructor(
                 if (viewState.value.memberId == ALL_PHOTO_ID) {
                     getAllPhoto()
                 } else if (viewState.value.memberId == OTHER_PHOTO_ID) {
-
+                    getEtcPhoto()
                 } else {
                     getMemberPhoto()
                 }
@@ -160,6 +161,34 @@ class PhotoListViewModel @Inject constructor(
             Log.e("예외받기", "$e")
         }
     }
+
+    private fun getEtcPhoto() = viewModelScope.launch {
+        try {
+            if (hasNextPage.value) {
+                getPhotoEtcUsecase(groupId, nextPage.value, 14).collect { result ->
+                    result.onSuccess { response ->
+                        updateState {
+                            copy(
+                                photoList = viewState.value.photoList + response.photoInfoList,
+                                loadState = LoadState.SUCCESS
+                            )
+                        }
+                        response.isLast.not().let {
+                            hasNextPage.value = it
+                            nextPage.value += 1
+                        }
+                    }.onFail {
+                        updateState { copy(loadState = LoadState.ERROR) }
+                    }.onException {
+                        throw it
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("예외받기", "$e")
+        }
+    }
+
 
     private fun getMemberPhoto() = viewModelScope.launch {
         try {
