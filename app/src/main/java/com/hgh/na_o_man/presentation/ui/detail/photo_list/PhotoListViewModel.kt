@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
+import com.hgh.na_o_man.di.util.work_manager.enqueue.DownloadEnqueuer
 import com.hgh.na_o_man.domain.usecase.photo.PhotoAllUsecase
 import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
@@ -26,6 +27,7 @@ class PhotoListViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getPhotoAllUsecase: PhotoAllUsecase,
     private val getMemberUsecase: CheckSpecificGroupUsecase,
+    private val downloadEnqueuer: DownloadEnqueuer,
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
@@ -68,7 +70,7 @@ class PhotoListViewModel @Inject constructor(
             }
 
             PhotoListContract.PhotoListEvent.OnDownloadClicked -> {
-
+                downloadPhoto()
             }
 
             is PhotoListContract.PhotoListEvent.OnImageClicked -> {
@@ -182,4 +184,16 @@ class PhotoListViewModel @Inject constructor(
         }
     }
 
+    private fun downloadPhoto() = viewModelScope.launch {
+        if (viewState.value.isDialogVisible) {
+            downloadEnqueuer.enqueueDownloadWork(listOf(viewState.value.dialogPhoto.rawPhotoUrl))
+            updateState { copy(isDialogVisible = false) }
+        } else {
+            downloadEnqueuer.enqueueDownloadWork(
+                viewState.value.photoList
+                    .filter { it.isSelected }
+                    .map { it.rawPhotoUrl }
+            )
+        }
+    }
 }
