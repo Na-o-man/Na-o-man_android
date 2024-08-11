@@ -187,7 +187,7 @@ fun PhotoListScreen(
                                     )
                                     BasicTextField(
                                         value = viewState.memberList.find {
-                                            it.memberId == viewState.memberId.toInt()
+                                            it.memberId == viewState.memberId
                                         }?.name ?: "",
                                         onValueChange = { },
                                         readOnly = true,
@@ -210,7 +210,7 @@ fun PhotoListScreen(
                                     onDismissRequest = { expanded = false },
                                 ) {
                                     viewState.memberList.filter {
-                                        it.memberId != viewState.memberId.toInt()
+                                        it.memberId != viewState.memberId
                                     }.forEachIndexed { index, member ->
                                         DropdownMenuItem(
                                             text = {
