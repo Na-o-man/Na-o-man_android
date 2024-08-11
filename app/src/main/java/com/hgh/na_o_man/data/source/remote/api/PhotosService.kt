@@ -29,4 +29,19 @@ interface PhotosService {
         @Query("page") page: Int,
         @Query("size") size: Int,
     ) : Response<ApiResult<PhotoAllDto>>
+
+    @GET("photos/etc")
+    suspend fun getPhotosEtcAPI(
+        @Query("shareGroupId") shareGroupId : Long,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ) : Response<ApiResult<PhotoAllDto>>
+
+    @GET("photos")
+    suspend fun getPhotosAPI(
+        @Query("shareGroupId") shareGroupId : Long,
+        @Query("profileId") profileId : Long,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ) : Response<ApiResult<PhotoAllDto>>
 }

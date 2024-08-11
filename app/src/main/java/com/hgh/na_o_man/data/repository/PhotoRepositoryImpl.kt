@@ -1,7 +1,6 @@
 package com.hgh.na_o_man.data.repository
 
 import com.hgh.na_o_man.data.dto.ApiResult
-import com.hgh.na_o_man.data.dto.notification.response.AcknowledgedCountDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoNameListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoUrlListDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoAllDto
@@ -17,17 +16,43 @@ import com.hgh.na_o_man.domain.repository.PhotoRepository
 import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
-    private val api : PhotosService
-) : PhotoRepository{
+    private val api: PhotosService
+) : PhotoRepository {
     override suspend fun postUpload(photoUrlListDto: PhotoUrlListDto): RetrofitResult<PhotoUploadCountModel> {
-        return apiHandler({ api.postUploadAPI(photoUrlListDto) }) { response : ApiResult<PhotoUploadCountDto> -> response.data.toModel()}
+        return apiHandler({ api.postUploadAPI(photoUrlListDto) }) { response: ApiResult<PhotoUploadCountDto> -> response.data.toModel() }
     }
 
     override suspend fun postPreSignedUrl(photoNameListDto: PhotoNameListDto): RetrofitResult<PhotoPreSignedModel> {
-        return apiHandler({ api.postPreSignedAPI(photoNameListDto) }) { response : ApiResult<PhotoPreSignedDto> -> response.data.toModel()}
+        return apiHandler({ api.postPreSignedAPI(photoNameListDto) }) { response: ApiResult<PhotoPreSignedDto> -> response.data.toModel() }
     }
 
-    override suspend fun getPhotoAll(shareGroupId : Long, page : Int, size : Int): RetrofitResult<PhotoAllModel> {
-        return apiHandler({ api.getPhotosAllAPI(shareGroupId, page, size) }) { response : ApiResult<PhotoAllDto> -> response.data.toModel()}
+    override suspend fun getPhotoAll(
+        shareGroupId: Long,
+        page: Int,
+        size: Int
+    ): RetrofitResult<PhotoAllModel> {
+        return apiHandler({
+            api.getPhotosAllAPI(
+                shareGroupId,
+                page,
+                size
+            )
+        }) { response: ApiResult<PhotoAllDto> -> response.data.toModel() }
+    }
+
+    override suspend fun getPhotos(
+        shareGroupId: Long,
+        profildId: Long,
+        page: Int,
+        size: Int
+    ): RetrofitResult<PhotoAllModel> {
+        return apiHandler({
+            api.getPhotosAPI(
+                shareGroupId,
+                profildId,
+                page,
+                size
+            )
+        }) { response: ApiResult<PhotoAllDto> -> response.data.toModel() }
     }
 }

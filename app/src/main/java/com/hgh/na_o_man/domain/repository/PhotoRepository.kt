@@ -11,4 +11,12 @@ interface PhotoRepository {
     suspend fun postUpload(photoUrlListDto: PhotoUrlListDto): RetrofitResult<PhotoUploadCountModel>
     suspend fun postPreSignedUrl(photoNameListDto: PhotoNameListDto): RetrofitResult<PhotoPreSignedModel>
     suspend fun getPhotoAll(shareGroupId: Long, page: Int, size: Int): RetrofitResult<PhotoAllModel>
+    suspend fun getPhotoEtc(shareGroupId: Long, page: Int, size: Int): RetrofitResult<PhotoAllModel>
+
+    suspend fun getPhotos(
+        shareGroupId: Long,
+        profileId: Long,
+        page: Int,
+        size: Int
+    ): RetrofitResult<PhotoAllModel>
 }
