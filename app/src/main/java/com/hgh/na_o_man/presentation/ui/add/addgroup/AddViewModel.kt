@@ -32,7 +32,12 @@ open class AddViewModel @Inject constructor(
             is AddEvent.CreateGroup -> createGroup()
             is AddEvent.RemoveMember -> removeMember(event.name)
             is AddEvent.UpdateSelectedAttributes -> updateSelectedAttributes(event.attributes)
+            is AddEvent.UpdateGroupName -> updateGroupName(event.groupName) // 새로운 이벤트 추가
         }
+    }
+
+    private fun updateGroupName(newName: String) {
+        updateState { copy(groupName = newName) }
     }
 
     private fun addMember(name: String) {
@@ -103,4 +108,6 @@ open class AddViewModel @Inject constructor(
             sendEffect({AddSideEffect.ShowToast("알 수 없는 오류가 발생했습니다.")})
         }
     }
+
+    fun getGroupName(): String = viewState.value.groupName
 }
