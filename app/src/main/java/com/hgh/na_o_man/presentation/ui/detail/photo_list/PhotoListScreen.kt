@@ -292,7 +292,7 @@ fun PhotoListScreen(
                                 viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDownloadClicked)
                             },
                             onClickDelete = {
-
+                                viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDeleteClicked)
                             },
                             onClickAgenda = {
                                 viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)
@@ -313,7 +313,7 @@ fun PhotoListScreen(
                                     viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDownloadClicked)
                                 },
                                 onClickDelete = {
-
+                                    viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDeleteClicked)
                                 },
                                 onClickAgenda = {
                                     viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)

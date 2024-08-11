@@ -73,7 +73,7 @@ class PhotoListViewModel @Inject constructor(
             }
 
             PhotoListContract.PhotoListEvent.OnDeleteClicked -> {
-
+                deletePhoto()
             }
 
             PhotoListContract.PhotoListEvent.OnDownloadClicked -> {
