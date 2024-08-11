@@ -60,7 +60,9 @@ fun MembersSpace(
     Scaffold(
         topBar = {
             StartAppBar(
-                onStartClick = { }
+                onStartClick = {
+                    navController.popBackStack()
+                }
             )
         },
         containerColor = lightSkyBlue // 여기를 수정
@@ -198,6 +200,8 @@ fun MembersSpace(
                     NextAppBar1(
                         onNextClick = {
                             if (textValue.isNotEmpty()) { // 텍스트가 입력되었을 때만 다음 화면으로 넘어가는 로직
+                                // CreateGroup 이벤트를 발생시키고 네비게이션
+                                viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
                                 navController.navigate(AddScreenRoute._LOADING.route)
                             }
                             else {

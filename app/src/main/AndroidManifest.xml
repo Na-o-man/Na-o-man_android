@@ -42,6 +42,11 @@
             android:theme="@style/Theme.Na_o_man" />
 
         <activity
+            android:name="com.hgh.na_o_man.presentation.ui.add.JoinGroupActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Na_o_man" />
+
+        <activity
             android:name="com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity"
             android:exported="true"
             android:theme="@style/Theme.Na_o_man">

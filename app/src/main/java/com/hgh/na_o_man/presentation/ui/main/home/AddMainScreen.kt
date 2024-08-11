@@ -27,6 +27,7 @@ import com.hgh.na_o_man.presentation.component.DecorationCloud
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.homeIcon.ShareGroupButton
 import com.hgh.na_o_man.presentation.ui.add.AddGroupActivity
+import com.hgh.na_o_man.presentation.ui.add.JoinGroupActivity
 
 @Composable
 fun AddMainScreen(
@@ -89,7 +90,7 @@ fun AddMainScreen(
                 }
                 Spacer(modifier = Modifier.width(12.dp))
                 ShareGroupButton(title = "공유 그룹 추가") {
-                    context.startActivity(AddGroupActivity.newIntent(context, false))
+                    context.startActivity(JoinGroupActivity.newIntentJoin(context, false))
                 }
             }
         }
