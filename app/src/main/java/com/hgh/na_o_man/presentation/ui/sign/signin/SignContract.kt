@@ -25,7 +25,6 @@ class SignContract {
     }
 
     sealed class SignEvent : ViewEvent {
-        object InitSignScreen : SignEvent()
         data class OnClickLogin(val userInfo: AuthInfoModel) : SignEvent()
         object OnClickALlAgree : SignEvent()
         object OnClickUpload : SignEvent()

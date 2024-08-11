@@ -34,10 +34,6 @@ class SignViewModel @Inject constructor(
 
     override fun handleEvents(event: SignContract.SignEvent) {
         when (event) {
-            is SignContract.SignEvent.InitSignScreen -> {
-
-            }
-
             SignContract.SignEvent.OnClickALlAgree -> {
                 signupAuth()
             }
