@@ -29,12 +29,13 @@ fun NoGroupBox(
 ) {
     Box(
         contentAlignment = Alignment.Center,
+//        modifier = Modifier.fillMaxSize()
         ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_no_group_message_299), // 아이콘 리소스 ID를 사용
-            contentDescription = "Box",
-            tint = Color(0xAA8D8D8D),
-        )
+//        Icon(
+//            imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_no_group_message_299), // 아이콘 리소스 ID를 사용
+//            contentDescription = "Box",
+//            tint = Color(0xAA8D8D8D),
+//        )
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_home_no_group_message_299), // 아이콘 리소스 ID를 사용
             contentDescription = "Box",
@@ -43,6 +44,8 @@ fun NoGroupBox(
 
         Box(
             modifier = Modifier
+                .align(Alignment.Center),
+            contentAlignment = Alignment.Center
         ) {
             Column {
                 Text(

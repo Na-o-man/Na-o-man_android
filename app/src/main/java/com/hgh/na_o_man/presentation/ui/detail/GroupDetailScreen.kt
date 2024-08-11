@@ -23,7 +23,8 @@ import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFolderScreen
 import com.hgh.na_o_man.presentation.ui.detail.agenda.AgendaScreen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
-import com.hgh.na_o_man.presentation.ui.detail.vote.VoteScreen1
+import com.hgh.na_o_man.presentation.ui.detail.vote.VoteListScreen
+import com.hgh.na_o_man.presentation.ui.detail.vote.VoteMainScreen
 import com.hgh.na_o_man.presentation.ui.detail.vote_detail.VoteDetailScreen
 import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 import com.hgh.na_o_man.presentation.ui.sign.SignScreenRoute
@@ -63,7 +64,7 @@ fun GroupDetailScreen(
                         },
                         navigationVote = { groupId ->
                             navController.navigate(
-                                GroupDetailScreenRoute.VOTE.route
+                                GroupDetailScreenRoute.VOTE.route.plus("/${groupId}")
                             )
                         },
                         navigationMyPage = {
@@ -94,8 +95,15 @@ fun GroupDetailScreen(
                     )
                 }
 
-                composable(route = GroupDetailScreenRoute.VOTE.route) {
-                    VoteScreen1(
+                composable(route = GroupDetailScreenRoute.VOTE.route
+                    .plus("/{$KEY_GROUP_ID}"),
+                    arguments = listOf(
+                        navArgument(KEY_GROUP_ID) { type = NavType.LongType }
+                    )
+                ) { backStackEntry ->
+                    val groupId = backStackEntry.arguments?.getLong(KEY_GROUP_ID) ?: 0L
+                    VoteMainScreen(
+                        groupId = groupId,
                         navigationBack = {
                             navController.popBackStack()
                         }, navigationAgenda = {
