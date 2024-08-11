@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,13 +19,10 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,13 +44,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
-import com.hgh.na_o_man.presentation.component.NextAppBar2
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.theme.DeepBlue
 import com.hgh.na_o_man.presentation.theme.LightWhite
-import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
+import com.hgh.na_o_man.presentation.ui.add.joingroup.JoinContract.JoinEvent.onProfileSelected
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -60,13 +56,20 @@ fun AcceptScreen(
     viewModel: JoinViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+    val pagerState = rememberPagerState(pageCount = {10})
+    var selectedProfile by remember { mutableStateOf<String?>(null) } // 상태를 var로 변경
+    var showDialog by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
-            StartAppBar(onStartClick = { })
+            StartAppBar(onStartClick = {
+                navController.popBackStack()
+            })
         },
-        containerColor = lightSkyBlue // 배경색
+        containerColor = lightSkyBlue
     ) { padding ->
-        // 구름 배경 Box
         Box(modifier = Modifier.fillMaxSize()) {
             EndTopCloud()
 
@@ -74,23 +77,21 @@ fun AcceptScreen(
             Row(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = padding.calculateTopPadding() + 40.dp), // Scaffold의 패딩을 고려
+                    .padding(top = padding.calculateTopPadding() + 40.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 왼쪽 이미지 (30도 회전)
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
                     contentDescription = "Left Image",
                     modifier = Modifier
                         .height(19.dp)
-                        .width(15.3.dp) // 이미지 크기 조정
-                        .graphicsLayer(rotationZ = -120f) // 30도 회전
+                        .width(15.3.dp)
+                        .graphicsLayer(rotationZ = -120f)
                 )
 
-                // 텍스트
                 Text(
                     text = "당신이 누구인지 알려주세요.",
-                    modifier = Modifier.padding(start = 16.dp), // 이미지와 텍스트 사이의 간격
+                    modifier = Modifier.padding(start = 16.dp),
                     color = LightWhite,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -99,42 +100,66 @@ fun AcceptScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .offset(y = 40.dp) // Row 아래에 위치하도록 패딩 추가
+                    .offset(y = 40.dp, x = -(20.dp))
             ) {
-                val pagerState = rememberPagerState(pageCount = { 10 }) // 페이지 수를 설정
                 HorizontalPager(
                     state = pagerState,
-                    modifier = Modifier.weight(1f) // 남은 공간을 차지하게 설정
+                    modifier = Modifier.weight(1f)
                 ) { page ->
-                    AcceptWho1(navController) // 각 페이지의 콘텐츠
+                    AcceptWho1(
+                        navController = navController,
+                        onProfileSelected = { profile ->
+                            selectedProfile = profile // 선택된 프로필을 상태로 업데이트
+                        }
+                    )
                 }
 
-                // 페이지 인디케이터
                 PageIndicator(pagerState)
 
-                var showDialog by remember { mutableStateOf(false) }
-
-                // 이미지 배경을 화면 중앙 오른쪽에 추가
+                // Next Button Image
                 Box(
                     modifier = Modifier
-                        .offset(x = 240.dp, y = -160.dp)
-                        .clickable(onClick = {
-                            showDialog = true // 클릭 시 다이얼로그 표시
-                        }),
-                    contentAlignment = Alignment.TopEnd // 내용 정렬을 오른쪽 아래로 설정
+                        .offset(y = -(150.dp), x = 260.dp)
+                        .clickable {
+                            if (selectedProfile != null) {
+                                // 프로필이 선택되었으면, 다음 화면으로 이동
+                                viewModel.handleEvents(JoinContract.JoinEvent.onProfileSelected(profileId = 1)) // 프로필 ID를 적절히 설정
+                                navController.navigate("next_screen")
+                            } else {
+                                // 프로필이 선택되지 않았을 때 처리
+                                Toast.makeText(context, "프로필을 선택해주세요.", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                    contentAlignment = Alignment.BottomEnd
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_button_cloud_next_140),
-                        contentDescription = "Image Background",
+                        contentDescription = "Next Button",
                         modifier = Modifier
                             .height(48.dp)
-                            .width(78.dp) // 이미지 크기 조정
+                            .width(78.dp)
                     )
                 }
             }
         }
+
+        // 다이얼로그
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text(text = "알림") },
+                text = { Text(text = "프로필 선택이 완료되었습니다.") },
+                confirmButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("확인")
+                    }
+                }
+            )
+        }
     }
 }
+
+
 
 
 @OptIn(ExperimentalFoundationApi::class)

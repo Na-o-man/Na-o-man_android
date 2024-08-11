@@ -108,4 +108,6 @@ open class AddViewModel @Inject constructor(
             sendEffect({AddSideEffect.ShowToast("알 수 없는 오류가 발생했습니다.")})
         }
     }
+
+    fun getGroupName(): String = viewState.value.groupName
 }
