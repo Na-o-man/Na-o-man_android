@@ -5,9 +5,9 @@ import com.hgh.na_o_man.domain.model.share_group.ProfileInfoModel
 
 data class ProfileInfoDto(
     val image: String,
-    val memberId: Int,
+    val memberId: Long,
     val name: String,
-    val profileId: Int
+    val profileId: Long
 ) {
     fun toModel() = ProfileInfoModel(
         image = this.image,

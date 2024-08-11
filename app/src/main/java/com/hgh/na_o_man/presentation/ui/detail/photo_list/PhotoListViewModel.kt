@@ -123,7 +123,7 @@ class PhotoListViewModel @Inject constructor(
                 nextPage.value = 0
                 updateState {
                     copy(
-                        memberId = event.member.memberId.toLong(),
+                        memberId = event.member.memberId,
                         photoList = listOf()
                     )
                 }
@@ -156,7 +156,6 @@ class PhotoListViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             Log.e("예외받기", "$e")
-            updateState { copy(loadState = LoadState.ERROR) }
         }
     }
 
@@ -180,7 +179,6 @@ class PhotoListViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             Log.e("예외받기", "$e")
-            updateState { copy(loadState = LoadState.ERROR) }
         }
     }
 

@@ -3,14 +3,14 @@ package com.hgh.na_o_man.presentation.ui.add.addgroup
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.data.dto.share_group.request.GroupAddRequestDto
-import com.hgh.na_o_man.di.util.remote.RetrofitResult
 import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
-import com.hgh.na_o_man.domain.model.share_group.GroupAddModel
 import com.hgh.na_o_man.domain.usecase.share_group.CreateGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.*
+import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddEvent
+import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddSideEffect
+import com.hgh.na_o_man.presentation.ui.add.addgroup.AddContract.AddViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

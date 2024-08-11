@@ -9,7 +9,7 @@ data class GroupAddDto(
     val memberCount: Int,
     val name: String,
     val profileInfoList: List<ProfileInfoDto>,
-    val shareGroupId: Int
+    val shareGroupId: Long
 ) {
     fun toModel() = GroupAddModel(
         createdAt =  this.createdAt,

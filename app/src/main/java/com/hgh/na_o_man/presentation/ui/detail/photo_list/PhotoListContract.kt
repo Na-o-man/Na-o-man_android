@@ -23,14 +23,14 @@ class PhotoListContract {
             ProfileInfoModel(
                 name = "전체",
                 image = null,
-                memberId = 100,
-                profileId = 100
+                memberId = 100L,
+                profileId = 100L
             ),
             ProfileInfoModel(
                 name = "기타",
                 image = null,
-                memberId = 101,
-                profileId = 101
+                memberId = 101L,
+                profileId = 101L
             )
         ),
     ) : ViewState
