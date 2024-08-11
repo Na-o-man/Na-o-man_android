@@ -37,6 +37,7 @@ open class AddViewModel @Inject constructor(
     }
 
     private fun updateGroupName(newName: String) {
+        // 상태가 기존 값과 다른 경우에만 업데이트
         updateState { copy(groupName = newName) }
     }
 
@@ -57,11 +58,18 @@ open class AddViewModel @Inject constructor(
     }
 
     private fun updateSelectedAttributes(attributes: List<String>) {
-        updateState { copy(selectedAttributes = attributes) }
+        // 상태가 기존 값과 다른 경우에만 업데이트
+        Log.d("UpdateAttributes", "Attributes: $attributes")
+        if (viewState.value.selectedAttributes != attributes) {
+            updateState { copy(selectedAttributes = attributes) }
+        }
     }
 
     fun updatePlace(newPlace: String) {
-        updateState { copy(place = newPlace) }
+        // 상태가 기존 값과 다른 경우에만 업데이트
+        if (viewState.value.place != newPlace) {
+            updateState { copy(place = newPlace) }
+        }
     }
 
     private fun createGroup() = viewModelScope.launch {
@@ -72,6 +80,13 @@ open class AddViewModel @Inject constructor(
             val place = viewState.value.place
             val attributes = viewState.value.selectedAttributes
 
+            // 예외 케이스를 처리하기 위해 로그 추가
+            if (memberNames.isEmpty() || place.isBlank() || attributes.isEmpty()) {
+                Log.e("CreateGroup", "필수 필드가 누락되었습니다.")
+                sendEffect ({ AddSideEffect.ShowToast("필수 필드가 누락되었습니다.") })
+                return@launch
+            }
+
             // 요청 데이터 클래스를 생성합니다.
             val requestDto = GroupAddRequestDto(
                 meetingTypeList = attributes,
@@ -79,6 +94,9 @@ open class AddViewModel @Inject constructor(
                 memberNameList = memberNames,
                 place = place
             )
+
+            // 요청 데이터 로그 출력
+            Log.d("CreateGroupRequest", "Request DTO: $requestDto")
 
             // Usecase 호출
             createGroupUsecase(requestDto).collect { result ->

@@ -1,10 +1,13 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +50,7 @@ import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -56,19 +63,39 @@ fun MembersFolder(
     val context = LocalContext.current
     val state by viewModel.viewState.collectAsState()
 
-    val groupName = state.groupName.ifEmpty { "제주도2024" } // 기본 그룹 이름
+    val groupName = state.groupName
     val isGroupCreated = state.isGroupCreated
     val inviteLink = state.inviteLink
+
+    var backPressedOnce by remember { mutableStateOf(false) }
+
+    // BackHandler를 사용하여 뒤로 가기 버튼 핸들링
+    BackHandler {
+        // 상태를 변경하고 Toast 메시지를 표시
+        backPressedOnce = if (backPressedOnce) {
+            // 두 번째 클릭 시 앱 종료
+            Toast.makeText(context, "앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+            (context as? Activity)?.finishAffinity()
+            false // 상태 리셋
+        } else {
+            // 첫 번째 클릭 시 Toast 메시지
+            Toast.makeText(context, "한 번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            true // 상태 변경
+        }
+    }
+
+    // 2초 후에 backPressedOnce 상태를 리셋하는 `LaunchedEffect`
+    if (backPressedOnce) {
+        LaunchedEffect(Unit) {
+            delay(2000)
+            backPressedOnce = false
+        }
+    }
 
     LaunchedEffect(isGroupCreated) {
         if (isGroupCreated) {
             navController.navigate(AddScreenRoute.FOLDER.route)
         }
-    }
-
-    LaunchedEffect(Unit) {
-        // 그룹 이름을 API에서 가져와서 업데이트
-        viewModel.handleEvents(AddContract.AddEvent.UpdateGroupName("제주도2024")) // 예시, 실제 API 호출로 대체
     }
 
     Scaffold(
@@ -100,7 +127,7 @@ fun MembersFolder(
                         .offset(y = -(10.dp)) // 위로 이동
                 ) {
                     Text(
-                        text = groupName,
+                        text = state.groupName,
                         color = DeepBlue,
                         style = androidx.compose.ui.text.TextStyle(
                             fontSize = 23.sp,
@@ -111,7 +138,7 @@ fun MembersFolder(
 
                 val clipboardManager =
                     context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val linkToCopy = "http://yourlink.com"
+                val linkToCopy = "https://naoman.site"
 
                 // 구름 이미지와 텍스트를 함께 겹쳐서 배치
                 Box(
