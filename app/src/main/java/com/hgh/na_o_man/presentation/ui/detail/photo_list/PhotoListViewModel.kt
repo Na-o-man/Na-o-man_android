@@ -155,7 +155,7 @@ class PhotoListViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            Log.e("예외받기", "$e")
+            Log.e("예외받기", "ㅇㅇㅇㅇㅇ$e")
         }
     }
 

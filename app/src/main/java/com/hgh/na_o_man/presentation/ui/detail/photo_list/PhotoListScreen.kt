@@ -285,7 +285,7 @@ fun PhotoListScreen(
                             isAgenda = viewState.isAgenda,
                             modifier = Modifier.align(alignment = Alignment.BottomCenter),
                             onCLickDown = {
-
+                                viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDownloadClicked)
                             },
                             onClickDelete = {
 
@@ -306,7 +306,7 @@ fun PhotoListScreen(
                                 isMine = false,
                                 modifier = modifier,
                                 onCLickDown = {
-
+                                    viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDownloadClicked)
                                 },
                                 onClickDelete = {
 
