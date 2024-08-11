@@ -1,15 +1,18 @@
 package com.hgh.na_o_man.data.repository
 
 import com.hgh.na_o_man.data.dto.ApiResult
+import com.hgh.na_o_man.data.dto.photo.request.PhotoIdListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoNameListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoUrlListDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoAllDto
+import com.hgh.na_o_man.data.dto.photo.response.PhotoIdListResDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoPreSignedDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoUploadCountDto
 import com.hgh.na_o_man.data.source.remote.api.PhotosService
 import com.hgh.na_o_man.di.util.remote.RetrofitResult
 import com.hgh.na_o_man.di.util.remote.apiHandler
 import com.hgh.na_o_man.domain.model.photo.PhotoAllModel
+import com.hgh.na_o_man.domain.model.photo.PhotoIdListResModel
 import com.hgh.na_o_man.domain.model.photo.PhotoPreSignedModel
 import com.hgh.na_o_man.domain.model.photo.PhotoUploadCountModel
 import com.hgh.na_o_man.domain.repository.PhotoRepository
@@ -68,5 +71,9 @@ class PhotoRepositoryImpl @Inject constructor(
                 size
             )
         }) { response: ApiResult<PhotoAllDto> -> response.data.toModel() }
+    }
+
+    override suspend fun deletePhoto(photoIdListDto: PhotoIdListDto): RetrofitResult<PhotoIdListResModel> {
+        return apiHandler({ api.deletePhotosAPI(photoIdListDto) }) { response: ApiResult<PhotoIdListResDto> -> response.data.toModel() }
     }
 }

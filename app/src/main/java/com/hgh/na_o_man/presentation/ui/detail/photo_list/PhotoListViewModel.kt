@@ -3,11 +3,13 @@ package com.hgh.na_o_man.presentation.ui.detail.photo_list
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.hgh.na_o_man.data.dto.photo.request.PhotoIdListDto
 import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.di.util.work_manager.enqueue.DownloadEnqueuer
 import com.hgh.na_o_man.domain.usecase.photo.PhotoAllUsecase
+import com.hgh.na_o_man.domain.usecase.photo.PhotoDeleteUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoEtcUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoUsecase
 import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
@@ -18,6 +20,7 @@ import com.hgh.na_o_man.presentation.ui.detail.KEY_GROUP_ID
 import com.hgh.na_o_man.presentation.ui.detail.KEY_IS_AGENDA
 import com.hgh.na_o_man.presentation.ui.detail.KEY_MEMBER_ID
 import com.hgh.na_o_man.presentation.ui.detail.OTHER_PHOTO_ID
+import com.hgh.na_o_man.presentation.ui.sign.signin.SignContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -32,6 +35,7 @@ class PhotoListViewModel @Inject constructor(
     private val downloadEnqueuer: DownloadEnqueuer,
     private val getPhotoUsecase: PhotoUsecase,
     private val getPhotoEtcUsecase: PhotoEtcUsecase,
+    private val deletePhotoUsecase: PhotoDeleteUsecase
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
@@ -238,6 +242,60 @@ class PhotoListViewModel @Inject constructor(
                     }
                 }.onException {
                     throw it
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("예외받기", "$e")
+        }
+    }
+
+    private fun deletePhoto() = viewModelScope.launch {
+        try {
+            if (viewState.value.isDialogVisible) {
+                deletePhotoUsecase(
+                    PhotoIdListDto(
+                        shareGroupId = groupId,
+                        photoIdList = listOf(viewState.value.dialogPhoto.photoId)
+                    )
+                ).collect { result ->
+                    result.onSuccess { response ->
+                        updateState {
+                            copy(
+                                photoList = viewState.value.photoList.filterNot {
+                                    it.photoId == viewState.value.dialogPhoto.photoId
+                                },
+                                isDialogVisible = false
+                            )
+                        }
+                    }.onFail {
+                        sendEffect({ PhotoListContract.PhotoListSideEffect.ShowToast("서버와 연결을 실패했습니다.") })
+                    }.onException {
+                        throw it
+                    }
+                }
+            } else {
+                deletePhotoUsecase(
+                    PhotoIdListDto(
+                        shareGroupId = groupId,
+                        photoIdList = viewState.value.photoList
+                            .filter { it.isSelected }
+                            .map { it.photoId }
+                    )
+                ).collect { result ->
+                    result.onSuccess { response ->
+                        updateState {
+                            copy(
+                                photoList = viewState.value.photoList.filterNot {
+                                    it.photoId in response.photoIdList
+                                },
+                                isDialogVisible = false
+                            )
+                        }
+                    }.onFail {
+                        sendEffect({ PhotoListContract.PhotoListSideEffect.ShowToast("서버와 연결을 실패했습니다.") })
+                    }.onException {
+                        throw it
+                    }
                 }
             }
         } catch (e: Exception) {

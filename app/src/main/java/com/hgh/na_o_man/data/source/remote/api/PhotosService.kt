@@ -1,13 +1,16 @@
 package com.hgh.na_o_man.data.source.remote.api
 
 import com.hgh.na_o_man.data.dto.ApiResult
+import com.hgh.na_o_man.data.dto.photo.request.PhotoIdListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoNameListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoUrlListDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoAllDto
+import com.hgh.na_o_man.data.dto.photo.response.PhotoIdListResDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoPreSignedDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoUploadCountDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -44,4 +47,9 @@ interface PhotosService {
         @Query("page") page: Int,
         @Query("size") size: Int,
     ) : Response<ApiResult<PhotoAllDto>>
+
+    @DELETE("photos")
+    suspend fun deletePhotosAPI(
+        @Body request : PhotoIdListDto
+    ) : Response<ApiResult<PhotoIdListResDto>>
 }
