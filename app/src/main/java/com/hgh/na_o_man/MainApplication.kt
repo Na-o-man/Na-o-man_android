@@ -35,8 +35,8 @@ class MainApplication : Application(), DefaultLifecycleObserver, Configuration.P
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                "upload_channel",
-                "사진 업로드",
+                "image_channel",
+                "사진 업로드/다운로드",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
                 description = "image Upload Notification"

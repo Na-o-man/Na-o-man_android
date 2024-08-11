@@ -132,7 +132,7 @@ fun PhotoListScreen(
                 topBar = {
                     if (viewState.isAgenda) {
                         BackAppBar {
-                            viewModel.setEvent(PhotoListContract.PhotoListEvent.OnBackClicked)
+                            viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)
                         }
                     } else {
                         BackAndSelectAppBar(

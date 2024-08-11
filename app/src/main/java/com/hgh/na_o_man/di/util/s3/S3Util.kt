@@ -1,8 +1,12 @@
 package com.hgh.na_o_man.di.util.s3
 
+import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -14,6 +18,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
+
 
 class S3Util @Inject constructor(
     private val context: Context
@@ -61,6 +66,28 @@ class S3Util @Inject constructor(
         }
 
         return if (outputFile.exists()) outputFile else outputFile
+    }
+
+     fun downloadImageJpeg(filename: String, downloadUrlOfImage: String): Result<String> {
+        try {
+            val dm = getSystemService<DownloadManager>(context , DownloadManager::class.java)
+            val downloadUri = Uri.parse(downloadUrlOfImage)
+            val request = DownloadManager.Request(downloadUri).apply {
+                setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+                setAllowedOverRoaming(false)
+                setTitle(filename)
+                setMimeType("image/jpeg")
+                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_PICTURES,
+                    File.separator + filename + ".jpg"
+                )
+            }
+            dm?.enqueue(request)
+            return Result.success(filename)
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
     }
 }
 
