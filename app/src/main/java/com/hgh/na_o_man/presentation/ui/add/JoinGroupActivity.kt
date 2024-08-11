@@ -23,7 +23,7 @@ class JoinGroupActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 // ViewModel 주입
-                val addViewModel: JoinViewModel = hiltViewModel()
+                val joinViewModel: JoinViewModel = hiltViewModel()
 
                 // NavHost 설정
                 JoinHostScreen()
@@ -36,11 +36,11 @@ class JoinGroupActivity : ComponentActivity() {
     }
 
     companion object {
-        const val ADD_GROUP = "addGroup"
+        const val JOIN_GROUP = "joinGroup"
 
-        fun newIntent(context: Context, isJoin: Boolean) =
+        fun newIntentJoin(context: Context, isJoin: Boolean) =
             Intent(context, JoinGroupActivity::class.java).apply {
-                putExtra(ADD_GROUP, isJoin)
+                putExtra(JOIN_GROUP, isJoin)
             }
     }
 }

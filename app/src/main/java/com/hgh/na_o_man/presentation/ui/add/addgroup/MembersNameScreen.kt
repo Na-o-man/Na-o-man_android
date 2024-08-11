@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -64,8 +66,7 @@ fun MembersNameScreen(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
-//    var groupName by remember { mutableStateOf("") }
-    var memberCount by remember { mutableIntStateOf(0) }
+//    var memberCount by remember { mutableIntStateOf(0) }
     var memberNames by remember { mutableStateOf(listOf<String>()) }
     var newMemberName by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
@@ -75,7 +76,19 @@ fun MembersNameScreen(
 
     Scaffold(
         topBar = {
-            StartAppBar(onStartClick = { navController.navigateUp() })
+            StartAppBar(onStartClick = { navController.popBackStack() })
+        },
+        bottomBar = {
+            // 하단 바에 NextAppBar1 버튼 추가
+            NextAppBar1(
+                onNextClick = {
+                    if (memberNames.isNotEmpty()) {
+                        // Call ViewModel to update members and navigate
+                        viewModel.handleEvents(AddContract.AddEvent.AddMember(newMemberName))
+                        navController.navigate(AddScreenRoute.ADJECTIVE.route)
+                    }
+                }, modifier = Modifier.offset(x = -(35.dp), y = -(30.dp))
+            )
         },
         containerColor = lightSkyBlue
     ) { padding ->
@@ -133,49 +146,61 @@ fun MembersNameScreen(
                             contentDescription = "ADD",
                             modifier = Modifier
                                 .offset(y = -(60.dp))
-                                .size(230.dp)
+                                .size(240.dp)
                                 .fillMaxSize(),
                             contentScale = ContentScale.FillBounds,
                         )
                     }
 
-                    Box(
+                    // 중앙에 위치한 이름 목록
+                    Column(
                         modifier = Modifier
-                            .padding(top = 16.dp) // Adjust padding as needed
-                            .height(40.dp)
-                            .width(225.dp)
-                            .clip(RoundedCornerShape(30.dp))
+                            .offset( x = 80.dp, y = 20.dp)
+                            .align(Alignment.Center) // Column을 중앙에 위치
+                            .padding(10.dp) // 내부 padding 조정
+                            .verticalScroll(rememberScrollState()) // 스크롤 가능하게 설정
                     ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            memberNames.chunked(3).forEach { rowNames ->
-                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    rowNames.forEach { name ->
-                                        Row(
-                                            modifier = Modifier
-                                                .background(Color.White.copy(alpha = 0.7f))
-                                                .padding(4.dp)
-                                                .clickable {
-                                                    viewModel.handleEvents(AddContract.AddEvent.RemoveMember(name))
-                                                },
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
+                        memberNames.chunked(3).forEach { rowNames -> // 3개의 이름씩 묶어 Row에 배치
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth() // Row가 전체 너비를 차지하도록 설정
+                                    .padding(vertical = 8.dp), // 각 Row 간격 조정
+                                horizontalArrangement = Arrangement.spacedBy(8.dp) // 이름들 사이 간격 조정
+                            ) {
+                                rowNames.forEach { name ->
+                                    var showRemoveButton by remember { mutableStateOf(false) }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .background(Color.White.copy(alpha = 0.7f)) // 흰색 배경 추가
+                                            .padding(horizontal = 4.dp, vertical = 3.dp)
+                                            .clickable {
+                                                showRemoveButton = !showRemoveButton // 클릭 시 삭제 버튼 표시/숨김
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
                                             Text(
                                                 text = name,
                                                 fontWeight = FontWeight.Bold,
                                                 color = SteelBlue,
-                                                modifier = Modifier.weight(1f)
+                                                modifier = Modifier
                                             )
 
-                                            // 만약 이 이름이 클릭된 상태라면 "X" 버튼 표시
-                                            Image(
-                                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
-                                                contentDescription = "Remove Button",
-                                                modifier = Modifier
-                                                    .clickable {
-                                                        viewModel.handleEvents(AddContract.AddEvent.RemoveMember(name))
-                                                    }
-                                                    .size(24.dp)
-                                            )
+                                            if (showRemoveButton) {
+                                                Image(
+                                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
+                                                    contentDescription = "Remove Button",
+                                                    modifier = Modifier
+                                                        .clickable {
+                                                            memberNames = memberNames - name
+                                                            viewModel.handleEvents(
+                                                                AddContract.AddEvent.RemoveMember(name)
+                                                            )
+                                                        }
+                                                        .size(13.dp) // 이미지 크기를 줄여서 테스트
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -187,8 +212,8 @@ fun MembersNameScreen(
                     Box(
                         modifier = Modifier
                             .height(40.dp)
-                            .width(225.dp)
-                            .offset(y = 150.dp)
+                            .width(235.dp)
+                            .offset(y = 170.dp)
                             .clip(RoundedCornerShape(30.dp))
                             .background(LightWhite.copy(alpha = 0.5f))
                     ) {
@@ -204,7 +229,7 @@ fun MembersNameScreen(
                                 color = SteelBlue,
                                 background = Color.Transparent,
                                 fontWeight = FontWeight.SemiBold,
-                                fontSize = 14.sp,
+                                fontSize = 13.sp,
                                 textAlign = TextAlign.Start
                             ),
                             cursorBrush = SolidColor(SteelBlue),
@@ -239,7 +264,11 @@ fun MembersNameScreen(
                                 .clickable {
                                     if (newMemberName.isNotBlank()) {
                                         memberNames = memberNames + newMemberName
-                                        memberCount = memberNames.size
+                                        viewModel.handleEvents(
+                                            AddContract.AddEvent.AddMember(
+                                                newMemberName
+                                            )
+                                        )
                                         newMemberName = "" // Reset the text field after adding
                                     }
                                 },
@@ -247,66 +276,59 @@ fun MembersNameScreen(
                         )
                     }
 
-                    // Display selected member names with "X" button
-                    Column(modifier = Modifier.padding(vertical = 10.dp)) {
-                        memberNames.forEach { name ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 4.dp)
-                            ) {
-                                Text(
-                                    text = name,
-                                    fontWeight = FontWeight.Bold,
-                                    color = SteelBlue,
-                                    modifier = Modifier.weight(1f)
-                                )
-                                Image(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
-                                    contentDescription = "Remove Button",
-                                    modifier = Modifier
-                                        .clickable {
-                                            memberNames = memberNames - name
-                                        }
-                                        .size(24.dp)
-                                )
-                            }
-                        }
-                        // NextAppBar1 버튼을 맨 마지막에 위치
-                        NextAppBar1(
-                            onNextClick = {
-                                if (memberNames.isNotEmpty()) {
-                                    // Call ViewModel to update members and navigate
-                                    viewModel.handleEvents(AddContract.AddEvent.AddMember(newMemberName))
-                                    navController.navigate(AddScreenRoute.ADJECTIVE.route)
-                                }
-                            }
-                        )
-                    }
+//                    // Display selected member names with "X" button
+//                    Column(modifier = Modifier.padding(vertical = 10.dp)) {
+//                        memberNames.forEach { name ->
+//                            Row(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .padding(vertical = 4.dp)
+//                            ) {
+//                                Text(
+//                                    text = name,
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = SteelBlue,
+//                                    modifier = Modifier.weight(1f)
+//                                )
+//                                Image(
+//                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
+//                                    contentDescription = "Remove Button",
+//                                    modifier = Modifier
+//                                        .clickable {
+//                                            //로컬 상태에서 삭제
+//                                            memberNames = memberNames - name
+//                                            //API에도 삭제 -> 삭제하고 남은 상태 업데이트 시킴.
+//                                            viewModel.handleEvents(AddContract.AddEvent.RemoveMember(name))
+//
+//                                        }
+//                                        .size(24.dp)
+//                                )
+//                            }
+//                        }
                 }
+            }
 
-                LaunchedEffect(Unit) {
-                    viewModel.effect.collect { effect ->
-                        when (effect) {
-                            is AddContract.AddSideEffect.NavigateToNextScreen -> {
-                                navController.navigate(AddScreenRoute.ADJECTIVE.route)
-                            }
+            LaunchedEffect(Unit) {
+                viewModel.effect.collect { effect ->
+                    when (effect) {
+                        is AddContract.AddSideEffect.NavigateToNextScreen -> {
+                            navController.navigate(AddScreenRoute.ADJECTIVE.route)
+                        }
 
-                            is AddContract.AddSideEffect.ShowToast -> {
-                                Toast.makeText(
-                                    context,
-                                    effect.message,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                        is AddContract.AddSideEffect.ShowToast -> {
+                            Toast.makeText(
+                                context,
+                                effect.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 
-                            is AddContract.AddSideEffect.ShowError -> {
-                                Toast.makeText(
-                                    context,
-                                    effect.error,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                        is AddContract.AddSideEffect.ShowError -> {
+                            Toast.makeText(
+                                context,
+                                effect.error,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }

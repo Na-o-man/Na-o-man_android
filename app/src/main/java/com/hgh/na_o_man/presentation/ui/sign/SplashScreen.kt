@@ -29,11 +29,12 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
 
         //커밋시 이부분 지우고 커밋
+        //건희
 //        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUzMjFAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfREVGQVVMVCIsImlhdCI6MTcyMjQwOTQwMCwiZXhwIjoxNzIzMDE0MjAwfQ.1V1tcbFqnLgjtBotxfPEtKniiAG5rXNCWU-c_aVuZKA")
-//        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImtreXh3QG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX0RFRkFVTFQiLCJpYXQiOjE3MjI4NDM5MTcsImV4cCI6MTcyMzQ0ODcxN30.hq5wIapK8TKo_b_ssF-96KluII8cSL_29etZMxw5X1I")
-//        dateStoreUtil.setAutoLogin(true)
+        //강연
+        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImtreXh3QG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX0RFRkFVTFQiLCJpYXQiOjE3MjMzMDI3NTksImV4cCI6MTcyMzkwNzU1OX0.UFUjTi4mf_gJRI4IxcbQWqNUOHQul2hoibHSaceob8U")
         //~~~~//
-        //dateStoreUtil.setAutoLogin(false)
+        dateStoreUtil.setAutoLogin(true)
 
         delay(2000)
         if (dateStoreUtil.getAutoLogin()) {

@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.di
 
+import com.hgh.na_o_man.data.source.remote.api.AgendasService
 import com.hgh.na_o_man.data.source.remote.api.AuthService
 import com.hgh.na_o_man.data.source.remote.api.MembersService
 import com.hgh.na_o_man.data.source.remote.api.ShareGroupsService
@@ -42,6 +43,12 @@ object ServiceModule {
     @Provides
     @Singleton
     fun providePhotosService(@RemoteModule.Auth retrofit: Retrofit): PhotosService {
+        return retrofit.buildService()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAgendasService(@RemoteModule.Auth retrofit: Retrofit): AgendasService {
         return retrofit.buildService()
     }
 }

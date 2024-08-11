@@ -37,11 +37,14 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,7 +57,8 @@ import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.Mustard
 import com.hgh.na_o_man.presentation.theme.SlateGray
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-
+import com.hgh.na_o_man.presentation.ui.add.JoinScreenRoute
+import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 
 @Composable
 fun AcceptCheckScreen(
@@ -66,6 +70,12 @@ fun AcceptCheckScreen(
     val context = LocalContext.current
     var textValue by remember { mutableStateOf(joinName) } // 기본 텍스트 값으로 그룹 이름 사용
     var isButtonPressed by remember { mutableStateOf(false) }
+
+    // 화면의 상태가 로딩 중이거나 멤버 정보가 없을 경우 로딩 표시
+    if (viewState.members.isEmpty()) {
+        viewModel.setEvent(JoinContract.JoinEvent.LoadGroupMembers)
+        return // 아직 멤버 정보가 로드되지 않았으므로 이 화면을 그리지 않음
+    }
 
     Scaffold(
         containerColor = lightSkyBlue // 배경색 설정
@@ -116,74 +126,31 @@ fun AcceptCheckScreen(
                         modifier = Modifier.height(280.dp).width(240.dp)
                     )
 
-                    // 원 1
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 100.dp, bottom = 80.dp)
-                            .align(Alignment.Center)
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_group_avatar_94),
-                            contentDescription = "Image 2",
-                            modifier = Modifier.height(80.dp).width(80.dp).padding(top = 18.dp),
-                            colorFilter = ColorFilter.tint(DeepBlue)
-                        )
-                        Text(
-                            text = "홍길금",
-                            color = SlateGray,
+                    // 멤버들
+                    viewState.members.forEachIndexed { index, member ->
+                        Box(
                             modifier = Modifier
                                 .align(Alignment.Center)
-                                .padding(top = 80.dp),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-
-                    // 원 2
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(end = 100.dp, bottom = 80.dp)
-                            .graphicsLayer(translationX = 150f)
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_group_avatar_94),
-                            contentDescription = "Image 2",
-                            modifier = Modifier.height(80.dp).width(80.dp).padding(top = 18.dp),
-                            colorFilter = ColorFilter.tint(Mustard)
-                        )
-                        Text(
-                            text = "홍길은",
-                            color = SlateGray,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(top = 80.dp),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-
-                    // 원 3
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 100.dp, bottom = 80.dp)
-                            .align(Alignment.Center)
-                            .graphicsLayer(translationX = 300f)
-                    ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_group_avatar_94),
-                            contentDescription = "Image 2",
-                            modifier = Modifier.height(80.dp).width(80.dp).padding(top = 18.dp)
-                        )
-                        Text(
-                            text = "홍길동",
-                            color = SlateGray,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(top = 80.dp),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                                .offset(x = -(45.dp))
+                                .padding(start = (index * 75).dp, bottom = 80.dp) // X축 padding 조정 (사이 간격 증가)
+                                .graphicsLayer(translationX = (index * 10).dp.toPx()) // X축 translation 조정 (간격 증가)
+                        ) {
+                            Image(
+                                painter = painterResource(id = member.avatarResId),
+                                contentDescription = "Avatar ${member.name}",
+                                modifier = Modifier.height(80.dp).width(80.dp).padding(top = 18.dp),
+                                colorFilter = ColorFilter.tint(DeepBlue) // 또는 다른 색상 필터
+                            )
+                            Text(
+                                text = member.name,
+                                color = SlateGray,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .padding(top = 80.dp),
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     }
                 }
 
@@ -198,7 +165,7 @@ fun AcceptCheckScreen(
                     Button(
                         onClick = {
                             viewModel.setEvent(JoinContract.JoinEvent.onFind)
-                            Toast.makeText(context, "다시 찾는 중입니다.", Toast.LENGTH_SHORT).show()
+                            navController.popBackStack() // 이전 화면으로 돌아가기
                         },
                         modifier = Modifier
                             .padding(start = 70.dp, top = 20.dp)
@@ -219,6 +186,7 @@ fun AcceptCheckScreen(
                     Button(
                         onClick = {
                             viewModel.setEvent(JoinContract.JoinEvent.onCorrect)
+                            navController.navigate(JoinScreenRoute.ACCEPT.route)
                         },
                         modifier = Modifier
                             .padding(end = 70.dp, top = 20.dp)
@@ -245,47 +213,32 @@ fun AcceptCheckScreen(
                         .background(LightWhite.copy(alpha = 0.7f), shape = RoundedCornerShape(20.dp))
                         .border(1.dp, LightWhite, shape = RoundedCornerShape(20.dp))
                 ) {
-                    var isFocused by remember { mutableStateOf(false) }
-
-                    Box(
+                    Text(
+                        text = textValue, // 그룹 이름을 여기에 표시
                         modifier = Modifier
-                            .padding(start = 48.dp)
-                            .fillMaxWidth()
-                            .align(Alignment.Center)
-                    ) {
-                        BasicTextField(
-                            value = textValue,
-                            onValueChange = { textValue = it },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .align(Alignment.Center)
-                                .onFocusChanged { state ->
-                                    isFocused = state.isFocused
-                                },
-                            textStyle = TextStyle(
-                                color = DeepBlue,
-                                background = Color.Transparent,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp,
-                                textAlign = TextAlign.Center
-                            ),
-                            cursorBrush = SolidColor(DeepBlue),
-                            decorationBox = { innerTextField ->
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .align(Alignment.Center)
-                                ) {
-                                    innerTextField()
-                                }
-                            }
+                            .fillMaxSize()
+                            .align(Alignment.Center),
+                        style = TextStyle(
+                            color = DeepBlue,
+                            background = Color.Transparent,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Center
                         )
-                    }
+                    )
                 }
             }
         }
     }
 }
+
+// Dp를 Float으로 변환하는 유틸리티 함수
+@Composable
+fun Dp.toPx(): Float {
+    val density = LocalDensity.current.density
+    return this.value * density
+}
+
 
 @Preview(showBackground = true)
 @Composable
@@ -294,5 +247,15 @@ fun PreviewAcceptCheckScreen() {
     AcceptCheckScreen(navController = navController, joinName = "제주도 2024")
 }
 
+@Composable
+fun SomeScreen(
+    navController: NavHostController = rememberNavController(),
+    addViewModel: AddViewModel = hiltViewModel()
+) {
+    val groupName by remember { mutableStateOf(addViewModel.getGroupName()) }
 
-
+    AcceptCheckScreen(
+        navController = navController,
+        joinName = groupName
+    )
+}

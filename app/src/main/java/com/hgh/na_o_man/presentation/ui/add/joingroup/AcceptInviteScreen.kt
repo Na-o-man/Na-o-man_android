@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.StartAppBar
@@ -56,28 +57,27 @@ import com.hgh.na_o_man.presentation.ui.add.JoinScreenRoute
 @Composable
 fun AcceptInviteScreen(
     viewModel: JoinViewModel = hiltViewModel(),
-    navController: NavController,
-    showBackIcon: Boolean = false
+    navController: NavHostController = rememberNavController(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current
 
-    // URL 입력 필드 상태 관리
     var textValue by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             StartAppBar(
-                onStartClick = { /* Handle back navigation */ }
+                onStartClick = {
+                    navController.popBackStack()
+                }
             )
         },
         containerColor = lightSkyBlue // Background color
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {
-            EndTopCloud() // Cloud background
+            EndTopCloud()
 
-            // Title and description
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
@@ -101,10 +101,10 @@ fun AcceptInviteScreen(
                 )
             }
 
-            // URL 입력 필드
             Box(
                 modifier = Modifier
                     .size(width = 295.dp, height = 55.dp)
+                    .offset(x = 35.dp, y = 326.dp)
                     .background(
                         color = LightWhite.copy(alpha = 0.7f),
                         shape = RoundedCornerShape(20.dp)
@@ -151,7 +151,6 @@ fun AcceptInviteScreen(
                 )
             }
 
-            // URL 검증 버튼
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
@@ -162,28 +161,24 @@ fun AcceptInviteScreen(
                     contentDescription = "Next Button",
                     modifier = Modifier
                         .clickable {
-                            // Pass URL to ViewModel for validation
                             viewModel.setEvent(JoinContract.JoinEvent.ValidateUrl(textValue))
                         }
                         .size(78.dp)
                 )
             }
 
-            // URL 검증 결과에 따른 네비게이션 처리
             LaunchedEffect(viewState.isUrlValid) {
                 if (viewState.isUrlValid) {
                     navController.navigate(JoinScreenRoute.CHECK.route)
                 }
             }
 
-            // Toast 메시지 처리
             LaunchedEffect(Unit) {
                 viewModel.effect.collect { sideEffect ->
                     when (sideEffect) {
                         is JoinContract.JoinSideEffect._ShowToast -> {
                             Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
                         }
-
                         else -> {}
                     }
                 }
@@ -191,6 +186,7 @@ fun AcceptInviteScreen(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
