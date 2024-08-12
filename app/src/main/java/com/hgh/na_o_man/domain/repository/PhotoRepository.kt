@@ -4,8 +4,6 @@ import com.hgh.na_o_man.data.dto.photo.request.PhotoIdListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoNameListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoSampleUrlListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoUrlListDto
-import com.hgh.na_o_man.data.dto.photo.response.PhotoDownloadUrlsDto
-import com.hgh.na_o_man.data.dto.photo.response.PhotoIdListResDto
 import com.hgh.na_o_man.di.util.remote.RetrofitResult
 import com.hgh.na_o_man.domain.model.photo.PhotoAllModel
 import com.hgh.na_o_man.domain.model.photo.PhotoDownloadUrlsModel

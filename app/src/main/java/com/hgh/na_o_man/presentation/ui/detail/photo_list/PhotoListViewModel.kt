@@ -35,7 +35,7 @@ class PhotoListViewModel @Inject constructor(
     private val downloadEnqueuer: DownloadEnqueuer,
     private val getPhotoUsecase: PhotoUsecase,
     private val getPhotoEtcUsecase: PhotoEtcUsecase,
-    private val deletePhotoUsecase: PhotoDeleteUsecase
+    private val deletePhotoUsecase: PhotoDeleteUsecase,
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
@@ -313,6 +313,13 @@ class PhotoListViewModel @Inject constructor(
                     .filter { it.isSelected }
                     .map { it.rawPhotoUrl }
             )
+            updateState {
+                copy(photoList = photoList.filter { it.isSelected }
+                    .map { photo ->
+                        photo.copy(isDownloaded = true, isSelected = false)
+                    }
+                )
+            }
         }
     }
 }
