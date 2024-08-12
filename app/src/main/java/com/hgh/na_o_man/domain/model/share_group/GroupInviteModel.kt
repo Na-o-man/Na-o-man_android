@@ -8,5 +8,5 @@ data class GroupInviteModel(
     val inviteCode: String,
     val memberCount: Int,
     val name: String,
-    val profileInfoList: List<String> // 리스트 형태로 정의
+    val profileInfoList: List<ProfileInfoModel> // 리스트 형태로 정의
 )

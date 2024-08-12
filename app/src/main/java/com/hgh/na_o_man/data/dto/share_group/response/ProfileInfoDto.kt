@@ -4,14 +4,14 @@ import com.hgh.na_o_man.domain.model.share_group.GroupAddModel
 import com.hgh.na_o_man.domain.model.share_group.ProfileInfoModel
 
 data class ProfileInfoDto(
-    val image: String,
-    val memberId: Long,
+    val image: String?,
+    val memberId: Long?,
     val name: String,
     val profileId: Long
 ) {
     fun toModel() = ProfileInfoModel(
-        image = this.image,
-        memberId = this.memberId,
+        image = this.image ?: "",
+        memberId = this.memberId ?: -1L,
         name = this.name,
         profileId = this.profileId
     )
