@@ -6,6 +6,7 @@ import com.hgh.na_o_man.data.dto.photo.request.PhotoNameListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoSampleUrlListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoUrlListDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoAllDto
+import com.hgh.na_o_man.data.dto.photo.response.PhotoDownloadUrlsDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoIdListResDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoPreSignedDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoUploadCountDto
@@ -13,6 +14,7 @@ import com.hgh.na_o_man.data.source.remote.api.PhotosService
 import com.hgh.na_o_man.di.util.remote.RetrofitResult
 import com.hgh.na_o_man.di.util.remote.apiHandler
 import com.hgh.na_o_man.domain.model.photo.PhotoAllModel
+import com.hgh.na_o_man.domain.model.photo.PhotoDownloadUrlsModel
 import com.hgh.na_o_man.domain.model.photo.PhotoIdListResModel
 import com.hgh.na_o_man.domain.model.photo.PhotoPreSignedModel
 import com.hgh.na_o_man.domain.model.photo.PhotoUploadCountModel
@@ -32,6 +34,13 @@ class PhotoRepositoryImpl @Inject constructor(
 
     override suspend fun postPreSignedUrl(photoNameListDto: PhotoNameListDto): RetrofitResult<PhotoPreSignedModel> {
         return apiHandler({ api.postPreSignedAPI(photoNameListDto) }) { response: ApiResult<PhotoPreSignedDto> -> response.data.toModel() }
+    }
+
+    override suspend fun getPhotoDownload(
+        shareGroupId: Long,
+        photoIdList: List<Long>
+    ): RetrofitResult<PhotoDownloadUrlsModel> {
+        return apiHandler({ api.getPhotosDownloadAPI(photoIdList, shareGroupId) }) { response: ApiResult<PhotoDownloadUrlsDto> -> response.data.toModel() }
     }
 
     override suspend fun getPhotoAll(
