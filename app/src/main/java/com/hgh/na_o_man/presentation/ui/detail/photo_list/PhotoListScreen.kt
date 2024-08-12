@@ -118,6 +118,10 @@ fun PhotoListScreen(
         viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDialogClosed)
     }
 
+    BackHandler(enabled = viewState.isAgenda) {
+        viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)
+    }
+
     when (viewState.loadState) {
         LoadState.LOADING -> {
             StateLoadingScreen()
@@ -132,7 +136,7 @@ fun PhotoListScreen(
                 topBar = {
                     if (viewState.isAgenda) {
                         BackAppBar {
-                            viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)
+                            viewModel.setEvent(PhotoListContract.PhotoListEvent.OnBackClicked)
                         }
                     } else {
                         BackAndSelectAppBar(
@@ -285,10 +289,10 @@ fun PhotoListScreen(
                             isAgenda = viewState.isAgenda,
                             modifier = Modifier.align(alignment = Alignment.BottomCenter),
                             onCLickDown = {
-
+                                viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDownloadClicked)
                             },
                             onClickDelete = {
-
+                                viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDeleteClicked)
                             },
                             onClickAgenda = {
                                 viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)
@@ -306,10 +310,10 @@ fun PhotoListScreen(
                                 isMine = false,
                                 modifier = modifier,
                                 onCLickDown = {
-
+                                    viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDownloadClicked)
                                 },
                                 onClickDelete = {
-
+                                    viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDeleteClicked)
                                 },
                                 onClickAgenda = {
                                     viewModel.setEvent(PhotoListContract.PhotoListEvent.OnAgendaClicked)

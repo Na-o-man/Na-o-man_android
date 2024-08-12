@@ -7,6 +7,6 @@ data class PhotoPreSignedDto(
     val preSignedUrlInfoList: List<PreSignedUrlInfoDto>
 ) {
     fun toModel() = PhotoPreSignedModel(
-        preSignedUrlInfoList = this.preSignedUrlInfoList
+        preSignedUrlInfoList = this.preSignedUrlInfoList.map { it.toModel() }
     )
 }

@@ -34,7 +34,6 @@ class UploadTaskImpl @Inject constructor(
 
             s3PreSignedUrlUsecase(
                 PhotoNameListDto(
-                    shareGroupId = groupId,
                     photoNameList = files.map { it.name })
             ).collect { result ->
                 result.onSuccess {
