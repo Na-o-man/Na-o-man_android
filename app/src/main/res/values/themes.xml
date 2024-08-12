@@ -4,6 +4,7 @@
     <style name="Theme.Na_o_man" parent="android:Theme.Material.Light.NoActionBar" >
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
 </resources>

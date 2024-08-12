@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.domain.usecase.agenda
 
+import android.util.Log
 import com.hgh.na_o_man.data.dto.agenda.response.AgendaInfoListDto
 import com.hgh.na_o_man.domain.repository.AgendaRepository
 import kotlinx.coroutines.flow.flow
@@ -10,5 +11,6 @@ class AgendaInfoListUsecase @Inject constructor(
 ) {
     suspend operator fun invoke(shareGroupId : Long, page : Int, size : Int) = flow {
         emit(repository.getAgenda(shareGroupId,page,size))
+        Log.d("AgendaInfoListUsecase", "Calling getAgenda with groupId: $shareGroupId")
     }
 }
