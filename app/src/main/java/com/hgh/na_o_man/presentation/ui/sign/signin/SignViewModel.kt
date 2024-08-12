@@ -165,7 +165,6 @@ class SignViewModel @Inject constructor(
 
                 getS3PreSignedUrlUsecase(
                     PhotoNameListDto(
-                        shareGroupId = 1,
                         photoNameList = files.map { it.name })
                 ).collect { result ->
                     result.onSuccess {
