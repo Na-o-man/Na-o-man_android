@@ -7,6 +7,7 @@ import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.domain.model.VoteDummy
 import com.hgh.na_o_man.domain.usecase.agenda.AgendaInfoListUsecase
+import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.ui.detail.KEY_GROUP_ID
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class VoteMainViewModel @Inject constructor(
     private val agendaInfoListUsecase: AgendaInfoListUsecase,
     private val savedStateHandle: SavedStateHandle,
+    private val checkSpecificGroupUsecase: CheckSpecificGroupUsecase,
 
     ) : BaseViewModel<VoteMainContract.VoteMainViewState,VoteMainContract.VoteMainSideEffect,VoteMainContract.VoteMainEvent>(
     VoteMainContract.VoteMainViewState()
@@ -25,6 +27,7 @@ class VoteMainViewModel @Inject constructor(
     init {
         Log.d("리컴포저블","VoteMainViewModelInit")
         setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
+        fetchGroupName()
     }
 
     private val groupId: Long
@@ -73,6 +76,21 @@ class VoteMainViewModel @Inject constructor(
         } catch (e : Exception) {
             Log.e("VoteMainViewModel", "Error in showVoteList", e)
             updateState { copy( loadState = LoadState.ERROR) }
+        }
+    }
+
+    private fun fetchGroupName() = viewModelScope.launch {
+        try {
+            checkSpecificGroupUsecase(groupId).collect { result ->
+                result.onSuccess { data ->
+                    val groupName = data.name
+                    updateState { copy(groupName = groupName) }
+                } .onFail {
+                    Log.e("VoteMainViewModel","Failed to fetch group name")
+                }
+            }
+        } catch (e : Exception){
+            Log.e("VoteMainViewModel","Error in fetchGroupName",e)
         }
     }
 }

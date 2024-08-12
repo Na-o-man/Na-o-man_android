@@ -102,4 +102,5 @@ class GroupDetailFolderViewModel @Inject constructor(
             updateState { copy(loadState = LoadState.ERROR) }
         }
     }
+
 }

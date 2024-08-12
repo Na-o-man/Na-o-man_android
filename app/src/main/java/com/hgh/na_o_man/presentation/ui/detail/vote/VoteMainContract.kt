@@ -15,6 +15,7 @@ class VoteMainContract {
         val groupId : Long = 0L,
         val voteList : List<VoteDummy> = listOf(),
         val voteDetail : AgendaInfoListModel? =null,
+        val groupName : String = "",
     ) : ViewState
 
     sealed class VoteMainSideEffect : ViewSideEffect {

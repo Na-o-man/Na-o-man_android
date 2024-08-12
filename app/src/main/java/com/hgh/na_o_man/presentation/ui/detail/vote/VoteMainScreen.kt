@@ -121,7 +121,7 @@ fun VoteMainScreen(
                     )
                     // 텍스트 추가
                     Text(
-                        text = "제주도", // 표시할 텍스트
+                        text = viewState.groupName, // 표시할 텍스트
                         color = Color.Black, // 텍스트 색상
                         modifier = Modifier
                             .offset(x = 50.dp, y = 86.dp)
