@@ -7,6 +7,7 @@ import com.hgh.na_o_man.domain.model.share_group.GroupAddModel
 import com.hgh.na_o_man.domain.model.share_group.GroupJoinModel
 import com.hgh.na_o_man.domain.model.share_group.GroupListReferModel
 import com.hgh.na_o_man.domain.model.share_group.CheckSpecificGroupModel
+import com.hgh.na_o_man.domain.model.share_group.GroupInviteModel
 
 interface ShareGroupRepository {
     suspend fun postShare(groupAddRequestDto: GroupAddRequestDto): RetrofitResult<GroupAddModel>
@@ -14,4 +15,5 @@ interface ShareGroupRepository {
     suspend fun searchGroup(shareGroupId : Long) : RetrofitResult<GroupAddModel>
     suspend fun referGroup(page : Int, size : Int) : RetrofitResult<GroupListReferModel>
     suspend fun checkSpecificGroup(shareGroupId : Long) : RetrofitResult<CheckSpecificGroupModel>
+    suspend fun getInvite(shareGroupId: String): RetrofitResult<GroupInviteModel>
 }

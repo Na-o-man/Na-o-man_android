@@ -7,7 +7,6 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,9 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,8 +46,6 @@ import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
-import kotlinx.coroutines.delay
-
 
 @Composable
 fun MembersFolder(
@@ -80,13 +74,12 @@ fun MembersFolder(
     Scaffold(
         containerColor = lightSkyBlue
     ) { padding ->
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
             StartTopCloud()
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
                     .wrapContentSize()
                     .align(Alignment.Center)
             ) {
@@ -94,52 +87,42 @@ fun MembersFolder(
                     painter = painterResource(id = R.drawable.ic_share_folder_144),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(1.dp)
-                        .offset(x = 10.dp, y = -(20.dp))
                         .size(200.dp)
+                        .offset(x = 10.dp, y = (-20).dp)
                 )
 
                 // 그룹 이름 텍스트
-                Box(
+                Text(
+                    text = state.groupName,
+                    color = DeepBlue,
+                    style = androidx.compose.ui.text.TextStyle(
+                        fontSize = 23.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .offset(y = -(10.dp)) // 위로 이동
-                ) {
-                    Text(
-                        text = state.groupName,
-                        color = DeepBlue,
-                        style = androidx.compose.ui.text.TextStyle(
-                            fontSize = 23.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-                }
+                        .offset(y = (-10).dp) // 위로 이동
+                )
 
-                val clipboardManager =
-                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val linkToCopy = "https://naoman.site"
+                val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-                // 구름 이미지와 텍스트를 함께 겹쳐서 배치
+                // 링크 복사 버튼
                 Box(
                     modifier = Modifier
                         .size(100.dp)
                         .offset(x = 150.dp, y = 107.dp)
                         .clickable {
-                            // 링크 복사 이벤트
-                            val clip = ClipData.newPlainText("Copied Link", linkToCopy)
+                            val clip = ClipData.newPlainText("Copied Link", inviteLink)
                             clipboardManager.setPrimaryClip(clip)
                             Toast.makeText(context, "링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    // 구름 이미지
                     Image(
                         painter = painterResource(id = R.drawable.ic_button_cloud_next_140),
                         contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize()
+                        modifier = Modifier.fillMaxSize()
                     )
-                    // "링크복사" 텍스트 (구름 이미지 위에 배치)
                     Text(
                         text = "링크복사",
                         fontSize = 13.sp,
@@ -149,6 +132,7 @@ fun MembersFolder(
                     )
                 }
 
+                // 초대 링크 공유 버튼
                 Box(
                     modifier = Modifier
                         .width(220.dp)
@@ -157,10 +141,8 @@ fun MembersFolder(
                         .clip(RoundedCornerShape(50.dp))
                         .background(LightWhite)
                         .clickable {
-                            val clipboardManager2 =
-                                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                             val clip = ClipData.newPlainText("Invite Link", inviteLink)
-                            clipboardManager2.setPrimaryClip(clip)
+                            clipboardManager.setPrimaryClip(clip)
                             Toast.makeText(context, "초대 링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
                         },
                     contentAlignment = Alignment.Center
@@ -181,6 +163,7 @@ fun MembersFolder(
                     )
                 }
 
+                // 공유 폴더 이동 버튼
                 Box(
                     modifier = Modifier
                         .width(220.dp)
@@ -190,7 +173,7 @@ fun MembersFolder(
                         .background(LightWhite)
                         .clickable {
                             Toast.makeText(context, "공유 폴더로 이동합니다.", Toast.LENGTH_SHORT).show()
-                            // 폴더 이동 기능 추가
+                            navController.navigate(AddScreenRoute.NAMEINPUT.route)
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -213,10 +196,3 @@ fun MembersFolder(
         }
     }
 }
-
-
-
-
-
-
-

@@ -67,7 +67,6 @@ fun AcceptCheckScreen(
     joinName: String // 생성된 그룹 이름을 인자로 받음
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    val context = LocalContext.current
     var textValue by remember { mutableStateOf(joinName) } // 기본 텍스트 값으로 그룹 이름 사용
     var isButtonPressed by remember { mutableStateOf(false) }
 
@@ -161,10 +160,10 @@ fun AcceptCheckScreen(
                         .padding(top = 300.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
-                ) {
+                ) {viewModel.setEvent(JoinContract.JoinEvent.onFind)
                     Button(
                         onClick = {
-                            viewModel.setEvent(JoinContract.JoinEvent.onFind)
+
                             navController.popBackStack() // 이전 화면으로 돌아가기
                         },
                         modifier = Modifier

@@ -172,7 +172,7 @@ fun MembersAdjective(
                                         modifier = Modifier.fillMaxSize(),
                                         shape = RoundedCornerShape(20.dp),
                                         colors = ButtonDefaults.buttonColors(
-                                            containerColor = if (isSelected) Color.Gray.copy(alpha = 0.6f) else LightWhite.copy(
+                                            containerColor = if (isSelected) Color.Gray.copy(alpha = 0.3f) else LightWhite.copy(
                                                 alpha = 0.3f
                                             ),
                                             contentColor = LightWhite

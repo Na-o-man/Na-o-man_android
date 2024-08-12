@@ -167,12 +167,14 @@ fun AcceptInviteScreen(
                 )
             }
 
+            // Handling navigation after URL validation
             LaunchedEffect(viewState.isUrlValid) {
                 if (viewState.isUrlValid) {
                     navController.navigate(JoinScreenRoute.CHECK.route)
                 }
             }
 
+            // Handling side effects like showing a toast message
             LaunchedEffect(Unit) {
                 viewModel.effect.collect { sideEffect ->
                     when (sideEffect) {
