@@ -54,7 +54,6 @@ import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GRO
 import com.hgh.na_o_man.presentation.ui.main.home.GroupListScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeContract
 
-
 @Composable
 fun VoteMainScreen(
     groupId : Long,
@@ -66,10 +65,14 @@ fun VoteMainScreen(
     val context = LocalContext.current as Activity
 
     Log.d("리컴포저블", "VoteMainScreen")
+    Log.d("VoteMainScreen", "Current view state: $viewState")
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
+    }
 
     LaunchedEffect(groupId) {
         Log.d("VoteMainScreen", "Received groupId: $groupId")
-        viewModel.initGroupId(groupId)
     }
 
 
@@ -119,7 +122,7 @@ fun VoteMainScreen(
                     )
                     // 텍스트 추가
                     Text(
-                        text = "제주도", // 표시할 텍스트
+                        text = viewState.groupName, // 표시할 텍스트
                         color = Color.Black, // 텍스트 색상
                         modifier = Modifier
                             .offset(x = 50.dp, y = 86.dp)
@@ -139,18 +142,20 @@ fun VoteMainScreen(
                             "안건 추가하기",
                             onAddGroupInBoxClicked = { viewModel.setEvent(VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked) })
                     } else {
+                        Log.d("VoteMainScreen","VoteMainScreen start")
                         VoteListScreen(
                             viewModel = viewModel,
                             voteList = viewState.voteList,
                             modifier = Modifier.padding(padding)
                         )
+                        Log.d("VoteMainScreen","VoteMainScreen end")
+
                     }
                 }
             }
         }
     }
 }
-
 
 
 @Composable
@@ -160,7 +165,7 @@ fun VoteListScreen(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
         LazyColumn (
@@ -168,18 +173,22 @@ fun VoteListScreen(
             modifier = Modifier.padding(16.dp)
         ) {
             items(voteList) { vote ->
+                Log.d("VoteListScreen", "Rendering vote item: ${vote.title}")
                 getVoteList(
                     title = vote.title,
-                    images = vote.images)
+                    images = vote.images
+                )
+                Log.d("VoteListScreen", "Finished rendering vote item: ${vote.title}")
+
             }
         }
     }
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewVoteMainScreen() {
-    val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-    VoteMainScreen(groupId = 1L ,navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewVoteMainScreen() {
+//    val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
+//    VoteMainScreen(groupId = 1L ,navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
+//}

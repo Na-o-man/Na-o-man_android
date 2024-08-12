@@ -32,7 +32,7 @@ fun SplashScreen(
         //건희
 //        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUzMjFAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfREVGQVVMVCIsImlhdCI6MTcyMjQwOTQwMCwiZXhwIjoxNzIzMDE0MjAwfQ.1V1tcbFqnLgjtBotxfPEtKniiAG5rXNCWU-c_aVuZKA")
         //강연
-        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUwODMxQG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX0RFRkFVTFQiLCJpYXQiOjE3MjM0MzU1MDQsImV4cCI6MTcyNDA0MDMwNH0.WPQeiCYKUWmbDVCjjCcCpkw_cduEaqlVokKOgp-E6Ak")
+        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUzMjFAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfREVGQVVMVCIsImlhdCI6MTcyMzE4MjMwMSwiZXhwIjoxNzIzNzg3MTAxfQ.wQieUxjLQne02bmHBySHSSb9XIiMTVieBDWHZhi7pJw")
         //~~~~//
         dateStoreUtil.setAutoLogin(true)
 
