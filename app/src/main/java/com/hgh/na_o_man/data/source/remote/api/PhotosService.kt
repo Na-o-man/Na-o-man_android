@@ -3,6 +3,7 @@ package com.hgh.na_o_man.data.source.remote.api
 import com.hgh.na_o_man.data.dto.ApiResult
 import com.hgh.na_o_man.data.dto.photo.request.PhotoIdListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoNameListDto
+import com.hgh.na_o_man.data.dto.photo.request.PhotoSampleUrlListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoUrlListDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoAllDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoIdListResDto
@@ -12,6 +13,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -25,6 +27,11 @@ interface PhotosService {
     suspend fun postPreSignedAPI(
         @Body request : PhotoNameListDto
     ) : Response<ApiResult<PhotoPreSignedDto>>
+
+    @POST("photos/sample")
+    suspend fun postSampleUploadAPI(
+        @Body request : PhotoSampleUrlListDto
+    ) : Response<ApiResult<PhotoUploadCountDto>>
 
     @GET("photos/all")
     suspend fun getPhotosAllAPI(
@@ -48,7 +55,7 @@ interface PhotosService {
         @Query("size") size: Int,
     ) : Response<ApiResult<PhotoAllDto>>
 
-    @DELETE("photos")
+    @HTTP(method = "DELETE", path="photo", hasBody = true)
     suspend fun deletePhotosAPI(
         @Body request : PhotoIdListDto
     ) : Response<ApiResult<PhotoIdListResDto>>

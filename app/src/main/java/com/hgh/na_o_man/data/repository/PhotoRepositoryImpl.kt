@@ -3,6 +3,7 @@ package com.hgh.na_o_man.data.repository
 import com.hgh.na_o_man.data.dto.ApiResult
 import com.hgh.na_o_man.data.dto.photo.request.PhotoIdListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoNameListDto
+import com.hgh.na_o_man.data.dto.photo.request.PhotoSampleUrlListDto
 import com.hgh.na_o_man.data.dto.photo.request.PhotoUrlListDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoAllDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoIdListResDto
@@ -23,6 +24,10 @@ class PhotoRepositoryImpl @Inject constructor(
 ) : PhotoRepository {
     override suspend fun postUpload(photoUrlListDto: PhotoUrlListDto): RetrofitResult<PhotoUploadCountModel> {
         return apiHandler({ api.postUploadAPI(photoUrlListDto) }) { response: ApiResult<PhotoUploadCountDto> -> response.data.toModel() }
+    }
+
+    override suspend fun postSampleUpload(photoSampleUrlListDto: PhotoSampleUrlListDto): RetrofitResult<PhotoUploadCountModel> {
+        return apiHandler({ api.postSampleUploadAPI(photoSampleUrlListDto) }) { response: ApiResult<PhotoUploadCountDto> -> response.data.toModel() }
     }
 
     override suspend fun postPreSignedUrl(photoNameListDto: PhotoNameListDto): RetrofitResult<PhotoPreSignedModel> {
