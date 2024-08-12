@@ -54,7 +54,6 @@ import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GRO
 import com.hgh.na_o_man.presentation.ui.main.home.GroupListScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeContract
 
-
 @Composable
 fun VoteMainScreen(
     groupId : Long,
@@ -67,9 +66,12 @@ fun VoteMainScreen(
 
     Log.d("리컴포저블", "VoteMainScreen")
 
+//    LaunchedEffect(key1 = viewModel.effect) {
+//        viewModel.setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
+//    }
+
     LaunchedEffect(groupId) {
         Log.d("VoteMainScreen", "Received groupId: $groupId")
-        viewModel.initGroupId(groupId)
     }
 
 
@@ -152,7 +154,6 @@ fun VoteMainScreen(
 }
 
 
-
 @Composable
 fun VoteListScreen(
     viewModel: VoteMainViewModel = hiltViewModel(),
@@ -177,9 +178,9 @@ fun VoteListScreen(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewVoteMainScreen() {
-    val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-    VoteMainScreen(groupId = 1L ,navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewVoteMainScreen() {
+//    val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
+//    VoteMainScreen(groupId = 1L ,navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
+//}

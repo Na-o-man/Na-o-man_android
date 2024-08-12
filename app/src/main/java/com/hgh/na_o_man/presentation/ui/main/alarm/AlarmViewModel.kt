@@ -18,6 +18,7 @@ import com.hgh.na_o_man.domain.usecase.notification.UnreadNotificationUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +34,10 @@ class AlarmViewModel @Inject constructor(
 ) : BaseViewModel<AlarmContract.AlarmViewState, AlarmContract.AlarmSideEffect, AlarmContract.AlarmEvent>(
     AlarmContract.AlarmViewState()
 ) {
+
+    private val nextPage = MutableStateFlow(0)
+    private val hasNextPage = MutableStateFlow(true)
+
     init {
         Log.d("리컴포저블","AlarmViewModel")
         setEvent(AlarmContract.AlarmEvent.InitAlarmScreen)
@@ -67,28 +72,38 @@ class AlarmViewModel @Inject constructor(
         updateState { copy(loadState = LoadState.LOADING) }
         Log.d("AlarmViewModel", "showAlarmList: Loading started")
         try {
-            notificationInfoListUsecase(0,20, listOf("date,desc")).collect{result ->
-                result.onSuccess { notificationInfoListModel ->
-                    Log.d("AlarmViewModel", "Successfully fetched alarm list")
-                    val alarmList = notificationInfoListModel.notificationInfoList.map { notificationInfo ->
-                        AlarmDummy(
-                            url = notificationInfo.url,
-                            detail = notificationInfo.body,
-                            date = notificationInfo.createdAt,
-                            //url 통해서 이미지 로드
-                            imageRes = R.drawable.ic_example // 예시 이미지 리소스 ID --> 이거 알림인데 그냥 프사 넣을건데 왜 필요하지...??
+            if(hasNextPage.value) {
+                notificationInfoListUsecase(nextPage.value, 10, listOf("date,desc")).collect { result ->
+                    result.onSuccess { notificationInfoListModel ->
+                        Log.d("AlarmViewModel", "Successfully fetched alarm list")
+                        val alarmList =
+                            notificationInfoListModel.notificationInfoList.map { notificationInfo ->
+                                AlarmDummy(
+                                    url = notificationInfo.url,
+                                    detail = notificationInfo.body,
+                                    date = notificationInfo.createdAt,
+                                    //url 통해서 이미지 로드
+                                    imageRes = R.drawable.ic_example // 예시 이미지 리소스 ID --> 이거 알림인데 그냥 프사 넣을건데 왜 필요하지...??
+                                )
+                            }
+                        updateState {
+                            copy(
+                                loadState = LoadState.SUCCESS,
+                                alarmList = alarmList
+                            )
+                        }
+                        notificationInfoListModel.isLast.not().let {
+                            hasNextPage.value = it
+                            nextPage.value +=1
+                        }
+                        Log.d(
+                            "AlarmViewModel",
+                            "showAlarmList: State updated to SUCCESS with ${alarmList.size} items"
                         )
+                    }.onFail {
+                        Log.d("AlarmViewModel", "Failed to fetch alarm list")
+                        updateState { copy(loadState = LoadState.ERROR) }
                     }
-                    updateState {
-                        copy(
-                            loadState = LoadState.SUCCESS,
-                            alarmList = alarmList
-                        )
-                    }
-                    Log.d("AlarmViewModel", "showAlarmList: State updated to SUCCESS with ${alarmList.size} items")
-                }.onFail {
-                    Log.d("AlarmViewModel", "Failed to fetch alarm list")
-                    updateState { copy(loadState = LoadState.ERROR) }
                 }
             }
         } catch (e: Exception) {
