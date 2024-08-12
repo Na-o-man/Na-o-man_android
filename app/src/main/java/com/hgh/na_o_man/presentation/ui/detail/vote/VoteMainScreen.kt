@@ -65,10 +65,11 @@ fun VoteMainScreen(
     val context = LocalContext.current as Activity
 
     Log.d("리컴포저블", "VoteMainScreen")
+    Log.d("VoteMainScreen", "Current view state: $viewState")
 
-//    LaunchedEffect(key1 = viewModel.effect) {
-//        viewModel.setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
-//    }
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
+    }
 
     LaunchedEffect(groupId) {
         Log.d("VoteMainScreen", "Received groupId: $groupId")
@@ -141,11 +142,14 @@ fun VoteMainScreen(
                             "안건 추가하기",
                             onAddGroupInBoxClicked = { viewModel.setEvent(VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked) })
                     } else {
+                        Log.d("VoteMainScreen","VoteMainScreen start")
                         VoteListScreen(
                             viewModel = viewModel,
                             voteList = viewState.voteList,
                             modifier = Modifier.padding(padding)
                         )
+                        Log.d("VoteMainScreen","VoteMainScreen end")
+
                     }
                 }
             }
@@ -161,7 +165,7 @@ fun VoteListScreen(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
         LazyColumn (
@@ -169,9 +173,13 @@ fun VoteListScreen(
             modifier = Modifier.padding(16.dp)
         ) {
             items(voteList) { vote ->
+                Log.d("VoteListScreen", "Rendering vote item: ${vote.title}")
                 getVoteList(
                     title = vote.title,
-                    images = vote.images)
+                    images = vote.images
+                )
+                Log.d("VoteListScreen", "Finished rendering vote item: ${vote.title}")
+
             }
         }
     }

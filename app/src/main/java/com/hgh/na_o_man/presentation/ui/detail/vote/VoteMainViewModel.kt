@@ -51,23 +51,27 @@ class VoteMainViewModel @Inject constructor(
     private fun showVoteList() = viewModelScope.launch {
         updateState { copy(loadState = LoadState.LOADING) }
         try {
-            agendaInfoListUsecase(groupId,0,20).collect() { result ->
+            agendaInfoListUsecase(groupId,0,10).collect() { result ->
+                Log.d("VoteMainViewModel", "API call completed, processing result")
                 Log.d("VoteMainViewModel id확인", "$groupId")
                 result.onSuccess { AgendaInfoListModel ->
+                    Log.d("VoteMainViewModel", "API call succeeded")
                     val voteList = AgendaInfoListModel.agendaDetailInfoList.map { voteInfo ->
                         VoteDummy(
                             id = voteInfo.agendaId,
                             title = voteInfo.title,
-                            images = voteInfo.agendaPhotoInfoList.map { it.agendaPhotoId },
+                            images = voteInfo.agendaPhotoInfoList.map { it.url },
                         )
                     }
                     updateState {
+                        Log.d("VoteMainViewModel", "Updating state with new vote list")
                         copy(
                             loadState = LoadState.SUCCESS,
                             voteList = voteList
                         )
                     }
-                }.onFail {
+                }.onFail { error ->
+                    Log.e("VoteMainViewModel","Failed to fetch vote list: $error")
                     updateState {
                         copy( loadState = LoadState.ERROR)
                     }

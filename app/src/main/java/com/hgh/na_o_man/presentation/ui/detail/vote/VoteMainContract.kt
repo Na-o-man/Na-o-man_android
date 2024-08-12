@@ -25,6 +25,5 @@ class VoteMainContract {
     sealed class VoteMainEvent : ViewEvent {
         object InitVoteMainScreen : VoteMainEvent()
         object onAddAgendaInBoxClicked : VoteMainEvent()
-
     }
 }

@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.component.voteIcon
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,19 +29,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.DeepBlue
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun getVoteList(
     title : String,
-    images : List<Int>,
+    images : List<String>,
     voteId: Long = 33L,
     onClick:(Long) -> Unit = {}
 ) {
+    Log.d("getVoteList", "Rendering getVoteList with title: $title")
     Box (
         modifier = Modifier
             .background(lightSkyBlue, shape = RoundedCornerShape(10.dp))
@@ -64,29 +68,38 @@ fun getVoteList(
             }
             Spacer(modifier = Modifier.height(8.dp))
 
+            Log.d("getVoteList","Middle check")
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier
             ) {
+                Log.d("getVoteList","Middle check2")
                 items(images) { image ->
-                    Image(
-                        painter = painterResource(id = image),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(130.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Color.Gray)
-                    )
+                Log.d("getVoteList", "Loading image resource: $image")
+
+                        Image(
+                            painter = rememberAsyncImagePainter(
+                                model = image,
+                                error = painterResource(id = R.drawable.ic_example)),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .size(130.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color.Gray)
+                        )
+                        Log.d("getVoteList","Image loaded successfully")
+                    }
                 }
             }
         }
     }
-}
 
-@Preview
-@Composable
-fun PreviewVoteList() {
-    getVoteList(title = "이번 여행을 대표할 엽사는?", images = listOf(R.drawable.ic_example, R.drawable.ic_example,R.drawable.ic_example))
-}
+
+//@Preview
+//@Composable
+//fun PreviewVoteList() {
+//    getVoteList(title = "이번 여행을 대표할 엽사는?", images = listOf(R.drawable.ic_example, R.drawable.ic_example,R.drawable.ic_example))
+//}
