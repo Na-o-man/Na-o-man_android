@@ -32,11 +32,11 @@ open class AddViewModel @Inject constructor(
             is AddEvent.CreateGroup -> createGroup()
             is AddEvent.RemoveMember -> removeMember(event.name)
             is AddEvent.UpdateSelectedAttributes -> updateSelectedAttributes(event.attributes)
-            is AddEvent.UpdateGroupName -> updateGroupName(event.groupName) // 새로운 이벤트 추가
         }
     }
 
     private fun updateGroupName(newName: String) {
+        // 상태가 기존 값과 다른 경우에만 업데이트
         updateState { copy(groupName = newName) }
     }
 
@@ -57,20 +57,33 @@ open class AddViewModel @Inject constructor(
     }
 
     private fun updateSelectedAttributes(attributes: List<String>) {
-        updateState { copy(selectedAttributes = attributes) }
+        // 상태가 기존 값과 다른 경우에만 업데이트
+        Log.d("UpdateAttributes", "Attributes: $attributes")
+        if (viewState.value.selectedAttributes != attributes) {
+            updateState { copy(selectedAttributes = attributes) }
+        }
     }
 
     fun updatePlace(newPlace: String) {
-        updateState { copy(place = newPlace) }
+        // 상태가 기존 값과 다른 경우에만 업데이트
+        if (viewState.value.place != newPlace) {
+            updateState { copy(place = newPlace) }
+        }
     }
 
     private fun createGroup() = viewModelScope.launch {
         try {
             // ViewState에서 필요한 데이터를 가져옵니다.
-            val groupName = viewState.value.groupName
             val memberNames = viewState.value.memberNames
             val place = viewState.value.place
             val attributes = viewState.value.selectedAttributes
+
+            // 예외 케이스를 처리하기 위해 로그 추가
+            if (memberNames.isEmpty() || place.isBlank() || attributes.isEmpty()) {
+                Log.e("CreateGroup", "필수 필드가 누락되었습니다.")
+                sendEffect ({ AddSideEffect.ShowToast("필수 필드가 누락되었습니다.") })
+                return@launch
+            }
 
             // 요청 데이터 클래스를 생성합니다.
             val requestDto = GroupAddRequestDto(
@@ -80,15 +93,18 @@ open class AddViewModel @Inject constructor(
                 place = place
             )
 
+            // 요청 데이터 로그 출력
+            Log.d("CreateGroupRequest", "Request DTO: $requestDto")
+
             // Usecase 호출
             createGroupUsecase(requestDto).collect { result ->
-                result.onSuccess { groupAddDto ->
+                result.onSuccess { response ->
                     // 그룹 생성 성공, 상태 업데이트
                     updateState {
                         copy(
                             isGroupCreated = true,
-                            groupName = groupAddDto.name, // 그룹 이름 업데이트
-                            inviteLink = groupAddDto.inviteUrl // 초대 링크 업데이트
+                            groupName = response.name, // 그룹 이름 업데이트
+                            inviteLink = response.inviteUrl // 초대 링크 업데이트
                         )
                     }
                     // 효과를 보내어 다음 화면으로 이동

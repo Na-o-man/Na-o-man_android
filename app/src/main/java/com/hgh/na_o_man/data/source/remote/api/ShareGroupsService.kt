@@ -7,15 +7,20 @@ import com.hgh.na_o_man.data.dto.share_group.response.GroupAddDto
 import com.hgh.na_o_man.data.dto.share_group.response.GroupJoinDto
 import com.hgh.na_o_man.data.dto.share_group.response.GroupListReferDto
 import com.hgh.na_o_man.data.dto.share_group.response.CheckSpecificGroupDto
+import com.hgh.na_o_man.data.dto.share_group.response.GroupInviteDto
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ShareGroupsService {
+    @GET("shareGroups")
+    suspend fun getInvite(
+        @Query("inviteCode") inviteCode: String,
+    ) : Response<ApiResult<GroupInviteDto>>
+
     @POST("shareGroups")
     suspend fun postAddGroup(
         @Body addGroupAddRequest: GroupAddRequestDto

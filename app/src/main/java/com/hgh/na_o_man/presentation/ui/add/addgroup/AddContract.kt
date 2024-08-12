@@ -22,7 +22,6 @@ class AddContract {
         object CreateGroup : AddEvent()
         data class RemoveMember(val name: String) : AddEvent()
         data class UpdateSelectedAttributes(val attributes: List<String>) : AddEvent()
-        data class UpdateGroupName(val groupName: String) : AddEvent() // 추가된 이벤트
     }
 
     sealed class AddSideEffect : ViewSideEffect {

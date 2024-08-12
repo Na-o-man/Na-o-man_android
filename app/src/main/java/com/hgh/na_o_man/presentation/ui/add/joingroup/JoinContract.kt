@@ -15,10 +15,11 @@ class JoinContract {
 
     // ViewState
     data class JoinViewState(
-        val isUrlValid: Boolean = true,
-        val profileId: Int = 0,
+        val isUrlValid: Boolean = false,
+        val profileId: Long = 0,
         val shareGroupId: Int = 0,
-        val members: List<Member> = emptyList() // 멤버 리스트 추가
+        val members: List<Member> = emptyList(), // 멤버 리스트 추가
+        val inviteCode: String = "" // inviteCode 추가
     ) : ViewState
 
     // SideEffect
@@ -29,7 +30,7 @@ class JoinContract {
 
     // Event
     sealed class JoinEvent : ViewEvent {
-        data class ValidateUrl(val url: String) : JoinEvent()
+        data class ValidateUrl(val inviteCode: String) : JoinEvent()
         object onFind : JoinEvent()
         object onCorrect : JoinEvent()
         object LoadGroupMembers : JoinEvent() // 그룹 멤버 로드 이벤트 추가

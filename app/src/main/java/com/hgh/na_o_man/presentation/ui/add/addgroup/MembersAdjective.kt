@@ -125,7 +125,8 @@ fun MembersAdjective(
             val context = LocalContext.current
             val buttonLabels = listOf("친구", "연인", "여행", "가족", "모임", "동아리", "행사", "나들이", "스냅")
             val buttonCount = buttonLabels.size
-            val selectedButtons = remember { mutableStateListOf<Boolean>().apply { repeat(buttonCount) { add(false) } } }
+            val selectedButtons =
+                remember { mutableStateListOf<Boolean>().apply { repeat(buttonCount) { add(false) } } }
             var inputText by remember { mutableStateOf("") }
 
             Column(
@@ -136,6 +137,7 @@ fun MembersAdjective(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+                // 버튼 UI
                 for (row in 0 until 3) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -154,18 +156,25 @@ fun MembersAdjective(
                                     Button(
                                         onClick = {
                                             selectedButtons[index] = !selectedButtons[index]
-                                            val currentAttributes = viewModel.viewState.value.selectedAttributes.toMutableList()
+                                            val currentAttributes =
+                                                viewModel.viewState.value.selectedAttributes.toMutableList()
                                             if (selectedButtons[index]) {
                                                 currentAttributes.add(buttonLabels[index])
                                             } else {
                                                 currentAttributes.remove(buttonLabels[index])
                                             }
-                                            viewModel.handleEvents(AddContract.AddEvent.UpdateSelectedAttributes(currentAttributes))
+                                            viewModel.handleEvents(
+                                                AddContract.AddEvent.UpdateSelectedAttributes(
+                                                    currentAttributes
+                                                )
+                                            )
                                         },
                                         modifier = Modifier.fillMaxSize(),
                                         shape = RoundedCornerShape(20.dp),
                                         colors = ButtonDefaults.buttonColors(
-                                            containerColor = if (isSelected) Color.Gray.copy(alpha = 0.6f) else LightWhite.copy(alpha = 0.3f),
+                                            containerColor = if (isSelected) Color.Gray.copy(alpha = 0.3f) else LightWhite.copy(
+                                                alpha = 0.3f
+                                            ),
                                             contentColor = LightWhite
                                         ),
                                         border = BorderStroke(
@@ -191,10 +200,13 @@ fun MembersAdjective(
                     Spacer(modifier = Modifier.height(17.dp))
                 }
 
+                // 입력 필드
                 Column {
                     TextField(
                         value = inputText,
-                        onValueChange = { inputText = it },
+                        onValueChange = { newText ->
+                            inputText = newText
+                        },
                         placeholder = {
                             Text(
                                 text = "직접 입력",
@@ -223,17 +235,20 @@ fun MembersAdjective(
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 if (inputText.isNotBlank()) {
-                                    val index = buttonLabels.indexOf(inputText)
-                                    if (index != -1) {
-                                        selectedButtons[index] = !selectedButtons[index]
-                                        val currentAttributes = viewModel.viewState.value.selectedAttributes.toMutableList()
-                                        if (selectedButtons[index])
-                                            currentAttributes.add(buttonLabels[index]) else {
-                                            currentAttributes.remove(buttonLabels[index])
+                                    // 버튼 레이블과 일치하지 않는 경우에만 처리
+                                    if (!buttonLabels.contains(inputText)) {
+                                        val newAttributes =
+                                            viewModel.viewState.value.selectedAttributes.toMutableList()
+                                        if (newAttributes.none { it == inputText }) {
+                                            newAttributes.add(inputText)
+                                            viewModel.handleEvents(
+                                                AddContract.AddEvent.UpdateSelectedAttributes(
+                                                    newAttributes
+                                                )
+                                            )
                                         }
-                                        viewModel.handleEvents(AddContract.AddEvent.UpdateSelectedAttributes(currentAttributes))
                                     }
-                                    inputText = ""
+                                    // 입력 필드를 초기화하지 않음
                                 }
                             }
                         )
@@ -248,39 +263,22 @@ fun MembersAdjective(
                                 val index = buttonLabels.indexOf(inputText)
                                 if (index != -1) {
                                     selectedButtons[index] = !selectedButtons[index]
-                                    val currentAttributes = viewModel.viewState.value.selectedAttributes.toMutableList()
+                                    val currentAttributes =
+                                        viewModel.viewState.value.selectedAttributes.toMutableList()
                                     if (selectedButtons[index]) {
                                         currentAttributes.add(buttonLabels[index])
                                     } else {
                                         currentAttributes.remove(buttonLabels[index])
                                     }
-                                    viewModel.handleEvents(AddContract.AddEvent.UpdateSelectedAttributes(currentAttributes))
+                                    viewModel.handleEvents(
+                                        AddContract.AddEvent.UpdateSelectedAttributes(
+                                            currentAttributes
+                                        )
+                                    )
                                 }
                             },
                         contentAlignment = Alignment.CenterEnd
                     ) {
-                        val context = LocalContext.current
-
-                        fun initializeButtons(buttonCount: Int) {
-                            selectedButtons.clear()
-                            repeat(buttonCount) { selectedButtons.add(false) }
-                        }
-
-                        // LaunchedEffect to handle side effects from ViewModel
-                        LaunchedEffect(Unit) {
-                            viewModel.effect.collect { effect ->
-                                when (effect) {
-                                    is AddContract.AddSideEffect.NavigateToNextScreen -> {
-                                        navController.navigate(AddScreenRoute.SPACEINPUT.route)
-                                    }
-                                    is AddContract.AddSideEffect.ShowToast -> {
-                                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                                    }
-                                    else -> {}
-                                }
-                            }
-                        }
-
                         NextAppBar1(
                             onNextClick = {
                                 navController.navigate(AddScreenRoute.SPACEINPUT.route)
@@ -292,6 +290,33 @@ fun MembersAdjective(
                 }
             }
         }
+
+        val context = LocalContext.current
+
+        // LaunchedEffect to handle side effects from ViewModel
+        LaunchedEffect(Unit) {
+            viewModel.effect.collect { effect ->
+                when (effect) {
+                    is AddContract.AddSideEffect.NavigateToNextScreen -> {
+                        navController.navigate(AddScreenRoute.SPACEINPUT.route)
+                    }
+
+                    is AddContract.AddSideEffect.ShowToast -> {
+                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+        NextAppBar1(
+            onNextClick = {
+                navController.navigate(AddScreenRoute.SPACEINPUT.route)
+            },
+            modifier = Modifier
+                .offset(x = 200.dp, y = -(10.dp))
+        )
     }
 }
 

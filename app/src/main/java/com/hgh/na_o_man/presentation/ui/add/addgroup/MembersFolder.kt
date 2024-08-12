@@ -1,10 +1,12 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,7 +47,6 @@ import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 
-
 @Composable
 fun MembersFolder(
     viewModel: AddViewModel = hiltViewModel(),
@@ -53,12 +54,16 @@ fun MembersFolder(
 ) {
     Log.d("리컴포저블", "MembersFolder")
 
-    val context = LocalContext.current
+    val context = LocalContext.current as Activity
     val state by viewModel.viewState.collectAsState()
 
-    val groupName = state.groupName.ifEmpty { "제주도2024" } // 기본 그룹 이름
     val isGroupCreated = state.isGroupCreated
     val inviteLink = state.inviteLink
+
+    // BackHandler를 사용하여 뒤로 가기 버튼 핸들링
+    BackHandler {
+        context.finish()
+    }
 
     LaunchedEffect(isGroupCreated) {
         if (isGroupCreated) {
@@ -66,21 +71,15 @@ fun MembersFolder(
         }
     }
 
-    LaunchedEffect(Unit) {
-        // 그룹 이름을 API에서 가져와서 업데이트
-        viewModel.handleEvents(AddContract.AddEvent.UpdateGroupName("제주도2024")) // 예시, 실제 API 호출로 대체
-    }
-
     Scaffold(
         containerColor = lightSkyBlue
     ) { padding ->
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
             StartTopCloud()
 
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
                     .wrapContentSize()
                     .align(Alignment.Center)
             ) {
@@ -88,52 +87,42 @@ fun MembersFolder(
                     painter = painterResource(id = R.drawable.ic_share_folder_144),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(1.dp)
-                        .offset(x = 10.dp, y = -(20.dp))
                         .size(200.dp)
+                        .offset(x = 10.dp, y = (-20).dp)
                 )
 
                 // 그룹 이름 텍스트
-                Box(
+                Text(
+                    text = state.groupName,
+                    color = DeepBlue,
+                    style = androidx.compose.ui.text.TextStyle(
+                        fontSize = 23.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .offset(y = -(10.dp)) // 위로 이동
-                ) {
-                    Text(
-                        text = groupName,
-                        color = DeepBlue,
-                        style = androidx.compose.ui.text.TextStyle(
-                            fontSize = 23.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-                }
+                        .offset(y = (-10).dp) // 위로 이동
+                )
 
-                val clipboardManager =
-                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val linkToCopy = "http://yourlink.com"
+                val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-                // 구름 이미지와 텍스트를 함께 겹쳐서 배치
+                // 링크 복사 버튼
                 Box(
                     modifier = Modifier
                         .size(100.dp)
                         .offset(x = 150.dp, y = 107.dp)
                         .clickable {
-                            // 링크 복사 이벤트
-                            val clip = ClipData.newPlainText("Copied Link", linkToCopy)
+                            val clip = ClipData.newPlainText("Copied Link", inviteLink)
                             clipboardManager.setPrimaryClip(clip)
                             Toast.makeText(context, "링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    // 구름 이미지
                     Image(
                         painter = painterResource(id = R.drawable.ic_button_cloud_next_140),
                         contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize()
+                        modifier = Modifier.fillMaxSize()
                     )
-                    // "링크복사" 텍스트 (구름 이미지 위에 배치)
                     Text(
                         text = "링크복사",
                         fontSize = 13.sp,
@@ -143,6 +132,7 @@ fun MembersFolder(
                     )
                 }
 
+                // 초대 링크 공유 버튼
                 Box(
                     modifier = Modifier
                         .width(220.dp)
@@ -151,10 +141,8 @@ fun MembersFolder(
                         .clip(RoundedCornerShape(50.dp))
                         .background(LightWhite)
                         .clickable {
-                            val clipboardManager2 =
-                                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                             val clip = ClipData.newPlainText("Invite Link", inviteLink)
-                            clipboardManager2.setPrimaryClip(clip)
+                            clipboardManager.setPrimaryClip(clip)
                             Toast.makeText(context, "초대 링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
                         },
                     contentAlignment = Alignment.Center
@@ -175,6 +163,7 @@ fun MembersFolder(
                     )
                 }
 
+                // 공유 폴더 이동 버튼
                 Box(
                     modifier = Modifier
                         .width(220.dp)
@@ -184,7 +173,7 @@ fun MembersFolder(
                         .background(LightWhite)
                         .clickable {
                             Toast.makeText(context, "공유 폴더로 이동합니다.", Toast.LENGTH_SHORT).show()
-                            // 폴더 이동 기능 추가
+                            navController.navigate(AddScreenRoute.NAMEINPUT.route)
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -207,10 +196,3 @@ fun MembersFolder(
         }
     }
 }
-
-
-
-
-
-
-

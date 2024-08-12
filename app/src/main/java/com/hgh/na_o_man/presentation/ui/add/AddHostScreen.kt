@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +28,7 @@ fun AddHostScreen(
     navController: NavHostController = rememberNavController()
 ) {
     Log.d("리컴포저블", "AddHostScreen")
+
     Scaffold(
         containerColor = lightSkyBlue
     ) { innerPadding ->
