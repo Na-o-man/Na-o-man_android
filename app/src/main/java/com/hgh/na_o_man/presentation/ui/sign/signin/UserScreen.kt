@@ -2,6 +2,7 @@ package com.hgh.na_o_man.presentation.ui.sign.signin
 
 import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -56,6 +57,10 @@ fun UserScreen(
                 else -> {}
             }
         }
+    }
+
+    BackHandler {
+        context.finish()
     }
 
     Surface(
