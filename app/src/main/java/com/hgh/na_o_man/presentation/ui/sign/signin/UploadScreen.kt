@@ -221,7 +221,7 @@ fun UploadScreen(
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
-                            Spacer(modifier = Modifier.height(4.dp))
+                            Spacer(modifier = Modifier.height(12.dp))
                             Line(modifier = Modifier.padding(horizontal = 24.dp))
                             Spacer(modifier = Modifier.height(16.dp))
                             LazyRow(

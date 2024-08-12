@@ -38,7 +38,7 @@ fun SignHostScreen(
             NavHost(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,
-                startDestination = SignScreenRoute.UPLOAD.route
+                startDestination = SignScreenRoute.SPLASH.route
             ) {
 
                 composable(route = SignScreenRoute.SPLASH.route) {
