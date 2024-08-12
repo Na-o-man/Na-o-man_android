@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.sign.signin
 
+import android.app.Activity
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -20,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -54,16 +55,18 @@ import com.hgh.na_o_man.presentation.component.SignBtn
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.UriImageCard
+import com.hgh.na_o_man.presentation.ui.main.MainActivity
 
 @Composable
 fun UploadScreen(
     viewModel: SignViewModel = hiltViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
+    val context = LocalContext.current as Activity
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2)
     ) { uris: List<Uri> ->
-        viewModel.patchUris(uris)
+        viewModel.setEvent(SignContract.SignEvent.OnPhotoSelected(uris))
     }
 
     LaunchedEffect(key1 = viewModel.effect) {
@@ -73,6 +76,14 @@ fun UploadScreen(
                     imagePickerLauncher.launch(
                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
                     )
+                }
+
+                is SignContract.SignSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                }
+
+                is SignContract.SignSideEffect.NaviMain -> {
+                    MainActivity.goMain(context)
                 }
 
                 else -> {}
@@ -217,7 +228,10 @@ fun UploadScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(24.dp),
-                                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    12.dp,
+                                    Alignment.CenterHorizontally
+                                ),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 itemsIndexed(viewState.photos, key = { _, it ->
@@ -239,7 +253,7 @@ fun UploadScreen(
                             }
                             Spacer(modifier = Modifier.height(16.dp))
                             CommonBtn(title = "사진 선택 완료") {
-
+                                viewModel.setEvent(SignContract.SignEvent.OnClickFinish)
                             }
                             Spacer(modifier = Modifier.height(30.dp))
                         }

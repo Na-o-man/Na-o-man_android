@@ -29,6 +29,7 @@ class SignContract {
         object OnClickALlAgree : SignEvent()
         object OnClickUpload : SignEvent()
         object OnClickPhotoPicker : SignEvent()
+        data class OnPhotoSelected(val photos : List<Uri>) : SignEvent()
         object OnClickFinish : SignEvent()
 
     }
