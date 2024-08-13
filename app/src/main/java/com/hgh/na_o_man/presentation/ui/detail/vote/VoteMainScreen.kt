@@ -132,25 +132,23 @@ fun VoteMainScreen(
                     )
                 }
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(), // 전체 화면을 채우도록 설정
-                    contentAlignment = Alignment.Center // 중앙 정렬
-                ) {
-                    if (viewState.voteList.isEmpty()) {
+                if (viewState.voteList.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .padding(padding)
+                            .fillMaxSize(), // 전체 화면을 채우도록 설정
+                        contentAlignment = Alignment.Center // 중앙 정렬
+                    ) {
                         NoGroupBox(message = "아직 안건이 없어요.\n플러스 버튼을 눌러\n그룹을 추가해 주세요.",
                             "안건 추가하기",
                             onAddGroupInBoxClicked = { viewModel.setEvent(VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked) })
-                    } else {
-                        Log.d("VoteMainScreen","VoteMainScreen start")
-                        VoteListScreen(
-                            viewModel = viewModel,
-                            voteList = viewState.voteList,
-                            modifier = Modifier.padding(padding)
-                        )
-                        Log.d("VoteMainScreen","VoteMainScreen end")
-
                     }
+                } else {
+                    VoteListScreen(
+                        viewModel = viewModel,
+                        voteList = viewState.voteList,
+                        modifier = Modifier.padding(padding)
+                    )
                 }
             }
         }
@@ -165,21 +163,24 @@ fun VoteListScreen(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        LazyColumn (
+        LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 110.dp, start = 16.dp, end = 16.dp, bottom = 16.dp) // 위쪽에 여백을 추가
         ) {
             items(voteList) { vote ->
-                Log.d("VoteListScreen", "Rendering vote item: ${vote.title}")
+                Box(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                )
                 getVoteList(
                     title = vote.title,
                     images = vote.images
                 )
-                Log.d("VoteListScreen", "Finished rendering vote item: ${vote.title}")
-
             }
         }
     }

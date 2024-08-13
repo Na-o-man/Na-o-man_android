@@ -8,12 +8,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -45,9 +47,17 @@ fun getVoteList(
     onClick:(Long) -> Unit = {}
 ) {
     Log.d("getVoteList", "Rendering getVoteList with title: $title")
+
+    // 이미지 리스트의 개수에 따라 높이 지정
+    val gridHeight = when (images.size) {
+        in 1..2 -> 130.dp + 16.dp // 이미지 한 줄 크기 + 패딩
+        in 3..4 -> 280.dp + 16.dp // 이미지 두 줄 크기 + 패딩
+        else -> 420.dp + 16.dp // 이미지 세 줄 크기 + 패딩
+    }
+
     Box (
         modifier = Modifier
-            .background(lightSkyBlue, shape = RoundedCornerShape(10.dp))
+            .background(Color.White, shape = RoundedCornerShape(10.dp))
             .border(1.dp, Color.LightGray, RoundedCornerShape(10.dp))
             .clickable(onClick = { onClick(voteId) })
     ) {
@@ -72,30 +82,31 @@ fun getVoteList(
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                modifier = Modifier
+                modifier = Modifier.height(gridHeight)
+
             ) {
                 Log.d("getVoteList","Middle check2")
                 items(images) { image ->
                 Log.d("getVoteList", "Loading image resource: $image")
 
-                        Image(
-                            painter = rememberAsyncImagePainter(
-                                model = image,
-                                error = painterResource(id = R.drawable.ic_example)),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .size(130.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(Color.Gray)
-                        )
-                        Log.d("getVoteList","Image loaded successfully")
-                    }
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = image,
+                            error = painterResource(id = R.drawable.ic_example)),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(130.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color.Gray)
+                    )
+                    Log.d("getVoteList","Image loaded successfully")
                 }
             }
         }
     }
+}
 
 
 //@Preview
