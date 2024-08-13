@@ -278,8 +278,7 @@ fun MembersNameScreen(
                             contentDescription = "Add Button",
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
-                                .height(24.dp)
-                                .width(36.dp)
+                                .size(40.dp, 28.dp)
                                 .padding(end = 10.dp)
                                 .clickable {
                                     if (newMemberName.isNotBlank()) {

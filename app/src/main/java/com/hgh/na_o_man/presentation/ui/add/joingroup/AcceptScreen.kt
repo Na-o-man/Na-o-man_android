@@ -63,7 +63,7 @@ fun AcceptScreen(
     val pagerState = rememberPagerState(pageCount = { (memberList.size + membersPerPage - 1) / membersPerPage })
 
     var selectedProfile by remember { mutableStateOf<String?>(null) } // 상태를 var로 변경
-    var showDialog by remember { mutableStateOf(false) }
+//    var showDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Scaffold(
@@ -88,8 +88,7 @@ fun AcceptScreen(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
                     contentDescription = "Left Image",
                     modifier = Modifier
-                        .height(19.dp)
-                        .width(15.3.dp)
+                        .size(19.dp)
                         .graphicsLayer(rotationZ = -120f)
                 )
 
@@ -104,7 +103,7 @@ fun AcceptScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .offset(y = 40.dp, x = -(20.dp))
+                    .padding(top = 40.dp, end = 20.dp)
             ) {
                 HorizontalPager(
                     state = pagerState,
@@ -133,7 +132,7 @@ fun AcceptScreen(
                 // Next Button Image
                 Box(
                     modifier = Modifier
-                        .offset(y = -(50.dp), x = 260.dp)
+                        .padding(bottom = 50.dp, start = 260.dp)
                         .clickable {
                             if (selectedProfile != null) {
                                 // 프로필이 선택되었으면, 다음 화면으로 이동
@@ -150,26 +149,25 @@ fun AcceptScreen(
                         painter = painterResource(R.drawable.ic_button_cloud_next_140),
                         contentDescription = "Next Button",
                         modifier = Modifier
-                            .height(48.dp)
-                            .width(78.dp)
+                            .size(78.dp, 48.dp),
                     )
                 }
             }
         }
 
-        // 다이얼로그
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text(text = "알림") },
-                text = { Text(text = "프로필 선택이 완료되었습니다.") },
-                confirmButton = {
-                    TextButton(onClick = { showDialog = false }) {
-                        Text("확인")
-                    }
-                }
-            )
-        }
+//        // 다이얼로그
+//        if (showDialog) {
+//            AlertDialog(
+//                onDismissRequest = { showDialog = false },
+//                title = { Text(text = "알림") },
+//                text = { Text(text = "프로필 선택이 완료되었습니다.") },
+//                confirmButton = {
+//                    TextButton(onClick = { showDialog = false }) {
+//                        Text("확인")
+//                    }
+//                }
+//            )
+//        }
     }
 }
 
