@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -27,20 +28,41 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.DeepBlue
+import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SlateGray
+import com.hgh.na_o_man.presentation.theme.SteelBlue
 
 @Composable
 fun UserInfo(
     userName: String,
     profileImageRes: Int,
+    isSelected: Boolean = false, // 선택 상태 추가
     onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
-            .size(355.dp, 130.dp) // 기존 크기 유지
+            .size(350.dp, 130.dp) // 기존 크기 유지
             .padding(16.dp) // 여백 추가
             .clickable(onClick = onClick) // 클릭 가능하도록 설정
+            .background(if (isSelected) Color.Gray else Color.Transparent) // 선택 상태에 따라 배경 색상 변경
     ) {
+            Image(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_nangman_23),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(50.dp)
+                    .fillMaxSize()
+                    .align(Alignment.Center)
+                    .background(Color.Transparent) // 배경을 투명하게 설정
+                    .clip(RoundedCornerShape(50.dp)) // 둥근 모서리 적용
+                    .graphicsLayer(
+                        alpha = if (isSelected) 0.8f else 1f // 선택 상태에 따라 투명도 조절
+                    ),
+                contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
+                colorFilter = if (isSelected) ColorFilter.tint(LightWhite.copy(alpha = 0.8f)) else null, // 선택 상태에 따라 색상 필터 적용
+                alpha = if (isSelected) 1f else 0f
+            )
+
         // 첫 번째 이미지
         Image(
             imageVector = ImageVector.vectorResource(R.drawable.ic_group_detail_info_151),
@@ -51,7 +73,8 @@ fun UserInfo(
                 .padding(start = 50.dp, top = 10.dp)
                 .background(Color.Transparent) // 배경을 투명하게 설정
                 .clip(RoundedCornerShape(50.dp)), // 둥근 모서리 적용
-            contentScale = ContentScale.FillBounds // 이미지 비율 무시하고 크기 맞춤
+            contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
+                    colorFilter = if (isSelected) ColorFilter.tint(SteelBlue) else null // 선택 상태에 따라 색상 필터 적용
         )
 
         // 두 번째 이미지
@@ -59,19 +82,20 @@ fun UserInfo(
             imageVector = ImageVector.vectorResource(R.drawable.ic_group_detail_info_151),
             contentDescription = null,
             modifier = Modifier
-                .height(100.dp)
+                .height(200.dp)
                 .width(320.dp)
                 .padding(start = 50.dp, top = 77.dp) // 여전히 겹치게 설정
                 .background(Color.Transparent) // 배경을 투명하게 설정
                 .clip(RoundedCornerShape(50.dp)),
-            contentScale = ContentScale.FillBounds // 이미지 비율 무시하고 크기 맞춤
+            contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
+            colorFilter = if (isSelected) ColorFilter.tint(SteelBlue) else null // 선택 상태에 따라 색상 필터 적용
         )
 
         // 프로필 이미지
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 20.dp) // 여백 추가
+                .padding(start = 0.dp) // 여백 추가
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = profileImageRes),
@@ -81,7 +105,8 @@ fun UserInfo(
                     .height(97.dp)
                     .width(97.dp)
                     .clip(RoundedCornerShape(50.dp)), // 둥근 모서리 적용
-                contentScale = ContentScale.FillBounds // 이미지 비율 무시하고 크기 맞춤
+                contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
+                        colorFilter = if (isSelected) ColorFilter.tint(SteelBlue) else null // 선택 상태에 따라 색상 필터 적용
             )
 
             // 원 아래 텍스트
@@ -98,3 +123,17 @@ fun UserInfo(
         }
     }
 }
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewUserInfo() {
+    // 예시 사용자 정보
+    UserInfo(
+        userName = "John Doe",
+        profileImageRes = R.drawable.ic_add_group_avatar_94, // 프로필 이미지 리소스 ID
+        isSelected = false, // 선택되지 않은 상태
+        onClick = { /* 클릭 시 동작 */ }
+    )
+}
+

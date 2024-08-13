@@ -59,10 +59,11 @@ fun AcceptScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState() // ViewModel의 상태를 수집
     val memberList = viewState.members
-    val pagerState = rememberPagerState(pageCount = { memberList.size })
+    val membersPerPage = 3 // 페이지당 멤버 수
+    val pagerState = rememberPagerState(pageCount = { (memberList.size + membersPerPage - 1) / membersPerPage })
+
     var selectedProfile by remember { mutableStateOf<String?>(null) } // 상태를 var로 변경
     var showDialog by remember { mutableStateOf(false) }
-
     val context = LocalContext.current
 
     Scaffold(
@@ -109,26 +110,30 @@ fun AcceptScreen(
                     state = pagerState,
                     modifier = Modifier.weight(1f)
                 ) { page ->
-                    if (page < memberList.size) {
-                        AcceptWho1(
-                            navController = navController,
-                            onProfileSelected = { profile ->
-                                selectedProfile = profile // 선택된 프로필을 상태로 업데이트
+                    val startIndex = page * membersPerPage
+                    val endIndex = minOf(startIndex + membersPerPage, memberList.size)
+                    val pageMembers = memberList.subList(startIndex, endIndex)
+                    
+                    AcceptWho1(
+                        navController = navController,
+                        onProfileSelected = { profile ->
+                            selectedProfile = profile // 선택된 프로필을 상태로 업데이트
                             },
-                            member = memberList[page] // 현재 페이지의 멤버 정보 전달
+                        members = pageMembers, // 현재 페이지의 멤버 정보 전달
+                        selectedProfile = selectedProfile, // 현재 선택된 프로필 상태 전달
+                        currentPage = page // 현재 페이지 번호 전달
                         )
-                    }
                 }
 
                 PageIndicator(
                     pagerState = pagerState,
-                    totalPages = memberList.size // 페이지 수 설정
+                    totalPages = pagerState.pageCount // 페이지 수 설정
                 )
 
                 // Next Button Image
                 Box(
                     modifier = Modifier
-                        .offset(y = -(150.dp), x = 260.dp)
+                        .offset(y = -(50.dp), x = 260.dp)
                         .clickable {
                             if (selectedProfile != null) {
                                 // 프로필이 선택되었으면, 다음 화면으로 이동
