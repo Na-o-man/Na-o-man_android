@@ -8,6 +8,7 @@ import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.di.util.work_manager.enqueue.DownloadEnqueuer
+import com.hgh.na_o_man.domain.usecase.member.GetMyIdUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoAllUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoDeleteUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoEtcUsecase
@@ -36,6 +37,7 @@ class PhotoListViewModel @Inject constructor(
     private val getPhotoUsecase: PhotoUsecase,
     private val getPhotoEtcUsecase: PhotoEtcUsecase,
     private val deletePhotoUsecase: PhotoDeleteUsecase,
+    private val getMyIdUsecase: GetMyIdUsecase,
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
@@ -52,14 +54,10 @@ class PhotoListViewModel @Inject constructor(
                 memberId = savedStateHandle[KEY_MEMBER_ID] ?: 0L
             )
         }
+        getMyId()
         setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
         getGroupMember()
         Log.d("리컴포저블", "PhotoListViewModel")
-        updateState {
-            copy(
-                loadState = LoadState.SUCCESS
-            )
-        }
     }
 
     override fun handleEvents(event: PhotoListContract.PhotoListEvent) {
@@ -131,7 +129,8 @@ class PhotoListViewModel @Inject constructor(
                 updateState {
                     copy(
                         memberId = event.member.memberId,
-                        photoList = listOf()
+                        photoList = listOf(),
+                        isMine = viewState.value.memberId == viewState.value.myId
                     )
                 }
                 setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
@@ -226,6 +225,28 @@ class PhotoListViewModel @Inject constructor(
         }
     }
 
+    private fun getMyId() = viewModelScope.launch {
+        try {
+            getMyIdUsecase().collect { result ->
+                result.onSuccess { response ->
+                    updateState {
+                        copy(
+                            loadState = LoadState.SUCCESS,
+                            myId = response.memberId
+                        )
+                    }
+                }.onFail { error ->
+                    updateState {
+                        copy(loadState = LoadState.ERROR)
+                    }
+                }.onException {
+                    throw it
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("예외받기", "$e")
+        }
+    }
     private fun getGroupMember() = viewModelScope.launch {
         try {
             getMemberUsecase(groupId).collect { result ->

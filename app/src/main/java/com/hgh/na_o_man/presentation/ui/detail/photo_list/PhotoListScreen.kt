@@ -285,7 +285,7 @@ fun PhotoListScreen(
                     }
                     if (viewState.photoList.count { it.isSelected } > 0) {
                         PhotoMenu(
-                            isMine = true,
+                            isMine = viewState.isMine,
                             isAgenda = viewState.isAgenda,
                             modifier = Modifier.align(alignment = Alignment.BottomCenter),
                             onCLickDown = {
@@ -307,7 +307,7 @@ fun PhotoListScreen(
                         onCancelButtonClick = { viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDialogClosed) },
                         { modifier ->
                             PhotoMenu(
-                                isMine = false,
+                                isMine = viewState.isMine,
                                 modifier = modifier,
                                 onCLickDown = {
                                     viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDownloadClicked)
