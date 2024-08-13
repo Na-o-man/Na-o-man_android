@@ -8,6 +8,7 @@ import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.domain.model.VoteDummy
 import com.hgh.na_o_man.domain.usecase.agenda.AgendaInfoListUsecase
 import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
+import com.hgh.na_o_man.domain.usecase.share_group.ShareGroupNameListUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.ui.detail.KEY_GROUP_ID
@@ -18,9 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class VoteMainViewModel @Inject constructor(
     private val agendaInfoListUsecase: AgendaInfoListUsecase,
-    private val savedStateHandle: SavedStateHandle,
-    private val checkSpecificGroupUsecase: CheckSpecificGroupUsecase,
-
+    private val savedStateHandle : SavedStateHandle,
+    private val checkSpecificGroupUsecase : CheckSpecificGroupUsecase,
+    private val shareGroupNameListUsecase: ShareGroupNameListUsecase
     ) : BaseViewModel<VoteMainContract.VoteMainViewState,VoteMainContract.VoteMainSideEffect,VoteMainContract.VoteMainEvent>(
     VoteMainContract.VoteMainViewState()
 ) {
@@ -28,6 +29,7 @@ class VoteMainViewModel @Inject constructor(
         Log.d("리컴포저블","VoteMainViewModelInit")
         setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
         fetchGroupName()
+        fetchGroupNameList()
     }
 
     private val groupId: Long
@@ -96,5 +98,18 @@ class VoteMainViewModel @Inject constructor(
         } catch (e : Exception){
             Log.e("VoteMainViewModel","Error in fetchGroupName",e)
         }
+    }
+
+    private fun fetchGroupNameList() = viewModelScope.launch {
+        try {
+            shareGroupNameListUsecase(0,10).collect{ result ->
+                result.onSuccess { data ->
+                    val groupNameList = data.shareGroupNameInfoList
+                    updateState { copy(groupNameList = groupNameList) }
+                } .onFail {
+                    Log.e("VoteMainViewModel","Failed to fetch group name list") }
+            }
+        } catch (e : Exception) {
+            Log.e("VoteMainViewModel","Failed to fetch group name list",e) }
     }
 }
