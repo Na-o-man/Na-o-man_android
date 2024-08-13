@@ -65,7 +65,7 @@ import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 
 
 @Composable
-fun AgendaScreen(
+fun Agenda2Screen(
     navigationBack: () -> Unit,
     navigationPhotoList: (Long, Long) -> Unit,
     navController: NavController,
@@ -490,7 +490,7 @@ fun ShowWarningDialog(onDismiss: () -> Unit) {
 @Composable
 fun PreviewVote2() {
     val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-    AgendaScreen({}, { _, _ ->
+    Agenda2Screen({}, { _, _ ->
 
     }, navController) // 초기화한 navController 전달
 }

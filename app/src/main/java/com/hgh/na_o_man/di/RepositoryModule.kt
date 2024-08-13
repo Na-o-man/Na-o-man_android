@@ -54,7 +54,7 @@ object RepositoryModule {
 
     @Provides
     @ViewModelScoped
-    fun provideAgendaRepository(api: VoteService): VoteRepository =
+    fun provideVoteRepository(api: VoteService): VoteRepository =
         VoteRepositoryImpl(api)
 
 
