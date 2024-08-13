@@ -74,6 +74,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
+    // 드롭다운 메뉴
+    implementation("androidx.compose.material3:material3:1.3.0-beta05")
+
     //뷰페이저 이용
 //    implementation ("com.google.accompanist:accompanist-pager:0.20.1")
 //    implementation ("com.google.accompanist:accompanist-pager-indicators:0.20.1")
