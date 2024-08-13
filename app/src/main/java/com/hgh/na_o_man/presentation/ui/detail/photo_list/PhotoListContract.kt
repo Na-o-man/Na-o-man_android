@@ -22,13 +22,13 @@ class PhotoListContract {
         val memberList: List<ProfileInfoModel> = listOf(
             ProfileInfoModel(
                 name = "전체",
-                image = null,
+                image = "",
                 memberId = 100L,
                 profileId = 100L
             ),
             ProfileInfoModel(
                 name = "기타",
-                image = null,
+                image = "",
                 memberId = 101L,
                 profileId = 101L
             )

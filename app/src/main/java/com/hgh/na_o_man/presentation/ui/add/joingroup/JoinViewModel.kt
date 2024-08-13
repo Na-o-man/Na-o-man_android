@@ -61,7 +61,7 @@ class JoinViewModel @Inject constructor(
                             isUrlValid = true,
                             shareGroupId = viewState.value.shareGroupId,
                             members = response.profileInfoList.map {
-                                Member(it, R.drawable.ic_add_group_avatar_94)
+                                Member(it.name, R.drawable.ic_add_group_avatar_94)
                             },
                             inviteCode = inviteCode
                         )

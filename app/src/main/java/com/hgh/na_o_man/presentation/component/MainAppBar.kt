@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hgh.na_o_man.presentation.component.type.AppBarMenu
 @Composable
@@ -255,6 +256,7 @@ private fun MainAppBar(
                 tint = Color.Unspecified,
                 contentDescription = stringResource(id = plus.contentDescription),
                 modifier = Modifier
+                    .padding(end = plus.horizontalPadding)
                     .clickable { onPlusClick() }
                     .align(Alignment.CenterEnd)
             )
@@ -262,17 +264,8 @@ private fun MainAppBar(
     }
 }
 
-// @Preview(showBackground = true)
-// @Composable
-// fun AppBarPreview() {
-// <<<<<<< feat/photo-list-ui
-//     BackAndSelectAppBar(
-//         onEndClick = {},
-//         onStartClick = {},
-//         isMenuClick = true
-// =======
-//     StartAppBar(
-//         onStartClick = {}
-// >>>>>>> dev
-//     )
-// }
+ @Preview(showBackground = true)
+ @Composable
+ fun AppBarPreview() {
+     StartPlusAppBar(Modifier,{},{})
+ }
