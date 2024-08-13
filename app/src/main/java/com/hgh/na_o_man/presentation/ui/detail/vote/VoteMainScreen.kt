@@ -20,9 +20,13 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.ExposedDropdownMenuDefaults.TrailingIcon
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.LeadingIconTab
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -132,7 +136,7 @@ fun VoteMainScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize() // 전체 화면을 채우도록 설정
-                        .padding(top = 100.dp)
+                        .padding(start = 30.dp, top = 100.dp)
                 ) {
 
                     Log.d("VoteMainScreen", "DropdownMenu - expanded: $expanded, selectedGroupName: $selectedGroupName")
@@ -217,6 +221,13 @@ fun voteListDropDownMenu(
     // 드롭다운 메뉴의 확장 상태를 관리하는 상태 변수
     var expanded by remember { mutableStateOf(false) }
 
+    // 만약 selectedGroupName이 비어있다면 ViewModel에서 가져온 groupName을 기본값으로 설정
+    val initialGroupName = if (selectedGroupName.isEmpty()) {
+        viewState.groupName // ViewModel에서 가져온 groupName을 기본값으로 설정
+    } else {
+        selectedGroupName
+    }
+
     // 드롭다운 메뉴를 누르면 확장 상태 변경
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -226,12 +237,13 @@ fun voteListDropDownMenu(
     ) {
         // 그룹 이름을 선택하는 텍스트 필드
         OutlinedTextField(
-            value = selectedGroupName,
+            value = initialGroupName,
             onValueChange = {},
             readOnly = true, // 사용자가 직접 입력하지 못하도록 설정
-            label = { Text("Select Group") },
-            trailingIcon = {
-                TrailingIcon(expanded = expanded)
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "Dropdown arrow")
             },
             modifier = Modifier
                 .wrapContentWidth()
