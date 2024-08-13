@@ -3,8 +3,12 @@ package com.hgh.na_o_man.presentation.ui.detail.vote
 import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,6 +20,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuDefaults
@@ -24,6 +30,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.LeadingIconTab
@@ -47,6 +54,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,6 +77,7 @@ import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
+import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
 import com.hgh.na_o_man.presentation.ui.main.home.GroupListScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeContract
 import getVoteList
@@ -86,7 +95,6 @@ fun VoteMainScreen(
 
     // 드롭다운 메뉴
     var expanded by remember { mutableStateOf(false) }
-    var selectedGroupName by remember { mutableStateOf(viewState.groupName) }
 
     // FocusRequester 초기화
     val focusRequester = remember { FocusRequester() }
@@ -97,11 +105,6 @@ fun VoteMainScreen(
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
     }
-
-    LaunchedEffect(groupId) {
-        Log.d("VoteMainScreen", "Received groupId: $groupId")
-    }
-
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
@@ -136,17 +139,72 @@ fun VoteMainScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize() // 전체 화면을 채우도록 설정
-                        .padding(start = 30.dp, top = 100.dp)
+                        .padding(start = 20.dp, top = 60.dp)
                 ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
 
-                    Log.d("VoteMainScreen", "DropdownMenu - expanded: $expanded, selectedGroupName: $selectedGroupName")
-                    voteListDropDownMenu(
-                        viewModel = viewModel,
-                        selectedGroupName = selectedGroupName,
-                        onGroupSelected = { groupName ->
-                            selectedGroupName = groupName
-                        },
-                    )
+                        ExposedDropdownMenuBox(
+                            expanded = expanded,
+                            onExpandedChange = {
+                                expanded = !expanded
+                            }
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                androidx.compose.material3.Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_dropdown_11),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified,
+                                )
+                                BasicTextField(
+                                    value = viewState.groupName ?:"",
+                                    onValueChange = { },
+                                    readOnly = true,
+                                    textStyle = TextStyle(
+                                        color = Color.Black,
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
+                                    ),
+                                    modifier = Modifier
+                                        .menuAnchor()
+                                )
+                            }
+                            DropdownMenu(
+                                modifier = Modifier
+                                    .border(3.dp, Color(0xFFBBCFE5), RoundedCornerShape(8.dp))
+                                    .background(Color(0xFFFFFFFF))
+                                    .padding(horizontal = 24.dp),
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false },
+                            ) {
+                                viewState.groupNameList.filter {
+                                    it.shareGroupId != viewState.groupId
+                                }.forEachIndexed { _, member ->
+                                    androidx.compose.material3.DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                member.name,
+                                                fontSize = 16.sp,
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        },
+                                        onClick = {
+                                            viewModel.setEvent(
+                                                VoteMainContract.VoteMainEvent.OnClickDropBoxItem(
+                                                    member = member
+                                                )
+                                            )
+                                            expanded = false
+                                        },
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if (viewState.voteList.isEmpty()) {
@@ -166,12 +224,6 @@ fun VoteMainScreen(
                         voteList = viewState.voteList,
                         modifier = Modifier.padding(padding)
                     )
-                }
-
-                LaunchedEffect(expanded) {
-                    if (expanded) {
-                        focusRequester.requestFocus()  // 드롭다운이 확장된 후에 포커스 요청
-                    }
                 }
             }
         }
@@ -208,71 +260,6 @@ fun VoteListScreen(
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
-@Composable
-fun voteListDropDownMenu(
-    viewModel: VoteMainViewModel = hiltViewModel(),
-    selectedGroupName : String,
-    onGroupSelected: (String) -> Unit,
-){
-    val viewState by viewModel.viewState.collectAsState()
-
-    // 드롭다운 메뉴의 확장 상태를 관리하는 상태 변수
-    var expanded by remember { mutableStateOf(false) }
-
-    // 만약 selectedGroupName이 비어있다면 ViewModel에서 가져온 groupName을 기본값으로 설정
-    val initialGroupName = if (selectedGroupName.isEmpty()) {
-        viewState.groupName // ViewModel에서 가져온 groupName을 기본값으로 설정
-    } else {
-        selectedGroupName
-    }
-
-    // 드롭다운 메뉴를 누르면 확장 상태 변경
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
-    ) {
-        // 그룹 이름을 선택하는 텍스트 필드
-        OutlinedTextField(
-            value = initialGroupName,
-            onValueChange = {},
-            readOnly = true, // 사용자가 직접 입력하지 못하도록 설정
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = "Dropdown arrow")
-            },
-            modifier = Modifier
-                .wrapContentWidth()
-                .menuAnchor()
-        )
-
-        // 그룹 이름 목록을 표시하는 드롭다운 메뉴
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
-                expanded = false // 드롭다운 메뉴 닫기
-            }
-        ) {
-            // 그룹 이름 리스트를 순회하며 각각의 아이템을 드롭다운 메뉴에 추가
-            viewState.groupNameList.forEach { group ->
-                DropdownMenuItem(
-                    onClick = {
-                        onGroupSelected(group.name) // 선택한 그룹 이름 반환
-                        expanded = false // 드롭다운 메뉴 닫기
-                    }
-                ) {
-                    Text(text = group.name)
-                }
-            }
-        }
-    }
-}
-
-
 
 //@Preview(showBackground = true)
 //@Composable

@@ -25,15 +25,21 @@ class VoteMainViewModel @Inject constructor(
     ) : BaseViewModel<VoteMainContract.VoteMainViewState,VoteMainContract.VoteMainSideEffect,VoteMainContract.VoteMainEvent>(
     VoteMainContract.VoteMainViewState()
 ) {
+    private var _groupId: Long = savedStateHandle[KEY_GROUP_ID] ?: 0L
+    private val groupId: Long
+        get() = _groupId
+
+
     init {
         Log.d("리컴포저블","VoteMainViewModelInit")
+        Log.d("VoteMainViewModel", "Initial groupId: $groupId")
         setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
         fetchGroupName()
         fetchGroupNameList()
     }
 
-    private val groupId: Long
-        get() = savedStateHandle[KEY_GROUP_ID] ?: 0L
+//    private val groupId: Long
+//        get() = savedStateHandle[KEY_GROUP_ID] ?: 0L
 
 
     override fun handleEvents(event: VoteMainContract.VoteMainEvent) {
@@ -45,17 +51,28 @@ class VoteMainViewModel @Inject constructor(
             is VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked -> {
 
             }
-
+            is VoteMainContract.VoteMainEvent.OnClickDropBoxItem -> {
+                Log.d("VoteMainViewModel", "Group ID before update: $_groupId")
+                _groupId = event.member.shareGroupId
+                updateState {
+                    copy(
+                        groupId = _groupId,
+                        groupName = event.member.name
+                    )
+                }
+                Log.d("VoteMainViewModel", "Group ID after update: ${event.member.shareGroupId}")
+                showVoteList()
+            }
             else -> {}
         }
     }
 
     private fun showVoteList() = viewModelScope.launch {
+        Log.d("VoteMainViewModel", "Fetching agenda list for group ID: $groupId")
         updateState { copy(loadState = LoadState.LOADING) }
         try {
             agendaInfoListUsecase(groupId,0,10).collect() { result ->
                 Log.d("VoteMainViewModel", "API call completed, processing result")
-                Log.d("VoteMainViewModel id확인", "$groupId")
                 result.onSuccess { AgendaInfoListModel ->
                     Log.d("VoteMainViewModel", "API call succeeded")
                     val voteList = AgendaInfoListModel.agendaDetailInfoList.map { voteInfo ->
@@ -90,13 +107,14 @@ class VoteMainViewModel @Inject constructor(
             checkSpecificGroupUsecase(groupId).collect { result ->
                 result.onSuccess { data ->
                     val groupName = data.name
+                    Log.d("VoteMainViewModel1", "Fetched group name: $groupName")
                     updateState { copy(groupName = groupName) }
                 } .onFail {
-                    Log.e("VoteMainViewModel","Failed to fetch group name")
+                    Log.e("VoteMainViewModel1","Failed to fetch group name")
                 }
             }
         } catch (e : Exception){
-            Log.e("VoteMainViewModel","Error in fetchGroupName",e)
+            Log.e("VoteMainViewModel1","Error in fetchGroupName",e)
         }
     }
 
