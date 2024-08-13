@@ -30,11 +30,13 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -65,6 +67,7 @@ fun MembersAdjective(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController()
 ) {
+    val context = LocalContext.current
     Log.d("리컴포저블", "MembersAdjective")
 
     Scaffold(
@@ -82,13 +85,14 @@ fun MembersAdjective(
         }
 
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
         ) {
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .offset(y = 110.dp),
+                    .padding(top = 50.dp), // 비율 기반 padding
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -100,7 +104,7 @@ fun MembersAdjective(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .offset(y = 145.dp),
+                    .padding(top = 90.dp), // 비율 기반 padding
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -118,7 +122,8 @@ fun MembersAdjective(
                             )
                         },
                     color = LightWhite,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp
                 )
             }
 
@@ -128,170 +133,152 @@ fun MembersAdjective(
             val selectedButtons =
                 remember { mutableStateListOf<Boolean>().apply { repeat(buttonCount) { add(false) } } }
             var inputText by remember { mutableStateOf("") }
+            val selectedAttributes =
+                viewModel.viewState.collectAsState().value.selectedAttributes.toMutableList()
 
             Column(
                 modifier = Modifier
-                    .padding(start = 30.dp, end = 30.dp)
-                    .offset(y = 90.dp)
-                    .fillMaxSize(),
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp)
+                    .padding(top = 175.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 // 버튼 UI
-                for (row in 0 until 3) {
+                buttonLabels.chunked(3).forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        for (col in 0 until 3) {
-                            val index = row * 3 + col
-                            if (index < buttonCount) {
-                                val isSelected = selectedButtons[index]
-                                Box(
-                                    modifier = Modifier
-                                        .offset(y = 1.dp)
-                                        .width(90.dp)
-                                        .height(42.dp)
-                                ) {
-                                    Button(
-                                        onClick = {
-                                            selectedButtons[index] = !selectedButtons[index]
-                                            val currentAttributes =
-                                                viewModel.viewState.value.selectedAttributes.toMutableList()
-                                            if (selectedButtons[index]) {
-                                                currentAttributes.add(buttonLabels[index])
-                                            } else {
-                                                currentAttributes.remove(buttonLabels[index])
-                                            }
-                                            viewModel.handleEvents(
-                                                AddContract.AddEvent.UpdateSelectedAttributes(
-                                                    currentAttributes
-                                                )
-                                            )
-                                        },
-                                        modifier = Modifier.fillMaxSize(),
-                                        shape = RoundedCornerShape(20.dp),
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = if (isSelected) Color.Gray.copy(alpha = 0.3f) else LightWhite.copy(
-                                                alpha = 0.3f
-                                            ),
-                                            contentColor = LightWhite
-                                        ),
-                                        border = BorderStroke(
-                                            1.dp,
-                                            LightWhite
-                                        )
-                                    ) {
-                                        Text(
-                                            text = buttonLabels[index],
-                                            fontWeight = FontWeight.SemiBold,
-                                            fontSize = 12.sp,
-                                            color = if (isSelected) SteelBlue else LightWhite
-                                        )
-                                    }
-                                }
+                        rowItems.forEachIndexed { rowIndex, label ->
+                            val actualIndex = buttonLabels.indexOf(label)
+                            val isSelected = selectedButtons[actualIndex]
+                            Button(
+                                onClick = {
+                                    // 버튼 선택 상태 업데이트
+                                    selectedButtons[actualIndex] = !isSelected
 
-                                if (col < 2) {
-                                    Spacer(modifier = Modifier.width(1.dp))
-                                }
+                                    // 속성 업데이트
+                                    if (selectedButtons[actualIndex]) {
+                                        selectedAttributes.add(label)
+                                    } else {
+                                        selectedAttributes.remove(label)
+                                    }
+
+                                    viewModel.handleEvents(
+                                        AddContract.AddEvent.UpdateSelectedAttributes(
+                                            selectedAttributes
+                                        )
+                                    )
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(horizontal = 8.dp), // 버튼 사이 간격 조정
+                                shape = RoundedCornerShape(20.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (isSelected) Color.Gray.copy(alpha = 0.3f) else LightWhite.copy(
+                                        alpha = 0.3f
+                                    ),
+                                    contentColor = LightWhite
+                                ),
+                                border = BorderStroke(1.dp, LightWhite)
+                            ) {
+                                Text(
+                                    text = label,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 12.sp,
+                                    color = if (isSelected) SteelBlue else LightWhite
+                                )
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(17.dp))
+                    Spacer(modifier = Modifier.height(15.dp)) // Row 간 간격 조정
                 }
 
                 // 입력 필드
-                Column {
-                    TextField(
-                        value = inputText,
-                        onValueChange = { newText ->
-                            inputText = newText
-                        },
-                        placeholder = {
-                            Text(
-                                text = "직접 입력",
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp,
-                                color = LightWhite.copy(alpha = 0.6f)
-                            )
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp, bottom = 10.dp)
-                            .border(
-                                BorderStroke(1.dp, LightWhite),
-                                shape = RoundedCornerShape(50.dp)
-                            ),
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = LightWhite.copy(alpha = 0.3f),
-                            unfocusedContainerColor = LightWhite.copy(alpha = 0.3f),
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
-                        shape = RoundedCornerShape(50.dp),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                if (inputText.isNotBlank()) {
-                                    // 버튼 레이블과 일치하지 않는 경우에만 처리
-                                    if (!buttonLabels.contains(inputText)) {
-                                        val newAttributes =
-                                            viewModel.viewState.value.selectedAttributes.toMutableList()
-                                        if (newAttributes.none { it == inputText }) {
-                                            newAttributes.add(inputText)
-                                            viewModel.handleEvents(
-                                                AddContract.AddEvent.UpdateSelectedAttributes(
-                                                    newAttributes
-                                                )
-                                            )
-                                        }
-                                    }
-                                    // 입력 필드를 초기화하지 않음
-                                }
+                TextField(
+                    value = inputText,
+                    onValueChange = { newText ->
+                        inputText = newText
+
+                        // 텍스트 입력이 있을 경우, 다른 텍스트 항목은 제거
+                        if (inputText.isNotBlank()) {
+                            val nonButtonTextAttributes =
+                                selectedAttributes.filter { it !in buttonLabels }
+                            if (nonButtonTextAttributes.isEmpty()) {
+                                selectedAttributes.add(inputText)
+                            } else {
+                                selectedAttributes.removeAll(nonButtonTextAttributes)
+                                selectedAttributes.add(inputText)
                             }
+
+                            viewModel.handleEvents(
+                                AddContract.AddEvent.UpdateSelectedAttributes(selectedAttributes)
+                            )
+                        }
+                    },
+                    placeholder = {
+                        Text(
+                            text = "직접 입력",
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 16.sp,
+                            color = LightWhite.copy(alpha = 0.6f)
                         )
+                    },
+                    modifier = Modifier
+                        .height(205.dp)
+                        .padding(start = 20.dp, end = 20.dp, bottom = 120.dp)
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp) // 비율 기반 padding
+                        .border(
+                            BorderStroke(1.dp, LightWhite),
+                            shape = RoundedCornerShape(50.dp)
+                        ),
+                    colors = TextFieldDefaults.colors(
+                        unfocusedTextColor = LightWhite,
+                        focusedTextColor = LightWhite,
+                        cursorColor = LightWhite,
+                        focusedContainerColor = LightWhite.copy(alpha = 0.3f),
+                        unfocusedContainerColor = LightWhite.copy(alpha = 0.3f),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(50.dp),
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            if (inputText.isNotBlank() && inputText !in selectedAttributes) {
+                                selectedAttributes.add(inputText)
+                                viewModel.handleEvents(
+                                    AddContract.AddEvent.UpdateSelectedAttributes(selectedAttributes)
+                                )
+                                inputText = ""  // 입력 필드 초기화
+                            }
+                        }
                     )
+                )
 
-                    Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(16.dp)) // 비율 기반 spacing
 
-                    Box(
-                        modifier = Modifier
-                            .size(110.dp).width(60.dp).height(60.dp)
-                            .clickable {
-                                val index = buttonLabels.indexOf(inputText)
-                                if (index != -1) {
-                                    selectedButtons[index] = !selectedButtons[index]
-                                    val currentAttributes =
-                                        viewModel.viewState.value.selectedAttributes.toMutableList()
-                                    if (selectedButtons[index]) {
-                                        currentAttributes.add(buttonLabels[index])
-                                    } else {
-                                        currentAttributes.remove(buttonLabels[index])
-                                    }
-                                    viewModel.handleEvents(
-                                        AddContract.AddEvent.UpdateSelectedAttributes(
-                                            currentAttributes
-                                        )
-                                    )
-                                }
-                            },
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        NextAppBar1(
-                            onNextClick = {
-                                navController.navigate(AddScreenRoute.SPACEINPUT.route)
-                            },
-                            modifier = Modifier
-                                .offset(x = 200.dp, y = -(10.dp))
-                        )
-                    }
-                }
+                val selectedAttributes =
+                    viewModel.viewState.collectAsState().value.selectedAttributes
+
+                NextAppBar1(
+                    onNextClick = {
+                        // 선택된 버튼이 하나라도 있거나 텍스트 입력 필드에 값이 있는 경우만 이동
+                        val hasSelectedButtons = selectedAttributes.size > 0
+                        val hasTextInput = inputText.isNotBlank()
+
+                        if (hasSelectedButtons || hasTextInput) {
+                            navController.navigate(AddScreenRoute.SPACEINPUT.route)
+                        } else {
+                            Toast.makeText(context, "하나 이상의 항목을 선택하거나 텍스트를 입력해야 합니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    modifier = Modifier.offset( y = -(50.dp))
+                )
             }
         }
-
-        val context = LocalContext.current
 
         // LaunchedEffect to handle side effects from ViewModel
         LaunchedEffect(Unit) {
@@ -309,14 +296,6 @@ fun MembersAdjective(
                 }
             }
         }
-
-        NextAppBar1(
-            onNextClick = {
-                navController.navigate(AddScreenRoute.SPACEINPUT.route)
-            },
-            modifier = Modifier
-                .offset(x = 200.dp, y = -(10.dp))
-        )
     }
 }
 
@@ -326,7 +305,4 @@ fun Preview3() {
     val navController = NavHostController(context = LocalContext.current)
     MembersAdjective(navController = navController)
 }
-
-
-
 
