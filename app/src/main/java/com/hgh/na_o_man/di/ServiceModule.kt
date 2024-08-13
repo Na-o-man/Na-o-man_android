@@ -6,6 +6,7 @@ import com.hgh.na_o_man.data.source.remote.api.MembersService
 import com.hgh.na_o_man.data.source.remote.api.ShareGroupsService
 import com.hgh.na_o_man.data.source.remote.api.NotificationsService
 import com.hgh.na_o_man.data.source.remote.api.PhotosService
+import com.hgh.na_o_man.data.source.remote.api.VoteService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,6 +50,12 @@ object ServiceModule {
     @Provides
     @Singleton
     fun provideAgendasService(@RemoteModule.Auth retrofit: Retrofit): AgendasService {
+        return retrofit.buildService()
+    }
+
+    @Provides
+    @Singleton
+    fun provideVoteService(@RemoteModule.Auth retrofit: Retrofit): VoteService {
         return retrofit.buildService()
     }
 }
