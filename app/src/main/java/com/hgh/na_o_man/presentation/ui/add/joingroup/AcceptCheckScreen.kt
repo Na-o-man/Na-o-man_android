@@ -1,7 +1,5 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,26 +15,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -48,17 +39,20 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.theme.DeepBlue
 import com.hgh.na_o_man.presentation.theme.LightWhite
-import com.hgh.na_o_man.presentation.theme.Mustard
 import com.hgh.na_o_man.presentation.theme.SlateGray
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.JoinScreenRoute
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 @Composable
 fun AcceptCheckScreen(
@@ -67,13 +61,24 @@ fun AcceptCheckScreen(
     joinName: String // 생성된 그룹 이름을 인자로 받음
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    var textValue by remember { mutableStateOf(joinName) } // 기본 텍스트 값으로 그룹 이름 사용
-    var isButtonPressed by remember { mutableStateOf(false) }
+    val textValue = viewState.groupName
 
     // 화면의 상태가 로딩 중이거나 멤버 정보가 없을 경우 로딩 표시
     if (viewState.members.isEmpty()) {
         viewModel.setEvent(JoinContract.JoinEvent.LoadGroupMembers)
         return // 아직 멤버 정보가 로드되지 않았으므로 이 화면을 그리지 않음
+    }
+
+    // Effect를 감지하여 화면 전환 처리
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { sideEffect ->
+            when (sideEffect) {
+                is JoinContract.JoinSideEffect.NavigateToInviteScreen -> {
+                    navController.popBackStack() // 뒤로 가기, 이전 화면으로 돌아가기
+                }
+                else -> {}
+            }
+        }
     }
 
     Scaffold(
@@ -126,7 +131,7 @@ fun AcceptCheckScreen(
                     )
 
                     // 멤버들
-                    viewState.members.forEachIndexed { index, member ->
+                    viewState.members.take(3).forEachIndexed { index, member ->
                         Box(
                             modifier = Modifier
                                 .align(Alignment.Center)
@@ -138,7 +143,6 @@ fun AcceptCheckScreen(
                                 painter = painterResource(id = member.avatarResId),
                                 contentDescription = "Avatar ${member.name}",
                                 modifier = Modifier.height(80.dp).width(80.dp).padding(top = 18.dp),
-                                colorFilter = ColorFilter.tint(DeepBlue) // 또는 다른 색상 필터
                             )
                             Text(
                                 text = member.name,
@@ -160,11 +164,12 @@ fun AcceptCheckScreen(
                         .padding(top = 300.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
-                ) {viewModel.setEvent(JoinContract.JoinEvent.onFind)
+                ) {
+                    // "다시 찾기" 버튼
                     Button(
                         onClick = {
-
-                            navController.popBackStack() // 이전 화면으로 돌아가기
+                            viewModel.setEvent(JoinContract.JoinEvent.onFind)
+                            navController.navigate(JoinScreenRoute.ACCEPT.route)
                         },
                         modifier = Modifier
                             .padding(start = 70.dp, top = 20.dp)
@@ -176,12 +181,13 @@ fun AcceptCheckScreen(
                     ) {
                         Text(
                             text = "다시 찾기",
-                            color = if (isButtonPressed) DeepBlue else LightWhite,
+                            color = LightWhite,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
 
+                    // "맞아요!" 버튼
                     Button(
                         onClick = {
                             viewModel.setEvent(JoinContract.JoinEvent.onCorrect)
@@ -197,7 +203,7 @@ fun AcceptCheckScreen(
                     ) {
                         Text(
                             text = "맞아요!",
-                            color = if (isButtonPressed) DeepBlue else LightWhite,
+                            color = LightWhite,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -216,6 +222,7 @@ fun AcceptCheckScreen(
                         text = textValue, // 그룹 이름을 여기에 표시
                         modifier = Modifier
                             .fillMaxSize()
+                            .offset(y = 10.dp)
                             .align(Alignment.Center),
                         style = TextStyle(
                             color = DeepBlue,
@@ -238,7 +245,6 @@ fun Dp.toPx(): Float {
     return this.value * density
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewAcceptCheckScreen() {
@@ -246,15 +252,15 @@ fun PreviewAcceptCheckScreen() {
     AcceptCheckScreen(navController = navController, joinName = "제주도 2024")
 }
 
-@Composable
-fun SomeScreen(
-    navController: NavHostController = rememberNavController(),
-    addViewModel: AddViewModel = hiltViewModel()
-) {
-    val groupName by remember { mutableStateOf(addViewModel.getGroupName()) }
-
-    AcceptCheckScreen(
-        navController = navController,
-        joinName = groupName
-    )
-}
+//@Composable
+//fun SomeScreen(
+//    navController: NavHostController = rememberNavController(),
+//    addViewModel: AddViewModel = hiltViewModel()
+//) {
+//    val groupName by remember { mutableStateOf(addViewModel.getGroupName()) }
+//
+//    AcceptCheckScreen(
+//        navController = navController,
+//        joinName = groupName
+//    )
+//}

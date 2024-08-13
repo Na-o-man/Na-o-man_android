@@ -81,7 +81,6 @@ fun UserInfo(
                     .height(97.dp)
                     .width(97.dp)
                     .clip(RoundedCornerShape(50.dp)), // 둥근 모서리 적용
-                colorFilter = ColorFilter.tint(DeepBlue),
                 contentScale = ContentScale.FillBounds // 이미지 비율 무시하고 크기 맞춤
             )
 
@@ -98,14 +97,4 @@ fun UserInfo(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun UserInfoPreview() {
-    UserInfo(
-        userName = "홍길동",
-        profileImageRes = R.drawable.ic_add_group_avatar_94,
-        onClick = {}
-    ) // UserInfo 컴포저블을 호출하여 프리뷰
 }

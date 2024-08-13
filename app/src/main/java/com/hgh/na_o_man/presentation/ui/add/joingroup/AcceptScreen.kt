@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,9 +55,11 @@ import com.hgh.na_o_man.presentation.ui.add.joingroup.JoinContract.JoinEvent.onP
 @Composable
 fun AcceptScreen(
     viewModel: JoinViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
-    val pagerState = rememberPagerState(pageCount = {10})
+    val viewState by viewModel.viewState.collectAsState() // ViewModel의 상태를 수집
+    val memberList = viewState.members
+    val pagerState = rememberPagerState(pageCount = { memberList.size })
     var selectedProfile by remember { mutableStateOf<String?>(null) } // 상태를 var로 변경
     var showDialog by remember { mutableStateOf(false) }
 
@@ -106,15 +109,21 @@ fun AcceptScreen(
                     state = pagerState,
                     modifier = Modifier.weight(1f)
                 ) { page ->
-                    AcceptWho1(
-                        navController = navController,
-                        onProfileSelected = { profile ->
-                            selectedProfile = profile // 선택된 프로필을 상태로 업데이트
-                        }
-                    )
+                    if (page < memberList.size) {
+                        AcceptWho1(
+                            navController = navController,
+                            onProfileSelected = { profile ->
+                                selectedProfile = profile // 선택된 프로필을 상태로 업데이트
+                            },
+                            member = memberList[page] // 현재 페이지의 멤버 정보 전달
+                        )
+                    }
                 }
 
-                PageIndicator(pagerState)
+                PageIndicator(
+                    pagerState = pagerState,
+                    totalPages = memberList.size // 페이지 수 설정
+                )
 
                 // Next Button Image
                 Box(
@@ -123,7 +132,7 @@ fun AcceptScreen(
                         .clickable {
                             if (selectedProfile != null) {
                                 // 프로필이 선택되었으면, 다음 화면으로 이동
-                                viewModel.handleEvents(JoinContract.JoinEvent.onProfileSelected(profileId = 1)) // 프로필 ID를 적절히 설정
+                                viewModel.handleEvents(onProfileSelected(profileId = 1)) // 프로필 ID를 적절히 설정
                                 navController.navigate("next_screen")
                             } else {
                                 // 프로필이 선택되지 않았을 때 처리
@@ -164,8 +173,10 @@ fun AcceptScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PageIndicator(pagerState: PagerState) {
-    val totalPages = 10 // 표시할 페이지 수 (예: 3페이지)
+fun PageIndicator(
+    pagerState: PagerState,
+    totalPages: Int // 총 페이지 수
+) {
     Row(
         modifier = Modifier
             .padding(16.dp),
@@ -173,20 +184,14 @@ fun PageIndicator(pagerState: PagerState) {
         verticalAlignment = Alignment.CenterVertically // 세로 방향 가운데 정렬
     ) {
         repeat(totalPages) { index ->
-            val color = if (pagerState.currentPage % totalPages == index) DeepBlue else Color.Gray // 현재 페이지에 따라 색상 변경
+            val color = if (pagerState.currentPage == index) DeepBlue else Color.Gray // 현재 페이지에 따라 색상 변경
             Box(
                 modifier = Modifier
                     .size(8.dp)
                     .padding(4.dp)
-                    .background(color, shape = CircleShape)
+                    .background(color, shape = CircleShape) // 점의 모양
             )
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewAccept() {
-    val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-    AcceptScreen(navController = navController)
-}

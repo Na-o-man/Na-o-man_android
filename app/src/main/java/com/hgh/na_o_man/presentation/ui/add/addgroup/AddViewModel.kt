@@ -32,6 +32,7 @@ open class AddViewModel @Inject constructor(
             is AddEvent.CreateGroup -> createGroup()
             is AddEvent.RemoveMember -> removeMember(event.name)
             is AddEvent.UpdateSelectedAttributes -> updateSelectedAttributes(event.attributes)
+            else -> {}
         }
     }
 
@@ -125,5 +126,5 @@ open class AddViewModel @Inject constructor(
         }
     }
 
-    fun getGroupName(): String = viewState.value.groupName
+//    fun getGroupName2(): String = viewState.value.groupName
 }

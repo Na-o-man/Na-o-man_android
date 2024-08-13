@@ -19,7 +19,8 @@ import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 @Composable
 fun AcceptWho1(
     navController: NavHostController,
-    onProfileSelected: (String) -> Unit
+    onProfileSelected: (String) -> Unit,
+    member: Member
 ) {
     Box(
         modifier = Modifier
@@ -37,37 +38,9 @@ fun AcceptWho1(
                     .background(Color.Transparent)
             ) {
                 UserInfo(
-                    userName = "홍길동",
+                    userName = member.name, // 멤버 이름 전달
                     profileImageRes = R.drawable.ic_add_group_avatar_94, // 프로필 이미지 리소스 추가
-                    onClick = { onProfileSelected("홍길동") } // 선택된 프로필을 onProfileSelected로 전달
-                )
-            }
-
-            // 두 번째 UserInfo
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 15.dp, top = 110.dp, bottom = 8.dp)
-                    .background(Color.Transparent)
-            ) {
-                UserInfo(
-                    userName = "홍길은",
-                    profileImageRes = R.drawable.ic_add_group_avatar_94, // 프로필 이미지 리소스 추가
-                    onClick = { onProfileSelected("홍길은") } // 선택된 프로필을 onProfileSelected로 전달
-                )
-            }
-
-            // 세 번째 UserInfo
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 15.dp, top = 230.dp)
-                    .background(Color.Transparent)
-            ) {
-                UserInfo(
-                    userName = "홍길금",
-                    profileImageRes = R.drawable.ic_add_group_avatar_94, // 프로필 이미지 리소스 추가
-                    onClick = { onProfileSelected("홍길금") } // 선택된 프로필을 onProfileSelected로 전달
+                    onClick = { onProfileSelected(member.name) } // 선택된 프로필을 onProfileSelected로 전달
                 )
             }
         }
