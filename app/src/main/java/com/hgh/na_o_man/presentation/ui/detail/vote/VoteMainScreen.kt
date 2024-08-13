@@ -181,9 +181,7 @@ fun VoteMainScreen(
                                 expanded = expanded,
                                 onDismissRequest = { expanded = false },
                             ) {
-                                viewState.groupNameList.filter {
-                                    it.shareGroupId != viewState.groupId
-                                }.forEachIndexed { _, member ->
+                                viewState.groupNameList.forEachIndexed { _, member ->
                                     androidx.compose.material3.DropdownMenuItem(
                                         text = {
                                             Text(
