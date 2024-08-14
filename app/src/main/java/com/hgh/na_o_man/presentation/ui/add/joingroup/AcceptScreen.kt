@@ -81,7 +81,7 @@ fun AcceptScreen(
             Row(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = padding.calculateTopPadding() + 40.dp),
+                    .padding(top = padding.calculateTopPadding() + 50.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -103,7 +103,7 @@ fun AcceptScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 40.dp, end = 20.dp)
+                    .padding(top = 170.dp, end = 20.dp)
             ) {
                 HorizontalPager(
                     state = pagerState,
@@ -132,7 +132,7 @@ fun AcceptScreen(
                 // Next Button Image
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 50.dp, start = 260.dp)
+                        .padding(bottom = 40.dp, start = 260.dp)
                         .clickable {
                             if (selectedProfile != null) {
                                 // 프로필이 선택되었으면, 다음 화면으로 이동

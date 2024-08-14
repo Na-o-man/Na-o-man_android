@@ -125,7 +125,7 @@ fun MembersFolder(
                         .align(Alignment.Center)
                         .size(75.dp)
                         .clickable {
-                            val clip = ClipData.newPlainText("Copied Link", inviteLink)
+                            val clip = ClipData.newPlainText("Copied Link", state.inviteLink)
                             clipboardManager.setPrimaryClip(clip)
                             Toast.makeText(context, "링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
                         },

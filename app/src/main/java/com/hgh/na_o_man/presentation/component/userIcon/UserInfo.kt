@@ -44,24 +44,8 @@ fun UserInfo(
             .size(350.dp, 130.dp) // 기존 크기 유지
             .padding(16.dp) // 여백 추가
             .clickable(onClick = onClick) // 클릭 가능하도록 설정
-            .background(if (isSelected) Color.Gray else Color.Transparent) // 선택 상태에 따라 배경 색상 변경
+            .background(if (isSelected) SteelBlue.copy(0.3f) else Color.Transparent) // 선택 상태에 따라 배경 색상 변경
     ) {
-            Image(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_nangman_23),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(50.dp)
-                    .fillMaxSize()
-                    .align(Alignment.Center)
-                    .background(Color.Transparent) // 배경을 투명하게 설정
-                    .clip(RoundedCornerShape(50.dp)) // 둥근 모서리 적용
-                    .graphicsLayer(
-                        alpha = if (isSelected) 0.8f else 1f // 선택 상태에 따라 투명도 조절
-                    ),
-                contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
-                colorFilter = if (isSelected) ColorFilter.tint(LightWhite.copy(alpha = 0.8f)) else null, // 선택 상태에 따라 색상 필터 적용
-                alpha = if (isSelected) 1f else 0f
-            )
 
         // 첫 번째 이미지
         Image(
@@ -74,7 +58,7 @@ fun UserInfo(
                 .background(Color.Transparent) // 배경을 투명하게 설정
                 .clip(RoundedCornerShape(50.dp)), // 둥근 모서리 적용
             contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
-                    colorFilter = if (isSelected) ColorFilter.tint(SteelBlue) else null // 선택 상태에 따라 색상 필터 적용
+                    colorFilter = if (isSelected) ColorFilter.tint(SteelBlue.copy(0.4f)) else null // 선택 상태에 따라 색상 필터 적용
         )
 
         // 두 번째 이미지
@@ -88,7 +72,7 @@ fun UserInfo(
                 .background(Color.Transparent) // 배경을 투명하게 설정
                 .clip(RoundedCornerShape(50.dp)),
             contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
-            colorFilter = if (isSelected) ColorFilter.tint(SteelBlue) else null // 선택 상태에 따라 색상 필터 적용
+            colorFilter = if (isSelected) ColorFilter.tint(SteelBlue.copy(0.6f)) else null // 선택 상태에 따라 색상 필터 적용
         )
 
         // 프로필 이미지
@@ -106,7 +90,7 @@ fun UserInfo(
                     .width(97.dp)
                     .clip(RoundedCornerShape(50.dp)), // 둥근 모서리 적용
                 contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
-                        colorFilter = if (isSelected) ColorFilter.tint(SteelBlue) else null // 선택 상태에 따라 색상 필터 적용
+                        colorFilter = if (isSelected) ColorFilter.tint(SteelBlue.copy(0.8f)) else null // 선택 상태에 따라 색상 필터 적용
             )
 
             // 원 아래 텍스트
