@@ -3,11 +3,30 @@
   <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=Kotlin&logoColor=white">
   <img src="https://img.shields.io/badge/jetpack_compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white">
 </div>
+<br>
+<table>
+  <tr>
+    <td align="center"><img src="" width="150" /></td>
+    <td align="center"><img src="" width="150" /></td>
+    <td align="center"><img src="" width="150" /></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/hangunhee39">⭐️한건희</a></td>
+    <td align="center"><a href="https://github.com/BAEK0111">백종원</a></td>
+    <td align="center"><a href="https://github.com/skyblue1232">고민균</a></td>
+  </tr>
+  <tr>
+    <td align="center"> MVVM+MVI패턴 설계 <br> Sign <br> MyPage <br> PhotoList <br> AgendaAdd <br> VoteDetail <br> ImageUpload/Download(Background) </td>
+    <td align="center"> Home <br> Alarm <br> GroupFolder <br> VoteHome </td>
+    <td align="center"> GroupAdd <br> GroupJoin </td>
+  </tr>
+</table>
 
 
 ## Clean Architecture
 - MVVM + MVI
 <img width="767" alt="manageApp_arch" src="https://github.com/hangunhee39/manageApp/assets/77563098/d10cb136-8371-415c-b1bb-672d19b09f8c">
+
 
 ## Project Folder Structure
 ```plaintext
