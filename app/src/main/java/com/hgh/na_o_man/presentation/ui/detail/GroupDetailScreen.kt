@@ -90,10 +90,9 @@ fun GroupDetailScreen(
                         navigationBack = {
                             navController.popBackStack()
                         },
-                        navigationAgenda = {
+                        navigationAgenda = { photos->
                             navController.previousBackStackEntry?.savedStateHandle?.set(
-                                "agendaData",
-                                it
+                                AGENDA_PHOTOS, photos
                             )
                             navController.popBackStack()
                         }
@@ -160,7 +159,9 @@ enum class GroupDetailScreenRoute(val route: String) {
 
 const val KEY_GROUP_ID = "group-id"
 const val KEY_MEMBER_ID = "member-id"
+const val KEY_PROFILE_ID  = "profild-id"
 const val KEY_AGENDA_ID = "agenda-id"
 const val KEY_IS_AGENDA = "is-agenda"
 const val ALL_PHOTO_ID = 100L
 const val OTHER_PHOTO_ID = 101L
+const val AGENDA_PHOTOS = "agenda-photos"

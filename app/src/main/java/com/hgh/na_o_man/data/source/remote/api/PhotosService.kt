@@ -61,7 +61,7 @@ interface PhotosService {
         @Query("size") size: Int,
     ) : Response<ApiResult<PhotoAllDto>>
 
-    @HTTP(method = "DELETE", path="photo", hasBody = true)
+    @HTTP(method = "DELETE", path="photos", hasBody = true)
     suspend fun deletePhotosAPI(
         @Body request : PhotoIdListDto
     ) : Response<ApiResult<PhotoIdListResDto>>

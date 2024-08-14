@@ -17,14 +17,14 @@ import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.ui.detail.ALL_PHOTO_ID
+import com.hgh.na_o_man.presentation.ui.detail.KEY_AGENDA_ID
 import com.hgh.na_o_man.presentation.ui.detail.KEY_GROUP_ID
 import com.hgh.na_o_man.presentation.ui.detail.KEY_IS_AGENDA
 import com.hgh.na_o_man.presentation.ui.detail.KEY_MEMBER_ID
+import com.hgh.na_o_man.presentation.ui.detail.KEY_PROFILE_ID
 import com.hgh.na_o_man.presentation.ui.detail.OTHER_PHOTO_ID
-import com.hgh.na_o_man.presentation.ui.sign.signin.SignContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,19 +51,19 @@ class PhotoListViewModel @Inject constructor(
         updateState {
             copy(
                 isAgenda = savedStateHandle[KEY_IS_AGENDA] ?: false,
-                memberId = savedStateHandle[KEY_MEMBER_ID] ?: 0L
+                profileId = savedStateHandle[KEY_MEMBER_ID] ?: 0L,
             )
         }
+        getGroupMember()
         getMyId()
         setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
-        getGroupMember()
         Log.d("리컴포저블", "PhotoListViewModel")
     }
 
     override fun handleEvents(event: PhotoListContract.PhotoListEvent) {
         when (event) {
             is PhotoListContract.PhotoListEvent.InitPhotoListScreen -> {
-                Log.d("id확인", "${groupId},${viewState.value.memberId}")
+                Log.d("id확인", "${groupId},${viewState.value.profileId}")
             }
 
             PhotoListContract.PhotoListEvent.OnBackClicked -> {
@@ -118,9 +118,9 @@ class PhotoListViewModel @Inject constructor(
             }
 
             PhotoListContract.PhotoListEvent.OnPagingPhoto -> {
-                if (viewState.value.memberId == ALL_PHOTO_ID) {
+                if (viewState.value.profileId == ALL_PHOTO_ID) {
                     getAllPhoto()
-                } else if (viewState.value.memberId == OTHER_PHOTO_ID) {
+                } else if (viewState.value.profileId == OTHER_PHOTO_ID) {
                     getEtcPhoto()
                 } else {
                     getMemberPhoto()
@@ -132,9 +132,10 @@ class PhotoListViewModel @Inject constructor(
                 nextPage.value = 0
                 updateState {
                     copy(
+                        profileId = event.member.profileId,
                         memberId = event.member.memberId,
                         photoList = listOf(),
-                        isMine = viewState.value.memberId == viewState.value.myId
+                        isMine = event.member.memberId == viewState.value.myId
                     )
                 }
                 setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
@@ -202,7 +203,7 @@ class PhotoListViewModel @Inject constructor(
             if (hasNextPage.value) {
                 getPhotoUsecase(
                     groupId,
-                    viewState.value.memberId,
+                    viewState.value.profileId,
                     nextPage.value,
                     14
                 ).collect { result ->
@@ -236,7 +237,7 @@ class PhotoListViewModel @Inject constructor(
                     updateState {
                         copy(
                             loadState = LoadState.SUCCESS,
-                            myId = response.memberId
+                            myId = response.memberId,
                         )
                     }
                 }.onFail { error ->
@@ -259,7 +260,7 @@ class PhotoListViewModel @Inject constructor(
                     updateState {
                         copy(
                             loadState = LoadState.SUCCESS,
-                            memberList = response.profileInfoList + viewState.value.memberList
+                            memberList = response.profileInfoList.filterNot { it.memberId == -1L } + viewState.value.memberList
                         )
                     }
                 }.onFail { error ->

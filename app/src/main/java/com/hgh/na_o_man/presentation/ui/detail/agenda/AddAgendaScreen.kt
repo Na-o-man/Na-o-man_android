@@ -53,6 +53,7 @@ import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.TitleDialog
 import com.hgh.na_o_man.presentation.theme.LightWhite
+import com.hgh.na_o_man.presentation.ui.detail.AGENDA_PHOTOS
 
 @Composable
 fun AddAgendaScreen(
@@ -63,7 +64,7 @@ fun AddAgendaScreen(
 ) {
     val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
     val agendaPhotos = remember {
-        savedStateHandle?.get<List<PhotoInfoModel>>("agendaData")?.map {
+        savedStateHandle?.get<List<PhotoInfoModel>>(AGENDA_PHOTOS)?.map {
             it.copy(isSelected = false)
         } ?: listOf(PhotoInfoModel())
     }
