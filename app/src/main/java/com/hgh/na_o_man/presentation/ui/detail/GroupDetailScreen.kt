@@ -68,9 +68,10 @@ fun GroupDetailScreen(
                                 GroupDetailScreenRoute.VOTE.route.plus("/${groupId}")
                             )
                         },
-                        navigationMyPage = {
-
-                            navController.navigate(GroupDetailScreenRoute.VOTE_DETAIL.route) // 수정 필요
+                        navigationMyPage = { groupId ->
+                            navController.navigate(
+                                GroupDetailScreenRoute.AGENDA.route.plus("/${groupId}")
+                            )
                         },
                     )
                 }
@@ -90,7 +91,10 @@ fun GroupDetailScreen(
                             navController.popBackStack()
                         },
                         navigationAgenda = {
-                            navController.previousBackStackEntry?.savedStateHandle?.set("agendaData", it)
+                            navController.previousBackStackEntry?.savedStateHandle?.set(
+                                "agendaData",
+                                it
+                            )
                             navController.popBackStack()
                         }
                     )
@@ -115,9 +119,14 @@ fun GroupDetailScreen(
                     )
                 }
 
-                composable(route = GroupDetailScreenRoute.AGENDA.route) {
+                composable(route = GroupDetailScreenRoute.AGENDA.route
+                    .plus("/{$KEY_GROUP_ID}"),
+                    arguments = listOf(
+                        navArgument(KEY_GROUP_ID) { type = NavType.LongType }
+                    )
+                ) {
                     AddAgendaScreen(
-                      //  navController = navController,
+                        navController = navController,
                         navigationBack = {
                             navController.popBackStack()
                         }, navigationPhotoList = { groupId, memberId ->

@@ -29,8 +29,7 @@ import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 @Composable
 fun AgendaPhotos(
     images: List<PhotoInfoModel>,
-    voteId: Long = 33L,
-    onClick: (Long) -> Unit = {}
+    onClick: () -> Unit
 ) {
 
     val gradient = Brush.linearGradient(
@@ -48,7 +47,6 @@ fun AgendaPhotos(
         modifier = Modifier
             .background(Color(0xBFFFFFFF), shape = RoundedCornerShape(14.dp))
             .border(1.dp, gradient, RoundedCornerShape(14.dp))
-            .clickable(onClick = { onClick(voteId) })
     ) {
         Column(
             modifier = Modifier
@@ -92,6 +90,9 @@ fun AgendaPhotos(
                 modifier = Modifier
                     .size(36.dp)
                     .align(Alignment.End)
+                    .clickable {
+                        onClick()
+                    }
             )
         }
     }
@@ -100,5 +101,5 @@ fun AgendaPhotos(
 @Preview
 @Composable
 fun PreviewVoteList() {
-    AgendaPhotos(images = listOf(PhotoInfoModel(), PhotoInfoModel()))
+    AgendaPhotos(images = listOf(PhotoInfoModel(), PhotoInfoModel())){}
 }

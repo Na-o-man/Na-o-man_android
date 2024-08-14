@@ -110,7 +110,11 @@ class PhotoListViewModel @Inject constructor(
 
             PhotoListContract.PhotoListEvent.OnAgendaClicked -> {
                 updateState { copy(selectPhotoList = photoList.filter { it.isSelected }) }
-                sendEffect({ PhotoListContract.PhotoListSideEffect.NaviAgenda })
+                if (viewState.value.selectPhotoList.size <= 6) {
+                    sendEffect({ PhotoListContract.PhotoListSideEffect.NaviAgenda })
+                } else {
+                    sendEffect({ PhotoListContract.PhotoListSideEffect.ShowToast("안건은 최대 6개 입니다.") })
+                }
             }
 
             PhotoListContract.PhotoListEvent.OnPagingPhoto -> {
