@@ -81,7 +81,7 @@ fun AcceptInviteScreen(
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .offset(x = 60.dp, y = -(65.dp)),
+                    .padding(start = 60.dp, bottom = 120.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -103,8 +103,8 @@ fun AcceptInviteScreen(
 
             Box(
                 modifier = Modifier
-                    .size(width = 295.dp, height = 55.dp)
-                    .offset(x = 35.dp, y = 326.dp)
+                    .size(width = 290.dp, height = 55.dp)
+                    .align(Alignment.Center)
                     .background(
                         color = LightWhite.copy(alpha = 0.7f),
                         shape = RoundedCornerShape(20.dp)
@@ -154,7 +154,7 @@ fun AcceptInviteScreen(
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
-                    .offset(x = -(40.dp), y = 70.dp)
+                    .padding(end = 30.dp, top = 130.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_button_cloud_next_140),

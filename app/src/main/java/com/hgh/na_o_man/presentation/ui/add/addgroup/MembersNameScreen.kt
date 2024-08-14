@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,6 +14,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -112,7 +116,7 @@ fun MembersNameScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 16.dp)
-                            .padding(top = 30.dp), // 상단 패딩 조정
+                            .padding(top = 20.dp), // 상단 패딩 조정
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // 중앙에 위치한 이미지
@@ -152,75 +156,83 @@ fun MembersNameScreen(
                         )
                     }
 
+                    Spacer(modifier = Modifier.height(10.dp))
+
                     // 중앙에 위치한 큰 이미지
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 30.dp), // 상단 패딩 조정
+                            .padding(top = 40.dp), // 상단 패딩 조정
                         contentAlignment = Alignment.Center
                     ) {
-                        Image(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_share_folder_144),
-                            contentDescription = "ADD",
+                        Box(
                             modifier = Modifier
-                                .size(220.dp)
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(16.dp)),
-                            contentScale = ContentScale.FillBounds
-                        )
-                    }
-
-                    // 중앙에 위치한 이름 목록
-                    Column(
-                        modifier = Modifier
-                            .offset(x = 75.dp, y = 20.dp)
-                            .align(Alignment.Center) // Column을 중앙에 위치
-                            .padding(10.dp) // 내부 padding 조정
-                            .verticalScroll(rememberScrollState()) // 스크롤 가능하게 설정
-                    ) {
-                        memberNames.chunked(3).forEach { rowNames -> // 3개의 이름씩 묶어 Row에 배치
-                            Row(
+                                .size(240.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .padding(10.dp), // 내부 패딩 추가
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_share_folder_144),
+                                contentDescription = "ADD",
                                 modifier = Modifier
-                                    .fillMaxWidth() // Row가 전체 너비를 차지하도록 설정
-                                    .padding(vertical = 8.dp), // 각 Row 간격 조정
-                                horizontalArrangement = Arrangement.spacedBy(8.dp) // 이름들 사이 간격 조정
+                                    .fillMaxSize(),
+                                contentScale = ContentScale.FillBounds
+                            )
+
+                            // 큰 이미지 내부에 이름 목록을 배치하고 스크롤 가능하게 설정
+                            LazyColumn(
+                                modifier = Modifier
+                                    .padding(start = 10.dp, top = 35.dp, bottom = 20.dp, end = 10.dp)
+                                    .fillMaxSize()
+                                    .padding(horizontal = 10.dp), // 좌우 padding
+                                verticalArrangement = Arrangement.Center // 내용을 중앙에서부터 채우도록 설정
                             ) {
-                                rowNames.forEach { name ->
-                                    var showRemoveButton by remember { mutableStateOf(false) }
+                                memberNames.chunked(3).forEach { rowNames -> // 3개의 이름씩 묶어 Row에 배치
+                                    item {
+                                        LazyRow(
+                                            modifier = Modifier
+                                                .fillMaxWidth() // Row가 전체 너비를 차지하도록 설정
+                                                .padding(vertical = 8.dp), // 각 Row 간격 조정
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp) // 이름들 사이 간격 조정
+                                        ) {
+                                            items(rowNames) { name ->
+                                                var showRemoveButton by remember { mutableStateOf(false) }
 
-                                    Box(
-                                        modifier = Modifier
-                                            .background(Color.White.copy(alpha = 0.7f)) // 흰색 배경 추가
-                                            .padding(horizontal = 4.dp, vertical = 3.dp)
-                                            .clickable {
-                                                showRemoveButton =
-                                                    !showRemoveButton // 클릭 시 삭제 버튼 표시/숨김
-                                            },
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Text(
-                                                text = name,
-                                                fontWeight = FontWeight.Bold,
-                                                color = SteelBlue,
-                                                fontSize = 14.sp
-                                            )
-
-                                            if (showRemoveButton) {
-                                                Image(
-                                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
-                                                    contentDescription = "Remove Button",
+                                                Box(
                                                     modifier = Modifier
+                                                        .clip(RoundedCornerShape(8.dp))
+                                                        .background(Color.White.copy(alpha = 0.7f)) // 흰색 배경 추가
+                                                        .padding(horizontal = 4.dp, vertical = 3.dp)
                                                         .clickable {
-                                                            memberNames = memberNames - name
-                                                            viewModel.handleEvents(
-                                                                AddContract.AddEvent.RemoveMember(
-                                                                    name
-                                                                )
+                                                            showRemoveButton = !showRemoveButton // 클릭 시 삭제 버튼 표시/숨김
+                                                        },
+                                                    contentAlignment = Alignment.Center
+                                                ) {
+                                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                                        Text(
+                                                            text = name,
+                                                            fontWeight = FontWeight.Bold,
+                                                            color = SteelBlue,
+                                                            fontSize = 14.sp
+                                                        )
+
+                                                        if (showRemoveButton) {
+                                                            Image(
+                                                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
+                                                                contentDescription = "Remove Button",
+                                                                modifier = Modifier
+                                                                    .clickable {
+                                                                        memberNames = memberNames - name
+                                                                        viewModel.handleEvents(
+                                                                            AddContract.AddEvent.RemoveMember(name)
+                                                                        )
+                                                                    }
+                                                                    .size(13.dp) // 이미지 크기를 줄여서 테스트
                                                             )
                                                         }
-                                                        .size(13.dp) // 이미지 크기를 줄여서 테스트
-                                                )
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -229,10 +241,14 @@ fun MembersNameScreen(
                         }
                     }
 
+                    Spacer(modifier = Modifier.height(10.dp))
+
                     // 입력창
                     Box(
                         modifier = Modifier
-                            .padding(start = 50.dp, end = 50.dp, top = 380.dp)
+                            .align(Alignment.Center)
+                            .padding(start = 50.dp, end = 50.dp, top = 390.dp)
+                            .height(100.dp)
                             .clip(RoundedCornerShape(30.dp))
                             .background(LightWhite.copy(alpha = 0.5f))
                     ) {
@@ -240,7 +256,6 @@ fun MembersNameScreen(
                             value = newMemberName,
                             onValueChange = { newMemberName = it },
                             modifier = Modifier
-                                .height(120.dp)
                                 .fillMaxWidth()
                                 .padding(start = 20.dp)
                                 .align(Alignment.CenterStart)
