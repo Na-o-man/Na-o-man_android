@@ -247,6 +247,7 @@ class PhotoListViewModel @Inject constructor(
             Log.e("예외받기", "$e")
         }
     }
+
     private fun getGroupMember() = viewModelScope.launch {
         try {
             getMemberUsecase(groupId).collect { result ->
@@ -335,11 +336,13 @@ class PhotoListViewModel @Inject constructor(
                     .map { it.rawPhotoUrl }
             )
             updateState {
-                copy(photoList = photoList.filter { it.isSelected }
-                    .map { photo ->
+                copy(photoList = photoList.map { photo ->
+                    if (photo.isSelected) {
                         photo.copy(isDownloaded = true, isSelected = false)
+                    } else {
+                        photo
                     }
-                )
+                })
             }
         }
     }
