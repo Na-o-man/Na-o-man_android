@@ -16,7 +16,7 @@
     <td align="center"><a href="https://github.com/skyblue1232">고민균</a></td>
   </tr>
   <tr>
-    <td align="center"> MVVM+MVI패턴 설계 <br> Sign <br> MyPage <br> PhotoList <br> AgendaAdd <br> VoteDetail <br> ImageUpload/Download(Background) </td>
+    <td align="center"> 프로젝트 설계( MVVM+MVI패턴, Hilt, ..) <br> Sign <br> MyPage <br> PhotoList <br> AgendaAdd <br> VoteDetail <br> Image-Up/Download(Background) </td>
     <td align="center"> Home <br> Alarm <br> GroupFolder <br> VoteHome </td>
     <td align="center"> GroupAdd <br> GroupJoin </td>
   </tr>
