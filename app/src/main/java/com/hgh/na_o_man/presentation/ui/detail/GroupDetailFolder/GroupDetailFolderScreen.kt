@@ -64,7 +64,7 @@ import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GRO
 @ExperimentalPagerApi
 @Composable
 fun GroupDetailFolderScreen(
-    navigationMyPage: () -> Unit,
+    navigationMyPage: (Long) -> Unit,
     navigationPhotoList: (Long, Long) -> Unit,
     navigationVote: (Long) -> Unit,
     navigationBack: () -> Unit,
@@ -135,7 +135,7 @@ fun GroupDetailFolderScreen(
                             navigationBack()
                         },
                         onEndClick = {
-                            navigationMyPage()
+                            navigationMyPage(viewState.groupId)
                         }
                     )
                 },

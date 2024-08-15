@@ -21,7 +21,8 @@ import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFolderScreen
-import com.hgh.na_o_man.presentation.ui.detail.agenda.AgendaScreen
+import com.hgh.na_o_man.presentation.ui.detail.agenda.AddAgendaScreen
+import com.hgh.na_o_man.presentation.ui.detail.agenda.Agenda2Screen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
 import com.hgh.na_o_man.presentation.ui.detail.vote.VoteListScreen
 import com.hgh.na_o_man.presentation.ui.detail.vote.VoteMainScreen
@@ -67,9 +68,10 @@ fun GroupDetailScreen(
                                 GroupDetailScreenRoute.VOTE.route.plus("/${groupId}")
                             )
                         },
-                        navigationMyPage = {
-
-                            navController.navigate(GroupDetailScreenRoute.VOTE_DETAIL.route) // 수정 필요
+                        navigationMyPage = { groupId ->
+                            navController.navigate(
+                                GroupDetailScreenRoute.AGENDA.route.plus("/${groupId}")
+                            )
                         },
                     )
                 }
@@ -88,8 +90,10 @@ fun GroupDetailScreen(
                         navigationBack = {
                             navController.popBackStack()
                         },
-                        navigationAgenda = {
-                            navController.previousBackStackEntry?.savedStateHandle?.set("agendaData", it)
+                        navigationAgenda = { photos->
+                            navController.previousBackStackEntry?.savedStateHandle?.set(
+                                AGENDA_PHOTOS, photos
+                            )
                             navController.popBackStack()
                         }
                     )
@@ -114,8 +118,13 @@ fun GroupDetailScreen(
                     )
                 }
 
-                composable(route = GroupDetailScreenRoute.AGENDA.route) {
-                    AgendaScreen(
+                composable(route = GroupDetailScreenRoute.AGENDA.route
+                    .plus("/{$KEY_GROUP_ID}"),
+                    arguments = listOf(
+                        navArgument(KEY_GROUP_ID) { type = NavType.LongType }
+                    )
+                ) {
+                    AddAgendaScreen(
                         navController = navController,
                         navigationBack = {
                             navController.popBackStack()
@@ -150,7 +159,9 @@ enum class GroupDetailScreenRoute(val route: String) {
 
 const val KEY_GROUP_ID = "group-id"
 const val KEY_MEMBER_ID = "member-id"
+const val KEY_PROFILE_ID  = "profild-id"
 const val KEY_AGENDA_ID = "agenda-id"
 const val KEY_IS_AGENDA = "is-agenda"
 const val ALL_PHOTO_ID = 100L
 const val OTHER_PHOTO_ID = 101L
+const val AGENDA_PHOTOS = "agenda-photos"

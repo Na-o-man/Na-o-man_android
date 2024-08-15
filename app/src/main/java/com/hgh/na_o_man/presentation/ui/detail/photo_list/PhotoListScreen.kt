@@ -38,7 +38,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -56,10 +55,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.BackAndSelectAppBar
@@ -191,7 +188,7 @@ fun PhotoListScreen(
                                     )
                                     BasicTextField(
                                         value = viewState.memberList.find {
-                                            it.memberId == viewState.memberId
+                                            it.profileId == viewState.profileId
                                         }?.name ?: "",
                                         onValueChange = { },
                                         readOnly = true,
@@ -214,7 +211,7 @@ fun PhotoListScreen(
                                     onDismissRequest = { expanded = false },
                                 ) {
                                     viewState.memberList.filter {
-                                        it.memberId != viewState.memberId
+                                        it.profileId != viewState.profileId
                                     }.forEachIndexed { index, member ->
                                         DropdownMenuItem(
                                             text = {
@@ -285,7 +282,7 @@ fun PhotoListScreen(
                     }
                     if (viewState.photoList.count { it.isSelected } > 0) {
                         PhotoMenu(
-                            isMine = true,
+                            isMine = viewState.isMine,
                             isAgenda = viewState.isAgenda,
                             modifier = Modifier.align(alignment = Alignment.BottomCenter),
                             onCLickDown = {
@@ -307,7 +304,7 @@ fun PhotoListScreen(
                         onCancelButtonClick = { viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDialogClosed) },
                         { modifier ->
                             PhotoMenu(
-                                isMine = false,
+                                isMine = viewState.isMine,
                                 modifier = modifier,
                                 onCLickDown = {
                                     viewModel.setEvent(PhotoListContract.PhotoListEvent.OnDownloadClicked)
