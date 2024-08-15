@@ -48,7 +48,7 @@ class VoteMainViewModel @Inject constructor(
             }
 
             is VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked -> {
-
+                sendEffect({VoteMainContract.VoteMainSideEffect.NaviAgendaAdd})
             }
 
             is VoteMainContract.VoteMainEvent.OnClickDropBoxItem -> {
@@ -63,7 +63,13 @@ class VoteMainViewModel @Inject constructor(
                 showVoteList()
             }
 
-            else -> {}
+            VoteMainContract.VoteMainEvent.OnBackClicked -> {
+                sendEffect({VoteMainContract.VoteMainSideEffect.NaviBack})
+            }
+
+            is VoteMainContract.VoteMainEvent.OnAgendaItemClicked -> {
+                sendEffect({VoteMainContract.VoteMainSideEffect.NaviVoteDetail(event.agendaId)})
+            }
         }
     }
 
@@ -74,18 +80,11 @@ class VoteMainViewModel @Inject constructor(
                 Log.d("VoteMainViewModel", "API call completed, processing result")
                 result.onSuccess { AgendaInfoListModel ->
                     Log.d("VoteMainViewModel", "API call succeeded")
-                    val voteList = AgendaInfoListModel.agendaDetailInfoList.map { voteInfo ->
-                        VoteDummy(
-                            id = voteInfo.agendaId,
-                            title = voteInfo.title,
-                            images = voteInfo.agendaPhotoInfoList.map { it.url },
-                        )
-                    }
                     updateState {
                         Log.d("VoteMainViewModel", "Updating state with new vote list")
                         copy(
                             loadState = LoadState.SUCCESS,
-                            voteList = voteList
+                            voteList = AgendaInfoListModel.agendaDetailInfoList
                         )
                     }
                 }.onFail { error ->
