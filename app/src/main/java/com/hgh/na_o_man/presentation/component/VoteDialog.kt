@@ -159,6 +159,7 @@ fun VoteBeforeDialog(
 @Composable
 fun VoteAfterDialog(
     voteData: VoteDetailModel,
+    title: String,
     onCancelButtonClick: () -> Unit = {},
 ) {
     Dialog(onDismissRequest = { onCancelButtonClick() }) {
@@ -184,7 +185,7 @@ fun VoteAfterDialog(
             ) {
                 Column {
                     CommonTitle(
-                        title = "누가 범인?", modifier = Modifier
+                        title = title, modifier = Modifier
                             .padding(horizontal = 12.dp)
                             .padding(top = 16.dp)
                     ) {

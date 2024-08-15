@@ -173,6 +173,7 @@ fun VoteDetailScreen(
                     if (viewState.isVoteMode.not()) {
                         VoteAfterDialog(
                             voteData = viewState.clickAgenda,
+                            title = viewState.title,
                             onCancelButtonClick = {
                                 viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnDialogClosed)
                             }
