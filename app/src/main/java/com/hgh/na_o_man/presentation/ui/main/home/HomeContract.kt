@@ -28,6 +28,7 @@ class HomeContract {
         object OnAddGroupInBoxClicked : HomeEvent()
         object OnAddGroupClicked : HomeEvent()
         object OnEnterGroupClicked : HomeEvent()
+        object OnPagingGroupList : HomeEvent()
         data class OnGroupListClicked(val id : Long) : HomeEvent()
     }
 }

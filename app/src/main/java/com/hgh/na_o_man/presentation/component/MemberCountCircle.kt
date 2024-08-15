@@ -29,10 +29,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
+import com.hgh.na_o_man.domain.model.share_group.ProfileInfoModel
 
 @Composable
 fun PeopleCountCircle(
-    member: List<Dummy>,
+    member: List<ProfileInfoModel>,
     maxSize: Int = 3,
     modifier: Modifier = Modifier,
 ) {
@@ -40,12 +42,12 @@ fun PeopleCountCircle(
         Row(
             modifier = Modifier.wrapContentSize()
         ) {
-            member.take(maxSize).forEachIndexed { index, imageUrl ->
+            member.take(maxSize).forEachIndexed { index, profile ->
                 Box(
                     modifier = Modifier
                         .offset(x = (-10).dp * index)
                 ) {
-                    CircleImage(imageUrl = imageUrl)
+                    CircleImage(imageUrl = profile.image)
                 }
             }
 
@@ -105,11 +107,11 @@ fun PeopleAgenda(
 
 @Composable
 fun CircleImage(
-    imageUrl: Dummy,
+    imageUrl: String,
     modifier: Modifier = Modifier
 ) {
     AsyncImage(
-        model = imageUrl.dummyString,
+        model = imageUrl,
         contentDescription = null,
         modifier = modifier
             .size(28.dp)
@@ -141,7 +143,7 @@ fun CircleText(text: String) {
 @Preview
 @Composable
 fun preview() {
-    PeopleCountCircle(listOf(Dummy(), Dummy(), Dummy(), Dummy(), Dummy()))
+    PeopleCountCircle(listOf())
 }
 
 @Preview

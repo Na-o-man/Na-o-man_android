@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.component.groupdetail
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Icon
@@ -13,13 +14,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.FolderDummy
 import com.hgh.na_o_man.presentation.component.FolderProfile
 
 @Composable
-fun Bigfolder(){
+fun Bigfolder(
+    folderInfo: FolderDummy? = null, // FolderProfile에 필요한 정보를 전달하기 위한 매개변수
+//    modifier: Modifier = Modifier,
+    onClick :() -> Unit = {}
+){
 
     Box(
         modifier = Modifier
+            .clickable ( onClick = onClick )
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_folder),
@@ -27,6 +34,15 @@ fun Bigfolder(){
             tint = Color.Unspecified
 
         )
+
+        folderInfo?.let {
+            FolderProfile(
+                folderInfo = it,
+                modifier = Modifier
+                    .offset(y = 20.dp)
+                    .align(Alignment.Center)
+            )
+        }
 
 //        Icon(
 //            imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),

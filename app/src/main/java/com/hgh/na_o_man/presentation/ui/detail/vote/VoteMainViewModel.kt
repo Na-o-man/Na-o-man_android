@@ -19,21 +19,19 @@ import javax.inject.Inject
 @HiltViewModel
 class VoteMainViewModel @Inject constructor(
     private val agendaInfoListUsecase: AgendaInfoListUsecase,
-    private val savedStateHandle : SavedStateHandle,
-    private val checkSpecificGroupUsecase : CheckSpecificGroupUsecase,
+    private val savedStateHandle: SavedStateHandle,
+    private val checkSpecificGroupUsecase: CheckSpecificGroupUsecase,
     private val shareGroupNameListUsecase: ShareGroupNameListUsecase
-    ) : BaseViewModel<VoteMainContract.VoteMainViewState,VoteMainContract.VoteMainSideEffect,VoteMainContract.VoteMainEvent>(
+) : BaseViewModel<VoteMainContract.VoteMainViewState, VoteMainContract.VoteMainSideEffect, VoteMainContract.VoteMainEvent>(
     VoteMainContract.VoteMainViewState()
 ) {
-    private var _groupId: Long = savedStateHandle[KEY_GROUP_ID] ?: 0L
-    private val groupId: Long
-        get() = _groupId
 
 
     init {
-        Log.d("리컴포저블","VoteMainViewModelInit")
-        Log.d("VoteMainViewModel", "Initial groupId: $groupId")
+        Log.d("리컴포저블", "VoteMainViewModelInit")
         setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
+        updateState { copy(groupId = savedStateHandle[KEY_GROUP_ID] ?: 0L) }
+        Log.d("VoteMainViewModel", "Initial groupId: ${viewState.value.groupId}")
         fetchGroupName()
         fetchGroupNameList()
     }
@@ -43,91 +41,93 @@ class VoteMainViewModel @Inject constructor(
 
 
     override fun handleEvents(event: VoteMainContract.VoteMainEvent) {
-        when(event) {
+        when (event) {
             is VoteMainContract.VoteMainEvent.InitVoteMainScreen -> {
-                Log.d("VoteMainViewModel","InitVoteMainScreen event")
+                Log.d("VoteMainViewModel", "InitVoteMainScreen event")
                 showVoteList()
             }
-            is VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked -> {
 
+            is VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked -> {
+                sendEffect({VoteMainContract.VoteMainSideEffect.NaviAgendaAdd})
             }
+
             is VoteMainContract.VoteMainEvent.OnClickDropBoxItem -> {
-                Log.d("VoteMainViewModel", "Group ID before update: $_groupId")
-                _groupId = event.member.shareGroupId
+                //Log.d("VoteMainViewModel", "Group ID before update: $_groupId")
                 updateState {
                     copy(
-                        groupId = _groupId,
+                        groupId = event.member.shareGroupId,
                         groupName = event.member.name
                     )
                 }
                 Log.d("VoteMainViewModel", "Group ID after update: ${event.member.shareGroupId}")
                 showVoteList()
             }
-            else -> {}
+
+            VoteMainContract.VoteMainEvent.OnBackClicked -> {
+                sendEffect({VoteMainContract.VoteMainSideEffect.NaviBack})
+            }
+
+            is VoteMainContract.VoteMainEvent.OnAgendaItemClicked -> {
+                sendEffect({VoteMainContract.VoteMainSideEffect.NaviVoteDetail(event.agendaId)})
+            }
         }
     }
 
     private fun showVoteList() = viewModelScope.launch {
-        Log.d("VoteMainViewModel", "Fetching agenda list for group ID: $groupId")
         updateState { copy(loadState = LoadState.LOADING) }
         try {
-            agendaInfoListUsecase(groupId,0,10).collect() { result ->
+            agendaInfoListUsecase(viewState.value.groupId, 0, 10).collect() { result ->
                 Log.d("VoteMainViewModel", "API call completed, processing result")
                 result.onSuccess { AgendaInfoListModel ->
                     Log.d("VoteMainViewModel", "API call succeeded")
-                    val voteList = AgendaInfoListModel.agendaDetailInfoList.map { voteInfo ->
-                        VoteDummy(
-                            id = voteInfo.agendaId,
-                            title = voteInfo.title,
-                            images = voteInfo.agendaPhotoInfoList.map { it.url },
-                        )
-                    }
                     updateState {
                         Log.d("VoteMainViewModel", "Updating state with new vote list")
                         copy(
                             loadState = LoadState.SUCCESS,
-                            voteList = voteList
+                            voteList = AgendaInfoListModel.agendaDetailInfoList
                         )
                     }
                 }.onFail { error ->
-                    Log.e("VoteMainViewModel","Failed to fetch vote list: $error")
+                    Log.e("VoteMainViewModel", "Failed to fetch vote list: $error")
                     updateState {
-                        copy( loadState = LoadState.ERROR)
+                        copy(loadState = LoadState.ERROR)
                     }
                 }
             }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Log.e("VoteMainViewModel", "Error in showVoteList", e)
-            updateState { copy( loadState = LoadState.ERROR) }
+            updateState { copy(loadState = LoadState.ERROR) }
         }
     }
 
     private fun fetchGroupName() = viewModelScope.launch {
         try {
-            checkSpecificGroupUsecase(groupId).collect { result ->
+            checkSpecificGroupUsecase(viewState.value.groupId).collect { result ->
                 result.onSuccess { data ->
                     val groupName = data.name
                     Log.d("VoteMainViewModel1", "Fetched group name: $groupName")
                     updateState { copy(groupName = groupName) }
-                } .onFail {
-                    Log.e("VoteMainViewModel1","Failed to fetch group name")
+                }.onFail {
+                    Log.e("VoteMainViewModel1", "Failed to fetch group name")
                 }
             }
-        } catch (e : Exception){
-            Log.e("VoteMainViewModel1","Error in fetchGroupName",e)
+        } catch (e: Exception) {
+            Log.e("VoteMainViewModel1", "Error in fetchGroupName", e)
         }
     }
 
     private fun fetchGroupNameList() = viewModelScope.launch {
         try {
-            shareGroupNameListUsecase(0,10).collect{ result ->
+            shareGroupNameListUsecase(0, 10).collect { result ->
                 result.onSuccess { data ->
                     val groupNameList = data.shareGroupNameInfoList
                     updateState { copy(groupNameList = groupNameList) }
-                } .onFail {
-                    Log.e("VoteMainViewModel","Failed to fetch group name list") }
+                }.onFail {
+                    Log.e("VoteMainViewModel", "Failed to fetch group name list")
+                }
             }
-        } catch (e : Exception) {
-            Log.e("VoteMainViewModel","Failed to fetch group name list",e) }
+        } catch (e: Exception) {
+            Log.e("VoteMainViewModel", "Failed to fetch group name list", e)
+        }
     }
 }

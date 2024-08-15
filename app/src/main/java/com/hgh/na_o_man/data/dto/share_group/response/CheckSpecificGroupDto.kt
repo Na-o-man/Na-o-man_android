@@ -9,7 +9,7 @@ data class CheckSpecificGroupDto(
     val memberCount: Int,
     val name: String,
     val profileInfoList: List<ProfileInfoDto>,
-    val shareGroupId: Int
+    val shareGroupId: Long
 ) {
     fun toModel() = CheckSpecificGroupModel(
         createdAt = this.createdAt,

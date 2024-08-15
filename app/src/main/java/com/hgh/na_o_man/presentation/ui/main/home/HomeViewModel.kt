@@ -29,14 +29,13 @@ class HomeViewModel @Inject constructor(
 
     init {
         Log.d("리컴포저블","HomeViewModelInit")
-        setEvent(HomeContract.HomeEvent.InitHomeScreen)
+        setEvent(HomeContract.HomeEvent.OnPagingGroupList)
     }
 
     override fun handleEvents(event: HomeContract.HomeEvent) {
         when (event) {
             is HomeContract.HomeEvent.InitHomeScreen -> {
                 Log.d("HomeViewModel", "InitHomeScreen event")
-                showGroupList()
             }
             is HomeContract.HomeEvent.OnAddGroupInBoxClicked -> {
                 Log.d("HomeViewModel", "OnAddGroupInBoxClicked event")
@@ -57,24 +56,21 @@ class HomeViewModel @Inject constructor(
                 )
                 Log.d("HomeViewModel","send id end")
             }
+            HomeContract.HomeEvent.OnPagingGroupList -> {
+                showGroupList()
+            }
             else -> {}
         }
     }
 
 
     private fun showGroupList() = viewModelScope.launch {
-        updateState { copy(loadState = LoadState.LOADING) }
         Log.d("HomeViewModel", "showGroupList: Loading started")
         try {
             if(hasNextPage.value) {
                 groupListReferUsecase(nextPage.value, 10).collect { result ->
-                    Log.d("HomeViewModel", "Result received $result")
-                    result.onSuccess { groupListReferModel ->
-                        Log.d(
-                            "HomeViewModel",
-                            "Successfully fetched group list: ${groupListReferModel.shareGroupInfoList}"
-                        )
-                        val groupList = groupListReferModel.shareGroupInfoList.map { groupInfo ->
+                    result.onSuccess { response ->
+                        val newGroupList = response.shareGroupInfoList.map { groupInfo ->
                             val imageResID = getImageResId(groupInfo.image)
                             GroupDummy(
                                 imageRes = imageResID,  //수정 필요
@@ -87,19 +83,22 @@ class HomeViewModel @Inject constructor(
                         updateState {
                             Log.d("HomeViewModel", "Updating state to SUCCESS")
                             copy(
-                                loadState = LoadState.SUCCESS,
-                                groupList = groupList
-                            )
+                                groupList = viewState.value.groupList + newGroupList,
+                                loadState = LoadState.SUCCESS
+                                )
                         }
-                        groupListReferModel.last.not().let {
-                            hasNextPage.value = it
-                            nextPage.value +=1
+//                        response.last.not().let {
+//                            hasNextPage.value = it
+//                            nextPage.value +=1
+//                        }
+                        if (response.last) {
+                            hasNextPage.value = false // 더 이상 페이지가 없으면 hasNextPage를 false로 설정
+                            Log.d("HomeViewModel", "Last page reached, no more loading.")
+                        } else {
+                            nextPage.value += 1
                         }
-                        Log.d("HomeViewModel", "Success fetch group list")
                     }.onFail {
-                        Log.d("HomeViewModel", "Failed to fetch group list")
                         updateState {
-                            Log.d("HomeViewModel", "Updating state to ERROR")
                             copy(loadState = LoadState.ERROR)
                         }
                     }

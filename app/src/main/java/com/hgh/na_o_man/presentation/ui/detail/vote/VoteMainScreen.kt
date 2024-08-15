@@ -2,43 +2,24 @@ package com.hgh.na_o_man.presentation.ui.detail.vote
 
 import android.app.Activity
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ExposedDropdownMenuDefaults
-import androidx.compose.material.ExposedDropdownMenuDefaults.TrailingIcon
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.LeadingIconTab
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -49,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -57,37 +37,28 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.VoteDummy
+import com.hgh.na_o_man.domain.model.agenda.AgendaDetailInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
-import com.hgh.na_o_man.presentation.component.PlusAppBar
-import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StartBottomCloud
-import com.hgh.na_o_man.presentation.component.StartEndAppBar
 import com.hgh.na_o_man.presentation.component.StartPlusAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
-import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
-import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
-import com.hgh.na_o_man.presentation.ui.main.home.GroupListScreen
-import com.hgh.na_o_man.presentation.ui.main.home.HomeContract
 import getVoteList
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun VoteMainScreen(
-    groupId : Long,
-    navigationAgenda: () -> Unit,
+    navigationAgenda: (Long) -> Unit,
     navigationBack: () -> Unit,
+    navigationVoteDetail: (Long) -> Unit,
     viewModel: VoteMainViewModel = hiltViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -101,6 +72,24 @@ fun VoteMainScreen(
 
     Log.d("리컴포저블", "VoteMainScreen")
     Log.d("VoteMainScreen", "Current view state: $viewState")
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                VoteMainContract.VoteMainSideEffect.NaviAgendaAdd -> {
+                    navigationAgenda(viewState.groupId)
+                }
+
+                VoteMainContract.VoteMainSideEffect.NaviBack -> {
+                    navigationBack()
+                }
+
+                is VoteMainContract.VoteMainSideEffect.NaviVoteDetail -> {
+                    navigationVoteDetail(effect.agendaId)
+                }
+            }
+        }
+    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
@@ -120,10 +109,10 @@ fun VoteMainScreen(
                 topBar = {
                     StartPlusAppBar(
                         onStartClick = {
-                        /*TODO*/
+                            viewModel.setEvent(VoteMainContract.VoteMainEvent.OnBackClicked)
                         },
                         onEndClick = {
-                        /*TODO*/
+                             viewModel.setEvent(VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked)
                         }
                     )
                 },
@@ -232,7 +221,7 @@ fun VoteMainScreen(
 @Composable
 fun VoteListScreen(
     viewModel: VoteMainViewModel = hiltViewModel(),
-    voteList:List<VoteDummy>,
+    voteList:List<AgendaDetailInfoModel>,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -252,7 +241,11 @@ fun VoteListScreen(
                 )
                 getVoteList(
                     title = vote.title,
-                    images = vote.images
+                    images = vote.agendaPhotoInfoList.map { it.url },
+                    voteId = vote.agendaId,
+                    onClick = { agendaId ->
+                        viewModel.setEvent(VoteMainContract.VoteMainEvent.OnAgendaItemClicked(agendaId))
+                    }
                 )
             }
         }
