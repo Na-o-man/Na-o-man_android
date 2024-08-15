@@ -58,7 +58,7 @@ import com.hgh.na_o_man.presentation.ui.detail.AGENDA_PHOTOS
 @Composable
 fun AddAgendaScreen(
     navigationBack: () -> Unit,
-    navigationPhotoList: (Long, Long) -> Unit,
+    navigationPhotoList: (Long, Long ,Long) -> Unit,
     navController: NavController,
     viewModel: AddAgendaViewModel = hiltViewModel(),
 ) {
@@ -80,7 +80,7 @@ fun AddAgendaScreen(
                 }
 
                 AddAgendaContract.AddAgendaSideEffect.NaviPhotoList -> {
-                    navigationPhotoList(viewState.groupId, 100L)
+                    navigationPhotoList(viewState.groupId, 100L, -1L)
                 }
 
                 is AddAgendaContract.AddAgendaSideEffect.ShowToast -> {

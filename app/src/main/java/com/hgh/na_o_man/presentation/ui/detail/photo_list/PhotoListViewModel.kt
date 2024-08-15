@@ -51,7 +51,8 @@ class PhotoListViewModel @Inject constructor(
         updateState {
             copy(
                 isAgenda = savedStateHandle[KEY_IS_AGENDA] ?: false,
-                profileId = savedStateHandle[KEY_MEMBER_ID] ?: 0L,
+                profileId = savedStateHandle[KEY_PROFILE_ID] ?: 100L,
+                memberId = savedStateHandle[KEY_MEMBER_ID] ?: -1L,
             )
         }
         getGroupMember()

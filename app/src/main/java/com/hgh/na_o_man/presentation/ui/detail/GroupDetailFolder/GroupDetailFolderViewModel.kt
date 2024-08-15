@@ -37,6 +37,7 @@ class GroupDetailFolderViewModel @Inject constructor(
                 sendEffect({
                     GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoList(
                         viewState.value.groupId,
+                        event.profileId,
                         event.memberId
                     )
                 })

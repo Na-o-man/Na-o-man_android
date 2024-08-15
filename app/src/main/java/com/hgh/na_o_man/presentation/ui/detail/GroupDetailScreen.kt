@@ -57,10 +57,10 @@ fun GroupDetailScreen(
                                 MainScreenRoute.HOME.route
                             )
                         }, // 이쪽도 매끄럽지 못해서 수정 필요
-                        navigationPhotoList = { groupId, memberId ->
+                        navigationPhotoList = { groupId, pofildId, memberId ->
                             navController.navigate(
                                 GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
-                                    .plus("/${memberId}").plus("/${false}")
+                                    .plus("/${pofildId}").plus("/${memberId}").plus("/${false}")
                             )
                         },
                         navigationVote = { groupId ->
@@ -78,10 +78,12 @@ fun GroupDetailScreen(
 
                 composable(route = GroupDetailScreenRoute.LIST.route
                     .plus("/{$KEY_GROUP_ID}")
+                    .plus("/{$KEY_PROFILE_ID}")
                     .plus("/{$KEY_MEMBER_ID}")
                     .plus("/{$KEY_IS_AGENDA}"),
                     arguments = listOf(
                         navArgument(KEY_GROUP_ID) { type = NavType.LongType },
+                        navArgument(KEY_PROFILE_ID) { type = NavType.LongType },
                         navArgument(KEY_MEMBER_ID) { type = NavType.LongType },
                         navArgument(KEY_IS_AGENDA) { type = NavType.BoolType }
                     )
@@ -90,7 +92,7 @@ fun GroupDetailScreen(
                         navigationBack = {
                             navController.popBackStack()
                         },
-                        navigationAgenda = { photos->
+                        navigationAgenda = { photos ->
                             navController.previousBackStackEntry?.savedStateHandle?.set(
                                 AGENDA_PHOTOS, photos
                             )
@@ -104,10 +106,8 @@ fun GroupDetailScreen(
                     arguments = listOf(
                         navArgument(KEY_GROUP_ID) { type = NavType.LongType }
                     )
-                ) { backStackEntry ->
-                    val groupId = backStackEntry.arguments?.getLong(KEY_GROUP_ID) ?: 0L
+                ) { 
                     VoteMainScreen(
-                        groupId = groupId,
                         navigationBack = {
                             navController.popBackStack()
                         }, navigationAgenda = {
@@ -128,10 +128,10 @@ fun GroupDetailScreen(
                         navController = navController,
                         navigationBack = {
                             navController.popBackStack()
-                        }, navigationPhotoList = { groupId, memberId ->
+                        }, navigationPhotoList = { groupId, profileId, memberId ->
                             navController.navigate(
                                 GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
-                                    .plus("/${memberId}").plus("/${true}")
+                                    .plus("/${profileId}").plus("/${memberId}").plus("/${true}")
                             )
                         }
                     )
@@ -159,7 +159,7 @@ enum class GroupDetailScreenRoute(val route: String) {
 
 const val KEY_GROUP_ID = "group-id"
 const val KEY_MEMBER_ID = "member-id"
-const val KEY_PROFILE_ID  = "profild-id"
+const val KEY_PROFILE_ID = "profild-id"
 const val KEY_AGENDA_ID = "agenda-id"
 const val KEY_IS_AGENDA = "is-agenda"
 const val ALL_PHOTO_ID = 100L
