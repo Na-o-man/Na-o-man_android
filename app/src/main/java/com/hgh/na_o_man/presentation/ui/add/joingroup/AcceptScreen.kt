@@ -151,6 +151,14 @@ fun AcceptScreen(
             }
         }
     }
+    // LaunchedEffect를 사용하여 상태 기반으로 동작 처리
+    LaunchedEffect(viewState) {
+        if (viewState.profileId > 0 && viewState.shareGroupId > 0) {
+            viewModel.onNextButtonClicked(viewState.profileId, viewState.shareGroupId)
+            // API 호출 후 상태에 따른 화면 전환 등
+        }
+    }
+
     // Side effects 처리
     LaunchedEffect(Unit) {
         viewModel.effect.collect { sideEffect ->
@@ -159,7 +167,6 @@ fun AcceptScreen(
                     Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
                 }
                 is JoinSideEffect.FinishActivity -> {
-                    kotlinx.coroutines.delay(500) // 500ms 지연
                     context.finish()
                 }
                 else -> Unit
