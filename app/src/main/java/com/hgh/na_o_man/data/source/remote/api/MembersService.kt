@@ -3,6 +3,7 @@ package com.hgh.na_o_man.data.source.remote.api
 import com.hgh.na_o_man.data.dto.ApiResult
 import com.hgh.na_o_man.data.dto.member.response.DeleteMemberDto
 import com.hgh.na_o_man.data.dto.member.response.MarketingAgreedDto
+import com.hgh.na_o_man.data.dto.member.response.MemberIdDto
 import com.hgh.na_o_man.data.dto.member.response.SamplePhotoDto
 import com.hgh.na_o_man.data.dto.member.response.SearchSuccessDto
 import retrofit2.Response
