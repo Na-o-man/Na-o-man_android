@@ -5,9 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,11 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
-import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersAdjective
-import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersFolder
-import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersLoading
-import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersSpace
+import com.hgh.na_o_man.presentation.ui.add.addgroup.*
 
 @Composable
 fun AddHostScreen(
@@ -41,19 +35,39 @@ fun AddHostScreen(
                 startDestination = AddScreenRoute.NAMEINPUT.route
             ) {
                 composable(route = AddScreenRoute.NAMEINPUT.route) {
-                    MembersNameScreen(viewModel, navController)
+                    MembersNameScreen(
+                        viewModel = viewModel,
+                        navController = navController,
+                        navigationHome = {
+                            // 'navigationHome' 로직 추가
+                            navController.popBackStack()
+                        }
+                    )
                 }
                 composable(route = AddScreenRoute.ADJECTIVE.route) {
-                    MembersAdjective(viewModel, navController)
+                    MembersAdjective(
+                        viewModel = viewModel,
+                        navController = navController,
+                        navigationBack = {
+                            // 'navigationBack' 로직 추가
+                            navController.popBackStack()
+                        }
+                    )
                 }
                 composable(route = AddScreenRoute.SPACEINPUT.route) {
-                    MembersSpace(viewModel, navController)
+                    MembersSpace(
+                        viewModel = viewModel,
+                        navController = navController,
+                        navigationBack = {
+                            navController.popBackStack()
+                        }
+                    )
                 }
                 composable(route = AddScreenRoute._LOADING.route) {
-                    MembersLoading(viewModel, navController)
+                    MembersLoading(viewModel = viewModel, navController = navController)
                 }
                 composable(route = AddScreenRoute.FOLDER.route) {
-                    MembersFolder(viewModel, navController)
+                    MembersFolder(viewModel = viewModel, navController = navController)
                 }
             }
         }

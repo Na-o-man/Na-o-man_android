@@ -55,15 +55,42 @@ fun MembersSpace(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
+    navigationBack: () -> Unit,
 ) {
     Log.d("리컴포저블", "members_space")
+    var textValue by remember { mutableStateOf("") }
+    var isFocused by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             StartAppBar(
                 onStartClick = {
-                    navController.popBackStack()
+                    navigationBack()
                 }
             )
+        },
+        bottomBar = {
+            // 다음 버튼
+            Box(
+                modifier = Modifier
+                    .padding(top = 130.dp, end = 20.dp)
+                    .fillMaxSize(), // 전체 크기로 채우기
+                contentAlignment = Alignment.CenterEnd // 중앙 정렬
+            ) {
+                NextAppBar1(
+                    onNextClick = {
+                        if (textValue.isNotEmpty()) { // 텍스트가 입력되었을 때만 다음 화면으로 넘어가는 로직
+                            // CreateGroup 이벤트를 발생시키고 네비게이션
+                            viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
+                            navController.navigate(AddScreenRoute._LOADING.route)
+                        }
+                        else {
+                            // showToast 메소드를 통해 토스트 메시지 전달
+                            AddContract.AddSideEffect.ShowToast("텍스트를 입력해주세요.")
+                        }
+                    },
+                )
+            }
         },
         containerColor = lightSkyBlue // 여기를 수정
     ) { padding ->
@@ -80,7 +107,7 @@ fun MembersSpace(
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .offset(y = -(120.dp)),
+                    .padding(bottom = 230.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -93,7 +120,7 @@ fun MembersSpace(
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .offset(y = -(85.dp)),
+                    .padding(bottom = 160.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -117,7 +144,7 @@ fun MembersSpace(
             // 화면 중앙 하단 이미지
             Box(
                 modifier = Modifier
-                    .size(width = 295.dp, height = 55.dp)
+                    .size(295.dp, 55.dp)
                     .background(
                         color = LightWhite.copy(alpha = 0.7f), // 투명도 0.7로 설정
                         shape = RoundedCornerShape(20.dp)
@@ -127,8 +154,6 @@ fun MembersSpace(
                         color = LightWhite, shape = RoundedCornerShape(20.dp)
                     )
             ) {
-                var textValue by remember { mutableStateOf("") }
-                var isFocused by remember { mutableStateOf(false) }
 
                 BasicTextField(
                     value = textValue,
@@ -189,38 +214,8 @@ fun MembersSpace(
                         }
                     }
                 }
-
-                // 다음 버튼
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize() // 전체 크기로 채우기
-                        .offset(y = 70.dp),
-                    contentAlignment = Alignment.CenterEnd // 중앙 정렬
-                ) {
-                    NextAppBar1(
-                        onNextClick = {
-                            if (textValue.isNotEmpty()) { // 텍스트가 입력되었을 때만 다음 화면으로 넘어가는 로직
-                                // CreateGroup 이벤트를 발생시키고 네비게이션
-                                viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
-                                navController.navigate(AddScreenRoute._LOADING.route)
-                            }
-                            else {
-                                // showToast 메소드를 통해 토스트 메시지 전달
-                                AddContract.AddSideEffect.ShowToast("텍스트를 입력해주세요.")
-                            }
-                        },
-                    )
-                }
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun Preview4() {
-    val navController = NavHostController(context = LocalContext.current)
-    MembersSpace(navController = navController)
 }
 
