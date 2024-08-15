@@ -172,6 +172,7 @@ fun GroupDetailFolderScreen(
                         Spacer(modifier = Modifier.height(20.dp))
 
                         viewState.groupDetail?.let { groupDetail ->
+                            val pagerState = rememberPagerState()
                             val itemCount = groupDetail.memberCount + 2
                             HorizontalPager(
                                 count = itemCount,
@@ -190,44 +191,39 @@ fun GroupDetailFolderScreen(
                                     modifier = Modifier
                                         .scale(scale)
                                 ) {
-                                    Bigfolder()
-
-                                    if (page < groupDetail.profileInfoList.size) {
-                                        val profileInfo = groupDetail.profileInfoList[page]
-                                        FolderProfile(
-                                            folderInfo = FolderDummy(
-                                                imageRes = profileInfo.image,
-                                                name = profileInfo.name
-                                            ),
-                                            modifier = Modifier
-                                                .offset(y = 20.dp)
-                                                .align(Alignment.Center)
-                                                .requiredSize(160.dp)
+                                    val folderInfo = if (page < groupDetail.profileInfoList.size) {
+                                        FolderDummy(
+                                            imageRes = groupDetail.profileInfoList[page].image,
+                                            name = groupDetail.profileInfoList[page].name
                                         )
                                     } else {
-                                        val folderInfo =
-                                            when (page - groupDetail.profileInfoList.size) {
-                                                0 -> FolderDummy(
-                                                    imageRes = R.drawable.ic_example.toString(),
-                                                    name = "단체사진"
-                                                )
+                                        when (page - groupDetail.profileInfoList.size) {
+                                            0 -> FolderDummy(
+                                                imageRes = R.drawable.ic_example.toString(),
+                                                name = "others"
+                                            )
+                                            1 -> FolderDummy(
+                                                imageRes = R.drawable.ic_example.toString(),
+                                                name = "all"
+                                            )
+                                            else -> FolderDummy(
+                                                imageRes = R.drawable.ic_example.toString(),
+                                                name = "알 수 없음"
+                                            )
+                                        }
+                                    }
 
-                                                1 -> FolderDummy(
-                                                    imageRes = R.drawable.ic_example.toString(),
-                                                    name = "기타"
-                                                )
-
-                                                else -> FolderDummy(
-                                                    imageRes = R.drawable.ic_example.toString(),
-                                                    name = "알 수 없음"
+                                    val memberId = if (page < groupDetail.profileInfoList.size) groupDetail.profileInfoList[page].memberId else null
+                                    if (memberId != null && memberId>0) {
+                                        Bigfolder(
+                                            folderInfo = folderInfo,
+                                            onClick = {
+                                                navigationPhotoList(
+                                                    groupDetail.shareGroupId,
+                                                    groupDetail.profileInfoList[page].profileId,
+                                                    groupDetail.profileInfoList[page].memberId
                                                 )
                                             }
-                                        FolderProfile(
-                                            folderInfo = folderInfo,
-                                            modifier = Modifier
-                                                .offset(y = 20.dp)
-                                                .align(Alignment.Center)
-                                                .requiredSize(160.dp)
                                         )
                                     }
                                 }
