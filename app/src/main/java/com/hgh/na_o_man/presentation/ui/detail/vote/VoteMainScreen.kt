@@ -2,8 +2,6 @@ package com.hgh.na_o_man.presentation.ui.detail.vote
 
 import android.app.Activity
 import android.util.Log
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -44,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.VoteDummy
+import com.hgh.na_o_man.domain.model.agenda.AgendaDetailInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.StartBottomCloud
@@ -52,7 +51,6 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFolderContract
 import getVoteList
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -60,6 +58,7 @@ import getVoteList
 fun VoteMainScreen(
     navigationAgenda: (Long) -> Unit,
     navigationBack: () -> Unit,
+    navigationVoteDetail: (Long) -> Unit,
     viewModel: VoteMainViewModel = hiltViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
@@ -78,10 +77,15 @@ fun VoteMainScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 VoteMainContract.VoteMainSideEffect.NaviAgendaAdd -> {
+                    navigationAgenda(viewState.groupId)
+                }
+
+                VoteMainContract.VoteMainSideEffect.NaviBack -> {
                     navigationBack()
                 }
-                VoteMainContract.VoteMainSideEffect.NaviBack -> {
-                    navigationAgenda(viewState.groupId)
+
+                is VoteMainContract.VoteMainSideEffect.NaviVoteDetail -> {
+                    navigationVoteDetail(effect.agendaId)
                 }
             }
         }
@@ -105,7 +109,7 @@ fun VoteMainScreen(
                 topBar = {
                     StartPlusAppBar(
                         onStartClick = {
-                        /*TODO*/
+                            viewModel.setEvent(VoteMainContract.VoteMainEvent.OnBackClicked)
                         },
                         onEndClick = {
                              viewModel.setEvent(VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked)
@@ -217,7 +221,7 @@ fun VoteMainScreen(
 @Composable
 fun VoteListScreen(
     viewModel: VoteMainViewModel = hiltViewModel(),
-    voteList:List<VoteDummy>,
+    voteList:List<AgendaDetailInfoModel>,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -237,7 +241,11 @@ fun VoteListScreen(
                 )
                 getVoteList(
                     title = vote.title,
-                    images = vote.images
+                    images = vote.agendaPhotoInfoList.map { it.url },
+                    voteId = vote.agendaId,
+                    onClick = { agendaId ->
+                        viewModel.setEvent(VoteMainContract.VoteMainEvent.OnAgendaItemClicked(agendaId))
+                    }
                 )
             }
         }

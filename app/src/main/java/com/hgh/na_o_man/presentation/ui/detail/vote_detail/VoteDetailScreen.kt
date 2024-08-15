@@ -2,6 +2,7 @@ package com.hgh.na_o_man.presentation.ui.detail.vote_detail
 
 import CloudWhiteBtn
 import android.app.Activity
+import android.icu.util.UniversalTimeScale.toLong
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.BottomStartCloud
@@ -117,14 +119,14 @@ fun VoteDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
 
                             ) {
-                            itemsIndexed(viewState.photos, key = { _, it ->
-                                it.id
+                            itemsIndexed(viewState.agendaInfo.agendaPhotoInfoList, key = { _, it ->
+                                it.agendaPhotoId
                             }) { _, photo ->
 
                                 ImageCardWithProfile(
                                     // 포토수정필요
-                                    image = PhotoInfoModel( w400PhotoUrl = photo.dummyString),
-                                    profiles = viewState.photos,
+                                    image = PhotoInfoModel(photoId = photo.agendaPhotoId, rawPhotoUrl = photo.url),
+                                    profiles = listOf(),
                                     isSelectMode = false,
                                     isVoteMode = viewState.isVoteMode,
                                     myProfile = viewState.userInfo,
@@ -132,13 +134,13 @@ fun VoteDetailScreen(
                                         if (viewState.isVoteMode.not()) {
                                             viewModel.setEvent(
                                                 VoteDetailContract.VoteDetailEvent.OnCLickNotVoteModeImage(
-                                                    photo
+                                                    Dummy()
                                                 )
                                             )
                                         } else {
                                             viewModel.setEvent(
                                                 VoteDetailContract.VoteDetailEvent.OnClickVoteModeImage(
-                                                    photo
+                                                    Dummy()
                                                 )
                                             )
                                         }
@@ -146,7 +148,7 @@ fun VoteDetailScreen(
                                     onProfileClick = {
                                         viewModel.setEvent(
                                             VoteDetailContract.VoteDetailEvent.OnClickCancelVote(
-                                                photo.id.toLong()
+                                                photo.agendaPhotoId
                                             )
                                         )
                                     }

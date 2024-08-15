@@ -35,6 +35,8 @@ import com.hgh.na_o_man.presentation.ui.sign.SignScreenRoute
 fun GroupDetailScreen(
     navController: NavHostController = rememberNavController(),
 ) {
+    val context = LocalContext.current as Activity
+
 
     Log.d("리컴포저블", "GroupDetailScreen")
     Scaffold(
@@ -53,14 +55,12 @@ fun GroupDetailScreen(
                 composable(route = GroupDetailScreenRoute.DETAIL.route) {
                     GroupDetailFolderScreen(
                         navigationBack = {
-                            navController.navigate(
-                                MainScreenRoute.HOME.route
-                            )
-                        }, // 이쪽도 매끄럽지 못해서 수정 필요
-                        navigationPhotoList = { groupId, pofildId, memberId ->
+                            context.finish()
+                        },
+                        navigationPhotoList = { groupId, profileId, memberId ->
                             navController.navigate(
                                 GroupDetailScreenRoute.LIST.route.plus("/${groupId}")
-                                    .plus("/${pofildId}").plus("/${memberId}").plus("/${false}")
+                                    .plus("/${profileId}").plus("/${memberId}").plus("/${false}")
                             )
                         },
                         navigationVote = { groupId ->
@@ -106,13 +106,19 @@ fun GroupDetailScreen(
                     arguments = listOf(
                         navArgument(KEY_GROUP_ID) { type = NavType.LongType }
                     )
-                ) { 
+                ) {
                     VoteMainScreen(
                         navigationBack = {
                             navController.popBackStack()
-                        }, navigationAgenda = {
+                        },
+                        navigationAgenda = { groupId ->
                             navController.navigate(
-                                GroupDetailScreenRoute.AGENDA.route
+                                GroupDetailScreenRoute.AGENDA.route.plus("/${groupId}")
+                            )
+                        },
+                        navigationVoteDetail = { agendaId ->
+                            navController.navigate(
+                                GroupDetailScreenRoute.VOTE_DETAIL.route.plus("/${agendaId}")
                             )
                         }
                     )
@@ -137,7 +143,12 @@ fun GroupDetailScreen(
                     )
                 }
 
-                composable(route = GroupDetailScreenRoute.VOTE_DETAIL.route) {
+                composable(route = GroupDetailScreenRoute.VOTE_DETAIL.route
+                    .plus("/{$KEY_AGENDA_ID}"),
+                    arguments = listOf(
+                        navArgument(KEY_AGENDA_ID) { type = NavType.LongType }
+                    )
+                ) {
                     VoteDetailScreen(
                         navigationBack = {
                             navController.popBackStack()

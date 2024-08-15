@@ -106,14 +106,7 @@ class JoinViewModel @Inject constructor(
                     })
                 }.onFail { error ->
                     Log.e("FetchGroupInfo", "유효하지 않은 그룹 정보: $error")
-                    updateState {
-                        copy(
-                            isUrlValid = false,
-                            members = emptyList()
-                        )
-                    }
-                    sendEffect({
-                        JoinContract.JoinSideEffect._ShowToast("그룹 참여에 실패했습니다.")
+                    sendEffect({ JoinContract.JoinSideEffect._ShowToast("그룹 참여에 실패했습니다.")
                     })
                 }.onException { e ->
                     Log.e("FetchGroupInfo", "Exception: $e")
