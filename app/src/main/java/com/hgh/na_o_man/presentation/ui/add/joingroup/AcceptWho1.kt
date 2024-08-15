@@ -1,21 +1,17 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -37,6 +33,7 @@ fun AcceptWho1(
     val firstItemIsSelectable = firstItemIndex < members.size &&
             (selectedProfile == null || members[firstItemIndex].name != selectedProfile!!.name)
 
+
     Box(
         modifier = Modifier
             .size(360.dp, 400.dp)
@@ -51,45 +48,24 @@ fun AcceptWho1(
                     .padding(start = 15.dp, bottom = 8.dp)
                     .background(Color.Transparent)
             ) {
+                // 멤버 리스트를 표시하는 영역
                 members.forEachIndexed { index, member ->
-                    val isFirstItem = index == firstItemIndex
-                    val isSelectable = !(isFirstItem && !firstItemIsSelectable)
-
-                    Box(
-                        modifier = Modifier
-                            .size(60.dp)
-                            .clip(CircleShape)
-                            .background(Color.Transparent)
-                    ) {
-                        val painter = if (member.avatarUrl != null) {
-                            rememberAsyncImagePainter(member.avatarUrl)
-                        } else {
-                            painterResource(id = R.drawable.ic_add_group_avatar_94)
-                        }
-
-                        Image(
-                            painter = painter,
-                            contentDescription = "Avatar ${member.name}",
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(CircleShape)
-                        )
+                    // 현재 페이지의 인덱스와 비교하여 첫 번째 항목을 설정
+                    val isSelected = index == firstItemIndex
+                    val painter = if (member.avatarUrl != null) {
+                        rememberAsyncImagePainter(member.avatarUrl)
+                    } else {
+                        painterResource(id = R.drawable.ic_add_group_avatar_94)
                     }
 
                     UserInfo(
                         userName = member.name,
-                        isSelected = member.name == selectedProfile?.name && isSelectable,
-                        profileImageRes = R.drawable.ic_add_group_avatar_94, // 이 부분은 필요하지 않음
-                        onClick = {
-                            if (isSelectable) {
-                                onProfileSelected(member.name)
-                            }
-                        }
+                        profileImagePainter = painter,
+                        isSelected = isSelected,
+                        onClick = { /* 클릭 이벤트 처리 */ }
                     )
                 }
             }
         }
     }
 }
-
-
