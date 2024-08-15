@@ -3,6 +3,7 @@ package com.hgh.na_o_man.presentation.ui.add
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.remember
@@ -60,5 +61,10 @@ class AddGroupActivity : ComponentActivity() {
                 putExtra(JOIN_GROUP, isJoin)
                 putExtra(ADD_GROUP, isJoin)
             }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("AcceptScreen", "Activity is destroyed")
     }
 }

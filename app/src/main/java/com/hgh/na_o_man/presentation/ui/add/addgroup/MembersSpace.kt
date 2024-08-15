@@ -55,6 +55,7 @@ fun MembersSpace(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
     showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
+    navigationBack: () -> Unit,
 ) {
     Log.d("리컴포저블", "members_space")
     var textValue by remember { mutableStateOf("") }
@@ -64,7 +65,7 @@ fun MembersSpace(
         topBar = {
             StartAppBar(
                 onStartClick = {
-                    navController.popBackStack()
+                    navigationBack()
                 }
             )
         },
@@ -216,13 +217,5 @@ fun MembersSpace(
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun Preview4() {
-    val navController = NavHostController(context = LocalContext.current)
-    MembersSpace(navController = navController)
 }
 

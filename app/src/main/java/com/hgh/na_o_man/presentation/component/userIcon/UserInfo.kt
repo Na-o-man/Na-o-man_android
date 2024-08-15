@@ -56,7 +56,7 @@ fun UserInfo(
                 .width(320.dp)
                 .padding(start = 50.dp, top = 10.dp)
                 .background(Color.Transparent) // 배경을 투명하게 설정
-                .clip(RoundedCornerShape(50.dp)), // 둥근 모서리 적용
+                .clip(RoundedCornerShape(30.dp)), // 둥근 모서리 적용
             contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
                     colorFilter = if (isSelected) ColorFilter.tint(SteelBlue.copy(0.4f)) else null // 선택 상태에 따라 색상 필터 적용
         )
@@ -70,7 +70,7 @@ fun UserInfo(
                 .width(320.dp)
                 .padding(start = 50.dp, top = 77.dp) // 여전히 겹치게 설정
                 .background(Color.Transparent) // 배경을 투명하게 설정
-                .clip(RoundedCornerShape(50.dp)),
+                .clip(RoundedCornerShape(30.dp)),
             contentScale = ContentScale.FillBounds, // 이미지 비율 무시하고 크기 맞춤
             colorFilter = if (isSelected) ColorFilter.tint(SteelBlue.copy(0.6f)) else null // 선택 상태에 따라 색상 필터 적용
         )

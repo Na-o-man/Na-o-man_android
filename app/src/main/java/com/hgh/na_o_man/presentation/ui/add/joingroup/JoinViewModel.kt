@@ -46,7 +46,9 @@ class JoinViewModel @Inject constructor(
 
             is JoinContract.JoinEvent.onProfileSelected -> {
                 // 프로필 선택 이벤트 처리
-//                updateState({ copy(profileId = event.profileId.toLong()) })
+                updateState {
+                    copy(profileId = event.profileId)
+                }
                 sendEffect({ JoinContract.JoinSideEffect.NavigateToNextScreen })
             }
 
@@ -60,15 +62,15 @@ class JoinViewModel @Inject constructor(
                 result.onSuccess { response ->
                     updateState {
                         copy(
-                            isUrlValid = true,
-                            shareGroupId = viewState.value.shareGroupId,
-                            members = response.profileInfoList.map {
-                                Member(it.name, R.drawable.ic_add_group_avatar_94)
+                            shareGroupId = response.shareGroupId,
+                            members = response.profileInfoList.mapIndexed { index, profile ->
+                                Member(id = profile.profileId, name = profile.name, avatarUrl = profile.image)
                             },
                             groupName = response.name,
                             inviteCode = inviteCode
                         )
                     }
+                    sendEffect({JoinContract.JoinSideEffect.NavigateToCheckScreen})
                     sendEffect({ JoinContract.JoinSideEffect._ShowToast("URL 검증에 성공했습니다.") })
                 }.onFail { error ->
                     Log.e("ValidateUrl", "서버와 연결을 실패했습니다. 오류: $error")
@@ -88,43 +90,50 @@ class JoinViewModel @Inject constructor(
 
     private fun fetchGroupInfo(profileId: Long, shareGroupId: Int) = viewModelScope.launch {
         try {
-            // GroupJoinRequestDto 생성
             val requestDto = GroupJoinRequestDto(profileId, shareGroupId)
 
             joinGroupUsecase(requestDto).collect { result ->
                 result.onSuccess { response ->
-                    // 성공적으로 그룹 정보를 가져온 경우
                     updateState {
                         copy(
-                            shareGroupId = viewState.value.shareGroupId, // 가져온 그룹 ID 업데이트
+                            shareGroupId = viewState.value.shareGroupId,
                             profileId = viewState.value.profileId
                         )
                     }
-                    sendEffect ({
-                        JoinContract.JoinSideEffect._ShowToast("그룹 정보를 성공적으로 가져왔습니다.")
-                        JoinContract.JoinSideEffect.NavigateToNextScreen
+                    sendEffect({
+                        JoinContract.JoinSideEffect._ShowToast("그룹 참여에 성공했습니다.")
+                        JoinContract.JoinSideEffect.FinishActivity // 액티비티 종료 지시
                     })
                 }.onFail { error ->
-                    // 그룹 정보가 유효하지 않은 경우 처리
                     Log.e("FetchGroupInfo", "유효하지 않은 그룹 정보: $error")
                     updateState {
                         copy(
                             isUrlValid = false,
-                            members = emptyList() // 멤버 리스트 비우기
+                            members = emptyList()
                         )
                     }
-                    sendEffect ({ JoinContract.JoinSideEffect._ShowToast("유효하지 않은 그룹입니다.") })
+                    sendEffect({
+                        JoinContract.JoinSideEffect._ShowToast("그룹 참여에 실패했습니다.")
+                    })
                 }.onException { e ->
-                    // 예외 발생 시 로그 출력 및 메시지 표시
                     Log.e("FetchGroupInfo", "Exception: $e")
-                    sendEffect ({ JoinContract.JoinSideEffect._ShowToast("서버와 연결을 실패했습니다. 오류: ${e.message}") })
+                    sendEffect({
+                        JoinContract.JoinSideEffect._ShowToast("서버와 연결을 실패했습니다. 오류: ${e.message}")
+                    })
                 }
             }
         } catch (e: Exception) {
-            // 전체 예외 처리
             Log.e("FetchGroupInfo", "Exception: $e")
-            sendEffect ({ JoinContract.JoinSideEffect._ShowToast("알 수 없는 오류가 발생했습니다.") })
+            sendEffect({
+                JoinContract.JoinSideEffect._ShowToast("알 수 없는 오류가 발생했습니다.")
+            })
         }
+    }
+
+
+
+    fun onNextButtonClicked(profileId: Long, shareGroupId: Int) {
+        fetchGroupInfo(profileId, shareGroupId)
     }
 
     private fun confirmGroup() {

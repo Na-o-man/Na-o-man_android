@@ -68,7 +68,8 @@ import com.hgh.na_o_man.presentation.ui.add.addgroup.AddViewModel
 @Composable
 fun MembersNameScreen(
     viewModel: AddViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    navigationHome: () -> Unit
 ) {
     var memberNames by remember { mutableStateOf(listOf<String>()) }
     var newMemberName by remember { mutableStateOf("") }
@@ -79,7 +80,7 @@ fun MembersNameScreen(
 
     Scaffold(
         topBar = {
-            StartAppBar(onStartClick = { navController.popBackStack() })
+            StartAppBar(onStartClick = { navigationHome() })
         },
         bottomBar = {
             NextAppBar1(
@@ -248,7 +249,7 @@ fun MembersNameScreen(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .padding(start = 50.dp, end = 50.dp, top = 390.dp)
-                            .height(100.dp)
+                            .height(45.dp) // 원하는 높이 설정
                             .clip(RoundedCornerShape(30.dp))
                             .background(LightWhite.copy(alpha = 0.5f))
                     ) {
@@ -257,14 +258,13 @@ fun MembersNameScreen(
                             onValueChange = { newMemberName = it },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 20.dp)
-                                .align(Alignment.CenterStart)
+                                .padding(horizontal = 20.dp, vertical = 10.dp) // 입력 필드에 여백 추가
                                 .onFocusChanged { state -> isFocused = state.isFocused },
                             textStyle = TextStyle(
                                 color = SteelBlue,
                                 background = Color.Transparent,
                                 fontWeight = FontWeight.SemiBold,
-                                fontSize = 13.sp,
+                                fontSize = 14.sp, // 폰트 크기 조정
                                 textAlign = TextAlign.Start
                             ),
                             cursorBrush = SolidColor(SteelBlue),
@@ -279,6 +279,7 @@ fun MembersNameScreen(
                                         Text(
                                             text = "이름",
                                             color = SteelBlue,
+                                            fontSize = 14.sp, // placeholder 텍스트 크기 조정
                                             textAlign = TextAlign.Start,
                                             fontWeight = FontWeight.SemiBold
                                         )
@@ -288,7 +289,8 @@ fun MembersNameScreen(
                             }
                         )
 
-                        Image(
+
+                    Image(
                             imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_nav_plus_new_31),
                             contentDescription = "Add Button",
                             modifier = Modifier

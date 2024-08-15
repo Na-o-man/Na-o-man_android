@@ -36,11 +36,6 @@ open class AddViewModel @Inject constructor(
         }
     }
 
-    private fun updateGroupName(newName: String) {
-        // 상태가 기존 값과 다른 경우에만 업데이트
-        updateState { copy(groupName = newName) }
-    }
-
     private fun addMember(name: String) {
         val currentMembers = viewState.value.memberNames.toMutableList()
         if (name.isNotBlank() && !currentMembers.contains(name)) {
@@ -125,6 +120,7 @@ open class AddViewModel @Inject constructor(
             sendEffect({AddSideEffect.ShowToast("알 수 없는 오류가 발생했습니다.")})
         }
     }
+
 
 //    fun getGroupName2(): String = viewState.value.groupName
 }

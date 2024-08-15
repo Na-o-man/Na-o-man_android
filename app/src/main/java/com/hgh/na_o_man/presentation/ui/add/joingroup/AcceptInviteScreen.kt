@@ -1,6 +1,8 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
+import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -58,18 +60,23 @@ import com.hgh.na_o_man.presentation.ui.add.JoinScreenRoute
 fun AcceptInviteScreen(
     viewModel: JoinViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
+    navigationHome: () -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    val context = LocalContext.current
+    val context = LocalContext.current as Activity
 
     var textValue by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
+
+    BackHandler {
+        context.finish()
+    }
 
     Scaffold(
         topBar = {
             StartAppBar(
                 onStartClick = {
-                    navController.popBackStack()
+                    navigationHome()
                 }
             )
         },
@@ -162,16 +169,10 @@ fun AcceptInviteScreen(
                     modifier = Modifier
                         .clickable {
                             viewModel.setEvent(JoinContract.JoinEvent.ValidateUrl(textValue))
+                            navController.navigate(JoinScreenRoute.CHECK.route)
                         }
                         .size(78.dp)
                 )
-            }
-
-            // Handling navigation after URL validation
-            LaunchedEffect(viewState.isUrlValid) {
-                if (viewState.isUrlValid) {
-                    navController.navigate(JoinScreenRoute.CHECK.route)
-                }
             }
 
             // Handling side effects like showing a toast message
@@ -181,22 +182,13 @@ fun AcceptInviteScreen(
                         is JoinContract.JoinSideEffect._ShowToast -> {
                             Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
                         }
-                        else -> {}
+                        JoinContract.JoinSideEffect.NavigateToCheckScreen -> {
+                            navController.navigate(JoinScreenRoute.CHECK.route)
+                        }
+                        else -> Unit
                     }
                 }
             }
         }
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun Preview7() {
-    val navController = NavHostController(LocalContext.current)
-    AcceptInviteScreen(navController = navController)
-}
-
-
-
-

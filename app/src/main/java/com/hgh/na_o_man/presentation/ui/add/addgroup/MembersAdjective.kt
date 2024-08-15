@@ -65,7 +65,8 @@ import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 @Composable
 fun MembersAdjective(
     viewModel: AddViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    navigationBack: () -> Unit,
 ) {
     val context = LocalContext.current
     Log.d("리컴포저블", "MembersAdjective")
@@ -74,7 +75,7 @@ fun MembersAdjective(
         topBar = {
             StartAppBar(
                 onStartClick = {
-                    navController.popBackStack()
+                    navigationBack()
                 }
             )
         },
@@ -140,7 +141,7 @@ fun MembersAdjective(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp)
-                    .padding(top = 175.dp),
+                    .padding(top = 175.dp, start = 10.dp, end = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -192,7 +193,7 @@ fun MembersAdjective(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(15.dp)) // Row 간 간격 조정
+                    Spacer(modifier = Modifier.height(13.dp)) // Row 간 간격 조정
                 }
 
                 // 입력 필드
@@ -226,8 +227,8 @@ fun MembersAdjective(
                         )
                     },
                     modifier = Modifier
-                        .height(205.dp)
-                        .padding(start = 20.dp, end = 20.dp, bottom = 120.dp)
+                        .height(211.dp)
+                        .padding(start = 5.dp, end = 5.dp, bottom = 120.dp)
                         .fillMaxWidth()
                         .padding(vertical = 16.dp) // 비율 기반 padding
                         .border(
@@ -299,10 +300,4 @@ fun MembersAdjective(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun Preview3() {
-    val navController = NavHostController(context = LocalContext.current)
-    MembersAdjective(navController = navController)
-}
 
