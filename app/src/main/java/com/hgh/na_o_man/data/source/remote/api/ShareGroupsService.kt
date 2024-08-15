@@ -8,6 +8,7 @@ import com.hgh.na_o_man.data.dto.share_group.response.GroupJoinDto
 import com.hgh.na_o_man.data.dto.share_group.response.GroupListReferDto
 import com.hgh.na_o_man.data.dto.share_group.response.CheckSpecificGroupDto
 import com.hgh.na_o_man.data.dto.share_group.response.GroupInviteDto
+import com.hgh.na_o_man.data.dto.share_group.response.ShareGroupNameListDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -47,4 +48,9 @@ interface ShareGroupsService {
         @Query("size") size : Int
     ) : Response<ApiResult<GroupListReferDto>>
 
+    @GET("shareGroups/my/shareGroupNameList")
+    suspend fun shareGroupNameList(
+        @Query("page") page : Int,
+        @Query("size") size : Int
+    ) : Response<ApiResult<ShareGroupNameListDto>>
 }
