@@ -65,7 +65,7 @@ import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GRO
 @Composable
 fun GroupDetailFolderScreen(
     navigationMyPage: (Long) -> Unit,
-    navigationPhotoList: (Long, Long) -> Unit,
+    navigationPhotoList: (Long, Long, Long) -> Unit,
     navigationVote: (Long) -> Unit,
     navigationBack: () -> Unit,
     navController: NavHostController = rememberNavController(),
@@ -89,7 +89,7 @@ fun GroupDetailFolderScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoList -> {
-                    navigationPhotoList(effect.groupId, effect.memberId)
+                    navigationPhotoList(effect.groupId, effect.profiledId ,effect.memberId)
                 }
 
                 is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviVote -> {
@@ -182,13 +182,13 @@ fun GroupDetailFolderScreen(
                                     .height(220.dp)
                             )
                             { page ->
-                            val scale by animateFloatAsState(
-                                targetValue = 1.1f
-                            )
+                                val scale by animateFloatAsState(
+                                    targetValue = 1.1f
+                                )
                                 Box(
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier
-                                          .scale(scale)
+                                        .scale(scale)
                                 ) {
                                     Bigfolder()
 
@@ -205,20 +205,23 @@ fun GroupDetailFolderScreen(
                                                 .requiredSize(160.dp)
                                         )
                                     } else {
-                                        val folderInfo = when (page - groupDetail.profileInfoList.size) {
-                                            0 -> FolderDummy(
-                                                imageRes = R.drawable.ic_example.toString(),
-                                                name = "단체사진"
-                                            )
-                                            1 -> FolderDummy(
-                                                imageRes = R.drawable.ic_example.toString(),
-                                                name = "기타"
-                                            )
-                                            else -> FolderDummy(
-                                                imageRes = R.drawable.ic_example.toString(),
-                                                name = "알 수 없음"
-                                            )
-                                        }
+                                        val folderInfo =
+                                            when (page - groupDetail.profileInfoList.size) {
+                                                0 -> FolderDummy(
+                                                    imageRes = R.drawable.ic_example.toString(),
+                                                    name = "단체사진"
+                                                )
+
+                                                1 -> FolderDummy(
+                                                    imageRes = R.drawable.ic_example.toString(),
+                                                    name = "기타"
+                                                )
+
+                                                else -> FolderDummy(
+                                                    imageRes = R.drawable.ic_example.toString(),
+                                                    name = "알 수 없음"
+                                                )
+                                            }
                                         FolderProfile(
                                             folderInfo = folderInfo,
                                             modifier = Modifier
@@ -233,7 +236,8 @@ fun GroupDetailFolderScreen(
                                 pagerState = pagerState,
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
-                                    .padding(16.dp))
+                                    .padding(16.dp)
+                            )
                         }
 
                         Row(
@@ -251,7 +255,8 @@ fun GroupDetailFolderScreen(
                                 // 테스트용 - 삭제해야함
                                 viewModel.setEvent(
                                     GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(
-                                        ALL_PHOTO_ID
+                                        profileId = ALL_PHOTO_ID,
+                                        memberId = -1L,
                                     )
                                 )
                             }
@@ -276,7 +281,7 @@ fun PreView(
 ) {
     GroupDetailFolderScreen(
         navigationMyPage = {},
-        navigationPhotoList = { _, _ -> },
+        navigationPhotoList = { _, _, _ -> },
         navigationVote = { _ -> },
         navigationBack = {})
 }

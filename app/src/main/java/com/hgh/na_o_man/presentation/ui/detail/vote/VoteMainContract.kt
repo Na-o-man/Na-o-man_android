@@ -22,7 +22,8 @@ class VoteMainContract {
     ) : ViewState
 
     sealed class VoteMainSideEffect : ViewSideEffect {
-
+        object NaviAgendaAdd :VoteMainSideEffect()
+        object NaviBack : VoteMainSideEffect()
     }
 
     sealed class VoteMainEvent : ViewEvent {
