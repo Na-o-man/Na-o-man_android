@@ -25,7 +25,7 @@ class AgendaRepositoryImpl @Inject constructor(
     override suspend fun postAgenda(agendaRequestDto: AgendaRequestDto): RetrofitResult<AgendaSuccessModel> {
         return apiHandler({ api.postCreateAgenda(agendaRequestDto) }) {response : ApiResult<AgendaSuccessDto> -> response.data.toModel()}
     }
-    override suspend fun getSearch(agendaId: Long): RetrofitResult<AgendaDetailInfoModel> {
+    override suspend fun getAgendaDetail(agendaId: Long): RetrofitResult<AgendaDetailInfoModel> {
         return apiHandler({ api.getSearchAgenda(agendaId) }) {response : ApiResult<AgendaDetailInfoDto> -> response.data.toModel()}
     }
     override suspend fun deleteAgenda(agendaId: Long): RetrofitResult<AgendaDeleteModel> {

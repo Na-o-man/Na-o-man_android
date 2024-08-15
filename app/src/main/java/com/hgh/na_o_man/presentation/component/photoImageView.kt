@@ -142,7 +142,7 @@ fun ImageCardWithProfile(
         if (isVoteMode) {
             if (image.isVoted) {
                 PeopleAgenda(
-                    profile = myProfile.profileUrl, text = image.w400PhotoUrl, modifier = Modifier
+                    profile = myProfile.profileUrl, text = image.comment, modifier = Modifier
                         .align(
                             Alignment.BottomStart
                         )
@@ -154,7 +154,7 @@ fun ImageCardWithProfile(
             }
         } else {
             PeopleCountCircle(
-                member = listOf(),
+                member = profiles,
                 modifier = Modifier
                     .align(
                         Alignment.BottomStart

@@ -1,7 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.detail
 
 import android.app.Activity
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,16 +17,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFolderScreen
 import com.hgh.na_o_man.presentation.ui.detail.agenda.AddAgendaScreen
-import com.hgh.na_o_man.presentation.ui.detail.agenda.Agenda2Screen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListScreen
-import com.hgh.na_o_man.presentation.ui.detail.vote.VoteListScreen
 import com.hgh.na_o_man.presentation.ui.detail.vote.VoteMainScreen
 import com.hgh.na_o_man.presentation.ui.detail.vote_detail.VoteDetailScreen
-import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
-import com.hgh.na_o_man.presentation.ui.sign.SignScreenRoute
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable

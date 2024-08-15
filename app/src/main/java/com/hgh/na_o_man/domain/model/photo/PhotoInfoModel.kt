@@ -6,6 +6,7 @@ data class PhotoInfoModel(
     val rawPhotoUrl: String = "",
     val w200PhotoUrl: String = "",
     val w400PhotoUrl: String = "",
+    val comment: String = "",
     val isSelected: Boolean = false,
     val isDownloaded: Boolean = false,
     val isVoted: Boolean = false,
