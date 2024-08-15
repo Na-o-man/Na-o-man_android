@@ -2,7 +2,6 @@ package com.hgh.na_o_man.presentation.ui.detail.vote_detail
 
 import CloudWhiteBtn
 import android.app.Activity
-import android.icu.util.UniversalTimeScale.toLong
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -26,8 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.hgh.na_o_man.domain.model.Dummy
-import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.BottomStartCloud
 import com.hgh.na_o_man.presentation.component.CommonTitle
@@ -38,7 +35,6 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.VoteAfterDialog
 import com.hgh.na_o_man.presentation.component.VoteBeforeDialog
-import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageContract
 
 @Composable
 fun VoteDetailScreen(
@@ -102,7 +98,7 @@ fun VoteDetailScreen(
                 ) {
                     Column {
                         CommonTitle(
-                            title = "제일 잘생긴사람은?",
+                            title = viewState.title,
                             maxLine = 2,
                             modifier = Modifier
                                 .padding(horizontal = 32.dp)
@@ -119,14 +115,15 @@ fun VoteDetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
 
                             ) {
-                            itemsIndexed(viewState.agendaInfo.agendaPhotoInfoList, key = { _, it ->
+                            itemsIndexed(viewState.agendas, key = { _, it ->
                                 it.agendaPhotoId
-                            }) { _, photo ->
+                            }) { _, vote ->
 
                                 ImageCardWithProfile(
-                                    // 포토수정필요
-                                    image = PhotoInfoModel(photoId = photo.agendaPhotoId, rawPhotoUrl = photo.url),
-                                    profiles = listOf(),
+                                    image = vote.photoInfo,
+                                    profiles = vote.voteInfoList.map {
+                                        it.profileInfo
+                                    },
                                     isSelectMode = false,
                                     isVoteMode = viewState.isVoteMode,
                                     myProfile = viewState.userInfo,
@@ -134,13 +131,13 @@ fun VoteDetailScreen(
                                         if (viewState.isVoteMode.not()) {
                                             viewModel.setEvent(
                                                 VoteDetailContract.VoteDetailEvent.OnCLickNotVoteModeImage(
-                                                    Dummy()
+                                                    vote
                                                 )
                                             )
                                         } else {
                                             viewModel.setEvent(
                                                 VoteDetailContract.VoteDetailEvent.OnClickVoteModeImage(
-                                                    Dummy()
+                                                    vote
                                                 )
                                             )
                                         }
@@ -148,7 +145,7 @@ fun VoteDetailScreen(
                                     onProfileClick = {
                                         viewModel.setEvent(
                                             VoteDetailContract.VoteDetailEvent.OnClickCancelVote(
-                                                photo.agendaPhotoId
+                                                vote.agendaPhotoId
                                             )
                                         )
                                     }
@@ -175,22 +172,22 @@ fun VoteDetailScreen(
                 if (viewState.isDialogVisible) {
                     if (viewState.isVoteMode.not()) {
                         VoteAfterDialog(
-                            image = viewState.clickPhoto,
-                            options = viewState.photos,
+                            voteData = viewState.clickAgenda,
+                            title = viewState.title,
                             onCancelButtonClick = {
                                 viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnDialogClosed)
                             }
                         )
                     } else {
                         VoteBeforeDialog(
-                            image = viewState.clickPhoto,
+                            voteData = viewState.clickAgenda,
                             onCancelButtonClick = {
                                 viewModel.setEvent(VoteDetailContract.VoteDetailEvent.OnDialogClosed)
                             }, onVoteClick = { text, id ->
                                 viewModel.setEvent(
                                     VoteDetailContract.VoteDetailEvent.OnClickInject(
                                         text = text,
-                                        photoId = id,
+                                        agendaPhotoId = id,
                                     )
                                 )
                             }
