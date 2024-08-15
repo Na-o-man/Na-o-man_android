@@ -1,5 +1,3 @@
-package com.hgh.na_o_man.presentation.component.voteIcon
-
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -100,10 +98,3 @@ fun getVoteList(
         }
     }
 }
-
-
-//@Preview
-//@Composable
-//fun PreviewVoteList() {
-//    getVoteList(title = "이번 여행을 대표할 엽사는?", images = listOf(R.drawable.ic_example, R.drawable.ic_example,R.drawable.ic_example))
-//}

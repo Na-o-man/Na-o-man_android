@@ -8,6 +8,7 @@ import com.hgh.na_o_man.data.dto.share_group.response.GroupJoinDto
 import com.hgh.na_o_man.data.dto.share_group.response.GroupListReferDto
 import com.hgh.na_o_man.data.dto.share_group.response.CheckSpecificGroupDto
 import com.hgh.na_o_man.data.dto.share_group.response.GroupInviteDto
+import com.hgh.na_o_man.data.dto.share_group.response.ShareGroupNameListDto
 import com.hgh.na_o_man.data.source.remote.api.ShareGroupsService
 import com.hgh.na_o_man.di.util.remote.RetrofitResult
 import com.hgh.na_o_man.di.util.remote.apiHandler
@@ -16,6 +17,7 @@ import com.hgh.na_o_man.domain.model.share_group.GroupJoinModel
 import com.hgh.na_o_man.domain.model.share_group.GroupListReferModel
 import com.hgh.na_o_man.domain.model.share_group.CheckSpecificGroupModel
 import com.hgh.na_o_man.domain.model.share_group.GroupInviteModel
+import com.hgh.na_o_man.domain.model.share_group.ShareGroupNameListModel
 import com.hgh.na_o_man.domain.repository.ShareGroupRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -49,4 +51,7 @@ import javax.inject.Singleton
         return apiHandler({ api.getInvite(inviteCode) }) { response: ApiResult<GroupInviteDto> -> response.data.toModel()}
     }
 
+    override suspend fun getShareGroupNameList(page: Int, size: Int): RetrofitResult<ShareGroupNameListModel> {
+        return apiHandler({ api.shareGroupNameList(page, size)}) { response: ApiResult<ShareGroupNameListDto> -> response.data.toModel()}
+    }
 }

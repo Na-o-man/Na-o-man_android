@@ -30,10 +30,11 @@ fun SplashScreen(
 
         //커밋시 이부분 지우고 커밋
         //건희
-        //dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUwODMxQG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX0RFRkFVTFQiLCJpYXQiOjE3MjM0MzU1MDQsImV4cCI6MTcyNDA0MDMwNH0.WPQeiCYKUWmbDVCjjCcCpkw_cduEaqlVokKOgp-E6Ak")
+        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjIiLCJyb2xlIjoiUk9MRV9ERUZBVUxUIiwiaWF0IjoxNzIzNTU4MTA4LCJleHAiOjE3MjQxNjI5MDh9.S32eSvP-uOIngYHuOdMiTD6zsiE-epSyWH6KS1cFzcU")
         //강연
         //dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUwODMxQG5hdmVyLmNvbSIsInJvbGUiOiJST0xFX0RFRkFVTFQiLCJpYXQiOjE3MjM0MzU1MDQsImV4cCI6MTcyNDA0MDMwNH0.WPQeiCYKUWmbDVCjjCcCpkw_cduEaqlVokKOgp-E6Ak")
-        dateStoreUtil.setAutoLogin(false)
+        dateStoreUtil.setAutoLogin(true)
+
 
 
         delay(2000)

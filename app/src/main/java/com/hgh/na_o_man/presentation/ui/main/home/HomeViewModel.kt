@@ -12,6 +12,7 @@ import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +23,10 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeContract.HomeViewState, HomeContract.HomeSideEffect, HomeContract.HomeEvent>(
     HomeContract.HomeViewState()
 ) {
+
+    private val nextPage = MutableStateFlow(0)
+    private val hasNextPage = MutableStateFlow(true)
+
     init {
         Log.d("리컴포저블","HomeViewModelInit")
         setEvent(HomeContract.HomeEvent.InitHomeScreen)
@@ -61,34 +66,43 @@ class HomeViewModel @Inject constructor(
         updateState { copy(loadState = LoadState.LOADING) }
         Log.d("HomeViewModel", "showGroupList: Loading started")
         try {
-            Log.d("HomeViewModel", "Calling groupListReferUsecase")
-            groupListReferUsecase(0, 20).collect { result ->
-                Log.d("HomeViewModel","Result received $result")
-                result.onSuccess { groupListReferModel ->
-                    Log.d("HomeViewModel", "Successfully fetched group list: ${groupListReferModel.shareGroupInfoList}")
-                    val groupList = groupListReferModel.shareGroupInfoList.map { groupInfo ->
-                        val imageResID = getImageResId(groupInfo.image)
-                        GroupDummy(
-                            imageRes = imageResID,  //수정 필요
-                            name = groupInfo.name,
-                            participantCount = groupInfo.memberCount,
-                            date = groupInfo.createdAt,
-                            groupId = groupInfo.shareGroupId
+            if(hasNextPage.value) {
+                groupListReferUsecase(nextPage.value, 10).collect { result ->
+                    Log.d("HomeViewModel", "Result received $result")
+                    result.onSuccess { groupListReferModel ->
+                        Log.d(
+                            "HomeViewModel",
+                            "Successfully fetched group list: ${groupListReferModel.shareGroupInfoList}"
                         )
+                        val groupList = groupListReferModel.shareGroupInfoList.map { groupInfo ->
+                            val imageResID = getImageResId(groupInfo.image)
+                            GroupDummy(
+                                imageRes = imageResID,  //수정 필요
+                                name = groupInfo.name,
+                                participantCount = groupInfo.memberCount,
+                                date = groupInfo.createdAt,
+                                groupId = groupInfo.shareGroupId
+                            )
+                        }
+                        updateState {
+                            Log.d("HomeViewModel", "Updating state to SUCCESS")
+                            copy(
+                                loadState = LoadState.SUCCESS,
+                                groupList = groupList
+                            )
+                        }
+                        groupListReferModel.last.not().let {
+                            hasNextPage.value = it
+                            nextPage.value +=1
+                        }
+                        Log.d("HomeViewModel", "Success fetch group list")
+                    }.onFail {
+                        Log.d("HomeViewModel", "Failed to fetch group list")
+                        updateState {
+                            Log.d("HomeViewModel", "Updating state to ERROR")
+                            copy(loadState = LoadState.ERROR)
+                        }
                     }
-                    updateState {
-                        Log.d("HomeViewModel", "Updating state to SUCCESS")
-                        copy(
-                            loadState = LoadState.SUCCESS,
-                            groupList = groupList
-                        )
-                    }
-                    Log.d("HomeViewModel","Success fetch group list")
-                }.onFail {
-                    Log.d("HomeViewModel","Failed to fetch group list")
-                    updateState {
-                        Log.d("HomeViewModel", "Updating state to ERROR")
-                        copy(loadState = LoadState.ERROR) }
                 }
             }
         } catch (e: Exception){
