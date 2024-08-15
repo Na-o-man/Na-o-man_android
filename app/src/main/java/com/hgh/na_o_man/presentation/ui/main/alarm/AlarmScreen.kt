@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hgh.na_o_man.domain.model.AlarmDummy
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.DecorationCloud
@@ -38,6 +40,7 @@ import com.hgh.na_o_man.presentation.component.homeIcon.AlarmNotRead
 import com.hgh.na_o_man.presentation.component.homeIcon.AlarmRead
 import com.hgh.na_o_man.presentation.component.homeIcon.NoAlarmBox
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
+import com.hgh.na_o_man.presentation.util.OnBottomListener
 
 @Composable
 fun AlarmScreen(
@@ -165,9 +168,16 @@ fun AlarmScreen(
 
 @Composable
 fun AlarmListScreen(
+    viewModel: AlarmViewModel = hiltViewModel(),
     alarmList: List<AlarmDummy>,
     modifier: Modifier = Modifier
 ) {
+
+    val lazyListState = rememberLazyListState()
+    lazyListState.OnBottomListener(2) {
+        viewModel.setEvent(AlarmContract.AlarmEvent.OnPagingAlarmList)
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()

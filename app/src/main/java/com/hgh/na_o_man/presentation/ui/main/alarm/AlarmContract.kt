@@ -21,6 +21,7 @@ class AlarmContract {
         object InitAlarmScreen : AlarmEvent()
         object OnReadAllClicked : AlarmEvent()
         object OnDeleteAllClicked : AlarmEvent()
+        object OnPagingAlarmList : AlarmEvent()
         data class OnAlarmListClicked(val notificationID : Long) : AlarmEvent()
     }
 }
