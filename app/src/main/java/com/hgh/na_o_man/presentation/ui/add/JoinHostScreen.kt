@@ -36,13 +36,19 @@ fun JoinHostScreen(
                 startDestination = JoinScreenRoute.INVITE.route
             ) {
                 composable(route = JoinScreenRoute.INVITE.route) {
-                    AcceptInviteScreen(viewModel, navController)
+                    AcceptInviteScreen(viewModel, navController, navigationHome = {
+                        navController.popBackStack()
+                    })
                 }
                 composable(route = JoinScreenRoute.CHECK.route) {
-                    AcceptCheckScreen(viewModel, navController, joinName = "")
+                    AcceptCheckScreen(viewModel, navController, joinName = "", navigationBack = {
+                        navController.popBackStack()
+                    })
                 }
                 composable(route = JoinScreenRoute.ACCEPT.route) {
-                    AcceptScreen(viewModel, navController)
+                    AcceptScreen(viewModel, navController, navigationBack = {
+                        navController.popBackStack()
+                    })
                 }
             }
         }

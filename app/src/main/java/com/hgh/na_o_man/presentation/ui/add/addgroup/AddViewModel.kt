@@ -32,12 +32,8 @@ open class AddViewModel @Inject constructor(
             is AddEvent.CreateGroup -> createGroup()
             is AddEvent.RemoveMember -> removeMember(event.name)
             is AddEvent.UpdateSelectedAttributes -> updateSelectedAttributes(event.attributes)
+            else -> {}
         }
-    }
-
-    private fun updateGroupName(newName: String) {
-        // 상태가 기존 값과 다른 경우에만 업데이트
-        updateState { copy(groupName = newName) }
     }
 
     private fun addMember(name: String) {
@@ -125,5 +121,6 @@ open class AddViewModel @Inject constructor(
         }
     }
 
-    fun getGroupName(): String = viewState.value.groupName
+
+//    fun getGroupName2(): String = viewState.value.groupName
 }
