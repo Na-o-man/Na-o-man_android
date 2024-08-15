@@ -164,7 +164,6 @@ fun TitleDialog(
     ) { // 다이얼로그 닫기
         Surface(
             modifier = Modifier
-                .wrapContentHeight()
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 12.dp)
                 .clickable { onCancelButtonClick() },
@@ -181,13 +180,14 @@ fun TitleDialog(
                     end = Offset.Infinite,
                 )
             ),
-            color = Color(0xCCFFFFFF),
+            color = Color(0xCCFFFFFF)
         ) {
             Text(
                 text = title,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(vertical = 40.dp, horizontal = 16.dp)
             )
         }
     }

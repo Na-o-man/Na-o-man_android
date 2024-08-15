@@ -58,7 +58,7 @@ import com.hgh.na_o_man.presentation.ui.detail.AGENDA_PHOTOS
 @Composable
 fun AddAgendaScreen(
     navigationBack: () -> Unit,
-    navigationPhotoList: (Long, Long ,Long) -> Unit,
+    navigationPhotoList: (Long, Long, Long) -> Unit,
     navController: NavController,
     viewModel: AddAgendaViewModel = hiltViewModel(),
 ) {
@@ -222,12 +222,16 @@ fun AddAgendaScreen(
                         .size(120.dp, 70.dp)
                         .align(Alignment.End)
                 ) {
-                    viewModel.setEvent(
-                        AddAgendaContract.AddAgendaEvent.OnAddAgendaClicked(
-                            title = agendaTitle,
-                            photos = agendaPhotos,
+                    if (agendaPhotos.size >= 2) {
+                        viewModel.setEvent(
+                            AddAgendaContract.AddAgendaEvent.OnAddAgendaClicked(
+                                title = agendaTitle,
+                                photos = agendaPhotos,
+                            )
                         )
-                    )
+                    } else {
+                        viewModel.setEvent(AddAgendaContract.AddAgendaEvent.OnDialogOpened)
+                    }
                 }
             }
         }
