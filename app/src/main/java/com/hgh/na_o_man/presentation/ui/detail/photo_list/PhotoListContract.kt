@@ -1,6 +1,5 @@
 package com.hgh.na_o_man.presentation.ui.detail.photo_list
 
-import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
 import com.hgh.na_o_man.domain.model.share_group.ProfileInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
@@ -15,7 +14,10 @@ class PhotoListContract {
         val isSelectMode: Boolean = false,
         val isDialogVisible: Boolean = false,
         val isAgenda: Boolean = false,
+        val isMine: Boolean = false,
+        val profileId: Long = 0,
         val memberId: Long = 0,
+        val myId: Long = 0,
         val dialogPhoto: PhotoInfoModel = PhotoInfoModel(),
         val photoList: List<PhotoInfoModel> = listOf(),
         val selectPhotoList: List<PhotoInfoModel> = listOf(),

@@ -64,8 +64,8 @@ import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GRO
 @ExperimentalPagerApi
 @Composable
 fun GroupDetailFolderScreen(
-    navigationMyPage: () -> Unit,
-    navigationPhotoList: (Long, Long) -> Unit,
+    navigationMyPage: (Long) -> Unit,
+    navigationPhotoList: (Long, Long, Long) -> Unit,
     navigationVote: (Long) -> Unit,
     navigationBack: () -> Unit,
     navController: NavHostController = rememberNavController(),
@@ -89,7 +89,7 @@ fun GroupDetailFolderScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoList -> {
-                    navigationPhotoList(effect.groupId, effect.memberId)
+                    navigationPhotoList(effect.groupId, effect.profiledId ,effect.memberId)
                 }
 
                 is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviVote -> {
@@ -135,7 +135,7 @@ fun GroupDetailFolderScreen(
                             navigationBack()
                         },
                         onEndClick = {
-                            navigationMyPage()
+                            navigationMyPage(viewState.groupId)
                         }
                     )
                 },
@@ -172,6 +172,7 @@ fun GroupDetailFolderScreen(
                         Spacer(modifier = Modifier.height(20.dp))
 
                         viewState.groupDetail?.let { groupDetail ->
+                            val pagerState = rememberPagerState()
                             val itemCount = groupDetail.memberCount + 2
                             HorizontalPager(
                                 count = itemCount,
@@ -182,49 +183,47 @@ fun GroupDetailFolderScreen(
                                     .height(220.dp)
                             )
                             { page ->
-                            val scale by animateFloatAsState(
-                                targetValue = 1.1f
-                            )
+                                val scale by animateFloatAsState(
+                                    targetValue = 1.1f
+                                )
                                 Box(
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier
-                                          .scale(scale)
+                                        .scale(scale)
                                 ) {
-                                    Bigfolder()
-
-                                    if (page < groupDetail.profileInfoList.size) {
-                                        val profileInfo = groupDetail.profileInfoList[page]
-                                        FolderProfile(
-                                            folderInfo = FolderDummy(
-                                                imageRes = profileInfo.image,
-                                                name = profileInfo.name
-                                            ),
-                                            modifier = Modifier
-                                                .offset(y = 20.dp)
-                                                .align(Alignment.Center)
-                                                .requiredSize(160.dp)
+                                    val folderInfo = if (page < groupDetail.profileInfoList.size) {
+                                        FolderDummy(
+                                            imageRes = groupDetail.profileInfoList[page].image,
+                                            name = groupDetail.profileInfoList[page].name
                                         )
                                     } else {
-                                        val folderInfo = when (page - groupDetail.profileInfoList.size) {
+                                        when (page - groupDetail.profileInfoList.size) {
                                             0 -> FolderDummy(
                                                 imageRes = R.drawable.ic_example.toString(),
-                                                name = "단체사진"
+                                                name = "others"
                                             )
                                             1 -> FolderDummy(
                                                 imageRes = R.drawable.ic_example.toString(),
-                                                name = "기타"
+                                                name = "all"
                                             )
                                             else -> FolderDummy(
                                                 imageRes = R.drawable.ic_example.toString(),
                                                 name = "알 수 없음"
                                             )
                                         }
-                                        FolderProfile(
+                                    }
+
+                                    val memberId = if (page < groupDetail.profileInfoList.size) groupDetail.profileInfoList[page].memberId else null
+                                    if (memberId != null && memberId>0) {
+                                        Bigfolder(
                                             folderInfo = folderInfo,
-                                            modifier = Modifier
-                                                .offset(y = 20.dp)
-                                                .align(Alignment.Center)
-                                                .requiredSize(160.dp)
+                                            onClick = {
+                                                navigationPhotoList(
+                                                    groupDetail.shareGroupId,
+                                                    groupDetail.profileInfoList[page].profileId,
+                                                    groupDetail.profileInfoList[page].memberId
+                                                )
+                                            }
                                         )
                                     }
                                 }
@@ -233,7 +232,8 @@ fun GroupDetailFolderScreen(
                                 pagerState = pagerState,
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
-                                    .padding(16.dp))
+                                    .padding(16.dp)
+                            )
                         }
 
                         Row(
@@ -251,7 +251,8 @@ fun GroupDetailFolderScreen(
                                 // 테스트용 - 삭제해야함
                                 viewModel.setEvent(
                                     GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(
-                                        ALL_PHOTO_ID
+                                        profileId = ALL_PHOTO_ID,
+                                        memberId = -1L,
                                     )
                                 )
                             }
@@ -276,7 +277,7 @@ fun PreView(
 ) {
     GroupDetailFolderScreen(
         navigationMyPage = {},
-        navigationPhotoList = { _, _ -> },
+        navigationPhotoList = { _, _, _ -> },
         navigationVote = { _ -> },
         navigationBack = {})
 }

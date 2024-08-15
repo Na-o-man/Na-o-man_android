@@ -40,14 +40,13 @@ class AlarmViewModel @Inject constructor(
 
     init {
         Log.d("리컴포저블","AlarmViewModel")
-        setEvent(AlarmContract.AlarmEvent.InitAlarmScreen)
+        setEvent(AlarmContract.AlarmEvent.OnPagingAlarmList)
     }
 
 
     override fun handleEvents(event: AlarmContract.AlarmEvent) {
         when (event) {
             is AlarmContract.AlarmEvent.InitAlarmScreen -> {
-                showAlarmList()
             }
 
             is AlarmContract.AlarmEvent.OnReadAllClicked -> {
@@ -63,7 +62,11 @@ class AlarmViewModel @Inject constructor(
             is AlarmContract.AlarmEvent.OnAlarmListClicked -> {
 
             }
+            AlarmContract.AlarmEvent.OnPagingAlarmList -> {
+                showAlarmList()
+            }
 
+            else -> {}
         }
     }
 
@@ -96,10 +99,14 @@ class AlarmViewModel @Inject constructor(
                             hasNextPage.value = it
                             nextPage.value +=1
                         }
-                        Log.d(
-                            "AlarmViewModel",
-                            "showAlarmList: State updated to SUCCESS with ${alarmList.size} items"
-                        )
+                        // 위에거 안되면 이거 하기
+//                        if (response.last) {
+//                            hasNextPage.value = false // 더 이상 페이지가 없으면 hasNextPage를 false로 설정
+//                            Log.d("HomeViewModel", "Last page reached, no more loading.")
+//                        } else {
+//                            nextPage.value += 1
+//                        }
+                        Log.d("AlarmViewModel", "showAlarmList: State updated to SUCCESS with ${alarmList.size} items")
                     }.onFail {
                         Log.d("AlarmViewModel", "Failed to fetch alarm list")
                         updateState { copy(loadState = LoadState.ERROR) }

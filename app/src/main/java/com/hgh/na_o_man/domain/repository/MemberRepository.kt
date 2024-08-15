@@ -12,5 +12,6 @@ interface MemberRepository {
     suspend fun getMarketingAgreed(memberId: Long): RetrofitResult<MarketingAgreedModel>
     suspend fun getSample(): RetrofitResult<SamplePhotoModel>
     suspend fun getMyInfo(): RetrofitResult<AuthInfoModel>
+    suspend fun getMyId(): RetrofitResult<MemberIdModel>
     suspend fun deleteMember(): RetrofitResult<DeleteMemberModel>
 }

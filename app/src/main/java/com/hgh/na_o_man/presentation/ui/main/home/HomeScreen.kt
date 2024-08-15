@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +37,8 @@ import com.hgh.na_o_man.presentation.component.homeIcon.EventCard
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailScreen
+import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
+import com.hgh.na_o_man.presentation.util.OnBottomListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
@@ -174,11 +178,17 @@ fun GroupListScreen(
     modifier: Modifier = Modifier
 ) {
 
+    val lazyListState = rememberLazyListState()
+    lazyListState.OnBottomListener(2) {
+        viewModel.setEvent(HomeContract.HomeEvent.OnPagingGroupList)
+    }
+
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
         LazyColumn(
+            state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {

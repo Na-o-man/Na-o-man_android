@@ -29,4 +29,7 @@ interface MembersService {
 
     @DELETE("members")
     suspend fun deleteMemberAPI(): Response<ApiResult<DeleteMemberDto>>
+
+    @GET("members/my-memberId")
+    suspend fun getMyIdAPI(): Response<ApiResult<MemberIdDto>>
 }

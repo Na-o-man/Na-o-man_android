@@ -92,10 +92,10 @@ fun StartPlusAppBar(
         modifier = modifier,
         back = AppBarMenu.BACK,
         plus = AppBarMenu.Plus2,
-        onEndClick = onEndClick,
+        onEndClick = {  },
         onStartClick = onStartClick,
         onNextClick = { }, // next 버튼 클릭 이벤트 추가
-        onPlusClick = { }
+        onPlusClick = onEndClick
     )
 }
 
@@ -114,7 +114,7 @@ fun BackAndSelectAppBar(
         onEndClick = onEndClick,
         onStartClick = onStartClick,
         onNextClick = { }, // next 버튼 클릭 이벤트 추가
-        onPlusClick = { }
+        onPlusClick = { },
     )
 }
 

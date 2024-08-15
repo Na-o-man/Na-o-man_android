@@ -2,13 +2,11 @@ package com.hgh.na_o_man.presentation.ui.detail.vote_detail
 
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
-import com.hgh.na_o_man.domain.model.share_group.ProfileInfoModel
+import com.hgh.na_o_man.domain.model.vote.VoteDetailModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
 import com.hgh.na_o_man.presentation.base.ViewState
-import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
-import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageContract
 
 class VoteDetailContract {
 
@@ -17,7 +15,10 @@ class VoteDetailContract {
         val isVoteMode : Boolean = false,
         val isDialogVisible: Boolean = false,
         val userInfo : AuthInfoModel = AuthInfoModel(),
-        val clickPhoto : Dummy = Dummy(),
+        val agendaId : Long = -1L,
+        val title : String = "",
+        val agendas : List<VoteDetailModel> = listOf(),
+        val clickAgenda : VoteDetailModel = VoteDetailModel(),
         val photos: List<Dummy> = listOf(
             Dummy(
                 id = 1,
@@ -49,14 +50,14 @@ class VoteDetailContract {
 
     sealed class VoteDetailEvent : ViewEvent {
         object InitVoteDetailScreen : VoteDetailEvent()
-        data class OnCLickNotVoteModeImage(val photo : Dummy): VoteDetailEvent()
-        data class OnClickVoteModeImage(val photo : Dummy) : VoteDetailEvent()
+        data class OnCLickNotVoteModeImage(val vote : VoteDetailModel): VoteDetailEvent()
+        data class OnClickVoteModeImage(val vote : VoteDetailModel) : VoteDetailEvent()
         object OnClickBackOnVote : VoteDetailEvent()
         object OnCLickBack : VoteDetailEvent()
-        data class OnClickCancelVote(val photoId: Long): VoteDetailEvent()
+        data class OnClickCancelVote(val agendaPhotoId: Long): VoteDetailEvent()
         object OnClickVote : VoteDetailEvent()
         object OnClickFinish :VoteDetailEvent()
-        data class OnClickInject(val text: String, val photoId : Long) : VoteDetailEvent()
+        data class OnClickInject(val text: String, val agendaPhotoId : Long) : VoteDetailEvent()
         object OnDialogClosed : VoteDetailEvent()
 
     }

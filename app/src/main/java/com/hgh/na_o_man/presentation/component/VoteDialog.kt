@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -46,11 +45,13 @@ import androidx.compose.ui.window.Dialog
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
+import com.hgh.na_o_man.domain.model.vote.VoteDetailModel
+import com.hgh.na_o_man.domain.model.vote.VoteInfoModel
 import com.hgh.na_o_man.presentation.theme.LightWhite
 
 @Composable
 fun VoteBeforeDialog(
-    image: Dummy,
+    voteData: VoteDetailModel,
     onCancelButtonClick: () -> Unit,
     onVoteClick: (String, Long) -> Unit,
 ) {
@@ -68,7 +69,7 @@ fun VoteBeforeDialog(
                 Box {
                     ImageCard(
                         // 포토수정필요
-                        image = PhotoInfoModel(w400PhotoUrl = image.dummyString),
+                        image = voteData.photoInfo,
                         isSelectMode = false,
                         modifier = Modifier
                             .wrapContentHeight()
@@ -130,7 +131,7 @@ fun VoteBeforeDialog(
                             .background(color = Color(0xCCFFFFFF), shape = RoundedCornerShape(6.dp))
                             .padding(horizontal = 6.dp, vertical = 4.dp)
                             .clickable {
-                                onVoteClick(text.value.text, image.id.toLong())
+                                onVoteClick(text.value.text, voteData.agendaPhotoId)
                             },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -157,8 +158,8 @@ fun VoteBeforeDialog(
 
 @Composable
 fun VoteAfterDialog(
-    image: Dummy,
-    options: List<Dummy>,
+    voteData: VoteDetailModel,
+    title: String,
     onCancelButtonClick: () -> Unit = {},
 ) {
     Dialog(onDismissRequest = { onCancelButtonClick() }) {
@@ -184,7 +185,7 @@ fun VoteAfterDialog(
             ) {
                 Column {
                     CommonTitle(
-                        title = "누가 범인?", modifier = Modifier
+                        title = title, modifier = Modifier
                             .padding(horizontal = 12.dp)
                             .padding(top = 16.dp)
                     ) {
@@ -194,8 +195,7 @@ fun VoteAfterDialog(
                         modifier = Modifier.padding(12.dp)
                     ) {
                         ImageCard(
-                            // 포토수정필요
-                            image = PhotoInfoModel(w400PhotoUrl = image.dummyString),
+                            image = voteData.photoInfo,
                             isSelectMode = false,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -215,7 +215,9 @@ fun VoteAfterDialog(
                         }
                     }
                     PeopleCountCircle(
-                        member = options, maxSize = 10,
+                        member = voteData.voteInfoList.map {
+                            it.profileInfo
+                        }, maxSize = 10,
                         modifier = Modifier.padding(start = 16.dp)
                     )
 
@@ -226,18 +228,18 @@ fun VoteAfterDialog(
                             .padding(top = 12.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        itemsIndexed(options, key = { _, it ->
-                            it.id
-                        }) { _, photo ->
+                        itemsIndexed(voteData.voteInfoList, key = { _, it ->
+                            it.voteId
+                        }) { _, vote ->
 
-                            val isLastItem = options.last() == photo
+                            val isLastItem = voteData.voteInfoList.last() == vote
                             val modifier = if (isLastItem) {
                                 Modifier.padding(bottom = 16.dp)
                             } else {
                                 Modifier.padding(bottom = 2.dp)
                             }
 
-                            OpinionItem(photo, modifier)
+                            OpinionItem(vote, modifier)
                         }
                     }
                 }
@@ -248,7 +250,7 @@ fun VoteAfterDialog(
 
 @Composable
 fun OpinionItem(
-    photo: Dummy,
+    voteInfo: VoteInfoModel,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -275,7 +277,7 @@ fun OpinionItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = photo.dummyString2,
+                text = voteInfo.comment,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color(0xFF1D3A72),
@@ -286,7 +288,7 @@ fun OpinionItem(
                     .weight(1f)
             )
             Text(
-                text = photo.dummyString3,
+                text = voteInfo.profileInfo.name,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color(0xFF000000),
@@ -294,7 +296,10 @@ fun OpinionItem(
                     .padding(horizontal = 8.dp)
             )
 
-            CircleImage(imageUrl = photo, modifier = Modifier.padding(end = 12.dp))
+            CircleImage(
+                imageUrl = voteInfo.profileInfo.image,
+                modifier = Modifier.padding(end = 12.dp)
+            )
         }
     }
 }
@@ -303,19 +308,19 @@ fun OpinionItem(
 @Preview
 @Composable
 fun AfterPreView() {
-    VoteBeforeDialog(Dummy(), {}) { _, _ ->
-
-    }
+//    VoteBeforeDialog(Dummy(), {}) { _, _ ->
+//
+//    }
 }
 
 @Composable
 @Preview
 fun ItemPreView() {
-    OpinionItem(Dummy())
+    //OpinionItem(Dummy())
 }
 
 @Composable
 @Preview
 fun BeforePreView() {
-    VoteAfterDialog(Dummy(), listOf(Dummy(), Dummy(), Dummy(), Dummy()), {})
+    // VoteAfterDialog(Dummy(), listOf(Dummy(), Dummy(), Dummy(), Dummy()), {})
 }

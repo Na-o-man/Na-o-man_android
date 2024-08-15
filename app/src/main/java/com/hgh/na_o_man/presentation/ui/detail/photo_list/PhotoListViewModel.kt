@@ -8,6 +8,7 @@ import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.di.util.work_manager.enqueue.DownloadEnqueuer
+import com.hgh.na_o_man.domain.usecase.member.GetMyIdUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoAllUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoDeleteUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoEtcUsecase
@@ -16,14 +17,14 @@ import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.ui.detail.ALL_PHOTO_ID
+import com.hgh.na_o_man.presentation.ui.detail.KEY_AGENDA_ID
 import com.hgh.na_o_man.presentation.ui.detail.KEY_GROUP_ID
 import com.hgh.na_o_man.presentation.ui.detail.KEY_IS_AGENDA
 import com.hgh.na_o_man.presentation.ui.detail.KEY_MEMBER_ID
+import com.hgh.na_o_man.presentation.ui.detail.KEY_PROFILE_ID
 import com.hgh.na_o_man.presentation.ui.detail.OTHER_PHOTO_ID
-import com.hgh.na_o_man.presentation.ui.sign.signin.SignContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,6 +37,7 @@ class PhotoListViewModel @Inject constructor(
     private val getPhotoUsecase: PhotoUsecase,
     private val getPhotoEtcUsecase: PhotoEtcUsecase,
     private val deletePhotoUsecase: PhotoDeleteUsecase,
+    private val getMyIdUsecase: GetMyIdUsecase,
 ) : BaseViewModel<PhotoListContract.PhotoListViewState, PhotoListContract.PhotoListSideEffect, PhotoListContract.PhotoListEvent>(
     PhotoListContract.PhotoListViewState()
 ) {
@@ -49,23 +51,20 @@ class PhotoListViewModel @Inject constructor(
         updateState {
             copy(
                 isAgenda = savedStateHandle[KEY_IS_AGENDA] ?: false,
-                memberId = savedStateHandle[KEY_MEMBER_ID] ?: 0L
+                profileId = savedStateHandle[KEY_PROFILE_ID] ?: 100L,
+                memberId = savedStateHandle[KEY_MEMBER_ID] ?: -1L,
             )
         }
-        setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
         getGroupMember()
+        getMyId()
+        setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
         Log.d("리컴포저블", "PhotoListViewModel")
-        updateState {
-            copy(
-                loadState = LoadState.SUCCESS
-            )
-        }
     }
 
     override fun handleEvents(event: PhotoListContract.PhotoListEvent) {
         when (event) {
             is PhotoListContract.PhotoListEvent.InitPhotoListScreen -> {
-                Log.d("id확인", "${groupId},${viewState.value.memberId}")
+                Log.d("id확인", "${groupId},${viewState.value.profileId}")
             }
 
             PhotoListContract.PhotoListEvent.OnBackClicked -> {
@@ -112,13 +111,17 @@ class PhotoListViewModel @Inject constructor(
 
             PhotoListContract.PhotoListEvent.OnAgendaClicked -> {
                 updateState { copy(selectPhotoList = photoList.filter { it.isSelected }) }
-                sendEffect({ PhotoListContract.PhotoListSideEffect.NaviAgenda })
+                if (viewState.value.selectPhotoList.size <= 6) {
+                    sendEffect({ PhotoListContract.PhotoListSideEffect.NaviAgenda })
+                } else {
+                    sendEffect({ PhotoListContract.PhotoListSideEffect.ShowToast("안건은 최대 6개 입니다.") })
+                }
             }
 
             PhotoListContract.PhotoListEvent.OnPagingPhoto -> {
-                if (viewState.value.memberId == ALL_PHOTO_ID) {
+                if (viewState.value.profileId == ALL_PHOTO_ID) {
                     getAllPhoto()
-                } else if (viewState.value.memberId == OTHER_PHOTO_ID) {
+                } else if (viewState.value.profileId == OTHER_PHOTO_ID) {
                     getEtcPhoto()
                 } else {
                     getMemberPhoto()
@@ -130,8 +133,10 @@ class PhotoListViewModel @Inject constructor(
                 nextPage.value = 0
                 updateState {
                     copy(
+                        profileId = event.member.profileId,
                         memberId = event.member.memberId,
-                        photoList = listOf()
+                        photoList = listOf(),
+                        isMine = event.member.memberId == viewState.value.myId
                     )
                 }
                 setEvent(PhotoListContract.PhotoListEvent.OnPagingPhoto)
@@ -199,7 +204,7 @@ class PhotoListViewModel @Inject constructor(
             if (hasNextPage.value) {
                 getPhotoUsecase(
                     groupId,
-                    viewState.value.memberId,
+                    viewState.value.profileId,
                     nextPage.value,
                     14
                 ).collect { result ->
@@ -226,6 +231,29 @@ class PhotoListViewModel @Inject constructor(
         }
     }
 
+    private fun getMyId() = viewModelScope.launch {
+        try {
+            getMyIdUsecase().collect { result ->
+                result.onSuccess { response ->
+                    updateState {
+                        copy(
+                            loadState = LoadState.SUCCESS,
+                            myId = response.memberId,
+                        )
+                    }
+                }.onFail { error ->
+                    updateState {
+                        copy(loadState = LoadState.ERROR)
+                    }
+                }.onException {
+                    throw it
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("예외받기", "$e")
+        }
+    }
+
     private fun getGroupMember() = viewModelScope.launch {
         try {
             getMemberUsecase(groupId).collect { result ->
@@ -233,7 +261,7 @@ class PhotoListViewModel @Inject constructor(
                     updateState {
                         copy(
                             loadState = LoadState.SUCCESS,
-                            memberList = response.profileInfoList + viewState.value.memberList
+                            memberList = response.profileInfoList.filterNot { it.memberId == -1L } + viewState.value.memberList
                         )
                     }
                 }.onFail { error ->
@@ -314,11 +342,13 @@ class PhotoListViewModel @Inject constructor(
                     .map { it.rawPhotoUrl }
             )
             updateState {
-                copy(photoList = photoList.filter { it.isSelected }
-                    .map { photo ->
+                copy(photoList = photoList.map { photo ->
+                    if (photo.isSelected) {
                         photo.copy(isDownloaded = true, isSelected = false)
+                    } else {
+                        photo
                     }
-                )
+                })
             }
         }
     }

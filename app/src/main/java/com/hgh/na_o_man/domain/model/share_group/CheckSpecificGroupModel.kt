@@ -7,5 +7,5 @@ data class CheckSpecificGroupModel(
     val memberCount: Int,
     val name: String,
     val profileInfoList: List<ProfileInfoModel>,
-    val shareGroupId: Int
+    val shareGroupId: Long
 )
