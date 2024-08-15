@@ -242,7 +242,7 @@ fun VoteListScreen(
                 getVoteList(
                     title = vote.title,
                     images = vote.agendaPhotoInfoList.map { it.url },
-                    voteId = vote.agendaId.toLong(),
+                    voteId = vote.agendaId,
                     onClick = { agendaId ->
                         viewModel.setEvent(VoteMainContract.VoteMainEvent.OnAgendaItemClicked(agendaId))
                     }

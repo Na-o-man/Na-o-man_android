@@ -1,6 +1,7 @@
 package com.hgh.na_o_man.presentation.ui.detail.vote_detail
 
 import com.hgh.na_o_man.domain.model.Dummy
+import com.hgh.na_o_man.domain.model.agenda.AgendaDetailInfoModel
 import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.hgh.na_o_man.domain.model.share_group.ProfileInfoModel
 import com.hgh.na_o_man.presentation.base.LoadState
@@ -17,6 +18,7 @@ class VoteDetailContract {
         val isVoteMode : Boolean = false,
         val isDialogVisible: Boolean = false,
         val userInfo : AuthInfoModel = AuthInfoModel(),
+        val agendaInfo : AgendaDetailInfoModel = AgendaDetailInfoModel(),
         val clickPhoto : Dummy = Dummy(),
         val photos: List<Dummy> = listOf(
             Dummy(

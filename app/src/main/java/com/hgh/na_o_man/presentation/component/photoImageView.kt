@@ -30,6 +30,7 @@ import coil.request.ImageRequest
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.auth.AuthInfoModel
 import com.hgh.na_o_man.domain.model.photo.PhotoInfoModel
+import com.hgh.na_o_man.domain.model.share_group.ProfileInfoModel
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 
 @Composable
@@ -114,7 +115,7 @@ fun UriImageCard(
 fun ImageCardWithProfile(
     modifier: Modifier = Modifier,
     image: PhotoInfoModel,
-    profiles: List<Dummy>,
+    profiles: List<ProfileInfoModel>,
     isSelectMode: Boolean,
     isVoteMode: Boolean = false,
     myProfile: AuthInfoModel = AuthInfoModel(),
@@ -153,7 +154,7 @@ fun ImageCardWithProfile(
             }
         } else {
             PeopleCountCircle(
-                member = profiles,
+                member = listOf(),
                 modifier = Modifier
                     .align(
                         Alignment.BottomStart
@@ -181,7 +182,7 @@ fun preView2() {
     ImageCardWithProfile(
         modifier = Modifier.fillMaxWidth(),
         image = PhotoInfoModel(),
-        profiles = listOf(Dummy(), Dummy()),
+        profiles = listOf(),
         isSelectMode = false,
         isVoteMode = true,
     ) {

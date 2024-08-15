@@ -7,6 +7,7 @@ import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.usecase.member.GetMyInfoUsecase
+import com.hgh.na_o_man.domain.usecase.vote.GetVoteDetailUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VoteDetailViewModel @Inject constructor(
     private val getMyInfoUsecase: GetMyInfoUsecase,
+    private val getVoteDetailUsecase: GetVoteDetailUsecase,
 ) : BaseViewModel<VoteDetailContract.VoteDetailViewState, VoteDetailContract.VoteDetailSideEffect, VoteDetailContract.VoteDetailEvent>(
     VoteDetailContract.VoteDetailViewState()
 ) {
@@ -94,6 +96,24 @@ class VoteDetailViewModel @Inject constructor(
     }
 
     private fun getMyInfo() {
+        viewModelScope.launch {
+            try {
+                getMyInfoUsecase().collect { result ->
+                    result.onSuccess {
+                        updateState { copy(userInfo = it) }
+                    }.onFail {
+                        updateState { copy(loadState = LoadState.ERROR) }
+                    }.onException {
+                        throw it
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("예외받기", "$e")
+            }
+        }
+    }
+
+    private fun getVoteDetail() {
         viewModelScope.launch {
             try {
                 getMyInfoUsecase().collect { result ->
