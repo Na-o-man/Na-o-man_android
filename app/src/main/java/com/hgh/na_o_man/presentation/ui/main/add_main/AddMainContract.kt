@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.ui.main.create
+package com.hgh.na_o_man.presentation.ui.main.add_main
 
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.base.ViewEvent

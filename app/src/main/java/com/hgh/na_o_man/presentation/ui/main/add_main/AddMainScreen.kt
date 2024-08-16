@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.ui.main.create
+package com.hgh.na_o_man.presentation.ui.main.add_main
 
 import android.app.Activity
 import android.util.Log
@@ -31,8 +31,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.presentation.component.DecorationCloud
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.homeIcon.ShareGroupButton
-import com.hgh.na_o_man.presentation.ui.add.AddGroupActivity
-import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageContract
 import com.hgh.na_o_man.presentation.ui.sign.SignActivity
 
 @Composable

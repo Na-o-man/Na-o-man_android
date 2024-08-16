@@ -1,4 +1,4 @@
-package com.hgh.na_o_man.presentation.ui.main.create
+package com.hgh.na_o_man.presentation.ui.main.add_main
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope

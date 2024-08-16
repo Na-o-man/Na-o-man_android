@@ -44,7 +44,7 @@ import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
-import com.hgh.na_o_man.presentation.ui.main.create.AddMainScreen
+import com.hgh.na_o_man.presentation.ui.main.add_main.AddMainScreen
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
 
 @OptIn(ExperimentalPagerApi::class)

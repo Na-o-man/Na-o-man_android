@@ -90,15 +90,9 @@ class HomeViewModel @Inject constructor(
                                 loadState = LoadState.SUCCESS
                                 )
                         }
-//                        response.last.not().let {
-//                            hasNextPage.value = it
-//                            nextPage.value +=1
-//                        }
-                        if (response.last) {
-                            hasNextPage.value = false // 더 이상 페이지가 없으면 hasNextPage를 false로 설정
-                            Log.d("HomeViewModel", "Last page reached, no more loading.")
-                        } else {
-                            nextPage.value += 1
+                        response.last.not().let {
+                            hasNextPage.value = it
+                            nextPage.value +=1
                         }
                     }.onFail {
                         updateState {
