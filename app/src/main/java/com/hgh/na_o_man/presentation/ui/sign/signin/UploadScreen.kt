@@ -3,6 +3,7 @@ package com.hgh.na_o_man.presentation.ui.sign.signin
 import android.app.Activity
 import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -67,6 +68,10 @@ fun UploadScreen(
         contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = 2)
     ) { uris: List<Uri> ->
         viewModel.setEvent(SignContract.SignEvent.OnPhotoSelected(uris))
+    }
+
+    BackHandler {
+        context.finish()
     }
 
     LaunchedEffect(key1 = viewModel.effect) {

@@ -3,6 +3,7 @@ package com.hgh.na_o_man.presentation.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
     private var createResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { _ ->
+        Log.d("한건희","createResultLauncher")
         viewModel.setEvent(MainContract.MainEvent.FinishedCreateActivity)
     }
 

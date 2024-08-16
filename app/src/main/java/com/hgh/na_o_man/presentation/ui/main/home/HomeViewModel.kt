@@ -35,7 +35,10 @@ class HomeViewModel @Inject constructor(
     override fun handleEvents(event: HomeContract.HomeEvent) {
         when (event) {
             is HomeContract.HomeEvent.InitHomeScreen -> {
-                Log.d("HomeViewModel", "InitHomeScreen event")
+                nextPage.value = 0
+                hasNextPage.value = true
+                updateState { copy(groupList = listOf()) }
+                setEvent(HomeContract.HomeEvent.OnPagingGroupList)
             }
             is HomeContract.HomeEvent.OnAddGroupInBoxClicked -> {
                 Log.d("HomeViewModel", "OnAddGroupInBoxClicked event")
@@ -87,15 +90,9 @@ class HomeViewModel @Inject constructor(
                                 loadState = LoadState.SUCCESS
                                 )
                         }
-//                        response.last.not().let {
-//                            hasNextPage.value = it
-//                            nextPage.value +=1
-//                        }
-                        if (response.last) {
-                            hasNextPage.value = false // 더 이상 페이지가 없으면 hasNextPage를 false로 설정
-                            Log.d("HomeViewModel", "Last page reached, no more loading.")
-                        } else {
-                            nextPage.value += 1
+                        response.last.not().let {
+                            hasNextPage.value = it
+                            nextPage.value +=1
                         }
                     }.onFail {
                         updateState {

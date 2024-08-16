@@ -44,6 +44,8 @@ fun SignHostScreen(
                 composable(route = SignScreenRoute.SPLASH.route) {
                     SplashScreen(naviSignScreen = {
                         navController.navigate(SignScreenRoute.LOGIN.route)
+                    }, naviUploadScreen = {
+                        navController.navigate(SignScreenRoute.UPLOAD.route)
                     }, dateStoreUtil = dataStoreUtil)
                 }
 

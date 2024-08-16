@@ -1,7 +1,8 @@
-package com.hgh.na_o_man.presentation.ui.main.home
+package com.hgh.na_o_man.presentation.ui.main.add_main
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,18 +27,49 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.hgh.na_o_man.presentation.component.DecorationCloud
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.homeIcon.ShareGroupButton
-import com.hgh.na_o_man.presentation.ui.add.AddGroupActivity
+import com.hgh.na_o_man.presentation.ui.sign.SignActivity
 
 @Composable
 fun AddMainScreen(
-    naviBack: () -> Unit
+    naviBack: () -> Unit,
+    naviAdd: () -> Unit,
+    naviJoin: () -> Unit,
+    viewModel: AddMainViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current as Activity
-
+    val viewState by viewModel.viewState.collectAsState()
     Log.d("리컴포저블", "HomeScreen")
+
+    LaunchedEffect(key1 = viewModel.effect) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                AddMainContract.AddMainSideEffect.NaviAdd -> {
+                    naviAdd()
+                }
+
+                AddMainContract.AddMainSideEffect.NaviBack -> {
+                    naviBack()
+                }
+
+                AddMainContract.AddMainSideEffect.NaviJoin -> {
+                    naviJoin()
+                }
+
+                AddMainContract.AddMainSideEffect.NaviSampleUpload -> {
+                    context.startActivity(SignActivity.intentUpload(context))
+                }
+
+                is AddMainContract.AddMainSideEffect.ShowToast -> {
+                    Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     Scaffold(
         containerColor = Color.Transparent
@@ -50,10 +85,10 @@ fun AddMainScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .blur(12.dp)
-                    .clickable (
+                    .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },
-                        onClick = { naviBack()}
+                        onClick = { viewModel.setEvent(AddMainContract.AddMainEvent.OnClickBack) }
                     )
             ) {
                 EndTopCloud()
@@ -85,11 +120,11 @@ fun AddMainScreen(
                     .pointerInput(Unit) {}
             ) {
                 ShareGroupButton(title = "공유 그룹 입장") {
-                    context.startActivity(AddGroupActivity.newIntent(context, true))
+                    viewModel.setEvent(AddMainContract.AddMainEvent.OnClickJoin)
                 }
                 Spacer(modifier = Modifier.width(12.dp))
                 ShareGroupButton(title = "공유 그룹 추가") {
-                    context.startActivity(AddGroupActivity.newIntent(context, false))
+                    viewModel.setEvent(AddMainContract.AddMainEvent.OnClickAdd)
                 }
             }
         }
@@ -101,5 +136,5 @@ fun AddMainScreen(
 @Composable
 fun HomeScreenWithButtonPreView(
 ) {
-    AddMainScreen({})
+//    AddMainScreen({})
 }

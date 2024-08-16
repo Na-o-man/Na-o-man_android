@@ -48,17 +48,15 @@ class AddGroupActivity : ComponentActivity() {
     }
 
     private fun determineStartDestination(): String {
-        val isJoin = intent.getBooleanExtra(JOIN_GROUP, false)
-        return if (isJoin) "add_host" else "join_host"
+        val isJoin = intent.getBooleanExtra(ADD_GROUP, false)
+        return if (isJoin) "join_host" else "add_host"
     }
 
     companion object {
-        const val JOIN_GROUP = "joinGroup"
         const val ADD_GROUP = "addGroup"
 
         fun newIntent(context: Context, isJoin: Boolean) =
             Intent(context, AddGroupActivity::class.java).apply {
-                putExtra(JOIN_GROUP, isJoin)
                 putExtra(ADD_GROUP, isJoin)
             }
     }
