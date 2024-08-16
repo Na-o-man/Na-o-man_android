@@ -23,8 +23,6 @@ class GroupDetailFolderViewModel @Inject constructor(
     init {
         Log.d("리컴포저블", "GroupDetailFolderViewModel")
         updateState { copy(loadState = LoadState.LOADING) }
-
-        updateState { copy(loadState = LoadState.SUCCESS) }
     }
 
     override fun handleEvents(event: GroupDetailFolderContract.GroupDetailFolderEvent) {
@@ -103,5 +101,4 @@ class GroupDetailFolderViewModel @Inject constructor(
             updateState { copy(loadState = LoadState.ERROR) }
         }
     }
-
 }

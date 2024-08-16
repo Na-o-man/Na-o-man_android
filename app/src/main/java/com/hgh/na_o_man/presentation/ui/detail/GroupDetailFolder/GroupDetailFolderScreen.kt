@@ -83,6 +83,7 @@ fun GroupDetailFolderScreen(
 
     LaunchedEffect(groupId) {
         viewModel.initGroupId(groupId)
+        Log.d("GroupDetailScreen", "LaunchedEffect triggered for groupId: $groupId")
     }
 
     LaunchedEffect(key1 = viewModel.effect) {
@@ -110,13 +111,8 @@ fun GroupDetailFolderScreen(
 
     Log.d("리컴포저블", "GroupDetailScreen")
 
-    val scope = rememberCoroutineScope()
-
     // 페이저용
-    val pagerState = rememberPagerState()
-
-//    val pagerState = rememberPagerState(initialPage = {dummyFolderData.size})
-//    val selectedTabIndex = remember{ derivedStateOf { pagerState.currentPage }  }
+    val pagerState = rememberPagerState(initialPage = 0)
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
@@ -172,81 +168,66 @@ fun GroupDetailFolderScreen(
                         Spacer(modifier = Modifier.height(20.dp))
 
                         viewState.groupDetail?.let { groupDetail ->
-                            val bigFolderCount = groupDetail.profileInfoList.size + 2
-                            val itemCount = groupDetail.memberCount + 2
+                            // Filter out folders without memberId
+                            val filteredProfileInfoList = groupDetail.profileInfoList.filter { it.memberId > 0 }
+
+                            val folderDummyList = filteredProfileInfoList.map {
+                                FolderDummy(
+                                    imageRes = it.image, // ProfileInfo에 있는 image와 name을 FolderDummy에 맞게 매핑합니다.
+                                    name = it.name
+                                )
+                            }
+
+                            val folderList = folderDummyList + listOf(
+                                FolderDummy(
+                                    imageRes = R.drawable.ic_example.toString(),
+                                    name = "others"
+                                ),
+                                FolderDummy(
+                                    imageRes = R.drawable.ic_example.toString(),
+                                    name = "all"
+                                )
+                            )
+
+
+
                             HorizontalPager(
-                                count = bigFolderCount,
+                                count = folderList.size,
                                 state = pagerState,
                                 contentPadding = PaddingValues(horizontal = 40.dp), // Set padding to create partial view
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(220.dp)
-                            )
-                            { page ->
-                                val scale by animateFloatAsState(
-                                    targetValue = 1.1f
-                                )
+                            ) { page ->
+                                val scale by animateFloatAsState(targetValue = 1.1f)
                                 Box(
                                     contentAlignment = Alignment.Center,
                                     modifier = Modifier
                                         .scale(scale)
                                 ) {
-                                    val folderInfo = if (page < groupDetail.profileInfoList.size) {
-                                        FolderDummy(
-                                            imageRes = groupDetail.profileInfoList[page].image,
-                                            name = groupDetail.profileInfoList[page].name
-                                        )
-                                    } else {
-                                        when (page - groupDetail.profileInfoList.size) {
-                                            0 -> FolderDummy(
-                                                imageRes = R.drawable.ic_example.toString(),
-                                                name = "others"
-                                            )
-                                            1 -> FolderDummy(
-                                                imageRes = R.drawable.ic_example.toString(),
-                                                name = "all"
-                                            )
-                                            else -> FolderDummy(
-                                                imageRes = R.drawable.ic_example.toString(),
-                                                name = "알 수 없음"
-                                            )
-                                        }
-                                    }
+                                    val folderInfo = folderList[page]
 
-                                    val memberId = if (page < groupDetail.profileInfoList.size) groupDetail.profileInfoList[page].memberId else null
-                                    if (memberId != null && memberId>0) {
-                                        Bigfolder(
-                                            folderInfo = folderInfo,
-                                            onClick = {
-                                                navigationPhotoList(
-                                                    groupDetail.shareGroupId,
-                                                    groupDetail.profileInfoList[page].profileId,
-                                                    groupDetail.profileInfoList[page].memberId
-                                                )
-                                            }
-                                        )
-                                    } else {
-                                        if(folderInfo.name == "others" || folderInfo.name == "all") {
-                                            Bigfolder(
-                                                folderInfo = folderInfo,
-                                                onClick = {
-                                                    navigationPhotoList(
-                                                        groupDetail.shareGroupId,
-                                                        groupDetail.profileInfoList[page].profileId,
-                                                        groupDetail.profileInfoList[page].memberId
-                                                    )
-                                                }
+                                    Bigfolder(
+                                        folderInfo = folderInfo,
+                                        onClick = {
+                                            val memberId = filteredProfileInfoList.getOrNull(page)?.memberId ?: -1
+                                            val profileId = filteredProfileInfoList.getOrNull(page)?.profileId ?: -1
+                                            navigationPhotoList(
+                                                groupDetail.shareGroupId,
+                                                profileId,
+                                                memberId
                                             )
                                         }
-                                    }
+                                    )
                                 }
                             }
+
                             HorizontalPagerIndicator(
                                 pagerState = pagerState,
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
                                     .padding(16.dp),
-                                pageCount = bigFolderCount
+                                pageCount = folderList.size
                             )
                         }
 
@@ -256,7 +237,7 @@ fun GroupDetailFolderScreen(
                                 .align(Alignment.CenterHorizontally)
                                 .offset(y = 90.dp)
                         ) {
-                            SmallCloudBtn(title = "이미지\n분류") {
+                            SmallCloudBtn(title = "이미지\n업로드") {
                                 viewModel.setEvent(
                                     GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadClicked
                                 )
@@ -270,7 +251,7 @@ fun GroupDetailFolderScreen(
                                     )
                                 )
                             }
-                            SmallCloudBtn(title = "지난 안건") {
+                            SmallCloudBtn(title = "지난\n안건") {
                                 viewModel.setEvent(
                                     GroupDetailFolderContract.GroupDetailFolderEvent.OnVoteClicked
                                 )
