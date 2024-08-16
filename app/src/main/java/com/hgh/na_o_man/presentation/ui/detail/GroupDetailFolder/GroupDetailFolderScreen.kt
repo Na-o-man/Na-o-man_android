@@ -169,6 +169,7 @@ fun GroupDetailFolderScreen(
 
                         viewState.groupDetail?.let { groupDetail ->
                             // Filter out folders without memberId
+
                             val filteredProfileInfoList = groupDetail.profileInfoList.filter { it.memberId > 0 }
 
                             val folderDummyList = filteredProfileInfoList.map {
@@ -188,9 +189,6 @@ fun GroupDetailFolderScreen(
                                     name = "all"
                                 )
                             )
-
-
-
                             HorizontalPager(
                                 count = folderList.size,
                                 state = pagerState,
@@ -211,7 +209,13 @@ fun GroupDetailFolderScreen(
                                         folderInfo = folderInfo,
                                         onClick = {
                                             val memberId = filteredProfileInfoList.getOrNull(page)?.memberId ?: -1
-                                            val profileId = filteredProfileInfoList.getOrNull(page)?.profileId ?: -1
+//                                            val profileId = filteredProfileInfoList.getOrNull(page)?.profileId ?: 100L
+                                            val profileId = when {
+                                                filteredProfileInfoList.getOrNull(page)?.profileId != null -> filteredProfileInfoList[page].profileId
+                                                folderInfo.name == "all" -> 100L
+                                                folderInfo.name == "others" -> 101L
+                                                else -> -1L
+                                            }
                                             navigationPhotoList(
                                                 groupDetail.shareGroupId,
                                                 profileId,
