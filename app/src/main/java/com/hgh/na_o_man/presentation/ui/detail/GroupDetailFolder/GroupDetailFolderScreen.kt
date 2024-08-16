@@ -172,10 +172,10 @@ fun GroupDetailFolderScreen(
                         Spacer(modifier = Modifier.height(20.dp))
 
                         viewState.groupDetail?.let { groupDetail ->
-                            val pagerState = rememberPagerState()
+                            val bigFolderCount = groupDetail.profileInfoList.size + 2
                             val itemCount = groupDetail.memberCount + 2
                             HorizontalPager(
-                                count = itemCount,
+                                count = bigFolderCount,
                                 state = pagerState,
                                 contentPadding = PaddingValues(horizontal = 40.dp), // Set padding to create partial view
                                 modifier = Modifier
@@ -225,6 +225,19 @@ fun GroupDetailFolderScreen(
                                                 )
                                             }
                                         )
+                                    } else {
+                                        if(folderInfo.name == "others" || folderInfo.name == "all") {
+                                            Bigfolder(
+                                                folderInfo = folderInfo,
+                                                onClick = {
+                                                    navigationPhotoList(
+                                                        groupDetail.shareGroupId,
+                                                        groupDetail.profileInfoList[page].profileId,
+                                                        groupDetail.profileInfoList[page].memberId
+                                                    )
+                                                }
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -232,7 +245,8 @@ fun GroupDetailFolderScreen(
                                 pagerState = pagerState,
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
-                                    .padding(16.dp)
+                                    .padding(16.dp),
+                                pageCount = bigFolderCount
                             )
                         }
 
