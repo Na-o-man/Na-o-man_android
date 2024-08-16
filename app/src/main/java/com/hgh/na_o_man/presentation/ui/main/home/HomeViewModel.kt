@@ -35,7 +35,10 @@ class HomeViewModel @Inject constructor(
     override fun handleEvents(event: HomeContract.HomeEvent) {
         when (event) {
             is HomeContract.HomeEvent.InitHomeScreen -> {
-                Log.d("HomeViewModel", "InitHomeScreen event")
+                nextPage.value = 0
+                hasNextPage.value = true
+                updateState { copy(groupList = listOf()) }
+                setEvent(HomeContract.HomeEvent.OnPagingGroupList)
             }
             is HomeContract.HomeEvent.OnAddGroupInBoxClicked -> {
                 Log.d("HomeViewModel", "OnAddGroupInBoxClicked event")

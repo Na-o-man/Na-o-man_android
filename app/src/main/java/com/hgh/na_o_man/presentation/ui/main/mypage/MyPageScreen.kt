@@ -50,10 +50,6 @@ fun MyPageScreen(
 
     Log.d("리컴포저블", "MyPageScreen")
 
-    LaunchedEffect(true) {
-        viewModel.setEvent(MyPageContract.MyPageEvent.InitMyPageScreen)
-    }
-
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
