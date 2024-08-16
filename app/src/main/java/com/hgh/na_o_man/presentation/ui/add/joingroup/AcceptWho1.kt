@@ -25,14 +25,13 @@ import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 fun AcceptWho1(
     navController: NavHostController,
     onProfileSelected: (String) -> Unit,
-    members: List<Member>, // 변경된 부분: List<Member>를 받도록 수정
-    selectedProfile: Member?, // 선택된 프로필 이름
-    currentPage: Int // 현재 페이지 번호 추가
+    members: List<Member>,
+    selectedProfile: Member?,
+    currentPage: Int
 ) {
     val firstItemIndex = currentPage * 3
     val firstItemIsSelectable = firstItemIndex < members.size &&
-            (selectedProfile == null || members[firstItemIndex].name != selectedProfile!!.name)
-
+            (selectedProfile == null || members[firstItemIndex].name != selectedProfile.name)
 
     Box(
         modifier = Modifier
@@ -48,21 +47,25 @@ fun AcceptWho1(
                     .padding(start = 15.dp, bottom = 8.dp)
                     .background(Color.Transparent)
             ) {
-                // 멤버 리스트를 표시하는 영역
                 members.forEachIndexed { index, member ->
-                    // 현재 페이지의 인덱스와 비교하여 첫 번째 항목을 설정
-                    val isSelected = index == firstItemIndex
-                    val painter = if (member.avatarUrl != null) {
-                        rememberAsyncImagePainter(member.avatarUrl)
+                    // 첫 번째 항목은 선택이 불가능하도록 설정
+                    val isSelectable = index != firstItemIndex
+                    // 만약 avatarUrl이 null이거나 유효하지 않다면 기본 이미지를 사용
+                    val painter = if (member.avatarUrl.isNotEmpty()) {
+                        rememberAsyncImagePainter(member.avatarUrl) // 사용자 정의 이미지
                     } else {
-                        painterResource(id = R.drawable.ic_add_group_avatar_94)
+                        painterResource(id = R.drawable.ic_add_group_avatar_94) // 기본 이미지
                     }
 
                     UserInfo(
                         userName = member.name,
                         profileImagePainter = painter,
-                        isSelected = isSelected,
-                        onClick = { /* 클릭 이벤트 처리 */ }
+                        isSelected = selectedProfile?.name == member.name && isSelectable,
+                        onClick = {
+                            if (isSelectable) {
+                                onProfileSelected(member.name)
+                            }
+                        }
                     )
                 }
             }

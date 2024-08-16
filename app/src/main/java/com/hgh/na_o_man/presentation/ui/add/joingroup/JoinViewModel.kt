@@ -101,12 +101,12 @@ class JoinViewModel @Inject constructor(
                         )
                     }
                     sendEffect({
-                        JoinContract.JoinSideEffect._ShowToast("그룹 참여에 성공했습니다.")
+                        JoinContract.JoinSideEffect._ShowToast("그룹 참여에 성공했습니다.\n환영합니다.")
                         JoinContract.JoinSideEffect.FinishActivity // 액티비티 종료 지시
                     })
                 }.onFail { error ->
                     Log.e("FetchGroupInfo", "유효하지 않은 그룹 정보: $error")
-                    sendEffect({ JoinContract.JoinSideEffect._ShowToast("그룹 참여에 실패했습니다.")
+                    sendEffect({ JoinContract.JoinSideEffect._ShowToast("이미 참여가 완료된 그룹입니다.")
                     })
                 }.onException { e ->
                     Log.e("FetchGroupInfo", "Exception: $e")
