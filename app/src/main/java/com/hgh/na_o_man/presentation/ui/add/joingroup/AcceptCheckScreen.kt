@@ -156,11 +156,11 @@ fun AcceptCheckScreen(
                                     .clip(CircleShape) // 동그란 형태로 자르기
                                     .background(Color.Transparent) // 배경색을 투명하게 설정
                             ) {
-                                // 이미지를 조건에 따라 설정
-                                val painter = if (member.avatarUrl != null) {
-                                    rememberAsyncImagePainter(member.avatarUrl)
+                                // 만약 avatarUrl이 null이거나 유효하지 않다면 기본 이미지를 사용
+                                val painter = if (member.avatarUrl.isNotEmpty()) {
+                                    rememberAsyncImagePainter(member.avatarUrl) // 사용자 정의 이미지
                                 } else {
-                                    painterResource(id = R.drawable.ic_add_group_avatar_94) // 대체 이미지 리소스
+                                    painterResource(id = R.drawable.ic_add_group_avatar_94) // 기본 이미지
                                 }
 
                                 Image(
