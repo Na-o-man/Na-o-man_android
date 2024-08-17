@@ -4,11 +4,11 @@ import com.hgh.na_o_man.domain.model.agenda.AgendaDeleteModel
 import com.hgh.na_o_man.domain.model.agenda.AgendaSuccessModel
 
 class AgendaSuccessDto (
-    val field: String,
-    val message: String
+    val agendaId: Long,
+    val createdAt: String
 ){
     fun toModel() = AgendaSuccessModel(
-        field = this.field,
-        message = this.message
+        agendaId = this.agendaId,
+        createdAt = this.createdAt
     )
 }

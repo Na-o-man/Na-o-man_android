@@ -38,31 +38,40 @@ import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailScreen
 import com.hgh.na_o_man.presentation.ui.detail.photo_list.PhotoListContract
+import com.hgh.na_o_man.presentation.ui.main.MainContract
+import com.hgh.na_o_man.presentation.ui.main.MainViewModel
 import com.hgh.na_o_man.presentation.util.OnBottomListener
+import com.hgh.na_o_man.presentation.util.composableActivityViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun HomeScreen(
     navigationMyPage: () -> Unit,
-    navigationToMembersInvite: () -> Unit,  // 네비게이션 함수 추가
     viewModel: HomeViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = composableActivityViewModel()
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current as Activity
 
-    LaunchedEffect(key1 = viewModel.effect) {
-        Log.d("HomeScreen", "InitHomeScreen event triggered")
-        viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
-    }
-
     Log.d("리컴포저블", "HomeScreen")
+
+    LaunchedEffect(key1 = mainViewModel.effect) {
+        mainViewModel.effect.collect { effect ->
+            when (effect) {
+                MainContract.MainSideEffect.RefreshScreen -> {
+                    Log.d("한건희","RefreshScreen…")
+                    viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
+                }
+            }
+        }
+    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 is HomeContract.HomeSideEffect.NaviMembersInviteScreen -> {
 //                Log.d("HomeScreen", "Navigating to MembersInviteScreen")
-                    navigationToMembersInvite()
+                    // navigationToMembersInvite()
                 }
 
                 is HomeContract.HomeSideEffect.NaviAcceptInviteScreen -> {
@@ -199,9 +208,9 @@ fun GroupListScreen(
                     participantCount = group.participantCount,
                     date = group.date,
                     onClick = {
-                        Log.d("HomeViewModel","send start")
+                        Log.d("HomeViewModel", "send start")
                         viewModel.setEvent(HomeContract.HomeEvent.OnGroupListClicked(group.groupId))
-                        Log.d("HomeViewModel","send end")
+                        Log.d("HomeViewModel", "send end")
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -217,6 +226,6 @@ fun HomeScreenPreView() {
 
     HomeScreen(
         navigationMyPage = { /* 네비게이션 로직 추가 */ },
-        navigationToMembersInvite = { navController.navigate("members_invite_route") }
+        // navigationToMembersInvite = { navController.navigate("members_invite_route") }
     )
 }

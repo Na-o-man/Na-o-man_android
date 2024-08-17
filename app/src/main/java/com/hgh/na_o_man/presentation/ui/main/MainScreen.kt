@@ -42,11 +42,9 @@ import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder.GroupDetailFolderScreen
-import com.hgh.na_o_man.presentation.ui.detail.GroupDetailScreenRoute
 import com.hgh.na_o_man.presentation.ui.main.alarm.AlarmScreen
 import com.hgh.na_o_man.presentation.ui.main.home.HomeScreen
-import com.hgh.na_o_man.presentation.ui.main.home.AddMainScreen
+import com.hgh.na_o_man.presentation.ui.main.add_main.AddMainScreen
 import com.hgh.na_o_man.presentation.ui.main.mypage.MyPageScreen
 
 @OptIn(ExperimentalPagerApi::class)
@@ -96,9 +94,6 @@ fun MainScreen(
                     HomeScreen(
                         navigationMyPage = {
                             navController.navigate(MainScreenRoute.MY_PAGE.route)
-                        },
-                        navigationToMembersInvite = {
-                            navController.navigate(MainScreenRoute.MEMBERS_INVITE.route)
                         }
                     )
                 }
@@ -107,6 +102,12 @@ fun MainScreen(
                     AddMainScreen(
                         naviBack = {
                             navController.popBackStack()
+                        },
+                        naviAdd = {
+                            intentToRequest()
+                        },
+                        naviJoin = {
+                            intentToAccept()
                         }
                     )
                 }

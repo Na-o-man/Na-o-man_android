@@ -17,22 +17,28 @@ import androidx.compose.ui.res.painterResource
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.di.util.data_store.DataStoreUtil
 import com.hgh.na_o_man.presentation.ui.main.MainActivity
+import com.hgh.na_o_man.presentation.ui.sign.SignActivity.Companion.SIGN_ACTIVITY
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
     dateStoreUtil: DataStoreUtil,
     naviSignScreen: () -> Unit,
+    naviUploadScreen: () -> Unit
 ) {
     val context = LocalContext.current as Activity
+    if (context.intent.getBooleanExtra(SIGN_ACTIVITY, false)) naviUploadScreen()
 
     LaunchedEffect(Unit) {
         //커밋시 이부분 지우고 커밋
         //건희
 //        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjIiLCJyb2xlIjoiUk9MRV9ERUZBVUxUIiwiaWF0IjoxNzIzNTU4MTA4LCJleHAiOjE3MjQxNjI5MDh9.S32eSvP-uOIngYHuOdMiTD6zsiE-epSyWH6KS1cFzcU")
         //강연
+
         dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjEiLCJyb2xlIjoiUk9MRV9ERUZBVUxUIiwiaWF0IjoxNzIzNTUwNDcyLCJleHAiOjE3MjQxNTUyNzJ9.nW5j_qOe85rGxO3n4x0lifnUCYimBQ1UJ8ngkOOASVM")
-        dateStoreUtil.setAutoLogin(true)
+        
+        //dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUzMjFAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfREVGQVVMVCIsImlhdCI6MTcyMzM4NDk3OCwiZXhwIjoxNzIzOTg5Nzc4fQ.SI91aCKHgLhVzU8Of8OP0H_c6IDJ4NrFX9U9W4jgBdc")
+        dateStoreUtil.setAutoLogin(false)
 
 
         delay(2000)

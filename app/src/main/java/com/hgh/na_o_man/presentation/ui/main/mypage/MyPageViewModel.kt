@@ -8,6 +8,7 @@ import com.hgh.na_o_man.di.util.remote.onError
 import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
+import com.hgh.na_o_man.domain.usecase.member.DeleteMemberUsecase
 import com.hgh.na_o_man.domain.usecase.member.GetMyInfoUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
@@ -20,20 +21,18 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val dataStoreUtil: DataStoreUtil,
     private val getMyInfoUsecase: GetMyInfoUsecase,
+    private val deleteMemberUsecase: DeleteMemberUsecase,
 ) : BaseViewModel<MyPageContract.MyPageViewState, MyPageContract.MyPageSideEffect, MyPageContract.MyPageEvent>(
     MyPageContract.MyPageViewState()
 ) {
 
     init {
+        getMyInfo()
         Log.d("리컴포저블", "MyPageViewModel")
     }
 
     override fun handleEvents(event: MyPageContract.MyPageEvent) {
         when (event) {
-            is MyPageContract.MyPageEvent.InitMyPageScreen -> {
-                getMyInfo()
-            }
-
             MyPageContract.MyPageEvent.OnClickBack -> {
                 sendEffect({ MyPageContract.MyPageSideEffect.NaviBack })
             }
@@ -56,7 +55,7 @@ class MyPageViewModel @Inject constructor(
             }
 
             MyPageContract.MyPageEvent.OnClickDialogSignOut -> {
-
+                deleteMyInfo()
             }
         }
     }
@@ -83,6 +82,24 @@ class MyPageViewModel @Inject constructor(
     private fun authDataClear() {
         viewModelScope.launch {
             dataStoreUtil.clearDataStore()
+        }
+    }
+
+    private fun deleteMyInfo() {
+        viewModelScope.launch {
+            try {
+                deleteMemberUsecase().collect { result ->
+                    result.onSuccess {
+                        setEvent(MyPageContract.MyPageEvent.OnClickDialogLogOut)
+                    }.onFail {
+                        updateState { copy( loadState = LoadState.ERROR) }
+                    }.onException {
+                        throw it
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("예외받기", "$e")
+            }
         }
     }
 }

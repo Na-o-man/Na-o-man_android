@@ -29,12 +29,17 @@ class SignActivity : ComponentActivity() {
     }
 
     companion object {
-        const val SIGN = "sign"
+        const val SIGN_ACTIVITY = "sign"
 
         fun goAuth(context: Context) {
             val intent = Intent(context, SignActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(intent)
         }
+
+        fun intentUpload(context: Context) =
+            Intent(context, SignActivity::class.java).apply {
+                putExtra(SIGN_ACTIVITY, true)
+            }
     }
 }

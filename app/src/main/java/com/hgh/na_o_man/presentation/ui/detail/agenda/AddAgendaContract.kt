@@ -25,6 +25,7 @@ class AddAgendaContract {
         object OnBackClicked : AddAgendaEvent()
         object OnAddPhotosClicked : AddAgendaEvent()
         data class OnAddAgendaClicked(val title: String, val photos: List<PhotoInfoModel>): AddAgendaEvent()
+        object OnDialogOpened : AddAgendaEvent()
         object OnDialogClosed : AddAgendaEvent()
     }
 }

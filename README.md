@@ -6,9 +6,9 @@
 <br>
 <table>
   <tr>
-    <td align="center"><img src="" width="150" /></td>
-    <td align="center"><img src="" width="150" /></td>
-    <td align="center"><img src="" width="150" /></td>
+    <td align="center"><img width="150" alt="na-o-man-한건희" src="https://github.com/user-attachments/assets/e7f9feda-04c8-4dda-8426-4173bac0dcb8"></td>
+    <td align="center"><img width="150" alt="na-o-man-백종원" src="https://github.com/user-attachments/assets/7264840a-7b59-43ce-88fd-c4d6f22cd2c0"></td>
+    <td align="center"><img width="150" alt="na-o-man-고민균" src="https://github.com/user-attachments/assets/af546406-fca2-48c6-a7d0-6cc8a34dc091"></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/hangunhee39">⭐️한건희</a></td>
@@ -16,7 +16,7 @@
     <td align="center"><a href="https://github.com/skyblue1232">고민균</a></td>
   </tr>
   <tr>
-    <td align="center"> 프로젝트 설계( MVVM+MVI패턴, Hilt, ..) <br> Sign <br> MyPage <br> PhotoList <br> AgendaAdd <br> VoteDetail <br> Image-Up/Download(Background) </td>
+    <td align="center"> 프로젝트 설계( MVVM+MVI패턴, Hilt, ..) <br> Sign <br> MyPage <br> AddMain <br> PhotoList <br> AgendaAdd <br> VoteDetail <br> Image-Up/Download(Background) </td>
     <td align="center"> Home <br> Alarm <br> GroupFolder <br> VoteHome </td>
     <td align="center"> GroupAdd <br> GroupJoin </td>
   </tr>
@@ -105,6 +105,7 @@
     │   │   ├── vote
     │   │   └── vote_detail
     │   ├── main
+    │   │   ├── add_main
     │   │   ├── alarm
     │   │   ├── home
     │   │   └── mypage
