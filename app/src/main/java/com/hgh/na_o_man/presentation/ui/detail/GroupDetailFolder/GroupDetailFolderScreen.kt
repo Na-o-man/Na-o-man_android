@@ -122,17 +122,6 @@ fun GroupDetailFolderScreen(
     // 페이저용
     val pagerState = rememberPagerState(initialPage = 0)
 
-    LaunchedEffect(pagerState.currentPage) {
-        if (pagerState.currentPage == 0) {
-            coroutineScope.launch {
-                pagerState.scrollToPage(viewState. * 1000)
-            }
-        } else if (pagerState.currentPage == viewState.groupDetail?.profileInfoList?.size ?:0 + 2 * 1000 + actualPageCount - 1) {
-            coroutineScope.launch {
-                pagerState.scrollToPage(actualPageCount * 1000 + actualPageCount)
-            }
-        }
-    }
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
