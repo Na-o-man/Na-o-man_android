@@ -1,12 +1,10 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
-import android.hardware.lights.Light
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,10 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,7 +31,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -47,7 +41,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -58,7 +51,6 @@ import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.NextAppBar1
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.theme.LightWhite
-import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 
@@ -93,7 +85,7 @@ fun MembersAdjective(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 50.dp), // 비율 기반 padding
+                    .padding(top = 70.dp), // 비율 기반 padding
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -105,7 +97,7 @@ fun MembersAdjective(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 90.dp), // 비율 기반 padding
+                    .padding(top = 110.dp), // 비율 기반 padding
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -128,7 +120,6 @@ fun MembersAdjective(
                 )
             }
 
-            val context = LocalContext.current
             val buttonLabels = listOf("친구", "연인", "여행", "가족", "모임", "동아리", "행사", "나들이", "스냅")
             val buttonCount = buttonLabels.size
             val selectedButtons =
@@ -140,8 +131,7 @@ fun MembersAdjective(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 15.dp)
-                    .padding(top = 175.dp, start = 10.dp, end = 10.dp),
+                    .padding(top = 210.dp, start = 45.dp, end = 45.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -174,7 +164,7 @@ fun MembersAdjective(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .padding(horizontal = 8.dp), // 버튼 사이 간격 조정
+                                    .padding(horizontal = 4.dp), // 버튼 사이 간격 조정
                                 shape = RoundedCornerShape(20.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = if (isSelected) Color.Gray.copy(alpha = 0.3f) else LightWhite.copy(
@@ -188,13 +178,15 @@ fun MembersAdjective(
                                     text = label,
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = 12.sp,
-                                    color = if (isSelected) SteelBlue else LightWhite
+                                    color = if (isSelected) Color.White else LightWhite
                                 )
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(13.dp)) // Row 간 간격 조정
+                    Spacer(modifier = Modifier.height(4.dp)) // Row 간 간격 조정
                 }
+
+                Spacer(modifier = Modifier.height(30.dp)) // 비율 기반 spacing
 
                 // 입력 필드
                 TextField(
@@ -222,18 +214,18 @@ fun MembersAdjective(
                         Text(
                             text = "직접 입력",
                             fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp,
-                            color = LightWhite.copy(alpha = 0.6f)
+                            fontSize = 12.sp,
+                            color = LightWhite.copy(alpha = 0.8f),
+                            modifier = Modifier.padding(horizontal = 2.dp)
                         )
                     },
                     modifier = Modifier
-                        .height(211.dp)
-                        .padding(start = 5.dp, end = 5.dp, bottom = 120.dp)
+                        .height(60.dp)
+                        .padding(start = 5.dp, end = 5.dp, bottom = 15.dp)
                         .fillMaxWidth()
-                        .padding(vertical = 16.dp) // 비율 기반 padding
                         .border(
                             BorderStroke(1.dp, LightWhite),
-                            shape = RoundedCornerShape(50.dp)
+                            shape = RoundedCornerShape(40.dp)
                         ),
                     colors = TextFieldDefaults.colors(
                         unfocusedTextColor = LightWhite,
@@ -259,10 +251,7 @@ fun MembersAdjective(
                     )
                 )
 
-                Spacer(modifier = Modifier.height(16.dp)) // 비율 기반 spacing
-
-                val selectedAttributes =
-                    viewModel.viewState.collectAsState().value.selectedAttributes
+                Spacer(modifier = Modifier.height(15.dp)) // 비율 기반 spacing
 
                 NextAppBar1(
                     onNextClick = {
@@ -276,7 +265,7 @@ fun MembersAdjective(
                             Toast.makeText(context, "하나 이상의 항목을 선택하거나 텍스트를 입력해야 합니다.", Toast.LENGTH_SHORT).show()
                         }
                     },
-                    modifier = Modifier.offset( y = -(50.dp))
+                    modifier = Modifier.padding(start = 10.dp)
                 )
             }
         }

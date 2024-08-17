@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
+import android.hardware.lights.Light
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +17,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -31,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -102,7 +107,7 @@ fun AcceptCheckScreen(
                 Row(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .padding(top = 320.dp),
+                        .padding(top = 150.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
@@ -115,7 +120,7 @@ fun AcceptCheckScreen(
 
                     Text(
                         text = "이 그룹이 맞으신가요?",
-                        modifier = Modifier.padding(start = 30.dp),
+                        modifier = Modifier.padding(start = 20.dp),
                         color = LightWhite,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -127,16 +132,15 @@ fun AcceptCheckScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_folder_head_122),
-                        contentDescription = "Image 1",
-                        modifier = Modifier.height(90.dp).width(133.dp)
-                            .offset(x = -(51.dp), y = -(93.dp))
-                    )
-
-                    Image(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_group_detail_folder_body_289),
+                        painter = painterResource(id = R.drawable.ic_file_227),
                         contentDescription = "Image 2",
-                        modifier = Modifier.size(240.dp, 280.dp)
+                        modifier = Modifier.size(250.dp, 305.dp)
+                            .align(Alignment.Center) // 중앙에 배치
+                            .graphicsLayer(
+                                alpha = 0.8f, // 전체 투명도 설정 (1은 불투명)
+                                shape = RoundedCornerShape(16.dp),
+                                clip = true
+                            )
                     )
 
                     // 멤버들
@@ -151,16 +155,17 @@ fun AcceptCheckScreen(
                             // 동그란 배경을 포함하는 Box
                             Box(
                                 modifier = Modifier
-                                    .padding(end = 40.dp)
+                                    .padding(end = 40.dp, top = 22.dp)
                                     .size(60.dp) // Box 크기를 설정
                                     .clip(CircleShape) // 동그란 형태로 자르기
                                     .background(Color.Transparent) // 배경색을 투명하게 설정
+                                    .border(2.dp, LightWhite, CircleShape)
                             ) {
                                 // 만약 avatarUrl이 null이거나 유효하지 않다면 기본 이미지를 사용
                                 val painter = if (member.avatarUrl.isNotEmpty()) {
                                     rememberAsyncImagePainter(member.avatarUrl) // 사용자 정의 이미지
                                 } else {
-                                    painterResource(id = R.drawable.ic_add_group_avatar_94) // 기본 이미지
+                                    painterResource(id = R.drawable.ic_profile_155) // 기본 이미지
                                 }
 
                                 Image(
@@ -176,9 +181,9 @@ fun AcceptCheckScreen(
                                 color = SlateGray,
                                 modifier = Modifier
                                     .align(Alignment.Center)
-                                    .padding(end = 40.dp, top = 65.dp),
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.SemiBold,
+                                    .padding(end = 39.dp, top = 77.dp),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium,
                                 maxLines = 1, // 한 줄로 제한
                                 overflow = TextOverflow.Ellipsis // 초과될 경우 말줄임표 추가
                             )
@@ -189,8 +194,8 @@ fun AcceptCheckScreen(
                     if (extraMembersCount > 0) {
                         Box(
                             modifier = Modifier
-                                .padding(bottom = 40.dp) // 위쪽 패딩 조정
-                                .padding(start = 150.dp) // 왼쪽 패딩 조정
+                                .padding(bottom = 22.dp) // 위쪽 패딩 조정
+                                .padding(start = 160.dp) // 왼쪽 패딩 조정
                         ) {
                             // 배경 이미지
                             Image(
@@ -215,11 +220,15 @@ fun AcceptCheckScreen(
                     }
                 }
 
-                // 버튼 눌림 상태 변수
-                var isPressed by remember { mutableStateOf(false) }
-                var isFocused by remember { mutableStateOf(false) }
+                // 각 버튼의 상태 변수
+                var isPressedBack by remember { mutableStateOf(false) }
+                var isFocusedBack by remember { mutableStateOf(false) }
 
-                val focusRequester = remember { FocusRequester() }
+                var isPressedCorrect by remember { mutableStateOf(false) }
+                var isFocusedCorrect by remember { mutableStateOf(false) }
+
+                val focusRequesterBack = remember { FocusRequester() }
+                val focusRequesterCorrect = remember { FocusRequester() }
 
                 Row(
                     modifier = Modifier
@@ -232,92 +241,93 @@ fun AcceptCheckScreen(
                     Button(
                         onClick = {
                             navigationBack()
+                            isPressedBack = !isPressedBack // Toggle button state
                         },
                         modifier = Modifier
-                            .height(45.dp)
-                            .width(95.dp)
-                            .border(BorderStroke(1.dp, LightWhite), shape = RoundedCornerShape(23.dp))
+                            .padding(start = 32.dp)
+                            .size(84.dp, 40.dp)
+                            .border(BorderStroke(1.dp, LightWhite), shape = RoundedCornerShape(50.dp))
                             .background(
-                                color = when {
-                                    isPressed || isFocused -> LightWhite
-                                    else -> LightWhite.copy(alpha = 0.3f)
-                                },
-                                shape = RoundedCornerShape(20.dp)
+                                color = LightWhite.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(50.dp)
                             )
-                            .focusRequester(focusRequester)
+                            .focusRequester(focusRequesterBack)
                             .onFocusChanged { focusState ->
-                                isFocused = focusState.isFocused
-                            }
-                            .clickable {
-                                isPressed = !isPressed
+                                isFocusedBack = focusState.isFocused
                             },
+                        contentPadding = PaddingValues(0.dp), // Remove default padding
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent,  // We'll handle this with background modifier
-                            contentColor = if (isPressed || isFocused) DeepBlue else LightWhite
+                            containerColor = Color.Transparent,  // Handle with background modifier
+                            contentColor = Color.Transparent
                         )
                     ) {
                         Text(
                             text = "다시 찾기",
-                            color = if (isPressed || isFocused) DeepBlue else LightWhite,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold
+                            color = if (isPressedBack || isFocusedBack) DeepBlue else LightWhite,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center) // Center text in button
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(15.dp))
+                    Spacer(modifier = Modifier.width(5.dp))
 
                     // "맞아요!" 버튼
                     Button(
                         onClick = {
                             viewModel.setEvent(JoinContract.JoinEvent.onCorrect)
                             navController.navigate(JoinScreenRoute.ACCEPT.route)
+                            isPressedCorrect = !isPressedCorrect // Toggle button state
                         },
                         modifier = Modifier
-                            .height(45.dp)
-                            .width(95.dp)
-                            .border(BorderStroke(1.dp, LightWhite), shape = RoundedCornerShape(23.dp))
+                            .padding(end = 32.dp)
+                            .size(84.dp, 40.dp)
+                            .border(BorderStroke(1.dp, LightWhite), shape = RoundedCornerShape(50.dp))
                             .background(
-                                color = when {
-                                    isPressed || isFocused -> LightWhite
-                                    else -> LightWhite.copy(alpha = 0.3f)
-                                },
-                                shape = RoundedCornerShape(20.dp)
+                                color = LightWhite.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(50.dp)
                             )
-                            .focusRequester(focusRequester)
+                            .focusRequester(focusRequesterCorrect)
                             .onFocusChanged { focusState ->
-                                isFocused = focusState.isFocused
-                            }
-                            .clickable {
-                                isPressed = !isPressed
+                                isFocusedCorrect = focusState.isFocused
                             },
+                        contentPadding = PaddingValues(0.dp), // Remove default padding
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent,  // We'll handle this with background modifier
-                            contentColor = if (isPressed || isFocused) DeepBlue else LightWhite
+                            containerColor = Color.Transparent,  // Handle with background modifier
+                            contentColor = Color.Transparent
                         )
                     ) {
                         Text(
                             text = "맞아요!",
-                            color = if (isPressed || isFocused) DeepBlue else LightWhite,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold
+                            color = if (isPressedCorrect || isFocusedCorrect) DeepBlue else LightWhite,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center) // Center text in button
                         )
                     }
                 }
 
 
-                // 화면 중앙 하단 이미지 "제주도 2024"
+                // 화면 중앙 하단 이미지
                 Box(
                     modifier = Modifier
-                        .padding(top = 90.dp)
-                        .size(width = 210.dp, height = 45.dp)
-                        .background(LightWhite.copy(alpha = 0.7f), shape = RoundedCornerShape(20.dp))
-                        .border(1.dp, LightWhite, shape = RoundedCornerShape(20.dp))
-                ) {
+                        .padding(top = 115.dp)
+                        .size(width = 210.dp, height = 50.dp)
+                        .shadow(
+                            elevation = 8.dp, // 그림자의 높이 (값을 조정하여 그림자 강도를 변경)
+                            shape = RoundedCornerShape(30.dp),
+                            ambientColor = Color.Black.copy(alpha = 1f), // 그림자 색상 및 투명도
+                            spotColor = Color.Black.copy(alpha = 0.8f) // 빛에 의해 생긴 그림자의 색상 및 투명도
+                        )
+                        .background(LightWhite.copy(alpha = 0.7f), shape = RoundedCornerShape(1.dp)) // 덜 둥근 모서리 배경
+                        .border(1.dp, LightWhite, shape = RoundedCornerShape(1.dp)) // 덜 둥근 모서리 테두리
+                )
+                {
                     Text(
                         text = textValue, // 그룹 이름을 여기에 표시
                         modifier = Modifier
                             .fillMaxSize()
-                            .offset(y = 10.dp)
+                            .padding(top = 15.dp)
                             .align(Alignment.Center),
                         style = TextStyle(
                             color = DeepBlue,

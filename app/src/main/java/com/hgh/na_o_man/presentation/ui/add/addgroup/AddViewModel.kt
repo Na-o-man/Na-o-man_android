@@ -32,7 +32,7 @@ open class AddViewModel @Inject constructor(
             is AddEvent.CreateGroup -> createGroup()
             is AddEvent.RemoveMember -> removeMember(event.name)
             is AddEvent.UpdateSelectedAttributes -> updateSelectedAttributes(event.attributes)
-            else -> {}
+            is AddEvent.Back -> sendEffect ({ AddSideEffect.Back })// Back 이벤트 처리
         }
     }
 

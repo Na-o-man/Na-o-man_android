@@ -34,8 +34,8 @@ fun UserInfo(
 ) {
     Box(
         modifier = Modifier
-            .size(360.dp, 130.dp) // 기존 크기 유지
-            .padding(16.dp) // 여백 추가
+            .size(360.dp, 125.dp) // 기존 크기 유지
+            .padding(15.dp) // 여백 추가
             .clickable(onClick = onClick) // 클릭 가능하도록 설정
             .background(if (isSelected) Color.Gray.copy(0.3f) else Color.Transparent) // 선택 상태에 따라 배경 색상 변경
     ) {

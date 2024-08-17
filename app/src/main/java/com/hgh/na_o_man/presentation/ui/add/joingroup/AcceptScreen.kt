@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -80,14 +81,14 @@ fun AcceptScreen(
             Row(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = padding.calculateTopPadding() + 50.dp),
+                    .padding(top = padding.calculateTopPadding() + 100.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
                     contentDescription = "Left Image",
                     modifier = Modifier
-                        .size(19.dp)
+                        .size(18.dp)
                         .graphicsLayer(rotationZ = -120f)
                 )
 
@@ -95,14 +96,14 @@ fun AcceptScreen(
                     text = "당신이 누구인지 알려주세요.",
                     modifier = Modifier.padding(start = 16.dp),
                     color = LightWhite,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 170.dp, end = 20.dp)
+                    .padding(top = 180.dp, end = 20.dp)
             ) {
                 HorizontalPager(
                     state = pagerState,
@@ -132,7 +133,8 @@ fun AcceptScreen(
                 // Next Button Image
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 40.dp, start = 260.dp)
+                        .padding(bottom = 20.dp, start = 260.dp)
+                        .offset(y = -(50.dp))
                         .clickable {
                             selectedProfile?.let { profile ->
                                 viewModel.onNextButtonClicked(profile.id, viewState.shareGroupId)

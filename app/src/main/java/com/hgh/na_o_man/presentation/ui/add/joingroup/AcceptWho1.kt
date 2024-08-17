@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -35,7 +33,7 @@ fun AcceptWho1(
 
     Box(
         modifier = Modifier
-            .size(360.dp, 400.dp)
+            .size(350.dp, 380.dp)
             .background(Color.Transparent)
     ) {
         Scaffold(
@@ -44,8 +42,9 @@ fun AcceptWho1(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 15.dp, bottom = 8.dp)
+                    .padding(start = 20.dp, bottom = 4.dp)
                     .background(Color.Transparent)
+                    .align(Alignment.Center)
             ) {
                 members.forEachIndexed { index, member ->
                     // 첫 번째 항목은 선택이 불가능하도록 설정
@@ -54,7 +53,7 @@ fun AcceptWho1(
                     val painter = if (member.avatarUrl.isNotEmpty()) {
                         rememberAsyncImagePainter(member.avatarUrl) // 사용자 정의 이미지
                     } else {
-                        painterResource(id = R.drawable.ic_add_group_avatar_94) // 기본 이미지
+                        painterResource(id = R.drawable.ic_profile_155) // 기본 이미지
                     }
 
                     UserInfo(

@@ -129,7 +129,7 @@ fun MembersLoading(
         // 상태를 수집하여 2초 후 네비게이션
         LaunchedEffect(Unit) {
             // CreateGroup 이벤트 처리 후 MembersLoading 화면에서 2초 대기
-            delay(500)
+            delay(300)
             navController.navigate(AddScreenRoute.FOLDER.route)
         }
     }
