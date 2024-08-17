@@ -225,6 +225,8 @@ fun GroupDetailFolderScreen(
                                     )
                                 }
                             }
+                            
+                            Spacer(modifier = Modifier.height(15.dp))
 
                             HorizontalPagerIndicator(
                                 pagerState = pagerState,
@@ -239,7 +241,7 @@ fun GroupDetailFolderScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .offset(y = 90.dp)
+                                .offset(y = 40.dp)
                         ) {
                             SmallCloudBtn(title = "이미지\n업로드") {
                                 viewModel.setEvent(

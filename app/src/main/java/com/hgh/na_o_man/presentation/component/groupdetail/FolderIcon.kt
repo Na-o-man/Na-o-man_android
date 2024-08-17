@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.FolderDummy
@@ -20,7 +21,6 @@ import com.hgh.na_o_man.presentation.component.FolderProfile
 @Composable
 fun Bigfolder(
     folderInfo: FolderDummy? = null, // FolderProfile에 필요한 정보를 전달하기 위한 매개변수
-//    modifier: Modifier = Modifier,
     onClick :() -> Unit = {}
 ){
 
@@ -44,13 +44,13 @@ fun Bigfolder(
             )
         }
 
-//        Icon(
-//            imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
-//            contentDescription = "낭만 로고",
-//            tint = Color.Unspecified,
-//            modifier = Modifier
-//                .offset(x = 210.dp, y = 50.dp)
-//        )
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
+            contentDescription = "낭만 로고",
+            tint = Color.Unspecified,
+            modifier = Modifier
+                .offset(x = 210.dp,y = 45.dp)
+        )
     }
 }
 
@@ -65,13 +65,13 @@ fun SmallFolder(page : Int){
             tint = Color.Unspecified
         )
 
-//        Icon(
-//            imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
-//            contentDescription = "낭만 로고",
-//            tint = Color.Unspecified,
-//            modifier = Modifier
-//                .offset(x = 210.dp, y = 50.dp)
-//        )
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
+            contentDescription = "낭만 로고",
+            tint = Color.Unspecified,
+            modifier = Modifier
+                .offset(x = 240.dp, y = 50.dp)
+        )
     }
 }
 
@@ -79,5 +79,6 @@ fun SmallFolder(page : Int){
 @Preview(showBackground = true)
 @Composable
 fun PreviewFolder() {
-    SmallFolder(2)
+//    SmallFolder(2)
+    Bigfolder()
 }
