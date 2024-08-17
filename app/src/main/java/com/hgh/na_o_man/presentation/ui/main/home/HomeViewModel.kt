@@ -107,12 +107,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getImageResId(imageName: String?): Int{
+    private fun getImageResId(imageName: String?): String{
         return if(imageName.isNullOrEmpty()){
-            R.drawable.ic_add_group_avatar_94
+            "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png"
         } else {
             val resId = application.resources.getIdentifier(imageName, "drawable",application.packageName)
-            if(resId != 0) resId else R.drawable.ic_add_group_avatar_94
+            if(resId != 0) {
+                resId.toString()
+            } else "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png"
         }
     }
 }
