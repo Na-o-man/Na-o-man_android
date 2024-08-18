@@ -2,6 +2,7 @@ package com.hgh.na_o_man.presentation.ui.add.joingroup
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.hgh.na_o_man.R
 import com.hgh.na_o_man.data.dto.share_group.request.GroupJoinRequestDto
 import com.hgh.na_o_man.di.util.remote.onException
 import com.hgh.na_o_man.di.util.remote.onFail
@@ -9,9 +10,10 @@ import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.domain.usecase.share_group.JoinGroupUsecase
 import com.hgh.na_o_man.domain.usecase.share_group.JoinInviteUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.hgh.na_o_man.presentation.ui.add.JoinScreenRoute
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel
 class JoinViewModel @Inject constructor(
@@ -31,18 +33,18 @@ class JoinViewModel @Inject constructor(
                 validateUrl(event.inviteCode)// inviteCode 전달
             }
 
-            is JoinContract.JoinEvent.OnFind -> {
+            is JoinContract.JoinEvent.onFind -> {
                 // 다시 찾기 이벤트 처리
                 findAnotherGroup()
             }
 
-            is JoinContract.JoinEvent.OnCorrect -> {
+            is JoinContract.JoinEvent.onCorrect -> {
                 // 맞아요 이벤트 처리
                 sendEffect({ JoinContract.JoinSideEffect.NavigateToNextScreen })
                 confirmGroup()
             }
 
-            is JoinContract.JoinEvent.OnProfileSelected -> {
+            is JoinContract.JoinEvent.onProfileSelected -> {
                 // 프로필 선택 이벤트 처리
                 updateState {
                     copy(profileId = event.profileId)
@@ -100,7 +102,7 @@ class JoinViewModel @Inject constructor(
                     }
                     sendEffect({
                         JoinContract.JoinSideEffect._ShowToast("그룹 참여에 성공했습니다.\n환영합니다.")
-                        JoinContract.JoinSideEffect.FinishActivity
+                        JoinContract.JoinSideEffect.FinishActivity // 액티비티 종료 지시
                     })
                 }.onFail { error ->
                     Log.e("FetchGroupInfo", "유효하지 않은 그룹 정보: $error")
@@ -121,6 +123,8 @@ class JoinViewModel @Inject constructor(
         }
     }
 
+
+
     fun onNextButtonClicked(profileId: Long, shareGroupId: Int) {
         fetchGroupInfo(profileId, shareGroupId)
     }
@@ -131,6 +135,9 @@ class JoinViewModel @Inject constructor(
     private fun findAnotherGroup() {
 
     }
+
+    fun getGroupName(): String = viewState.value.groupName
+
 }
 
 

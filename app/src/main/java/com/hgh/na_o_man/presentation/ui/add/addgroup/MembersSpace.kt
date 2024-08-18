@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,6 +34,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,6 +54,7 @@ import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 fun MembersSpace(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
+    showBackIcon: Boolean = false, // 아이콘을 보여줄지 여부를 받는 매개변수
     navigationBack: () -> Unit,
 ) {
     Log.d("리컴포저블", "members_space")
@@ -67,27 +70,31 @@ fun MembersSpace(
             )
         },
         bottomBar = {
+            // 다음 버튼
             Box(
                 modifier = Modifier
                     .padding(top = 130.dp, end = 20.dp)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.CenterEnd
+                    .fillMaxSize(), // 전체 크기로 채우기
+                contentAlignment = Alignment.CenterEnd // 중앙 정렬
             ) {
                 NextAppBar1(
                     onNextClick = {
-                        if (textValue.isNotEmpty()) {
+                        if (textValue.isNotEmpty()) { // 텍스트가 입력되었을 때만 다음 화면으로 넘어가는 로직
+                            // CreateGroup 이벤트를 발생시키고 네비게이션
                             viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
-                            navController.navigate(AddScreenRoute.LOADING.route)
+                            navController.navigate(AddScreenRoute._LOADING.route)
                         }
                         else {
+                            // showToast 메소드를 통해 토스트 메시지 전달
                             AddContract.AddSideEffect.ShowToast("텍스트를 입력해주세요.")
                         }
                     },
                 )
             }
         },
-        containerColor = lightSkyBlue
+        containerColor = lightSkyBlue // 여기를 수정
     ) { padding ->
+        //구름 배경 Box
         Box(modifier = Modifier.fillMaxSize()) {
             EndTopCloud()
         }
@@ -96,6 +103,7 @@ fun MembersSpace(
             modifier = Modifier.fillMaxSize().padding(10.dp),
             contentAlignment = Alignment.Center
         ) {
+            // 화면 중앙 이미지
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -108,6 +116,7 @@ fun MembersSpace(
                 )
             }
 
+            // 텍스트
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -132,12 +141,12 @@ fun MembersSpace(
                 )
             }
 
-            // 텍스트창
+            // 화면 중앙 하단 이미지
             Box(
                 modifier = Modifier
                     .size(295.dp, 55.dp)
                     .background(
-                        color = LightWhite.copy(alpha = 0.7f),
+                        color = LightWhite.copy(alpha = 0.7f), // 투명도 0.7로 설정
                         shape = RoundedCornerShape(20.dp)
                     )
                     .border(
@@ -150,8 +159,9 @@ fun MembersSpace(
                     value = textValue,
                     onValueChange = { newValue ->
                         textValue = newValue
+                        // 화면에서 입력하는 즉시 viewModel의 상태를 업데이트
                         viewModel.updatePlace(newValue)
-                    },
+                    }, // 상태 업데이트
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.Center)
@@ -171,33 +181,35 @@ fun MembersSpace(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .align(Alignment.Center),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center // 중앙 정렬 설정
                         ) {
                             if (textValue.isEmpty() && !isFocused) {
+                                // 입력값이 없고 포커스가 없을 때 플레이스홀더 텍스트 표시
                                 Text(
                                     text = "공간을 입력해주세요.",
-                                    color = SteelBlue,
+                                    color = SteelBlue, // 약간의 투명도를 주어 플레이스홀더 느낌
                                     textAlign = TextAlign.Center,
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
-                            innerTextField()
+                            innerTextField() // innerTextField 호출
                         }
                     }
                 )
 
-                val context = LocalContext.current
+                val context = LocalContext.current // 현재의 컨텍스트 가져오기
 
                 LaunchedEffect(Unit) {
                     viewModel.effect.collect { effect ->
                         when (effect) {
                             is AddContract.AddSideEffect.NavigateToNextScreen -> {
-                                navController.navigate(AddScreenRoute.LOADING.route)
+                                navController.navigate(AddScreenRoute._LOADING.route)
                             }
 
                             is AddContract.AddSideEffect.ShowToast -> {
                                 Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                             }
+                            // 다른 사이드 이펙트가 있다면 추가
                             else -> {}
                         }
                     }

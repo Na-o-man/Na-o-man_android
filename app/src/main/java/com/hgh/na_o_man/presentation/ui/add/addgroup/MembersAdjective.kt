@@ -1,10 +1,12 @@
 package com.hgh.na_o_man.presentation.ui.add.addgroup
 
+import android.hardware.lights.Light
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,6 +36,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -40,9 +45,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,6 +58,7 @@ import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.NextAppBar1
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.theme.LightWhite
+import com.hgh.na_o_man.presentation.theme.SteelBlue
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
 
@@ -82,11 +88,12 @@ fun MembersAdjective(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(padding)
         ) {
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 150.dp),
+                    .padding(top = 50.dp), // 비율 기반 padding
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -98,7 +105,7 @@ fun MembersAdjective(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 180.dp),
+                    .padding(top = 90.dp), // 비율 기반 padding
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -121,6 +128,7 @@ fun MembersAdjective(
                 )
             }
 
+            val context = LocalContext.current
             val buttonLabels = listOf("친구", "연인", "여행", "가족", "모임", "동아리", "행사", "나들이", "스냅")
             val buttonCount = buttonLabels.size
             val selectedButtons =
@@ -132,24 +140,26 @@ fun MembersAdjective(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(padding)
-                    .padding(top = 210.dp, start = 45.dp, end = 45.dp),
+                    .padding(horizontal = 15.dp)
+                    .padding(top = 175.dp, start = 10.dp, end = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // 버튼 9개
+                // 버튼 UI
                 buttonLabels.chunked(3).forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        rowItems.forEachIndexed { _, label ->
+                        rowItems.forEachIndexed { rowIndex, label ->
                             val actualIndex = buttonLabels.indexOf(label)
                             val isSelected = selectedButtons[actualIndex]
                             Button(
                                 onClick = {
+                                    // 버튼 선택 상태 업데이트
                                     selectedButtons[actualIndex] = !isSelected
 
+                                    // 속성 업데이트
                                     if (selectedButtons[actualIndex]) {
                                         selectedAttributes.add(label)
                                     } else {
@@ -164,7 +174,7 @@ fun MembersAdjective(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .padding(horizontal = 4.dp),
+                                    .padding(horizontal = 8.dp), // 버튼 사이 간격 조정
                                 shape = RoundedCornerShape(20.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = if (isSelected) Color.Gray.copy(alpha = 0.3f) else LightWhite.copy(
@@ -178,15 +188,13 @@ fun MembersAdjective(
                                     text = label,
                                     fontWeight = FontWeight.SemiBold,
                                     fontSize = 12.sp,
-                                    color = if (isSelected) Color.White else LightWhite
+                                    color = if (isSelected) SteelBlue else LightWhite
                                 )
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(13.dp)) // Row 간 간격 조정
                 }
-
-                Spacer(modifier = Modifier.height(30.dp))
 
                 // 입력 필드
                 TextField(
@@ -194,6 +202,7 @@ fun MembersAdjective(
                     onValueChange = { newText ->
                         inputText = newText
 
+                        // 텍스트 입력이 있을 경우, 다른 텍스트 항목은 제거
                         if (inputText.isNotBlank()) {
                             val nonButtonTextAttributes =
                                 selectedAttributes.filter { it !in buttonLabels }
@@ -213,22 +222,18 @@ fun MembersAdjective(
                         Text(
                             text = "직접 입력",
                             fontWeight = FontWeight.SemiBold,
-                            fontSize = 12.sp,
-                            color = LightWhite.copy(alpha = 0.8f),
-                            modifier = Modifier.padding(horizontal = 2.dp)
+                            fontSize = 16.sp,
+                            color = LightWhite.copy(alpha = 0.6f)
                         )
                     },
-                    textStyle = TextStyle(
-                        fontSize = 13.sp,
-                        color = LightWhite
-                    ),
                     modifier = Modifier
-                        .height(54.dp)
-                        .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
+                        .height(211.dp)
+                        .padding(start = 5.dp, end = 5.dp, bottom = 120.dp)
                         .fillMaxWidth()
+                        .padding(vertical = 16.dp) // 비율 기반 padding
                         .border(
                             BorderStroke(1.dp, LightWhite),
-                            shape = RoundedCornerShape(40.dp)
+                            shape = RoundedCornerShape(50.dp)
                         ),
                     colors = TextFieldDefaults.colors(
                         unfocusedTextColor = LightWhite,
@@ -248,17 +253,20 @@ fun MembersAdjective(
                                 viewModel.handleEvents(
                                     AddContract.AddEvent.UpdateSelectedAttributes(selectedAttributes)
                                 )
-                                inputText = ""
+                                inputText = ""  // 입력 필드 초기화
                             }
                         }
                     )
                 )
 
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(16.dp)) // 비율 기반 spacing
+
+                val selectedAttributes =
+                    viewModel.viewState.collectAsState().value.selectedAttributes
 
                 NextAppBar1(
                     onNextClick = {
-
+                        // 선택된 버튼이 하나라도 있거나 텍스트 입력 필드에 값이 있는 경우만 이동
                         val hasSelectedButtons = selectedAttributes.size > 0
                         val hasTextInput = inputText.isNotBlank()
 
@@ -268,11 +276,12 @@ fun MembersAdjective(
                             Toast.makeText(context, "하나 이상의 항목을 선택하거나 텍스트를 입력해야 합니다.", Toast.LENGTH_SHORT).show()
                         }
                     },
-                    modifier = Modifier.offset(x = 10.dp)
+                    modifier = Modifier.offset( y = -(50.dp))
                 )
             }
         }
 
+        // LaunchedEffect to handle side effects from ViewModel
         LaunchedEffect(Unit) {
             viewModel.effect.collect { effect ->
                 when (effect) {

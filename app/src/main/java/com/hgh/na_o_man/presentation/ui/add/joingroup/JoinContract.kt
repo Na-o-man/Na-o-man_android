@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
+import androidx.annotation.DrawableRes
 import com.hgh.na_o_man.presentation.base.ViewEvent
 import com.hgh.na_o_man.presentation.base.ViewSideEffect
 import com.hgh.na_o_man.presentation.base.ViewState
@@ -25,17 +26,17 @@ class JoinContract {
     // SideEffect
     sealed class JoinSideEffect : ViewSideEffect {
         data class _ShowToast(val message: String) : JoinSideEffect()
-        data object NavigateToNextScreen : JoinSideEffect()
-        data object NavigateToCheckScreen : JoinSideEffect()
-        data object FinishActivity : JoinSideEffect() // 액티비티 종료
+        object NavigateToNextScreen : JoinSideEffect()
+        object NavigateToCheckScreen : JoinSideEffect()
+        object FinishActivity : JoinSideEffect() // 액티비티 종료를 위한 SideEffect
     }
 
     // Event
     sealed class JoinEvent : ViewEvent {
         data class ValidateUrl(val inviteCode: String) : JoinEvent()
-        data object OnFind : JoinEvent()
-        data object OnCorrect : JoinEvent()
-        data object LoadGroupMembers : JoinEvent() // 그룹 멤버 로드
-        data class OnProfileSelected(val profileId: Long) : JoinEvent() // 프로필 선택
+        object onFind : JoinEvent()
+        object onCorrect : JoinEvent()
+        object LoadGroupMembers : JoinEvent() // 그룹 멤버 로드 이벤트 추가
+        data class onProfileSelected(val profileId: Long) : JoinEvent() // 프로필 선택 이벤트 추가
     }
 }
