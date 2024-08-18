@@ -43,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -119,10 +120,6 @@ fun GroupDetailFolderScreen(
 
     Log.d("리컴포저블", "GroupDetailScreen")
 
-    // 페이저용
-    val pagerState = rememberPagerState(initialPage = 0)
-
-
     when (viewState.loadState) {
         LoadState.LOADING -> {
             StateLoadingScreen()
@@ -157,8 +154,7 @@ fun GroupDetailFolderScreen(
                         .padding(padding)
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Spacer(modifier = Modifier.height(100.dp))
 
@@ -199,6 +195,12 @@ fun GroupDetailFolderScreen(
                                     name = "all"
                                 )
                             )
+
+                            val pageCount = Int.MAX_VALUE
+                            val realSize = folderList.size
+                            val middlePage = pageCount / 2
+                            val pagerState = rememberPagerState(initialPage = middlePage - (middlePage % realSize))
+
                             Box(
                                 modifier = Modifier
                                     .height(264.dp)
@@ -208,21 +210,24 @@ fun GroupDetailFolderScreen(
                                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_round_folder_600),
                                     contentDescription = null,
                                     tint = Color.Unspecified,
-                                    modifier = Modifier.width(800.dp).align(Alignment.BottomCenter)
+                                    modifier = Modifier
+                                        .width(800.dp)
+                                        .align(Alignment.BottomCenter)
                                 )
 
                                 HorizontalPager(
-                                    count = folderList.size,
+                                    count = pageCount,
                                     state = pagerState,
                                     contentPadding = PaddingValues(horizontal = 70.dp), // Set padding to create partial view
                                     modifier = Modifier.matchParentSize(),
                                     itemSpacing = 0.dp,
+                                ) { index ->
 
-                                ) { page ->
+                                    val page = index % realSize // 무한 스크롤 인덱스 조정
 
                                     val currentPage = pagerState.currentPage
                                     val pageOffset = pagerState.currentPageOffset
-                                    val pagePosition = page - currentPage - pageOffset
+                                    val pagePosition = index - currentPage - pageOffset
 
                                     // 페이지가 중앙에 가까울수록 더 커지도록 설정
                                     val targetScale = 0.8f + (1.2f - 0.8f) * (1 - abs(pagePosition))
@@ -248,8 +253,7 @@ fun GroupDetailFolderScreen(
                                             folderInfo = folderInfo,
                                             onClick = {
                                                 val memberId =
-                                                    filteredProfileInfoList.getOrNull(page)?.memberId
-                                                        ?: -1
+                                                    filteredProfileInfoList.getOrNull(page)?.memberId ?: -1
 //                                            val profileId = filteredProfileInfoList.getOrNull(page)?.profileId ?: 100L
                                                 val profileId = when {
                                                     filteredProfileInfoList.getOrNull(page)?.profileId != null -> filteredProfileInfoList[page].profileId
@@ -262,7 +266,7 @@ fun GroupDetailFolderScreen(
                                                     profileId,
                                                     memberId
                                                 )
-                                            }
+                                            },
                                         )
                                     }
                                 }
@@ -272,10 +276,11 @@ fun GroupDetailFolderScreen(
 
                             HorizontalPagerIndicator(
                                 pagerState = pagerState,
+                                pageCount = realSize,
+                                pageIndexMapping =  {page -> page % realSize},
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
                                     .padding(16.dp),
-                                pageCount = folderList.size
                             )
                         }
 
@@ -311,7 +316,6 @@ fun GroupDetailFolderScreen(
         }
     }
 }
-
 
 @OptIn(ExperimentalPagerApi::class)
 @Preview
