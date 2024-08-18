@@ -1,8 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.add.joingroup
 
 import android.app.Activity
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -13,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -47,7 +46,6 @@ import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.theme.DeepBlue
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
-import com.hgh.na_o_man.presentation.ui.add.AddGroupActivity
 import com.hgh.na_o_man.presentation.ui.add.joingroup.JoinContract.JoinSideEffect
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -57,12 +55,12 @@ fun AcceptScreen(
     navController: NavHostController = rememberNavController(),
     navigationBack: () -> Unit,
 ) {
-    val viewState by viewModel.viewState.collectAsState() // ViewModel의 상태를 수집
+    val viewState by viewModel.viewState.collectAsState()
     val memberList = viewState.members
-    val membersPerPage = 3 // 페이지당 멤버 수
+    val membersPerPage = 3
     val pagerState = rememberPagerState(pageCount = { (memberList.size + membersPerPage - 1) / membersPerPage })
 
-    var selectedProfile by remember { mutableStateOf<Member?>(null) } // 상태를 var로 변경
+    var selectedProfile by remember { mutableStateOf<Member?>(null) }
     val context = LocalContext.current as Activity
 
     Scaffold(
@@ -76,18 +74,17 @@ fun AcceptScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             EndTopCloud()
 
-            // 상단에 위치한 Row
             Row(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = padding.calculateTopPadding() + 50.dp),
+                    .padding(top = padding.calculateTopPadding() + 100.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
                     contentDescription = "Left Image",
                     modifier = Modifier
-                        .size(19.dp)
+                        .size(18.dp)
                         .graphicsLayer(rotationZ = -120f)
                 )
 
@@ -95,14 +92,14 @@ fun AcceptScreen(
                     text = "당신이 누구인지 알려주세요.",
                     modifier = Modifier.padding(start = 16.dp),
                     color = LightWhite,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 170.dp, end = 20.dp)
+                    .padding(top = 180.dp, end = 20.dp)
             ) {
                 HorizontalPager(
                     state = pagerState,
@@ -115,12 +112,11 @@ fun AcceptScreen(
                     AcceptWho1(
                         navController = navController,
                         onProfileSelected = { profileName ->
-                            // Find the selected Member based on profileName
                             selectedProfile = memberList.find { it.name == profileName }
                         },
-                        members = pageMembers, // 현재 페이지의 멤버 정보 전달
-                        selectedProfile = selectedProfile, // 현재 선택된 프로필 상태 전달
-                        currentPage = page // 현재 페이지 번호 전달
+                        members = pageMembers,
+                        selectedProfile = selectedProfile,
+                        currentPage = page
                     )
                 }
 
@@ -129,10 +125,10 @@ fun AcceptScreen(
                     totalPages = pagerState.pageCount // 페이지 수 설정
                 )
 
-                // Next Button Image
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 40.dp, start = 260.dp)
+                        .padding(bottom = 20.dp, start = 260.dp)
+                        .offset(y = -(50.dp))
                         .clickable {
                             selectedProfile?.let { profile ->
                                 viewModel.onNextButtonClicked(profile.id, viewState.shareGroupId)
@@ -151,15 +147,13 @@ fun AcceptScreen(
             }
         }
     }
-    // LaunchedEffect를 사용하여 상태 기반으로 동작 처리
+
     LaunchedEffect(viewState) {
         if (viewState.profileId > 0 && viewState.shareGroupId > 0) {
             viewModel.onNextButtonClicked(viewState.profileId, viewState.shareGroupId)
-            // API 호출 후 상태에 따른 화면 전환 등
         }
     }
 
-    // Side effects 처리
     LaunchedEffect(Unit) {
         viewModel.effect.collect { sideEffect ->
             when (sideEffect) {
@@ -180,21 +174,21 @@ fun AcceptScreen(
 @Composable
 fun PageIndicator(
     pagerState: PagerState,
-    totalPages: Int // 총 페이지 수
+    totalPages: Int
 ) {
     Row(
         modifier = Modifier
             .padding(16.dp),
-        horizontalArrangement = Arrangement.Center, // 가로 방향 가운데 정렬
-        verticalAlignment = Alignment.CenterVertically // 세로 방향 가운데 정렬
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(totalPages) { index ->
-            val color = if (pagerState.currentPage == index) DeepBlue else Color.Gray // 현재 페이지에 따라 색상 변경
+            val color = if (pagerState.currentPage == index) DeepBlue else Color.Gray
             Box(
                 modifier = Modifier
                     .size(8.dp)
                     .padding(4.dp)
-                    .background(color, shape = CircleShape) // 점의 모양
+                    .background(color, shape = CircleShape)
             )
         }
     }

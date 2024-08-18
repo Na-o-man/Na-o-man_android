@@ -12,71 +12,44 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hgh.na_o_man.presentation.theme.LightNavy
 import com.hgh.na_o_man.presentation.theme.LightWhite
-import com.hgh.na_o_man.presentation.theme.SteelBlue
 
 @Composable
 fun UserInfo(
     userName: String,
-    profileImagePainter: Painter? = null, // Nullable로 변경
+    profileImagePainter: Painter? = null,
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
+    val imageColorFilter = if (isSelected) ColorFilter.tint(LightNavy.copy(0.98f)) else null
+
     Box(
         modifier = Modifier
-            .size(360.dp, 130.dp) // 기존 크기 유지
-            .padding(16.dp) // 여백 추가
-            .clickable(onClick = onClick) // 클릭 가능하도록 설정
-            .background(if (isSelected) Color.Gray.copy(0.3f) else Color.Transparent) // 선택 상태에 따라 배경 색상 변경
+            .size(365.dp, 125.dp)
+            .padding(15.dp)
+            .clickable(onClick = onClick),
     ) {
 
-        // 첫 번째 사각형
+        //이름표
         Box(
             modifier = Modifier
                 .size(320.dp, 70.dp)
-                .padding(start = 50.dp, top = 10.dp)
+                .padding(start = 50.dp, top = 10.dp),
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
-                // 그라데이션 사각형
-                drawRoundRect(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(
-                            LightWhite.copy(alpha = 0.1f), // LightWhite에서 시작하여 점점 밝아짐
-                            LightWhite.copy(alpha = 0.8f) // 완전히 밝은 색상으로 그라데이션
-                        )
-                    ),
-                    size = size,
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(30.dp.toPx())
-                )
-
-                // 하얀색 테두리
-                drawRoundRect(
-                    color = Color.White,
-                    size = size,
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(30.dp.toPx()),
-                    style = Stroke(width = 1.dp.toPx()) // 테두리 두께 설정
-                )
-            }
-        }
-
-        // 두 번째 사각형
-        Box(
-            modifier = Modifier
-                .size(320.dp, 198.dp)
-                .padding(start = 50.dp, top = 77.dp)
-        ) {
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                // 그라데이션 사각형
                 drawRoundRect(
                     brush = Brush.horizontalGradient(
                         colors = listOf(
@@ -85,15 +58,43 @@ fun UserInfo(
                         )
                     ),
                     size = size,
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(50.dp.toPx())
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(30.dp.toPx()),
+                    colorFilter = imageColorFilter
                 )
 
-                // 하얀색 테두리
+                drawRoundRect(
+                    color = Color.White,
+                    size = size,
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(30.dp.toPx()),
+                    style = Stroke(width = 1.dp.toPx())
+                )
+            }
+        }
+
+        // 이름표 하단 이미지
+        Box(
+            modifier = Modifier
+                .size(320.dp, 198.dp)
+                .padding(start = 50.dp, top = 77.dp)
+        ) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                drawRoundRect(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            LightWhite.copy(alpha = 0.1f),
+                            LightWhite.copy(alpha = 0.8f)
+                        )
+                    ),
+                    size = size,
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(50.dp.toPx()),
+                    colorFilter = imageColorFilter
+                )
+
                 drawRoundRect(
                     color = Color.White,
                     size = size,
                     cornerRadius = androidx.compose.ui.geometry.CornerRadius(50.dp.toPx()),
-                    style = Stroke(width = 1.5.dp.toPx()) // 테두리 두께 설정
+                    style = Stroke(width = 1.5.dp.toPx())
                 )
             }
         }
@@ -105,15 +106,17 @@ fun UserInfo(
                 .clip(CircleShape)
                 .background(Color.Transparent)
                 .border(2.dp, LightWhite, CircleShape)
+                .align(Alignment.CenterStart)
         ) {
             if (profileImagePainter != null) {
                 Image(
-                    painter = profileImagePainter, // 프로필 이미지 painter를 사용하여 설정
+                    painter = profileImagePainter,
                     contentDescription = "Avatar $userName",
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(CircleShape), // 원형으로 이미지 클립
-                    contentScale = ContentScale.Crop
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                    colorFilter = imageColorFilter
                 )
             }
         }

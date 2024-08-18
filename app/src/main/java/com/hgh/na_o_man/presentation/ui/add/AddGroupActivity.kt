@@ -23,14 +23,11 @@ class AddGroupActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NaOManTheme {
-                // NavController 생성
                 val navController = rememberNavController()
 
-                // ViewModel 주입
                 val addViewModel: AddViewModel = hiltViewModel()
                 val joinViewModel: JoinViewModel = hiltViewModel()
 
-                // Determine the start destination based on the intent's extra value
                 val startDestination = remember {
                     determineStartDestination()
                 }
@@ -39,7 +36,6 @@ class AddGroupActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = startDestination
                 ) {
-                    // Define your navigation graph here
                     composable("add_host") { AddHostScreen() }
                     composable("join_host") { JoinHostScreen() }
                 }
@@ -49,6 +45,7 @@ class AddGroupActivity : ComponentActivity() {
 
     private fun determineStartDestination(): String {
         val isJoin = intent.getBooleanExtra(ADD_GROUP, false)
+
         return if (isJoin) "join_host" else "add_host"
     }
 
