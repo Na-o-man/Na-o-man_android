@@ -28,8 +28,6 @@ fun AcceptWho1(
     currentPage: Int
 ) {
     val firstItemIndex = currentPage * 3
-    val firstItemIsSelectable = firstItemIndex < members.size &&
-            (selectedProfile == null || members[firstItemIndex].name != selectedProfile.name)
 
     Box(
         modifier = Modifier
@@ -42,18 +40,17 @@ fun AcceptWho1(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, bottom = 4.dp)
+                    .padding(padding)
+                    .padding(start = 30.dp, bottom = 4.dp)
                     .background(Color.Transparent)
                     .align(Alignment.Center)
             ) {
                 members.forEachIndexed { index, member ->
-                    // 첫 번째 항목은 선택이 불가능하도록 설정
                     val isSelectable = index != firstItemIndex
-                    // 만약 avatarUrl이 null이거나 유효하지 않다면 기본 이미지를 사용
                     val painter = if (member.avatarUrl.isNotEmpty()) {
-                        rememberAsyncImagePainter(member.avatarUrl) // 사용자 정의 이미지
+                        rememberAsyncImagePainter(member.avatarUrl)
                     } else {
-                        painterResource(id = R.drawable.ic_profile_155) // 기본 이미지
+                        painterResource(id = R.drawable.ic_profile_155)
                     }
 
                     UserInfo(

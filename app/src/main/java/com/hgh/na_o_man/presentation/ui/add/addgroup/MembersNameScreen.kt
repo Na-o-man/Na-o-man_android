@@ -98,7 +98,6 @@ fun MembersNameScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
         ) {
 
             Box(
@@ -114,10 +113,9 @@ fun MembersNameScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = 16.dp)
-                            .padding(top = 20.dp), // 상단 패딩 조정
+                            .padding(top = 90.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // 중앙에 위치한 이미지
                         Box(
                             modifier = Modifier
                                 .size(22.dp)
@@ -129,7 +127,7 @@ fun MembersNameScreen(
                                 contentDescription = "Center Image",
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(150.dp) // 적절한 높이 조정
+                                    .height(150.dp)
                             )
                         }
 
@@ -156,18 +154,18 @@ fun MembersNameScreen(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // 중앙에 위치한 큰 이미지
+                    // 폴더 이미지
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 40.dp), // 상단 패딩 조정
+                            .padding(top = 40.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Box(
                             modifier = Modifier
                                 .size(240.dp)
                                 .clip(RoundedCornerShape(16.dp))
-                                .padding(10.dp), // 내부 패딩 추가
+                                .padding(10.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
@@ -175,27 +173,26 @@ fun MembersNameScreen(
                                 contentDescription = "ADD",
                                 modifier = Modifier
                                     .fillMaxSize().graphicsLayer(
-                                        alpha = 0.8f, // 전체 투명도 설정 (1은 불투명)
+                                        alpha = 0.8f,
                                         shape = RoundedCornerShape(16.dp),
                                         clip = true
                                     )
                             )
 
-                            // 큰 이미지 내부에 이름 목록을 배치하고 스크롤 가능하게 설정
                             LazyColumn(
                                 modifier = Modifier
                                     .padding(start = 15.dp, top = 35.dp, bottom = 20.dp, end = 10.dp)
                                     .fillMaxSize()
-                                    .padding(horizontal = 10.dp), // 좌우 padding
-                                verticalArrangement = Arrangement.Center // 내용을 중앙에서부터 채우도록 설정
+                                    .padding(horizontal = 10.dp),
+                                verticalArrangement = Arrangement.Center
                             ) {
                                 memberNames.chunked(3).forEach { rowNames -> // 3개의 이름씩 묶어 Row에 배치
                                     item {
                                         LazyRow(
                                             modifier = Modifier
-                                                .fillMaxWidth() // Row가 전체 너비를 차지하도록 설정
-                                                .padding(vertical = 8.dp), // 각 Row 간격 조정
-                                            horizontalArrangement = Arrangement.spacedBy(5.dp) // 이름들 사이 간격 조정
+                                                .fillMaxWidth()
+                                                .padding(vertical = 8.dp),
+                                            horizontalArrangement = Arrangement.spacedBy(5.dp)
                                         ) {
                                             items(rowNames) { name ->
                                                 var showRemoveButton by remember { mutableStateOf(false) }
@@ -204,7 +201,7 @@ fun MembersNameScreen(
                                                     modifier = Modifier
                                                         .clip(RoundedCornerShape(8.dp))
                                                         .border(width = 3.dp, color = LightWhite.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
-                                                        .background(LightWhite.copy(alpha = 0.3f)) // 흰색 배경 추가
+                                                        .background(LightWhite.copy(alpha = 0.3f))
                                                         .padding(horizontal = 8.dp, vertical = 3.dp)
                                                         .clickable {
                                                             showRemoveButton = !showRemoveButton // 클릭 시 삭제 버튼 표시/숨김
@@ -230,7 +227,7 @@ fun MembersNameScreen(
                                                                             AddContract.AddEvent.RemoveMember(name)
                                                                         )
                                                                     }
-                                                                    .size(15.dp) // 이미지 크기를 줄여서 테스트
+                                                                    .size(15.dp)
                                                                     .padding(1.dp)
                                                             )
                                                         }
@@ -250,8 +247,8 @@ fun MembersNameScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 70.dp, end = 70.dp, top = 360.dp) // 동일한 좌우 패딩 사용
-                            .height(40.dp) // 원하는 높이 설정
+                            .padding(start = 70.dp, end = 70.dp, top = 360.dp)
+                            .height(40.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .background(LightWhite.copy(alpha = 0.5f))
                             .border(2.dp, LightWhite.copy(alpha = 0.3f))
@@ -261,13 +258,13 @@ fun MembersNameScreen(
                             onValueChange = { newMemberName = it },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 10.dp) // 입력 필드에 여백 추가
+                                .padding(horizontal = 12.dp, vertical = 10.dp)
                                 .onFocusChanged { state -> isFocused = state.isFocused },
                             textStyle = TextStyle(
                                 color = SteelBlue,
                                 background = Color.Transparent,
                                 fontWeight = FontWeight.SemiBold,
-                                fontSize = 14.sp, // 폰트 크기 조정
+                                fontSize = 14.sp,
                                 textAlign = TextAlign.Start
                             ),
                             cursorBrush = SolidColor(SteelBlue),
@@ -282,7 +279,7 @@ fun MembersNameScreen(
                                         Text(
                                             text = "이름",
                                             color = SteelBlue,
-                                            fontSize = 14.sp, // placeholder 텍스트 크기 조정
+                                            fontSize = 14.sp,
                                             textAlign = TextAlign.Start,
                                             fontWeight = FontWeight.SemiBold
                                         )
@@ -315,7 +312,7 @@ fun MembersNameScreen(
                                                     newMemberName
                                                 )
                                             )
-                                            newMemberName = "" // 추가 후 입력 필드 리셋
+                                            newMemberName = ""
                                         }
                                     }
                                 },
@@ -325,7 +322,6 @@ fun MembersNameScreen(
                 }
             }
 
-            // 사이드 이펙트 처리
             LaunchedEffect(Unit) {
                 viewModel.effect.collect { effect ->
                     when (effect) {
@@ -349,7 +345,7 @@ fun MembersNameScreen(
                             ).show()
                         }
 
-                        is AddContract.AddSideEffect.Back -> {  // 뒤로가기 이벤트 처리
+                        is AddContract.AddSideEffect.Back -> {  // 뒤로가기
                             navigationHome()
                         }
 

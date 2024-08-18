@@ -83,7 +83,6 @@ fun MembersFolder(
     ) { padding ->
         Box(modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
         ) {
             StartTopCloud()
 
@@ -91,19 +90,18 @@ fun MembersFolder(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 15.dp) // 좌우 패딩
+                    .padding(horizontal = 15.dp)
                     .padding(bottom = 10.dp)
-                    .align(Alignment.Center) // 중앙 정렬
+                    .align(Alignment.Center)
             ) {
-                // 폴더 아이콘 이미지
                 Image(
                     painter = painterResource(id = R.drawable.ic_file_227),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(221.dp, 194.26.dp) // 이미지 크기 설정
-                        .align(Alignment.Center) // 중앙에 배치
+                        .size(221.dp, 194.26.dp)
+                        .align(Alignment.Center)
                         .graphicsLayer(
-                            alpha = 0.8f, // 전체 투명도 설정 (1은 불투명)
+                            alpha = 0.8f,
                             shape = RoundedCornerShape(16.dp),
                             clip = true
                         )
@@ -128,7 +126,7 @@ fun MembersFolder(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 160.dp, start = 205.dp) // 그룹 이름 텍스트 아래에 배치
+                        .padding(top = 160.dp, start = 205.dp)
                         .align(Alignment.Center)
                         .clickable {
                             val clip = ClipData.newPlainText("Copied Link", state.inviteLink)
@@ -143,10 +141,9 @@ fun MembersFolder(
                         modifier = Modifier
                             .size(99.dp, 65.dp)
                             .graphicsLayer {
-                                ColorFilter.tint(LightWhite.copy(0.9f)) // 하얀색으로 색상 필터 적용
+                                ColorFilter.tint(LightWhite.copy(0.9f))
                             }
                     )
-                    // Row 사용하여 텍스트와 이미지를 나란히 배치
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
@@ -158,22 +155,21 @@ fun MembersFolder(
                             fontWeight = FontWeight.Light,
                             color = SteelBlue
                         )
-                        Spacer(modifier = Modifier.width(1.dp)) // 텍스트와 이미지 사이의 간격
+                        Spacer(modifier = Modifier.width(1.dp))
                         Image(
                             painter = painterResource(id = R.drawable.ic_link_copy_158),
                             contentDescription = null,
-                            modifier = Modifier.size(11.dp) // 이미지 크기 조정
+                            modifier = Modifier.size(11.dp)
                         )
                     }
                 }
 
-                // Column을 사용하여 버튼을 아래로 배치
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
-                        .align(Alignment.BottomCenter) // 하단 중앙 정렬
-                        .padding(bottom = 135.dp, start = 40.dp, end = 40.dp) // 하단 패딩
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 135.dp, start = 40.dp, end = 40.dp)
                 ) {
                     // 초대 링크 공유 버튼
                     Box(
@@ -183,7 +179,7 @@ fun MembersFolder(
                             .clip(RoundedCornerShape(50.dp))
                             .background(LightWhite.copy(0.4f))
                             .clickable {
-                                // 카카오톡 공유 인텐트 호출
+                                // 카카오톡 공유
                                 shareInviteLink(context, state.inviteLink)
                             }
                         ,
@@ -196,9 +192,9 @@ fun MembersFolder(
                                 .fillMaxWidth()
                                 .align(Alignment.Center)
                                 .border(
-                                    width = 1.dp, // 테두리 두께
-                                    color = LightWhite.copy(alpha = 0.32f), // 테두리 색상 및 투명도
-                                    shape = RoundedCornerShape(50.dp) // 모서리를 둥글게 처리하고 싶으면 RoundedCornerShape 사용
+                                    width = 1.dp,
+                                    color = LightWhite.copy(alpha = 0.32f),
+                                    shape = RoundedCornerShape(50.dp)
                                 ),
                             contentScale = ContentScale.FillBounds
                         )
@@ -212,7 +208,7 @@ fun MembersFolder(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp)) // 버튼 간 간격 조정
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     // 공유 폴더 이동 버튼
                     Box(
@@ -223,7 +219,7 @@ fun MembersFolder(
                             .background(LightWhite.copy(0.35f))
                             .clickable {
                                 Toast.makeText(context, "공유 폴더로 이동합니다.", Toast.LENGTH_SHORT).show()
-                                context.finish()
+                                navController.navigate(AddScreenRoute.NAMEINPUT.route)
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -234,9 +230,9 @@ fun MembersFolder(
                                 .fillMaxWidth()
                                 .align(Alignment.Center)
                                 .border(
-                                    width = 1.dp, // 테두리 두께
-                                    color = LightWhite.copy(alpha = 0.32f), // 테두리 색상 및 투명도
-                                    shape = RoundedCornerShape(50.dp) // 모서리를 둥글게 처리하고 싶으면 RoundedCornerShape 사용
+                                    width = 1.dp,
+                                    color = LightWhite.copy(alpha = 0.32f),
+                                    shape = RoundedCornerShape(50.dp)
                                 ),
                             contentScale = ContentScale.FillBounds
                         )

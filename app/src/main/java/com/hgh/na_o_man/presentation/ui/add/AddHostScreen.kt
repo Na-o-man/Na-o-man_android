@@ -52,7 +52,6 @@ fun AddHostScreen(
                         viewModel = viewModel,
                         navController = navController,
                         navigationBack = {
-                            // 'navigationBack' 로직 추가
                             navController.navigate(AddScreenRoute.NAMEINPUT.route)
                         }
                     )
@@ -66,7 +65,7 @@ fun AddHostScreen(
                         }
                     )
                 }
-                composable(route = AddScreenRoute._LOADING.route) {
+                composable(route = AddScreenRoute.LOADING.route) {
                     MembersLoading(viewModel = viewModel, navController = navController)
                 }
                 composable(route = AddScreenRoute.FOLDER.route) {
@@ -83,7 +82,7 @@ enum class AddScreenRoute(val route: String){
     NAMEINPUT("members_name_screen"),
     ADJECTIVE("members_adjective_screen"),
     SPACEINPUT("members_space_screen"),
-    _LOADING("members_loading"),
+    LOADING("members_loading"),
     FOLDER("members_folder")
 }
 

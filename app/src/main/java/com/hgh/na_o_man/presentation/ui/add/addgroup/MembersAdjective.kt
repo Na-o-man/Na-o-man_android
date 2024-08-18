@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -80,12 +82,11 @@ fun MembersAdjective(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
         ) {
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 70.dp), // 비율 기반 padding
+                    .padding(top = 150.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -97,7 +98,7 @@ fun MembersAdjective(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 110.dp), // 비율 기반 padding
+                    .padding(top = 180.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -131,25 +132,24 @@ fun MembersAdjective(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(padding)
                     .padding(top = 210.dp, start = 45.dp, end = 45.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // 버튼 UI
+                // 버튼 9개
                 buttonLabels.chunked(3).forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        rowItems.forEachIndexed { rowIndex, label ->
+                        rowItems.forEachIndexed { _, label ->
                             val actualIndex = buttonLabels.indexOf(label)
                             val isSelected = selectedButtons[actualIndex]
                             Button(
                                 onClick = {
-                                    // 버튼 선택 상태 업데이트
                                     selectedButtons[actualIndex] = !isSelected
 
-                                    // 속성 업데이트
                                     if (selectedButtons[actualIndex]) {
                                         selectedAttributes.add(label)
                                     } else {
@@ -164,7 +164,7 @@ fun MembersAdjective(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .padding(horizontal = 4.dp), // 버튼 사이 간격 조정
+                                    .padding(horizontal = 4.dp),
                                 shape = RoundedCornerShape(20.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = if (isSelected) Color.Gray.copy(alpha = 0.3f) else LightWhite.copy(
@@ -183,10 +183,10 @@ fun MembersAdjective(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(4.dp)) // Row 간 간격 조정
+                    Spacer(modifier = Modifier.height(4.dp))
                 }
 
-                Spacer(modifier = Modifier.height(30.dp)) // 비율 기반 spacing
+                Spacer(modifier = Modifier.height(30.dp))
 
                 // 입력 필드
                 TextField(
@@ -194,7 +194,6 @@ fun MembersAdjective(
                     onValueChange = { newText ->
                         inputText = newText
 
-                        // 텍스트 입력이 있을 경우, 다른 텍스트 항목은 제거
                         if (inputText.isNotBlank()) {
                             val nonButtonTextAttributes =
                                 selectedAttributes.filter { it !in buttonLabels }
@@ -219,9 +218,13 @@ fun MembersAdjective(
                             modifier = Modifier.padding(horizontal = 2.dp)
                         )
                     },
+                    textStyle = TextStyle(
+                        fontSize = 13.sp,
+                        color = LightWhite
+                    ),
                     modifier = Modifier
-                        .height(60.dp)
-                        .padding(start = 5.dp, end = 5.dp, bottom = 15.dp)
+                        .height(54.dp)
+                        .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
                         .fillMaxWidth()
                         .border(
                             BorderStroke(1.dp, LightWhite),
@@ -245,17 +248,17 @@ fun MembersAdjective(
                                 viewModel.handleEvents(
                                     AddContract.AddEvent.UpdateSelectedAttributes(selectedAttributes)
                                 )
-                                inputText = ""  // 입력 필드 초기화
+                                inputText = ""
                             }
                         }
                     )
                 )
 
-                Spacer(modifier = Modifier.height(15.dp)) // 비율 기반 spacing
+                Spacer(modifier = Modifier.height(15.dp))
 
                 NextAppBar1(
                     onNextClick = {
-                        // 선택된 버튼이 하나라도 있거나 텍스트 입력 필드에 값이 있는 경우만 이동
+
                         val hasSelectedButtons = selectedAttributes.size > 0
                         val hasTextInput = inputText.isNotBlank()
 
@@ -265,12 +268,11 @@ fun MembersAdjective(
                             Toast.makeText(context, "하나 이상의 항목을 선택하거나 텍스트를 입력해야 합니다.", Toast.LENGTH_SHORT).show()
                         }
                     },
-                    modifier = Modifier.padding(start = 10.dp)
+                    modifier = Modifier.offset(x = 10.dp)
                 )
             }
         }
 
-        // LaunchedEffect to handle side effects from ViewModel
         LaunchedEffect(Unit) {
             viewModel.effect.collect { effect ->
                 when (effect) {
