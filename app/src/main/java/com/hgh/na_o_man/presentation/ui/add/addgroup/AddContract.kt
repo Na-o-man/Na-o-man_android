@@ -32,3 +32,4 @@ class AddContract {
         data object FinishActivity : AddSideEffect()
     }
 }
+

@@ -17,11 +17,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.addgroup.*
+import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 
 @Composable
 fun AddHostScreen(
     viewModel: AddViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     Log.d("리컴포저블", "AddHostScreen")
 
@@ -53,6 +54,9 @@ fun AddHostScreen(
                         navController = navController,
                         navigationBack = {
                             navController.navigate(AddScreenRoute.NAMEINPUT.route)
+                        },
+                        navigationMyPage = {
+                            navController.navigate(MainScreenRoute.MY_PAGE.route)
                         }
                     )
                 }
@@ -77,6 +81,7 @@ fun AddHostScreen(
         }
     }
 }
+
 
 enum class AddScreenRoute(val route: String){
     NAMEINPUT("members_name_screen"),

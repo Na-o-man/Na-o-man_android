@@ -39,6 +39,7 @@ class AddGroupActivity : ComponentActivity() {
                     composable("add_host") { AddHostScreen() }
                     composable("join_host") { JoinHostScreen() }
                 }
+
             }
         }
     }

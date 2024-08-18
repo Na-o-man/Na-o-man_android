@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,6 +50,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
+import com.hgh.na_o_man.presentation.component.EndAppBar
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.NextAppBar1
 import com.hgh.na_o_man.presentation.component.StartAppBar
@@ -61,17 +63,29 @@ fun MembersAdjective(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
     navigationBack: () -> Unit,
+    navigationMyPage: () -> Unit,
 ) {
     val context = LocalContext.current
     Log.d("리컴포저블", "MembersAdjective")
 
     Scaffold(
         topBar = {
-            StartAppBar(
-                onStartClick = {
-                    navigationBack()
-                }
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween // 시작과 끝을 각각 정렬
+            ) {
+                StartAppBar(
+                    onStartClick = {
+                        navigationBack()
+                    }
+                )
+                EndAppBar(
+                    onEndClick = {
+                        navigationMyPage()
+                    }
+                )
+            }
         },
         containerColor = lightSkyBlue
     ) { padding ->
@@ -82,6 +96,7 @@ fun MembersAdjective(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+
         ) {
             Box(
                 modifier = Modifier

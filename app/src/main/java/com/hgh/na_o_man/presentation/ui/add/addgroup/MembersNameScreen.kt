@@ -89,6 +89,7 @@ fun MembersNameScreen(
                 }, modifier = Modifier.padding(bottom = 20.dp, end = 20.dp)
             )
         },
+
         containerColor = lightSkyBlue
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {

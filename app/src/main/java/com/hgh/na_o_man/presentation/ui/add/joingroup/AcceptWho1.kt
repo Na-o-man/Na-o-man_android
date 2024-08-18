@@ -53,6 +53,7 @@ fun AcceptWho1(
                         painterResource(id = R.drawable.ic_profile_155)
                     }
 
+
                     UserInfo(
                         userName = member.name,
                         profileImagePainter = painter,

@@ -69,6 +69,7 @@ fun AcceptScreen(
                 navigationBack()
             })
         },
+
         containerColor = lightSkyBlue
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {

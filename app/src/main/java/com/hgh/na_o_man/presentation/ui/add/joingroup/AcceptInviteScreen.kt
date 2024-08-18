@@ -75,6 +75,7 @@ fun AcceptInviteScreen(
                 }
             )
         },
+
         containerColor = lightSkyBlue
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {
