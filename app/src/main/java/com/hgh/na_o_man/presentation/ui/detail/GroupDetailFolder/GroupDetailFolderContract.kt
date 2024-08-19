@@ -14,6 +14,7 @@ class GroupDetailFolderContract {
         val groupId: Long = 0L,
         val uris: List<Uri> = listOf(),
         val groupDetail: CheckSpecificGroupModel? = null,
+        val pagerIndex: Int = 0,
     ) : ViewState
 
     sealed class GroupDetailFolderSideEffect : ViewSideEffect {
@@ -28,6 +29,6 @@ class GroupDetailFolderContract {
         object OnUploadClicked : GroupDetailFolderEvent()
         object OnVoteClicked : GroupDetailFolderEvent()
         object OnDownloadClicked : GroupDetailFolderEvent()
-        data class OnUserFolderClicked(val profileId: Long, val memberId: Long) : GroupDetailFolderEvent()
+        data class OnUserFolderClicked(val profileId: Long, val memberId: Long, val currentPage: Int) : GroupDetailFolderEvent()
     }
 }

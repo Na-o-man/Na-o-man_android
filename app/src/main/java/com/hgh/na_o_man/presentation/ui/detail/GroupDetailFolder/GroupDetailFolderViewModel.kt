@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.pager.PagerState
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
@@ -34,6 +35,7 @@ class GroupDetailFolderViewModel @Inject constructor(
             }
 
             is GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked -> {
+                updateState { copy(pagerIndex = event.currentPage) }
                 sendEffect({
                     GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoList(
                         viewState.value.groupId,

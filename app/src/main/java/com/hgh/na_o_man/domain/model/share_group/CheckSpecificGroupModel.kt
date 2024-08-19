@@ -8,4 +8,6 @@ data class CheckSpecificGroupModel(
     val name: String,
     val profileInfoList: List<ProfileInfoModel>,
     val shareGroupId: Long
-)
+) {
+    constructor() : this("","", "", 0, "", listOf(), -1L)
+}

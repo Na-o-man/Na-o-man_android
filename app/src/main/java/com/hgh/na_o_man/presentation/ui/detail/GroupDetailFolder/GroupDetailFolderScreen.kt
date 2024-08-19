@@ -210,7 +210,7 @@ fun GroupDetailFolderScreen(
                             val realSize = folderList.size
                             val middlePage = pageCount / 2
 
-                            val pagerState = rememberPagerState(middlePage - (middlePage % realSize))
+                            val pagerState = rememberPagerState(middlePage - (middlePage % realSize)+viewState.pagerIndex)
 
                             Box(
                                 modifier = Modifier
@@ -275,12 +275,11 @@ fun GroupDetailFolderScreen(
                                                 Log.d("GroupDetailFolderScreen","groupId : $groupId, profileId : $profileId")
                                                 currentProfileId = profileId
                                                 Log.d("GroupDetailFolderScreen", "Updated currentProfileId: $currentProfileId")
-
-                                                navigationPhotoList(
-                                                    groupDetail.shareGroupId,
+                                                viewModel.setEvent(GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(
                                                     profileId,
-                                                    memberId
-                                                )
+                                                    memberId,
+                                                    currentPage - middlePage
+                                                ))
                                             },
                                         )
                                     }
