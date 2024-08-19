@@ -30,14 +30,12 @@ class VoteMainViewModel @Inject constructor(
     private val nextPage = MutableStateFlow(0)
     private val hasNextPage = MutableStateFlow(true)
 
-
     init {
-        Log.d("리컴포저블", "VoteMainViewModelInit")
-        setEvent(VoteMainContract.VoteMainEvent.OnPagingVoteList)
         updateState { copy(groupId = savedStateHandle[KEY_GROUP_ID] ?: 0L) }
-        Log.d("VoteMainViewModel", "Initial groupId: ${viewState.value.groupId}")
         fetchGroupName()
         fetchGroupNameList()
+        setEvent(VoteMainContract.VoteMainEvent.OnPagingVoteList)
+        Log.d("리컴포저블", "VoteMainViewModelInit")
     }
 
 //    private val groupId: Long
@@ -47,8 +45,6 @@ class VoteMainViewModel @Inject constructor(
     override fun handleEvents(event: VoteMainContract.VoteMainEvent) {
         when (event) {
             is VoteMainContract.VoteMainEvent.InitVoteMainScreen -> {
-                Log.d("VoteMainViewModel", "InitVoteMainScreen event")
-                showVoteList()
             }
 
             is VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked -> {
@@ -58,15 +54,14 @@ class VoteMainViewModel @Inject constructor(
             is VoteMainContract.VoteMainEvent.OnClickDropBoxItem -> {
                 nextPage.value = 0
                 hasNextPage.value = true
-                //Log.d("VoteMainViewModel", "Group ID before update: $_groupId")
                 updateState {
                     copy(
                         groupId = event.member.shareGroupId,
-                        groupName = event.member.name
+                        groupName = event.member.name,
+                        voteList = listOf()
                     )
                 }
-                Log.d("VoteMainViewModel", "Group ID after update: ${event.member.shareGroupId}")
-                showVoteList()
+                setEvent(VoteMainContract.VoteMainEvent.OnPagingVoteList)
             }
 
             VoteMainContract.VoteMainEvent.OnBackClicked -> {
@@ -84,27 +79,28 @@ class VoteMainViewModel @Inject constructor(
     }
 
     private fun showVoteList() = viewModelScope.launch {
-        updateState { copy(loadState = LoadState.LOADING) }
+        Log.d("VoteMainViewModel", "Showing vote list, hasNextPage: ${hasNextPage.value}, nextPage: ${nextPage.value}")
         try {
             if (hasNextPage.value) {
-                agendaInfoListUsecase(viewState.value.groupId, nextPage.value, 10).collect() { result ->
+                Log.d("VoteMainViewModel", "Fetching page: ${nextPage.value} for group: ${viewState.value.groupId}")
+                agendaInfoListUsecase(viewState.value.groupId, nextPage.value, 3).collect { result ->
                     result.onSuccess { response ->
-                        Log.d("VoteMainViewModel", "API call succeeded")
+                        Log.d("VoteMainViewModel", "Last page: ${response.last}")
                         updateState {
-                            Log.d("VoteMainViewModel", "Updating state with new vote list")
                             copy(
-                                loadState = LoadState.SUCCESS,
-                                voteList = response.agendaDetailInfoList
+                                voteList = viewState.value.voteList + response.agendaDetailInfoList,
+                                loadState = LoadState.SUCCESS
                             )
                         }
-//                        response.last.not().let {
-//                            hasNextPage.value = it
-//                            nextPage.value +=1
-//                        }
                         response.last.not().let {
                             hasNextPage.value = it
                             nextPage.value +=1
                         }
+//                        if(response.last){
+//                            hasNextPage.value = false
+//                        } else {
+//                            nextPage.value += 1
+//                        }
                     }.onFail { error ->
                         Log.e("VoteMainViewModel", "Failed to fetch vote list: $error")
                         updateState {

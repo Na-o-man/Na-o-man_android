@@ -71,11 +71,11 @@ fun VoteMainScreen(
     // 드롭다운 메뉴
     var expanded by remember { mutableStateOf(false) }
 
-    // FocusRequester 초기화
-    val focusRequester = remember { FocusRequester() }
-
     Log.d("리컴포저블", "VoteMainScreen")
-    Log.d("VoteMainScreen", "Current view state: $viewState")
+
+    LaunchedEffect(key1 = true) {
+        viewModel.setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
+    }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -93,10 +93,6 @@ fun VoteMainScreen(
                 }
             }
         }
-    }
-
-    LaunchedEffect(key1 = viewModel.effect) {
-        viewModel.setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
     }
 
     when (viewState.loadState) {
@@ -230,15 +226,16 @@ fun VoteListScreen(
 ) {
 
     val lazyListState = rememberLazyListState()
-    lazyListState.OnBottomListener(2) {
+    lazyListState.OnBottomListener( 2) {
+        Log.d("VoteMainScreen","바닥")
         viewModel.setEvent(VoteMainContract.VoteMainEvent.OnPagingVoteList)
     }
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         LazyColumn(
+            state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
