@@ -2,6 +2,8 @@ package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.pager.PagerState
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
@@ -23,8 +25,6 @@ class GroupDetailFolderViewModel @Inject constructor(
     init {
         Log.d("리컴포저블", "GroupDetailFolderViewModel")
         updateState { copy(loadState = LoadState.LOADING) }
-
-        updateState { copy(loadState = LoadState.SUCCESS) }
     }
 
     override fun handleEvents(event: GroupDetailFolderContract.GroupDetailFolderEvent) {
@@ -51,10 +51,12 @@ class GroupDetailFolderViewModel @Inject constructor(
                 })
             }
 
+            GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked -> {
+            }
+
             GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadClicked -> {
                 sendEffect({ GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoPicker })
             }
-
             else -> {}
         }
     }
@@ -74,15 +76,9 @@ class GroupDetailFolderViewModel @Inject constructor(
 
     private fun fetchGroupDetail(groupId: Long) = viewModelScope.launch {
         updateState { copy(loadState = LoadState.LOADING) }
-        Log.d("GroupDetailViewModel", "fetchGroupDetail: Loading started for groupId: $groupId")
-
         try {
-            Log.d("GroupDetailViewModel", "Calling checkSpecificGroupUsecase for groupId: $groupId")
             checkSpecificGroupUsecase(groupId).collect { result ->
-                Log.d("GroupDetailViewModel", "Result received: $result")
-
                 result.onSuccess { group ->
-                    Log.d("GroupDetailViewModel", "Successfully fetched group detail: $group")
                     updateState {
                         copy(
                             loadState = LoadState.SUCCESS,
@@ -103,5 +99,4 @@ class GroupDetailFolderViewModel @Inject constructor(
             updateState { copy(loadState = LoadState.ERROR) }
         }
     }
-
 }

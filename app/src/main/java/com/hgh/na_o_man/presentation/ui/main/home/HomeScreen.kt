@@ -62,6 +62,8 @@ fun HomeScreen(
                     Log.d("한건희","RefreshScreen…")
                     viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
                 }
+
+                else -> {}
             }
         }
     }

@@ -2,6 +2,7 @@ package com.hgh.na_o_man.presentation.ui.main.alarm
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import coil.compose.rememberAsyncImagePainter
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.data.dto.notification.response.DeletedCountDto
 import com.hgh.na_o_man.data.dto.notification.response.UnreadDto
@@ -9,6 +10,8 @@ import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.domain.model.AlarmDummy
 import com.hgh.na_o_man.domain.model.GroupDummy
+import com.hgh.na_o_man.domain.usecase.member.GetMyInfoUsecase
+import com.hgh.na_o_man.domain.usecase.member.SearchSuccessUsecase
 import com.hgh.na_o_man.domain.usecase.notification.AcknowledgedCountUsecase
 import com.hgh.na_o_man.domain.usecase.notification.DeleteAcknowledgedCountUsecase
 import com.hgh.na_o_man.domain.usecase.notification.DeletedCountUsecase
@@ -19,6 +22,7 @@ import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,9 +32,9 @@ class AlarmViewModel @Inject constructor(
     private val deleteAcknowledgedCountUsecase: DeleteAcknowledgedCountUsecase,
     private val deletedCountUsecase : DeletedCountUsecase,
     private val notificationInfoListUsecase : NotificationInfoListUsecase,
+    private val getMyInfoUsecase: GetMyInfoUsecase,
     private val postFcmUsecase : PostFcmUsecase,
-    private val unreadNotificationUsecase : UnreadNotificationUsecase
-
+    private val unreadNotificationUsecase : UnreadNotificationUsecase,
 ) : BaseViewModel<AlarmContract.AlarmViewState, AlarmContract.AlarmSideEffect, AlarmContract.AlarmEvent>(
     AlarmContract.AlarmViewState()
 ) {
@@ -76,9 +80,18 @@ class AlarmViewModel @Inject constructor(
         Log.d("AlarmViewModel", "showAlarmList: Loading started")
         try {
             if(hasNextPage.value) {
+                var imageResUrl: String ?= null // imageResUrl을 블록 외부에 선언
+
                 notificationInfoListUsecase(nextPage.value, 10, listOf("date,desc")).collect { result ->
                     result.onSuccess { notificationInfoListModel ->
                         Log.d("AlarmViewModel", "Successfully fetched alarm list")
+
+                        getMyInfoUsecase().collect{ result ->
+                            result.onSuccess { myInfo ->
+                                imageResUrl = myInfo.profileUrl
+                            }
+                        }
+
                         val alarmList =
                             notificationInfoListModel.notificationInfoList.map { notificationInfo ->
                                 AlarmDummy(
@@ -86,7 +99,7 @@ class AlarmViewModel @Inject constructor(
                                     detail = notificationInfo.body,
                                     date = notificationInfo.createdAt,
                                     //url 통해서 이미지 로드
-                                    imageRes = R.drawable.ic_example // 예시 이미지 리소스 ID --> 이거 알림인데 그냥 프사 넣을건데 왜 필요하지...??
+                                    imageRes = imageResUrl
                                 )
                             }
                         updateState {

@@ -22,11 +22,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.hgh.na_o_man.R
 
 @Composable
 fun EventCard(
-    imageRes: Int,
+    imageRes: String,
     title: String,
     participantCount: Int,
     date: String,
@@ -85,7 +87,7 @@ fun EventCard(
                 .zIndex(1f) // 이미지가 다른 요소들 위에 렌더링되도록 설정
         ) {
             Image(
-                painter = painterResource(id = imageRes),
+                painter = rememberAsyncImagePainter(model = imageRes),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -97,8 +99,8 @@ fun EventCard(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun EventCardPreview() {
-    EventCard(imageRes = R.drawable.ic_example, title = "제목", participantCount = 5, date = "2024.07.20")
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun EventCardPreview() {
+//    EventCard(imageRes = R.drawable.ic_example.toString(), title = "제목", participantCount = 5, date = "2024.07.20")
+//}

@@ -19,11 +19,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.hgh.na_o_man.R
 
 @Composable
 fun AlarmRead(
-    imageRes: Int,
+    imageRes: String?,
     detail: String,
     date: String,
     onClick: () -> Unit = {}
@@ -31,7 +32,6 @@ fun AlarmRead(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .fillMaxWidth()
             .padding(8.dp)
             .clickable(onClick = onClick) // 클릭 이벤트 추가
     ) {
@@ -39,18 +39,17 @@ fun AlarmRead(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_notice_read_312),
             contentDescription = "그룹 리스트",
             tint = Color.Unspecified,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier
+                .align(Alignment.Center)
         )
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(start = 50.dp)
-                .clickable(onClick = onClick) // 클릭 이벤트 추가
         ) {
             Image(
-                painter = painterResource(id = imageRes),
+                painter = rememberAsyncImagePainter(model = imageRes),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -72,7 +71,7 @@ fun AlarmRead(
                     modifier = Modifier
                         .widthIn(max = 210.dp)
                 )
-//                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = date,
                     fontSize = 9.sp,
@@ -85,7 +84,7 @@ fun AlarmRead(
 
 @Composable
 fun AlarmNotRead(
-    imageRes: Int,
+    imageRes: String?,
     detail: String,
     date: String,
     onClick: () -> Unit = {}
@@ -93,7 +92,6 @@ fun AlarmNotRead(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .fillMaxWidth()
             .padding(8.dp)
             .clickable(onClick = onClick) // 클릭 이벤트 추가
     ) {
@@ -101,18 +99,16 @@ fun AlarmNotRead(
             painter = painterResource(id = R.drawable.ic_notice_not_read),
             contentDescription = null,
             modifier = Modifier
-                .requiredSize(308.dp, 79.dp)
+                .requiredSize(310.dp, 85.dp)
         )
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(start = 50.dp, top = 10.dp)
-                .clickable(onClick = onClick) // 클릭 이벤트 추가
         ) {
             Image(
-                painter = painterResource(id = imageRes),
+                painter = rememberAsyncImagePainter(model = imageRes),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -151,13 +147,13 @@ fun AlarmNotRead(
 fun AlarmMessagePreview() {
     Column {
         AlarmRead(
-            imageRes = R.drawable.ic_example,
+            imageRes = R.drawable.ic_example.toString(),
             detail = "[개구쟁어로즈]ㄹㅁㄴㅇㄹㄴㅇㅁㄹㅁdfdffdfdfdfdfdfdfdfdfdfdffdfdffdfdfㄴㅇㄹㅁㄴㄹㄴㅁㄹㅁㄴㄹㅇㅁㄴㄹㄴㅁㅇㄹㅁㄴㅇㄹㅁㄴㅇ해변히어럼ㄴ에했습니다.",
             date = "2024.07.20"
         )
         Spacer(modifier = Modifier.height(16.dp))
         AlarmNotRead(
-            imageRes = R.drawable.ic_example,
+            imageRes = R.drawable.ic_example.toString(),
             detail = "[개구쟁이 친구들과 발리 한마당 : 해변 히어로즈]에 김봉순 님이 n장 사진을 업로드 했습니다.",
             date = "2024.07.21"
         )

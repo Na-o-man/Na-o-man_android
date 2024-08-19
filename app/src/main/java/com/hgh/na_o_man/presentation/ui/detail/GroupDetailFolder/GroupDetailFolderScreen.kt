@@ -5,10 +5,13 @@ import SmallCloudBtn
 import android.app.Activity
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,23 +24,33 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import androidx.constraintlayout.widget.Group
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -59,6 +72,8 @@ import com.hgh.na_o_man.presentation.component.groupdetail.GroupInfo
 import com.hgh.na_o_man.presentation.component.groupdetail.SmallFolder
 import com.hgh.na_o_man.presentation.ui.detail.ALL_PHOTO_ID
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
+import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 
 @ExperimentalPagerApi
@@ -73,23 +88,28 @@ fun GroupDetailFolderScreen(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current as Activity
+    val coroutineScope = rememberCoroutineScope()
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) { uris: List<Uri> ->
         viewModel.uploadUri(uris)
     }
 
+
+    var currentProfileId by remember { mutableStateOf<Long?>(null) }
     val groupId = remember { context.intent.getLongExtra(GROUP_DETAIL, 0L) }
+
 
     LaunchedEffect(groupId) {
         viewModel.initGroupId(groupId)
+        Log.d("GroupDetailScreen", "LaunchedEffect triggered for groupId: $groupId")
     }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoList -> {
-                    navigationPhotoList(effect.groupId, effect.profiledId ,effect.memberId)
+                    navigationPhotoList(effect.groupId, effect.profiledId, effect.memberId)
                 }
 
                 is GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviVote -> {
@@ -109,14 +129,6 @@ fun GroupDetailFolderScreen(
 
 
     Log.d("리컴포저블", "GroupDetailScreen")
-
-    val scope = rememberCoroutineScope()
-
-    // 페이저용
-    val pagerState = rememberPagerState()
-
-//    val pagerState = rememberPagerState(initialPage = {dummyFolderData.size})
-//    val selectedTabIndex = remember{ derivedStateOf { pagerState.currentPage }  }
 
     when (viewState.loadState) {
         LoadState.LOADING -> {
@@ -152,8 +164,7 @@ fun GroupDetailFolderScreen(
                         .padding(padding)
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Spacer(modifier = Modifier.height(100.dp))
 
@@ -169,94 +180,145 @@ fun GroupDetailFolderScreen(
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(40.dp))
 
                         viewState.groupDetail?.let { groupDetail ->
-                            val pagerState = rememberPagerState()
-                            val itemCount = groupDetail.memberCount + 2
-                            HorizontalPager(
-                                count = itemCount,
-                                state = pagerState,
-                                contentPadding = PaddingValues(horizontal = 40.dp), // Set padding to create partial view
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(220.dp)
-                            )
-                            { page ->
-                                val scale by animateFloatAsState(
-                                    targetValue = 1.1f
-                                )
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier
-                                        .scale(scale)
-                                ) {
-                                    val folderInfo = if (page < groupDetail.profileInfoList.size) {
-                                        FolderDummy(
-                                            imageRes = groupDetail.profileInfoList[page].image,
-                                            name = groupDetail.profileInfoList[page].name
-                                        )
-                                    } else {
-                                        when (page - groupDetail.profileInfoList.size) {
-                                            0 -> FolderDummy(
-                                                imageRes = R.drawable.ic_example.toString(),
-                                                name = "others"
-                                            )
-                                            1 -> FolderDummy(
-                                                imageRes = R.drawable.ic_example.toString(),
-                                                name = "all"
-                                            )
-                                            else -> FolderDummy(
-                                                imageRes = R.drawable.ic_example.toString(),
-                                                name = "알 수 없음"
-                                            )
-                                        }
-                                    }
+                            // Filter out folders without memberId
 
-                                    val memberId = if (page < groupDetail.profileInfoList.size) groupDetail.profileInfoList[page].memberId else null
-                                    if (memberId != null && memberId>0) {
+                            val filteredProfileInfoList =
+                                groupDetail.profileInfoList.filter { it.memberId > 0 }
+
+                            val folderDummyList = filteredProfileInfoList.map {
+                                FolderDummy(
+                                    imageRes = it.image, // ProfileInfo에 있는 image와 name을 FolderDummy에 맞게 매핑합니다.
+                                    name = it.name
+                                )
+                            }
+
+                            val folderList = folderDummyList + listOf(
+                                FolderDummy(
+                                    imageRes = R.drawable.ic_example.toString(),
+                                    name = "others"
+                                ),
+                                FolderDummy(
+                                    imageRes = R.drawable.ic_example.toString(),
+                                    name = "all"
+                                )
+                            )
+
+                            val pageCount = Int.MAX_VALUE
+                            val realSize = folderList.size
+                            val middlePage = pageCount / 2
+
+                            val pagerState = rememberPagerState(middlePage - (middlePage % realSize))
+
+                            Box(
+                                modifier = Modifier
+                                    .height(264.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_round_folder_600),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified,
+                                    modifier = Modifier
+                                        .width(800.dp)
+                                        .align(Alignment.BottomCenter)
+                                )
+
+                                HorizontalPager(
+                                    count = pageCount,
+                                    state = pagerState,
+                                    contentPadding = PaddingValues(horizontal = 70.dp), // Set padding to create partial view
+                                    modifier = Modifier.matchParentSize(),
+                                    itemSpacing = 0.dp,
+                                ) { index ->
+
+                                    val page = index % realSize // 무한 스크롤 인덱스 조정
+
+                                    val currentPage = pagerState.currentPage
+                                    val pageOffset = pagerState.currentPageOffset
+                                    val pagePosition = index - currentPage - pageOffset
+
+                                    // 페이지가 중앙에 가까울수록 더 커지도록 설정
+                                    val targetScale = 0.8f + (1.2f - 0.8f) * (1 - abs(pagePosition))
+
+                                    // 스케일 애니메이션
+                                    Box(
+                                        contentAlignment = Alignment.Center,
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .graphicsLayer {
+                                                scaleX = targetScale
+                                                scaleY = targetScale
+                                                transformOrigin =
+                                                    androidx.compose.ui.graphics.TransformOrigin(
+                                                        0.5f,
+                                                        1f
+                                                    ) // 변환 원점을 아래쪽 중앙으로 설정
+                                            }
+                                    ) {
+                                        val folderInfo = folderList[page]
+
                                         Bigfolder(
                                             folderInfo = folderInfo,
                                             onClick = {
+
+                                                val memberId =
+                                                    filteredProfileInfoList.getOrNull(page)?.memberId ?: -1
+                                                val profileId = when {
+                                                    filteredProfileInfoList.getOrNull(page)?.profileId != null -> filteredProfileInfoList[page].profileId
+                                                    folderInfo.name == "all" -> 100L
+                                                    folderInfo.name == "others" -> 101L
+                                                    else -> -1L
+                                                }
+                                                Log.d("GroupDetailFolderScreen","groupId : $groupId, profileId : $profileId")
+                                                currentProfileId = profileId
+                                                Log.d("GroupDetailFolderScreen", "Updated currentProfileId: $currentProfileId")
+
                                                 navigationPhotoList(
                                                     groupDetail.shareGroupId,
-                                                    groupDetail.profileInfoList[page].profileId,
-                                                    groupDetail.profileInfoList[page].memberId
+                                                    profileId,
+                                                    memberId
                                                 )
-                                            }
+                                            },
                                         )
                                     }
                                 }
                             }
+
+                            Spacer(modifier = Modifier.height(15.dp))
+
                             HorizontalPagerIndicator(
                                 pagerState = pagerState,
+                                pageCount = realSize,
+                                pageIndexMapping =  {page -> page % realSize},
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
-                                    .padding(16.dp)
+                                    .padding(16.dp),
                             )
                         }
+
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .offset(y = 90.dp)
+                                .offset(y = 40.dp)
                         ) {
-                            SmallCloudBtn(title = "이미지\n분류") {
+                            SmallCloudBtn(title = "이미지\n업로드") {
                                 viewModel.setEvent(
                                     GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadClicked
                                 )
                             }
+
                             CloudBtn(title = "다운로드") {
-                                // 테스트용 - 삭제해야함
                                 viewModel.setEvent(
-                                    GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(
-                                        profileId = ALL_PHOTO_ID,
-                                        memberId = -1L,
-                                    )
+                                    GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked
                                 )
                             }
-                            SmallCloudBtn(title = "지난 안건") {
+
+                            SmallCloudBtn(title = "지난\n안건") {
                                 viewModel.setEvent(
                                     GroupDetailFolderContract.GroupDetailFolderEvent.OnVoteClicked
                                 )
@@ -268,7 +330,6 @@ fun GroupDetailFolderScreen(
         }
     }
 }
-
 
 @OptIn(ExperimentalPagerApi::class)
 @Preview
