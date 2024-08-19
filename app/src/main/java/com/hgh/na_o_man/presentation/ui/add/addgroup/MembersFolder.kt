@@ -220,7 +220,7 @@ fun MembersFolder(
                             .background(LightWhite.copy(0.35f))
                             .clickable {
                                 Toast.makeText(context, "공유 폴더로 이동합니다.", Toast.LENGTH_SHORT).show()
-                                navController.navigate(AddScreenRoute.NAMEINPUT.route)
+                                navigationHome()
                             },
                         contentAlignment = Alignment.Center
                     ) {
