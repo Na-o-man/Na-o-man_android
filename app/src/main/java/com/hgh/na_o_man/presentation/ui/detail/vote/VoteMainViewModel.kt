@@ -13,6 +13,7 @@ import com.hgh.na_o_man.presentation.base.BaseViewModel
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.ui.detail.KEY_GROUP_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,10 +27,13 @@ class VoteMainViewModel @Inject constructor(
     VoteMainContract.VoteMainViewState()
 ) {
 
+    private val nextPage = MutableStateFlow(0)
+    private val hasNextPage = MutableStateFlow(true)
+
 
     init {
         Log.d("리컴포저블", "VoteMainViewModelInit")
-        setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
+        setEvent(VoteMainContract.VoteMainEvent.OnPagingVoteList)
         updateState { copy(groupId = savedStateHandle[KEY_GROUP_ID] ?: 0L) }
         Log.d("VoteMainViewModel", "Initial groupId: ${viewState.value.groupId}")
         fetchGroupName()
@@ -52,6 +56,8 @@ class VoteMainViewModel @Inject constructor(
             }
 
             is VoteMainContract.VoteMainEvent.OnClickDropBoxItem -> {
+                nextPage.value = 0
+                hasNextPage.value = true
                 //Log.d("VoteMainViewModel", "Group ID before update: $_groupId")
                 updateState {
                     copy(
@@ -70,27 +76,40 @@ class VoteMainViewModel @Inject constructor(
             is VoteMainContract.VoteMainEvent.OnAgendaItemClicked -> {
                 sendEffect({VoteMainContract.VoteMainSideEffect.NaviVoteDetail(event.agendaId)})
             }
+
+            VoteMainContract.VoteMainEvent.OnPagingVoteList -> {
+                showVoteList()
+            }
         }
     }
 
     private fun showVoteList() = viewModelScope.launch {
         updateState { copy(loadState = LoadState.LOADING) }
         try {
-            agendaInfoListUsecase(viewState.value.groupId, 0, 10).collect() { result ->
-                Log.d("VoteMainViewModel", "API call completed, processing result")
-                result.onSuccess { AgendaInfoListModel ->
-                    Log.d("VoteMainViewModel", "API call succeeded")
-                    updateState {
-                        Log.d("VoteMainViewModel", "Updating state with new vote list")
-                        copy(
-                            loadState = LoadState.SUCCESS,
-                            voteList = AgendaInfoListModel.agendaDetailInfoList
-                        )
-                    }
-                }.onFail { error ->
-                    Log.e("VoteMainViewModel", "Failed to fetch vote list: $error")
-                    updateState {
-                        copy(loadState = LoadState.ERROR)
+            if (hasNextPage.value) {
+                agendaInfoListUsecase(viewState.value.groupId, nextPage.value, 10).collect() { result ->
+                    result.onSuccess { response ->
+                        Log.d("VoteMainViewModel", "API call succeeded")
+                        updateState {
+                            Log.d("VoteMainViewModel", "Updating state with new vote list")
+                            copy(
+                                loadState = LoadState.SUCCESS,
+                                voteList = response.agendaDetailInfoList
+                            )
+                        }
+//                        response.last.not().let {
+//                            hasNextPage.value = it
+//                            nextPage.value +=1
+//                        }
+                        response.last.not().let {
+                            hasNextPage.value = it
+                            nextPage.value +=1
+                        }
+                    }.onFail { error ->
+                        Log.e("VoteMainViewModel", "Failed to fetch vote list: $error")
+                        updateState {
+                            copy(loadState = LoadState.ERROR)
+                        }
                     }
                 }
             }
