@@ -90,4 +90,12 @@ class PhotoRepositoryImpl @Inject constructor(
     override suspend fun deletePhoto(photoIdListDto: PhotoIdListDto): RetrofitResult<PhotoIdListResModel> {
         return apiHandler({ api.deletePhotosAPI(photoIdListDto) }) { response: ApiResult<PhotoIdListResDto> -> response.data.toModel() }
     }
+
+    override suspend fun getNoPhoto(shareGroupId: Long): RetrofitResult<PhotoDownloadUrlsModel> {
+        return apiHandler({ api.getNoAllPhoto(shareGroupId) }) { response: ApiResult<PhotoDownloadUrlsDto> -> response.data.toModel() }
+    }
+
+    override suspend fun getPhotoAlbum(shareGroupId: Long, profileId: Long): RetrofitResult<PhotoDownloadUrlsModel> {
+        return apiHandler({ api.getPhotoAllAlbum(shareGroupId, profileId) }) { response: ApiResult<PhotoDownloadUrlsDto> -> response.data.toModel() }
+    }
 }

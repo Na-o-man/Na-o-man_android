@@ -25,4 +25,6 @@ interface PhotoRepository {
         size: Int
     ): RetrofitResult<PhotoAllModel>
     suspend fun deletePhoto(photoIdListDto: PhotoIdListDto): RetrofitResult<PhotoIdListResModel>
+    suspend fun getNoPhoto(shareGroupId: Long): RetrofitResult<PhotoDownloadUrlsModel>
+    suspend fun getPhotoAlbum(shareGroupId: Long, profileId: Long): RetrofitResult<PhotoDownloadUrlsModel>
 }
