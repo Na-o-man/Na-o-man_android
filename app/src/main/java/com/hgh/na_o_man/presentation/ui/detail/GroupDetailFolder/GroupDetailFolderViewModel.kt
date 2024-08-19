@@ -1,5 +1,6 @@
 package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 
+import android.graphics.pdf.PdfDocument.Page
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -53,7 +54,8 @@ class GroupDetailFolderViewModel @Inject constructor(
                 })
             }
 
-            GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked -> {
+            is GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked -> {
+                sendEffect({ GroupDetailFolderContract.GroupDetailFolderSideEffect.ShowIdToast("groupId : ${viewState.value.groupId}, profileId : ${event.profileId}")})
             }
 
             GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadClicked -> {
