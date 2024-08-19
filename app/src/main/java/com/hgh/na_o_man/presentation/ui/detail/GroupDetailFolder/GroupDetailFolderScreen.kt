@@ -5,6 +5,7 @@ import SmallCloudBtn
 import android.app.Activity
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,9 +31,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -44,6 +50,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.constraintlayout.widget.Group
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -88,7 +95,10 @@ fun GroupDetailFolderScreen(
         viewModel.uploadUri(uris)
     }
 
+
+    var currentProfileId by remember { mutableStateOf<Long?>(null) }
     val groupId = remember { context.intent.getLongExtra(GROUP_DETAIL, 0L) }
+
 
     LaunchedEffect(groupId) {
         viewModel.initGroupId(groupId)
@@ -199,7 +209,8 @@ fun GroupDetailFolderScreen(
                             val pageCount = Int.MAX_VALUE
                             val realSize = folderList.size
                             val middlePage = pageCount / 2
-                            val pagerState = rememberPagerState(initialPage = middlePage - (middlePage % realSize))
+
+                            val pagerState = rememberPagerState(middlePage - (middlePage % realSize))
 
                             Box(
                                 modifier = Modifier
@@ -252,15 +263,19 @@ fun GroupDetailFolderScreen(
                                         Bigfolder(
                                             folderInfo = folderInfo,
                                             onClick = {
+
                                                 val memberId =
                                                     filteredProfileInfoList.getOrNull(page)?.memberId ?: -1
-//                                            val profileId = filteredProfileInfoList.getOrNull(page)?.profileId ?: 100L
                                                 val profileId = when {
                                                     filteredProfileInfoList.getOrNull(page)?.profileId != null -> filteredProfileInfoList[page].profileId
                                                     folderInfo.name == "all" -> 100L
                                                     folderInfo.name == "others" -> 101L
                                                     else -> -1L
                                                 }
+                                                Log.d("GroupDetailFolderScreen","groupId : $groupId, profileId : $profileId")
+                                                currentProfileId = profileId
+                                                Log.d("GroupDetailFolderScreen", "Updated currentProfileId: $currentProfileId")
+
                                                 navigationPhotoList(
                                                     groupDetail.shareGroupId,
                                                     profileId,
@@ -284,6 +299,7 @@ fun GroupDetailFolderScreen(
                             )
                         }
 
+
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -295,15 +311,13 @@ fun GroupDetailFolderScreen(
                                     GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadClicked
                                 )
                             }
+
                             CloudBtn(title = "다운로드") {
-                                // 테스트용 - 삭제해야함
                                 viewModel.setEvent(
-                                    GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(
-                                        profileId = ALL_PHOTO_ID,
-                                        memberId = -1L,
-                                    )
+                                    GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked
                                 )
                             }
+
                             SmallCloudBtn(title = "지난\n안건") {
                                 viewModel.setEvent(
                                     GroupDetailFolderContract.GroupDetailFolderEvent.OnVoteClicked
