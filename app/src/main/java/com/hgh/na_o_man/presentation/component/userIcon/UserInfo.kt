@@ -57,6 +57,7 @@ fun UserInfo(
                             LightWhite.copy(alpha = 0.8f)
                         )
                     ),
+
                     size = size,
                     cornerRadius = androidx.compose.ui.geometry.CornerRadius(30.dp.toPx()),
                     colorFilter = imageColorFilter

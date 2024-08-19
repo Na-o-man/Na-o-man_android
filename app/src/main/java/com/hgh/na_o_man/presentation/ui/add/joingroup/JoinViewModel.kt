@@ -98,6 +98,7 @@ class JoinViewModel @Inject constructor(
                             profileId = viewState.value.profileId
                         )
                     }
+
                     sendEffect({
                         JoinContract.JoinSideEffect._ShowToast("그룹 참여에 성공했습니다.\n환영합니다.")
                         JoinContract.JoinSideEffect.FinishActivity

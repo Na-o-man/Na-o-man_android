@@ -70,6 +70,7 @@ fun AcceptCheckScreen(
     val textValue = viewState.groupName
     val extraMembersCount = viewState.members.size - viewState.members.take(3).size // 초과 인원
 
+
     if (viewState.members.isEmpty()) {
         viewModel.setEvent(JoinContract.JoinEvent.LoadGroupMembers)
         return

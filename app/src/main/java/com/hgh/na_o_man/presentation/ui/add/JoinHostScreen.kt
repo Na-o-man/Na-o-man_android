@@ -28,6 +28,7 @@ fun JoinHostScreen(
     val context = LocalContext.current as Activity
 
     Log.d("리컴포저블", "JoinHostScreen")
+
     Scaffold(
         containerColor = lightSkyBlue
     ) { innerPadding ->

@@ -89,6 +89,7 @@ fun MembersNameScreen(
                 }, modifier = Modifier.padding(bottom = 20.dp, end = 20.dp)
             )
         },
+
         containerColor = lightSkyBlue
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -172,7 +173,8 @@ fun MembersNameScreen(
                                 painter = painterResource(id = R.drawable.ic_file_227),
                                 contentDescription = "ADD",
                                 modifier = Modifier
-                                    .fillMaxSize().graphicsLayer(
+                                    .fillMaxSize()
+                                    .graphicsLayer(
                                         alpha = 0.8f,
                                         shape = RoundedCornerShape(16.dp),
                                         clip = true
@@ -181,7 +183,12 @@ fun MembersNameScreen(
 
                             LazyColumn(
                                 modifier = Modifier
-                                    .padding(start = 15.dp, top = 35.dp, bottom = 20.dp, end = 10.dp)
+                                    .padding(
+                                        start = 15.dp,
+                                        top = 35.dp,
+                                        bottom = 20.dp,
+                                        end = 10.dp
+                                    )
                                     .fillMaxSize()
                                     .padding(horizontal = 10.dp),
                                 verticalArrangement = Arrangement.Center
@@ -200,11 +207,16 @@ fun MembersNameScreen(
                                                 Box(
                                                     modifier = Modifier
                                                         .clip(RoundedCornerShape(8.dp))
-                                                        .border(width = 3.dp, color = LightWhite.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
+                                                        .border(
+                                                            width = 3.dp,
+                                                            color = LightWhite.copy(alpha = 0.2f),
+                                                            RoundedCornerShape(8.dp)
+                                                        )
                                                         .background(LightWhite.copy(alpha = 0.3f))
                                                         .padding(horizontal = 8.dp, vertical = 3.dp)
                                                         .clickable {
-                                                            showRemoveButton = !showRemoveButton // 클릭 시 삭제 버튼 표시/숨김
+                                                            showRemoveButton =
+                                                                !showRemoveButton // 클릭 시 삭제 버튼 표시/숨김
                                                         },
                                                     contentAlignment = Alignment.Center
                                                 ) {
@@ -222,9 +234,12 @@ fun MembersNameScreen(
                                                                 contentDescription = "Remove Button",
                                                                 modifier = Modifier
                                                                     .clickable {
-                                                                        memberNames = memberNames - name
+                                                                        memberNames =
+                                                                            memberNames - name
                                                                         viewModel.handleEvents(
-                                                                            AddContract.AddEvent.RemoveMember(name)
+                                                                            AddContract.AddEvent.RemoveMember(
+                                                                                name
+                                                                            )
                                                                         )
                                                                     }
                                                                     .size(15.dp)
@@ -300,11 +315,13 @@ fun MembersNameScreen(
                                 .clickable {
                                     if (newMemberName.isNotBlank()) {
                                         if (memberNames.contains(newMemberName)) {
-                                            Toast.makeText(
-                                                context,
-                                                "이미 존재하는 이름입니다.",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    "이미 존재하는 이름입니다.",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
                                         } else {
                                             memberNames = memberNames + newMemberName
                                             viewModel.handleEvents(

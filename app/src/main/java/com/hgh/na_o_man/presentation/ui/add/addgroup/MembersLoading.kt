@@ -51,8 +51,6 @@ fun MembersLoading(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-
-
             val rotationState = remember { Animatable(0f) }
 
             // 로딩
