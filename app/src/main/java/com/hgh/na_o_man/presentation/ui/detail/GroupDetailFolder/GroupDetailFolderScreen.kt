@@ -202,11 +202,11 @@ fun GroupDetailFolderScreen(
 
                             val folderList = folderDummyList + listOf(
                                 FolderDummy(
-                                    imageRes = R.drawable.ic_example.toString(),
+                                    imageRes = "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png",
                                     name = "others"
                                 ),
                                 FolderDummy(
-                                    imageRes = R.drawable.ic_example.toString(),
+                                    imageRes = "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png",
                                     name = "all"
                                 )
                             )
