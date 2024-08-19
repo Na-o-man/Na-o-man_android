@@ -54,6 +54,7 @@ import com.hgh.na_o_man.presentation.component.EndAppBar
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.NextAppBar1
 import com.hgh.na_o_man.presentation.component.StartAppBar
+import com.hgh.na_o_man.presentation.component.StartEndAppBar
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
@@ -70,22 +71,8 @@ fun MembersAdjective(
 
     Scaffold(
         topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween // 시작과 끝을 각각 정렬
-            ) {
-                StartAppBar(
-                    onStartClick = {
-                        navigationBack()
-                    }
-                )
-                EndAppBar(
-                    onEndClick = {
-                        navigationMyPage()
-                    }
-                )
-            }
+            StartEndAppBar(
+                onStartClick = { navigationBack() }, onEndClick = { navigationMyPage() })
         },
         containerColor = lightSkyBlue
     ) { padding ->

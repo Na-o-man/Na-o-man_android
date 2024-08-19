@@ -2,6 +2,7 @@ package com.hgh.na_o_man.presentation.ui.add
 
 import com.hgh.na_o_man.presentation.ui.add.addgroup.MembersNameScreen
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.addgroup.*
+import com.hgh.na_o_man.presentation.ui.main.MainActivity
 import com.hgh.na_o_man.presentation.ui.main.MainScreenRoute
 
 @Composable
@@ -56,7 +58,10 @@ fun AddHostScreen(
                             navController.navigate(AddScreenRoute.NAMEINPUT.route)
                         },
                         navigationMyPage = {
-                            navController.navigate(MainScreenRoute.MY_PAGE.route)
+                            val intent = Intent(context, MainActivity::class.java).apply {
+                                putExtra("startDestination", MainScreenRoute.MY_PAGE.route)
+                            }
+                            context.startActivity(intent)
                         }
                     )
                 }
