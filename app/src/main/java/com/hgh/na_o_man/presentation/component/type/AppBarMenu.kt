@@ -52,7 +52,7 @@ enum class AppBarMenu(
 
     Plus2(
         horizontalPadding = 20.dp,
-        icon = R.drawable.ic_button_vote_add_agenda_39,
+        icon = R.drawable.ic_add_top_bar_38,
         contentDescription = R.string.plus_description
     )
 }
