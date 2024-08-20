@@ -157,19 +157,19 @@ fun UploadScreen(
                             ) {
                                 ExampleImg(
                                     modifier = Modifier.weight(1f),
-                                    imageId = R.drawable.background_1,
+                                    imageId = R.drawable.sample_face,
                                     iconId = R.drawable.ic_yes_13,
                                     "정면 사진"
                                 )
                                 ExampleImg(
                                     modifier = Modifier.weight(1f),
-                                    imageId = R.drawable.background_1,
+                                    imageId = R.drawable.sample_side,
                                     iconId = R.drawable.ic_yes_13,
                                     "측면 사진"
                                 )
                                 ExampleImg(
                                     modifier = Modifier.weight(1f),
-                                    imageId = R.drawable.background_2,
+                                    imageId = R.drawable.sample_together,
                                     iconId = R.drawable.ic_no_13,
                                     "너무 작게 나온 사진"
                                 )

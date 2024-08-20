@@ -66,7 +66,7 @@ fun AddAgendaScreen(
     val agendaPhotos = remember {
         savedStateHandle?.get<List<PhotoInfoModel>>(AGENDA_PHOTOS)?.map {
             it.copy(isSelected = false)
-        } ?: listOf(PhotoInfoModel())
+        } ?: listOf(PhotoInfoModel(rawPhotoUrl =  "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png"))
     }
     var agendaTitle by remember { mutableStateOf("") }
     val viewState by viewModel.viewState.collectAsState()
