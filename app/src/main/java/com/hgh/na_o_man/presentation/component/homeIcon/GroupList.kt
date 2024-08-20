@@ -38,7 +38,7 @@ fun EventCard(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .padding(12.dp)
+            .padding(top = 20.dp)
             .clickable(onClick = { onClick(groupId) }) // 클릭 이벤트 추가
     ) {
         Icon(
@@ -55,7 +55,9 @@ fun EventCard(
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(start = 80.dp, end = 16.dp) // 끝쪽 패딩 추가
+                .padding(start = 160.dp, end = 20.dp) // 끝쪽 패딩 추가
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = title,
@@ -63,26 +65,26 @@ fun EventCard(
                 color = Color.Black,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                modifier = Modifier.widthIn(min = 0.dp, max = 160.dp) // 텍스트의 최대 너비 설정
+                modifier = Modifier.widthIn(max = 150.dp) // 텍스트의 최대 너비 설정
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_person_13),
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.size(15.dp)
+                    modifier = Modifier.size(16.dp)
                 )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(text = "$participantCount", color = Color.White, fontSize = 20.sp)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = date, color = Color.White, fontSize = 20.sp)
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(text = "$participantCount", color = Color.White, fontSize = 16.sp)
+                Spacer(modifier = Modifier.width(17.dp))
+                Text(text = date, color = Color.White, fontSize = 16.sp)
             }
         }
 
         Box(
             modifier = Modifier
-                .offset(x = -90.dp, y = (-15).dp)
+                .offset(x = -80.dp, y = (-15).dp)
                 .clickable(onClick = { onClick(groupId) }) // 클릭 이벤트 추가
                 .zIndex(1f) // 이미지가 다른 요소들 위에 렌더링되도록 설정
         ) {
@@ -91,7 +93,7 @@ fun EventCard(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(100.dp)
                     .clip(CircleShape)
                     .border(width = 2.dp, color = Color.White, shape = CircleShape)
             )
@@ -99,8 +101,11 @@ fun EventCard(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun EventCardPreview() {
-//    EventCard(imageRes = R.drawable.ic_example.toString(), title = "제목", participantCount = 5, date = "2024.07.20")
-//}
+@Preview(showBackground = true)
+@Composable
+fun EventCardPreview() {
+    Column (){
+        EventCard(imageRes = R.drawable.ic_example.toString(), title = "제목", participantCount = 5, date = "2024.07.20")
+        EventCard(imageRes = R.drawable.ic_example.toString(), title = "제목asdfasdfasdfasf", participantCount = 5, date = "2024.07.20")
+    }
+}

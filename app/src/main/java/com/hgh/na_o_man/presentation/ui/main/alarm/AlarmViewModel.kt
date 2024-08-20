@@ -95,6 +95,7 @@ class AlarmViewModel @Inject constructor(
                         val alarmList =
                             notificationInfoListModel.notificationInfoList.map { notificationInfo ->
                                 AlarmDummy(
+                                    isRead = notificationInfo.isChecked,
                                     url = notificationInfo.url,
                                     detail = notificationInfo.body,
                                     date = notificationInfo.createdAt,
