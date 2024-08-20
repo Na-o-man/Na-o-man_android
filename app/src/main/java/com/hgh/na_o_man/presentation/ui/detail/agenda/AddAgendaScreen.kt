@@ -68,9 +68,9 @@ fun AddAgendaScreen(
             it.copy(isSelected = false)
         } ?: listOf(PhotoInfoModel(rawPhotoUrl =  "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png"))
     }
-    var agendaTitle by remember { mutableStateOf("") }
     val viewState by viewModel.viewState.collectAsState()
     val context = LocalContext.current as Activity
+    var agendaTitle by remember { mutableStateOf(viewState.agendaTitle) }
 
     LaunchedEffect(key1 = viewModel.effect) {
         viewModel.effect.collect { effect ->
@@ -211,7 +211,7 @@ fun AddAgendaScreen(
                 AgendaPhotos(
                     images = agendaPhotos.ifEmpty { listOf(PhotoInfoModel()) },
                     onClick = {
-                        viewModel.setEvent(AddAgendaContract.AddAgendaEvent.OnAddPhotosClicked)
+                        viewModel.setEvent(AddAgendaContract.AddAgendaEvent.OnAddPhotosClicked(agendaTitle))
                     }
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -222,15 +222,19 @@ fun AddAgendaScreen(
                         .size(120.dp, 70.dp)
                         .align(Alignment.End)
                 ) {
-                    if (agendaPhotos.size >= 2) {
-                        viewModel.setEvent(
-                            AddAgendaContract.AddAgendaEvent.OnAddAgendaClicked(
-                                title = agendaTitle,
-                                photos = agendaPhotos,
+                    if (agendaTitle.isNotEmpty()) {
+                        if (agendaPhotos.size >= 2) {
+                            viewModel.setEvent(
+                                AddAgendaContract.AddAgendaEvent.OnAddAgendaClicked(
+                                    title = agendaTitle,
+                                    photos = agendaPhotos,
+                                )
                             )
-                        )
+                        } else {
+                            viewModel.setEvent(AddAgendaContract.AddAgendaEvent.OnDialogOpened)
+                        }
                     } else {
-                        viewModel.setEvent(AddAgendaContract.AddAgendaEvent.OnDialogOpened)
+                        Toast.makeText(context, "제목을 입력해 주세요.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
