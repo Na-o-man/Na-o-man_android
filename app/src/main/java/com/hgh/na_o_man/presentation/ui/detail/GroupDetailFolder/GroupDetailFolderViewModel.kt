@@ -1,9 +1,11 @@
 package com.hgh.na_o_man.presentation.ui.detail.GroupDetailFolder
 
+import android.graphics.pdf.PdfDocument.Page
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.pager.PagerState
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
@@ -34,6 +36,7 @@ class GroupDetailFolderViewModel @Inject constructor(
             }
 
             is GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked -> {
+                updateState { copy(pagerIndex = event.currentPage) }
                 sendEffect({
                     GroupDetailFolderContract.GroupDetailFolderSideEffect.NaviPhotoList(
                         viewState.value.groupId,
@@ -51,7 +54,8 @@ class GroupDetailFolderViewModel @Inject constructor(
                 })
             }
 
-            GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked -> {
+            is GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked -> {
+                sendEffect({ GroupDetailFolderContract.GroupDetailFolderSideEffect.ShowIdToast("groupId : ${viewState.value.groupId}, profileId : ${event.profileId}")})
             }
 
             GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadClicked -> {

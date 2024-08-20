@@ -32,6 +32,7 @@ class VoteMainContract {
         object InitVoteMainScreen : VoteMainEvent()
         object onAddAgendaInBoxClicked : VoteMainEvent()
         object OnBackClicked :VoteMainEvent()
+        object OnPagingVoteList : VoteMainEvent()
         data class OnAgendaItemClicked(val agendaId : Long) :VoteMainEvent()
         data class OnClickDropBoxItem(val member: ShareGroupNameInfoModel) : VoteMainEvent()
     }

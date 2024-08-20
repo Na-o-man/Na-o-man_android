@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+//import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.ExperimentalMaterialApi
@@ -51,6 +53,8 @@ import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
+import com.hgh.na_o_man.presentation.util.OnBottomListener
+//import com.hgh.na_o_man.presentation.util.OnBottomListener
 import getVoteList
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -224,6 +228,12 @@ fun VoteListScreen(
     voteList:List<AgendaDetailInfoModel>,
     modifier: Modifier = Modifier
 ) {
+
+    val lazyListState = rememberLazyListState()
+    lazyListState.OnBottomListener(2) {
+        viewModel.setEvent(VoteMainContract.VoteMainEvent.OnPagingVoteList)
+    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

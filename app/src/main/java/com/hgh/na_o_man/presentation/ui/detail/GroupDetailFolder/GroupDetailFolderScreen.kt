@@ -39,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -122,6 +123,10 @@ fun GroupDetailFolderScreen(
                     )
                 }
 
+                is GroupDetailFolderContract.GroupDetailFolderSideEffect.ShowIdToast -> {
+                    Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                }
+
                 else -> Unit
             }
         }
@@ -197,11 +202,11 @@ fun GroupDetailFolderScreen(
 
                             val folderList = folderDummyList + listOf(
                                 FolderDummy(
-                                    imageRes = R.drawable.ic_example.toString(),
+                                    imageRes = "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png",
                                     name = "others"
                                 ),
                                 FolderDummy(
-                                    imageRes = R.drawable.ic_example.toString(),
+                                    imageRes = "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png",
                                     name = "all"
                                 )
                             )
@@ -210,7 +215,21 @@ fun GroupDetailFolderScreen(
                             val realSize = folderList.size
                             val middlePage = pageCount / 2
 
-                            val pagerState = rememberPagerState(middlePage - (middlePage % realSize))
+                            val pagerState = rememberPagerState(middlePage - (middlePage % realSize)+viewState.pagerIndex)
+
+                            LaunchedEffect(pagerState) {
+                                snapshotFlow { pagerState.currentPage }
+                                    .collect { page ->
+                                        val folderInfo = folderList[page % realSize]
+                                        // 현재 페이지의 profileId를 가져와 currentProfileId에 저장합니다.
+                                        currentProfileId = when (folderInfo.name) {
+                                            "all" -> 100L
+                                            "others" -> 101L
+                                            else -> filteredProfileInfoList.getOrNull(page % realSize)?.profileId
+                                        }
+                                    }
+                            }
+
 
                             Box(
                                 modifier = Modifier
@@ -275,12 +294,11 @@ fun GroupDetailFolderScreen(
                                                 Log.d("GroupDetailFolderScreen","groupId : $groupId, profileId : $profileId")
                                                 currentProfileId = profileId
                                                 Log.d("GroupDetailFolderScreen", "Updated currentProfileId: $currentProfileId")
-
-                                                navigationPhotoList(
-                                                    groupDetail.shareGroupId,
+                                                viewModel.setEvent(GroupDetailFolderContract.GroupDetailFolderEvent.OnUserFolderClicked(
                                                     profileId,
-                                                    memberId
-                                                )
+                                                    memberId,
+                                                    currentPage - middlePage
+                                                ))
                                             },
                                         )
                                     }
@@ -313,8 +331,9 @@ fun GroupDetailFolderScreen(
                             }
 
                             CloudBtn(title = "다운로드") {
+                                val profileId = currentProfileId ?: -1L
                                 viewModel.setEvent(
-                                    GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked
+                                    GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked(profileId)
                                 )
                             }
 
