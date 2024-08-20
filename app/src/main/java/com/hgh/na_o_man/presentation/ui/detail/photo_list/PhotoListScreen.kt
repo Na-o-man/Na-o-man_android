@@ -242,7 +242,8 @@ fun PhotoListScreen(
                             modifier = Modifier
                                 .padding(start = 40.dp, end = 40.dp, top = 24.dp)
                                 .weight(1f),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             itemsIndexed(viewState.photoList, key = { _, it ->
                                 it.photoId
@@ -258,7 +259,7 @@ fun PhotoListScreen(
                                 ImageCard(
                                     modifier = modifier
                                         .fillMaxWidth()
-                                        .aspectRatio(1.25f),
+                                        .aspectRatio(1.20f),
                                     image = photo,
                                     isSelectMode = viewState.isSelectMode || viewState.isAgenda,
                                     onClick = {

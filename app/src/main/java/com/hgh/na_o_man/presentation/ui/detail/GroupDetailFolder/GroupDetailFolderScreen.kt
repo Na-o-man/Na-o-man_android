@@ -9,10 +9,6 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,26 +19,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -50,8 +40,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import androidx.constraintlayout.widget.Group
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -60,20 +48,15 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.hgh.na_o_man.R
-import com.hgh.na_o_man.domain.model.Dummy
 import com.hgh.na_o_man.domain.model.FolderDummy
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
-import com.hgh.na_o_man.presentation.component.FolderProfile
 import com.hgh.na_o_man.presentation.component.StartEndAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.groupdetail.Bigfolder
 import com.hgh.na_o_man.presentation.component.groupdetail.GroupInfo
-import com.hgh.na_o_man.presentation.component.groupdetail.SmallFolder
-import com.hgh.na_o_man.presentation.ui.detail.ALL_PHOTO_ID
 import com.hgh.na_o_man.presentation.ui.detail.GroupDetailActivity.Companion.GROUP_DETAIL
-import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 
@@ -93,7 +76,9 @@ fun GroupDetailFolderScreen(
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) { uris: List<Uri> ->
-        viewModel.uploadUri(uris)
+       if (uris.isNotEmpty()){
+           viewModel.setEvent(GroupDetailFolderContract.GroupDetailFolderEvent.OnUploadPhotoClicked(uris))
+       }
     }
 
 
@@ -102,7 +87,7 @@ fun GroupDetailFolderScreen(
 
 
     LaunchedEffect(groupId) {
-        viewModel.initGroupId(groupId)
+        viewModel.setEvent(GroupDetailFolderContract.GroupDetailFolderEvent.InitGroupDetailFolderScreen(groupId))
         Log.d("GroupDetailScreen", "LaunchedEffect triggered for groupId: $groupId")
     }
 
@@ -123,7 +108,7 @@ fun GroupDetailFolderScreen(
                     )
                 }
 
-                is GroupDetailFolderContract.GroupDetailFolderSideEffect.ShowIdToast -> {
+                is GroupDetailFolderContract.GroupDetailFolderSideEffect.ShowToast -> {
                     Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
                 }
 
