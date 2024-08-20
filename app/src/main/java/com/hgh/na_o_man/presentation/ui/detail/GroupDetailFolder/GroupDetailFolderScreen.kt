@@ -51,6 +51,7 @@ import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.FolderDummy
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.EndTopCloud
+import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StartEndAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
@@ -132,12 +133,9 @@ fun GroupDetailFolderScreen(
         LoadState.SUCCESS -> {
             Scaffold(
                 topBar = {
-                    StartEndAppBar(
+                    StartAppBar(
                         onStartClick = {
                             navigationBack()
-                        },
-                        onEndClick = {
-                            navigationMyPage(viewState.groupId)
                         }
                     )
                 },
