@@ -56,7 +56,7 @@ fun ImageDialog(
                     .align(Alignment.Center)
                     .wrapContentHeight(),
                 shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(2.dp, SteelBlue),
+                border = BorderStroke(2.dp, Color(0xCFFFFFFF)),
                 color = LightWhite.copy(alpha = 0.8f)
             ) {
                 Column {

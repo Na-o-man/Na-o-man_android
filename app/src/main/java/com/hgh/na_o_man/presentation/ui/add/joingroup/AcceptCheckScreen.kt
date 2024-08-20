@@ -70,6 +70,7 @@ fun AcceptCheckScreen(
     val textValue = viewState.groupName
     val extraMembersCount = viewState.members.size - viewState.members.take(3).size // 초과 인원
 
+
     if (viewState.members.isEmpty()) {
         viewModel.setEvent(JoinContract.JoinEvent.LoadGroupMembers)
         return
@@ -187,7 +188,6 @@ fun AcceptCheckScreen(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
-
                         }
                     }
                     // 초과 인원 수 표시
@@ -305,6 +305,7 @@ fun AcceptCheckScreen(
                     }
                 }
 
+                val shortenedText = shortenText(textValue, maxChars = 13)
                 // 폴더 이미지
                 Box(
                     modifier = Modifier
@@ -321,7 +322,7 @@ fun AcceptCheckScreen(
                 )
                 {
                     Text(
-                        text = textValue,
+                        text = shortenedText,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(top = 15.dp)

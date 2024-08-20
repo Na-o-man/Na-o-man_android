@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,9 +50,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.hgh.na_o_man.R
+import com.hgh.na_o_man.presentation.component.EndAppBar
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.NextAppBar1
 import com.hgh.na_o_man.presentation.component.StartAppBar
+import com.hgh.na_o_man.presentation.component.StartEndAppBar
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.AddScreenRoute
@@ -61,17 +64,15 @@ fun MembersAdjective(
     viewModel: AddViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
     navigationBack: () -> Unit,
+    navigationMyPage: () -> Unit,
 ) {
     val context = LocalContext.current
     Log.d("리컴포저블", "MembersAdjective")
 
     Scaffold(
         topBar = {
-            StartAppBar(
-                onStartClick = {
-                    navigationBack()
-                }
-            )
+            StartEndAppBar(
+                onStartClick = { navigationBack() }, onEndClick = { navigationMyPage() })
         },
         containerColor = lightSkyBlue
     ) { padding ->
@@ -82,6 +83,7 @@ fun MembersAdjective(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+
         ) {
             Box(
                 modifier = Modifier

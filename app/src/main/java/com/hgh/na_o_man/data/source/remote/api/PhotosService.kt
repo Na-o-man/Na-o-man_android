@@ -10,6 +10,7 @@ import com.hgh.na_o_man.data.dto.photo.response.PhotoDownloadUrlsDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoIdListResDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoPreSignedDto
 import com.hgh.na_o_man.data.dto.photo.response.PhotoUploadCountDto
+import com.hgh.na_o_man.domain.model.photo.PhotoDownloadUrlsModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -65,4 +66,15 @@ interface PhotosService {
     suspend fun deletePhotosAPI(
         @Body request : PhotoIdListDto
     ) : Response<ApiResult<PhotoIdListResDto>>
+
+    @GET("photos/download/etc")
+    suspend fun getNoAllPhoto(
+        @Query("shareGroupId") shareGroupId: Long
+    ) : Response<ApiResult<PhotoDownloadUrlsDto>>
+
+    @GET("photos/download/all")
+    suspend fun getPhotoAllAlbum(
+        @Query("shareGroupId") shareGroupId: Long,
+        @Query("profileId") profileId : Long
+    ) : Response<ApiResult<PhotoDownloadUrlsDto>>
 }

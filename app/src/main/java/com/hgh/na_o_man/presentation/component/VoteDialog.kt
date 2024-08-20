@@ -181,7 +181,7 @@ fun VoteAfterDialog(
                         end = Offset.Infinite,
                     )
                 ),
-                color = LightWhite.copy(alpha = 0.6f)
+                color = LightWhite.copy(alpha = 0.8f, blue = 50f)
             ) {
                 Column {
                     CommonTitle(

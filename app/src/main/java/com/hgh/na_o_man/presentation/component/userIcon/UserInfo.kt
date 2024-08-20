@@ -7,6 +7,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -34,11 +36,12 @@ fun UserInfo(
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
-    val imageColorFilter = if (isSelected) ColorFilter.tint(LightNavy.copy(0.98f)) else null
+    val imageColorFilter = if (isSelected) ColorFilter.tint(LightNavy.copy(0.7f)) else null
 
     Box(
         modifier = Modifier
-            .size(365.dp, 125.dp)
+            .fillMaxWidth()
+            .height(125.dp)
             .padding(15.dp)
             .clickable(onClick = onClick),
     ) {
@@ -46,7 +49,7 @@ fun UserInfo(
         //이름표
         Box(
             modifier = Modifier
-                .size(320.dp, 70.dp)
+                .size(275.dp, 70.dp)
                 .padding(start = 50.dp, top = 10.dp),
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
@@ -57,6 +60,7 @@ fun UserInfo(
                             LightWhite.copy(alpha = 0.8f)
                         )
                     ),
+
                     size = size,
                     cornerRadius = androidx.compose.ui.geometry.CornerRadius(30.dp.toPx()),
                     colorFilter = imageColorFilter
@@ -74,7 +78,7 @@ fun UserInfo(
         // 이름표 하단 이미지
         Box(
             modifier = Modifier
-                .size(320.dp, 198.dp)
+                .size(275.dp, 198.dp)
                 .padding(start = 50.dp, top = 77.dp)
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
@@ -102,7 +106,7 @@ fun UserInfo(
         // 프로필 이미지
         Box(
             modifier = Modifier
-                .size(100.dp)
+                .size(99.dp)
                 .clip(CircleShape)
                 .background(Color.Transparent)
                 .border(2.dp, LightWhite, CircleShape)
@@ -116,7 +120,6 @@ fun UserInfo(
                         .fillMaxSize()
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop,
-                    colorFilter = imageColorFilter
                 )
             }
         }

@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -78,6 +79,7 @@ fun MembersFolder(
         }
     }
 
+
     Scaffold(
         containerColor = lightSkyBlue
     ) { padding ->
@@ -107,9 +109,10 @@ fun MembersFolder(
                         )
                 )
 
+                val shortenedText = shortenText(state.groupName, maxChars = 10)
                 // 그룹 이름 텍스트
                 Text(
-                    text = state.groupName,
+                    text = shortenedText,
                     color = DeepBlue,
                     style = androidx.compose.ui.text.TextStyle(
                         fontSize = 23.sp,
@@ -117,7 +120,9 @@ fun MembersFolder(
                     ),
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .padding(top = 15.dp)
+                        .padding(top = 15.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -219,7 +224,7 @@ fun MembersFolder(
                             .background(LightWhite.copy(0.35f))
                             .clickable {
                                 Toast.makeText(context, "공유 폴더로 이동합니다.", Toast.LENGTH_SHORT).show()
-                                navController.navigate(AddScreenRoute.NAMEINPUT.route)
+                                navigationHome()
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -260,4 +265,12 @@ fun shareInviteLink(context: Context, inviteLink: String) {
         setPackage("com.kakao.talk")
     }
     context.startActivity(sendIntent)
+}
+
+fun shortenText(text: String, maxChars: Int): String {
+    return if (text.length > maxChars) {
+        "${text.take(maxChars)}.."
+    } else {
+        text
+    }
 }

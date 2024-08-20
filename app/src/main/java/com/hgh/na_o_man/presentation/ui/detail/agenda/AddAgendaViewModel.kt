@@ -41,7 +41,8 @@ class AddAgendaViewModel @Inject constructor(
                 createAgenda(event.title, event.photos)
             }
 
-            AddAgendaContract.AddAgendaEvent.OnAddPhotosClicked -> {
+            is AddAgendaContract.AddAgendaEvent.OnAddPhotosClicked -> {
+                updateState { copy(agendaTitle = event.title) }
                 sendEffect({ AddAgendaContract.AddAgendaSideEffect.NaviPhotoList })
             }
 
