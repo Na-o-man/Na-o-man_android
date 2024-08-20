@@ -48,9 +48,9 @@ fun ImageCard(
     Card(
         shape = RoundedCornerShape(16.dp),
         border = if (image.isSelected) {
-            BorderStroke(4.dp, Color.Yellow)
+            BorderStroke(4.dp, Color(0xFFF9D067))
         } else {
-            BorderStroke(2.dp, SteelBlue)
+            BorderStroke(2.dp, Color(0xCFFFFFFF))
         },
         modifier = modifier
             .clickable {

@@ -12,6 +12,7 @@ class AddAgendaContract {
         val loadState: LoadState = LoadState.SUCCESS,
         val groupId: Long = 0,
         val isDialogVisibility: Boolean = false,
+        val agendaTitle : String = "",
     ) : ViewState
 
     sealed class AddAgendaSideEffect : ViewSideEffect {
@@ -23,7 +24,7 @@ class AddAgendaContract {
     sealed class AddAgendaEvent : ViewEvent {
         object InitAddAgendaScreen : AddAgendaEvent()
         object OnBackClicked : AddAgendaEvent()
-        object OnAddPhotosClicked : AddAgendaEvent()
+        data class OnAddPhotosClicked(val title: String) : AddAgendaEvent()
         data class OnAddAgendaClicked(val title: String, val photos: List<PhotoInfoModel>): AddAgendaEvent()
         object OnDialogOpened : AddAgendaEvent()
         object OnDialogClosed : AddAgendaEvent()

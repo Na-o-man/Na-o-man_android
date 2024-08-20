@@ -21,13 +21,14 @@ class GroupDetailFolderContract {
         data class NaviPhotoList(val groupId: Long, val profiledId: Long, val memberId: Long) : GroupDetailFolderSideEffect()
         data class NaviVote(val groupId: Long) : GroupDetailFolderSideEffect()
         object NaviPhotoPicker : GroupDetailFolderSideEffect()
-        data class ShowIdToast(val msg : String) : GroupDetailFolderSideEffect()
+        data class ShowToast(val msg : String) : GroupDetailFolderSideEffect()
     }
 
     sealed class GroupDetailFolderEvent : ViewEvent {
-        object InitGroupDetailFolderScreen : GroupDetailFolderEvent()
+        data class InitGroupDetailFolderScreen(val groupId: Long) : GroupDetailFolderEvent()
         object OnUploadClicked : GroupDetailFolderEvent()
         object OnVoteClicked : GroupDetailFolderEvent()
+        data class OnUploadPhotoClicked(val uris: List<Uri>) : GroupDetailFolderEvent()
         data class OnUserFolderClicked(val profileId: Long, val memberId: Long, val currentPage: Int) : GroupDetailFolderEvent()
         data class OnDownloadClicked(val profileId: Long) : GroupDetailFolderEvent()
     }
