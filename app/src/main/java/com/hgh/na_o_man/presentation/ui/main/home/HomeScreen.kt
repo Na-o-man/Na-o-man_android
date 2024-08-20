@@ -59,7 +59,6 @@ fun HomeScreen(
         mainViewModel.effect.collect { effect ->
             when (effect) {
                 MainContract.MainSideEffect.RefreshScreen -> {
-                    Log.d("한건희","RefreshScreen…")
                     viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
                 }
 
@@ -191,6 +190,7 @@ fun GroupListScreen(
 
     val lazyListState = rememberLazyListState()
     lazyListState.OnBottomListener(2) {
+        Log.d("왜왜왜","OnBottomListener")
         viewModel.setEvent(HomeContract.HomeEvent.OnPagingGroupList)
     }
 
