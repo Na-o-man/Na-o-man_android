@@ -2,22 +2,17 @@ package com.hgh.na_o_man.presentation.ui.add.joingroup
 
 import android.app.Activity
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -40,15 +34,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.presentation.component.EndTopCloud
 import com.hgh.na_o_man.presentation.component.StartAppBar
-import com.hgh.na_o_man.presentation.theme.DeepBlue
 import com.hgh.na_o_man.presentation.theme.LightWhite
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.ui.add.joingroup.JoinContract.JoinSideEffect
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun AcceptScreen(
     viewModel: JoinViewModel = hiltViewModel(),
@@ -58,7 +55,9 @@ fun AcceptScreen(
     val viewState by viewModel.viewState.collectAsState()
     val memberList = viewState.members
     val membersPerPage = 3
-    val pagerState = rememberPagerState(pageCount = { (memberList.size + membersPerPage - 1) / membersPerPage })
+
+    val pageCount = (memberList.size + membersPerPage - 1) / membersPerPage
+    val pagerState = rememberPagerState()
 
     var selectedProfile by remember { mutableStateOf<Member?>(null) }
     val context = LocalContext.current as Activity
@@ -69,7 +68,6 @@ fun AcceptScreen(
                 navigationBack()
             })
         },
-
         containerColor = lightSkyBlue
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -78,7 +76,7 @@ fun AcceptScreen(
             Row(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = padding.calculateTopPadding() + 100.dp),
+                    .padding(top = padding.calculateTopPadding() + 90.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -100,10 +98,11 @@ fun AcceptScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 180.dp, end = 20.dp)
+                    .padding(top = 175.dp, end = 15.dp)
             ) {
                 HorizontalPager(
                     state = pagerState,
+                    count = pageCount,
                     modifier = Modifier.weight(1f)
                 ) { page ->
                     val startIndex = page * membersPerPage
@@ -121,15 +120,29 @@ fun AcceptScreen(
                     )
                 }
 
-                PageIndicator(
-                    pagerState = pagerState,
-                    totalPages = pagerState.pageCount // 페이지 수 설정
-                )
-
+                // 페이지 인디케이터
                 Box(
                     modifier = Modifier
-                        .padding(bottom = 20.dp, start = 260.dp)
-                        .offset(y = -(50.dp))
+                        .align(Alignment.CenterHorizontally)
+                        .padding(10.dp)
+                        .fillMaxWidth()
+                        .height(30.dp)
+                ) {
+                    HorizontalPagerIndicator(
+                        pagerState = pagerState,
+                        pageCount = pageCount,
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                            .align(Alignment.Center)
+                            .padding(vertical = 10.dp)
+                    )
+                }
+
+                // 구름 넥스트 버튼
+                Box(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .offset(y = -(50.dp), x = 240.dp)
                         .clickable {
                             selectedProfile?.let { profile ->
                                 viewModel.onNextButtonClicked(profile.id, viewState.shareGroupId)
@@ -166,31 +179,6 @@ fun AcceptScreen(
                 }
                 else -> Unit
             }
-        }
-    }
-}
-
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun PageIndicator(
-    pagerState: PagerState,
-    totalPages: Int
-) {
-    Row(
-        modifier = Modifier
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        repeat(totalPages) { index ->
-            val color = if (pagerState.currentPage == index) DeepBlue else Color.Gray
-            Box(
-                modifier = Modifier
-                    .size(8.dp)
-                    .padding(4.dp)
-                    .background(color, shape = CircleShape)
-            )
         }
     }
 }

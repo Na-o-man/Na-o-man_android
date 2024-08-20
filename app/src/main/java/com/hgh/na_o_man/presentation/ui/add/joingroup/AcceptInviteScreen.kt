@@ -62,6 +62,7 @@ fun AcceptInviteScreen(
 
     var textValue by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
+    var shouldNavigate by remember { mutableStateOf(false) }
 
     BackHandler {
         context.finish()
@@ -164,8 +165,12 @@ fun AcceptInviteScreen(
                     contentDescription = "Next Button",
                     modifier = Modifier
                         .clickable {
-                            viewModel.setEvent(JoinContract.JoinEvent.ValidateUrl(textValue))
-                            navController.navigate(JoinScreenRoute.CHECK.route)
+                            if (textValue.isNotBlank()) {
+                                viewModel.setEvent(JoinContract.JoinEvent.ValidateUrl(textValue))
+                                shouldNavigate = true
+                            } else {
+                                Toast.makeText(context, "URL을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                            }
                         }
                         .size(78.dp)
                 )
@@ -179,6 +184,7 @@ fun AcceptInviteScreen(
                         }
                         JoinContract.JoinSideEffect.NavigateToCheckScreen -> {
                             navController.navigate(JoinScreenRoute.CHECK.route)
+                            shouldNavigate = false
                         }
                         else -> Unit
                     }

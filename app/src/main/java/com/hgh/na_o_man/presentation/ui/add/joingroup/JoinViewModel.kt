@@ -68,8 +68,8 @@ class JoinViewModel @Inject constructor(
                             inviteCode = inviteCode
                         )
                     }
-                    sendEffect({JoinContract.JoinSideEffect.NavigateToCheckScreen})
                     sendEffect({ JoinContract.JoinSideEffect._ShowToast("URL 검증에 성공했습니다.") })
+                    sendEffect({JoinContract.JoinSideEffect.NavigateToCheckScreen})
                 }.onFail { error ->
                     Log.e("ValidateUrl", "서버와 연결을 실패했습니다. 오류: $error")
                     sendEffect({ JoinContract.JoinSideEffect._ShowToast("URL 검증에 실패했습니다.") })
