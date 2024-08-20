@@ -74,6 +74,7 @@ fun VoteMainScreen(
     Log.d("리컴포저블", "VoteMainScreen")
 
     LaunchedEffect(key1 = true) {
+        Log.d("왜왜왜", "LaunchedEffect")
         viewModel.setEvent(VoteMainContract.VoteMainEvent.InitVoteMainScreen)
     }
 
