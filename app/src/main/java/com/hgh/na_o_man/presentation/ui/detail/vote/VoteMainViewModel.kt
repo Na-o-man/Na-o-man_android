@@ -34,7 +34,6 @@ class VoteMainViewModel @Inject constructor(
         updateState { copy(groupId = savedStateHandle[KEY_GROUP_ID] ?: 0L) }
         fetchGroupName()
         fetchGroupNameList()
-        setEvent(VoteMainContract.VoteMainEvent.OnPagingVoteList)
         Log.d("리컴포저블", "VoteMainViewModelInit")
     }
 
@@ -45,10 +44,11 @@ class VoteMainViewModel @Inject constructor(
     override fun handleEvents(event: VoteMainContract.VoteMainEvent) {
         when (event) {
             is VoteMainContract.VoteMainEvent.InitVoteMainScreen -> {
+                showRefreshVoteList()
             }
 
             is VoteMainContract.VoteMainEvent.onAddAgendaInBoxClicked -> {
-                sendEffect({VoteMainContract.VoteMainSideEffect.NaviAgendaAdd})
+                sendEffect({ VoteMainContract.VoteMainSideEffect.NaviAgendaAdd })
             }
 
             is VoteMainContract.VoteMainEvent.OnClickDropBoxItem -> {
@@ -65,11 +65,11 @@ class VoteMainViewModel @Inject constructor(
             }
 
             VoteMainContract.VoteMainEvent.OnBackClicked -> {
-                sendEffect({VoteMainContract.VoteMainSideEffect.NaviBack})
+                sendEffect({ VoteMainContract.VoteMainSideEffect.NaviBack })
             }
 
             is VoteMainContract.VoteMainEvent.OnAgendaItemClicked -> {
-                sendEffect({VoteMainContract.VoteMainSideEffect.NaviVoteDetail(event.agendaId)})
+                sendEffect({ VoteMainContract.VoteMainSideEffect.NaviVoteDetail(event.agendaId) })
             }
 
             VoteMainContract.VoteMainEvent.OnPagingVoteList -> {
@@ -79,11 +79,21 @@ class VoteMainViewModel @Inject constructor(
     }
 
     private fun showVoteList() = viewModelScope.launch {
-        Log.d("VoteMainViewModel", "Showing vote list, hasNextPage: ${hasNextPage.value}, nextPage: ${nextPage.value}")
+        Log.d(
+            "VoteMainViewModel",
+            "Showing vote list, hasNextPage: ${hasNextPage.value}, nextPage: ${nextPage.value}"
+        )
         try {
             if (hasNextPage.value) {
-                Log.d("VoteMainViewModel", "Fetching page: ${nextPage.value} for group: ${viewState.value.groupId}")
-                agendaInfoListUsecase(viewState.value.groupId, nextPage.value, 3).collect { result ->
+                Log.d(
+                    "VoteMainViewModel",
+                    "Fetching page: ${nextPage.value} for group: ${viewState.value.groupId}"
+                )
+                agendaInfoListUsecase(
+                    viewState.value.groupId,
+                    nextPage.value,
+                    3
+                ).collect { result ->
                     result.onSuccess { response ->
                         Log.d("VoteMainViewModel", "Last page: ${response.last}")
                         updateState {
@@ -94,7 +104,7 @@ class VoteMainViewModel @Inject constructor(
                         }
                         response.last.not().let {
                             hasNextPage.value = it
-                            nextPage.value +=1
+                            nextPage.value += 1
                         }
 //                        if(response.last){
 //                            hasNextPage.value = false
@@ -107,6 +117,36 @@ class VoteMainViewModel @Inject constructor(
                             copy(loadState = LoadState.ERROR)
                         }
                     }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("VoteMainViewModel", "Error in showVoteList", e)
+            updateState { copy(loadState = LoadState.ERROR) }
+        }
+    }
+
+    private fun showRefreshVoteList() = viewModelScope.launch {
+        try {
+            updateState { copy(voteList = listOf()) }
+            agendaInfoListUsecase(viewState.value.groupId, 0, 3).collect { result ->
+                result.onSuccess { response ->
+                    Log.d("VoteMainViewModel", "Last page: ${response.last}")
+                    updateState {
+                        copy(
+                            voteList = viewState.value.voteList + response.agendaDetailInfoList,
+                            loadState = LoadState.SUCCESS
+                        )
+                    }
+                    response.last.not().let {
+                        hasNextPage.value = it
+                        nextPage.value = 1
+                    }
+                }.onFail { error ->
+                    Log.e("VoteMainViewModel", "Failed to fetch vote list: $error")
+                    updateState {
+                        copy(loadState = LoadState.ERROR)
+                    }
+
                 }
             }
         } catch (e: Exception) {

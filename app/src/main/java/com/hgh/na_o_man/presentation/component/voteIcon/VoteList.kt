@@ -5,8 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,8 +47,8 @@ fun getVoteList(
 
     Box(
         modifier = Modifier
-            .background(Color(0xBFFFFFFF), shape = RoundedCornerShape(10.dp))
-            .border(1.dp, gradient, RoundedCornerShape(10.dp))
+            .background(Color(0xBFFFFFFF), shape = RoundedCornerShape(14.dp))
+            .border(1.dp, gradient, RoundedCornerShape(14.dp))
             .clickable(onClick = { onClick(voteId) })
     ) {
         Column(
@@ -64,6 +66,7 @@ fun getVoteList(
                     color = DeepBlue
                 )
             }
+            Spacer(modifier = Modifier.height(8.dp))
 
             Log.d("getVoteList", "Middle check")
 
