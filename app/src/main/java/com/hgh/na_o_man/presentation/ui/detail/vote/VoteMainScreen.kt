@@ -1,15 +1,21 @@
 package com.hgh.na_o_man.presentation.ui.detail.vote
 
 import android.app.Activity
+import android.graphics.drawable.Icon
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -20,6 +26,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,9 +46,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.VoteDummy
 import com.hgh.na_o_man.domain.model.agenda.AgendaDetailInfoModel
@@ -125,11 +134,10 @@ fun VoteMainScreen(
                     StartBottomCloud()
                 }
 
-
                 Box(
                     modifier = Modifier
                         .fillMaxSize() // 전체 화면을 채우도록 설정
-                        .padding(start = 20.dp, top = 60.dp)
+                        .padding(top = 80.dp)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -141,28 +149,43 @@ fun VoteMainScreen(
                                 expanded = !expanded
                             }
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                androidx.compose.material3.Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_dropdown_11),
+
+                            Box(modifier = Modifier){
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_notice_yellow_box_148),
                                     contentDescription = null,
                                     tint = Color.Unspecified,
-                                )
-                                BasicTextField(
-                                    value = viewState.groupName ?:"",
-                                    onValueChange = { },
-                                    readOnly = true,
-                                    textStyle = TextStyle(
-                                        color = Color.Black,
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        textAlign = TextAlign.Center
-                                    ),
                                     modifier = Modifier
-                                        .menuAnchor()
+                                        .requiredSize(width = 160.dp, height = 39.dp)
                                 )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(start = 20.dp,top = 6.dp)
+                                ) {
+                                    androidx.compose.material3.Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_dropdown_11),
+                                        contentDescription = null,
+                                        tint = Color.Unspecified,
+                                    )
+                                    
+                                    Spacer(modifier = Modifier.width(5.dp))
+
+                                    BasicTextField(
+                                        value = viewState.groupName ?: "",
+                                        onValueChange = { },
+                                        readOnly = true,
+                                        textStyle = TextStyle(
+                                            color = Color.Black,
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            textAlign = TextAlign.Center
+                                        ),
+                                        modifier = Modifier
+                                            .menuAnchor()
+                                    )
+                                }
                             }
+
                             DropdownMenu(
                                 modifier = Modifier
                                     .border(3.dp, Color(0xFFBBCFE5), RoundedCornerShape(8.dp))
@@ -262,7 +285,9 @@ fun VoteListScreen(
 
 //@Preview(showBackground = true)
 //@Composable
-//fun PreviewVoteMainScreen() {
+//fun PreviewVoteMainScreen(
+//    viewModel: VoteMainViewModel = hiltViewModel()
+//) {
 //    val navController = NavHostController(context = LocalContext.current) // NavHostController 초기화
-//    VoteMainScreen(groupId = 1L ,navigationBack = {}, navigationAgenda = {}) // 초기화한 navController 전달
+//    VoteMainScreen() // 초기화한 navController 전달
 //}
