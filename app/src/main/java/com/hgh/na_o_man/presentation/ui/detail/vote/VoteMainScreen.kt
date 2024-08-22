@@ -61,6 +61,7 @@ import com.hgh.na_o_man.presentation.component.StartPlusAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
 import com.hgh.na_o_man.presentation.component.homeIcon.NoGroupBox
+import com.hgh.na_o_man.presentation.component.voteIcon.GroupNameBox
 import com.hgh.na_o_man.presentation.theme.lightSkyBlue
 import com.hgh.na_o_man.presentation.util.OnBottomListener
 //import com.hgh.na_o_man.presentation.util.OnBottomListener
@@ -151,13 +152,7 @@ fun VoteMainScreen(
                         ) {
 
                             Box(modifier = Modifier){
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_notice_yellow_box_148),
-                                    contentDescription = null,
-                                    tint = Color.Unspecified,
-                                    modifier = Modifier
-                                        .requiredSize(width = 160.dp, height = 39.dp)
-                                )
+                                GroupNameBox(title = viewState.groupName)
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.padding(start = 20.dp,top = 6.dp)
