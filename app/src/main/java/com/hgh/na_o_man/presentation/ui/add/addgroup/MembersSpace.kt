@@ -5,7 +5,9 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -66,27 +68,6 @@ fun MembersSpace(
                 }
             )
         },
-        bottomBar = {
-            Box(
-                modifier = Modifier
-                    .padding(top = 130.dp, end = 20.dp)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                NextAppBar1(
-                    onNextClick = {
-                        if (textValue.isNotEmpty()) {
-                            viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
-                            navController.navigate(AddScreenRoute.LOADING.route)
-                        }
-                        else {
-                            AddContract.AddSideEffect.ShowToast("텍스트를 입력해주세요.")
-                        }
-                    },
-                )
-            }
-        },
-
         containerColor = lightSkyBlue
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -133,59 +114,86 @@ fun MembersSpace(
                 )
             }
 
-            // 텍스트창
-            Box(
+            Column(
                 modifier = Modifier
-                    .size(295.dp, 55.dp)
-                    .background(
-                        color = LightWhite.copy(alpha = 0.7f),
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = LightWhite, shape = RoundedCornerShape(20.dp)
-                    )
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-
-                BasicTextField(
-                    value = textValue,
-                    onValueChange = { newValue ->
-                        textValue = newValue
-                        viewModel.updatePlace(newValue)
-                    },
+                // 텍스트창
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center)
-                        .onFocusChanged { state ->
-                            isFocused = state.isFocused
+                        .padding(top = 285.dp)
+                        .size(295.dp, 55.dp)
+                        .background(
+                            color = LightWhite.copy(alpha = 0.7f),
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = LightWhite,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                ) {
+                    BasicTextField(
+                        value = textValue,
+                        onValueChange = { newValue ->
+                            textValue = newValue
+                            viewModel.updatePlace(newValue)
                         },
-                    textStyle = TextStyle(
-                        color = SteelBlue,
-                        background = Color.Transparent,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center
-                    ),
-                    cursorBrush = SolidColor(SteelBlue),
-                    decorationBox = { innerTextField ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .align(Alignment.Center),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (textValue.isEmpty() && !isFocused) {
-                                Text(
-                                    text = "공간을 입력해주세요.",
-                                    color = SteelBlue,
-                                    textAlign = TextAlign.Center,
-                                    fontWeight = FontWeight.SemiBold
-                                )
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Center)
+                            .onFocusChanged { state ->
+                                isFocused = state.isFocused
+                            },
+                        textStyle = TextStyle(
+                            color = SteelBlue,
+                            background = Color.Transparent,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        ),
+                        cursorBrush = SolidColor(SteelBlue),
+                        decorationBox = { innerTextField ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .align(Alignment.Center),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                if (textValue.isEmpty() && !isFocused) {
+                                    Text(
+                                        text = "공간을 입력해주세요.",
+                                        color = SteelBlue,
+                                        textAlign = TextAlign.Center,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                                innerTextField()
                             }
-                            innerTextField()
                         }
-                    }
-                )
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 245.dp)
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    NextAppBar1(
+                        onNextClick = {
+                            if (textValue.isNotEmpty()) {
+                                viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
+                                navController.navigate(AddScreenRoute.LOADING.route)
+                            } else {
+                                AddContract.AddSideEffect.ShowToast("텍스트를 입력해주세요.")
+                            }
+                        }
+                    )
+                }
 
                 val context = LocalContext.current
 

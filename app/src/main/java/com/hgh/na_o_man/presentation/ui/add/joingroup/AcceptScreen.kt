@@ -127,7 +127,7 @@ fun AcceptScreen(
                 Box(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(10.dp)
+                        .padding(bottom = 40.dp)
                         .fillMaxWidth()
                         .height(30.dp)
                 ) {

@@ -109,7 +109,7 @@ fun MembersFolder(
                         )
                 )
 
-                val shortenedText = shortenText(state.groupName, maxChars = 10)
+                val shortenedText = shortenText(state.groupName, maxChars = 20)
                 // 그룹 이름 텍스트
                 Text(
                     text = shortenedText,
@@ -121,7 +121,7 @@ fun MembersFolder(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(top = 15.dp),
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
@@ -174,7 +174,7 @@ fun MembersFolder(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 135.dp, start = 40.dp, end = 40.dp)
+                        .padding(bottom = 150.dp, start = 50.dp, end = 50.dp)
                 ) {
                     // 초대 링크 공유 버튼
                     Box(

@@ -81,16 +81,6 @@ fun MembersNameScreen(
         topBar = {
             StartAppBar(onStartClick = { navigationHome() })
         },
-        bottomBar = {
-            NextAppBar1(
-                onNextClick = {
-                    if (memberNames.isNotEmpty()) {
-                        viewModel.handleEvents(AddContract.AddEvent.AddMember(newMemberName))
-                        navController.navigate(AddScreenRoute.ADJECTIVE.route)
-                    }
-                }, modifier = Modifier.padding(bottom = 20.dp, end = 20.dp)
-            )
-        },
 
         containerColor = lightSkyBlue
     ) { padding ->
@@ -159,19 +149,21 @@ fun MembersNameScreen(
 
                     Column(
                         modifier = Modifier
-                            .wrapContentWidth()
+                            .fillMaxSize()
                             .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Top
                     ) {
                         Box(
                             modifier = Modifier
-                                .padding(top = 140.dp),
+                                .fillMaxWidth()
+                                .padding(top = 150.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(240.dp)
+                                    .size(240.dp, 220.dp)
+                                    .fillMaxWidth()
                                     .clip(RoundedCornerShape(16.dp))
                                     .padding(10.dp),
                                 contentAlignment = Alignment.Center
@@ -262,132 +254,159 @@ fun MembersNameScreen(
                                                                             }
                                                                             .size(15.dp)
                                                                             .padding(1.dp)
-                                                                        )
-                                                                    }
-                                                             }
-                                                         }
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
                                                     }
-                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                }
-
-                                Spacer(modifier = Modifier.height(10.dp))
-
-                                // 입력창
-                                Box(
-                                    modifier = Modifier
-                                        .height(40.dp)
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .background(LightWhite.copy(alpha = 0.5f))
-                                        .border(2.dp, LightWhite.copy(alpha = 0.3f))
-                                ) {
-                                    BasicTextField(
-                                        value = newMemberName,
-                                        onValueChange = { newMemberName = it },
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(horizontal = 12.dp, vertical = 10.dp)
-                                            .onFocusChanged { state ->
-                                                isFocused = state.isFocused
-                                            },
-                                        textStyle = TextStyle(
-                                            color = SteelBlue,
-                                            background = Color.Transparent,
-                                            fontWeight = FontWeight.SemiBold,
-                                            fontSize = 14.sp,
-                                            textAlign = TextAlign.Start
-                                        ),
-                                        cursorBrush = SolidColor(SteelBlue),
-                                        decorationBox = { innerTextField ->
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .align(Alignment.CenterStart),
-                                                contentAlignment = Alignment.CenterStart
-                                            ) {
-                                                if (newMemberName.isEmpty() && !isFocused) {
-                                                    Text(
-                                                        text = "이름",
-                                                        color = SteelBlue,
-                                                        fontSize = 14.sp,
-                                                        textAlign = TextAlign.Start,
-                                                        fontWeight = FontWeight.SemiBold
-                                                    )
-                                                }
-                                                innerTextField()
-                                            }
-                                        }
-                                    )
-
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_example_plus_button_274),
-                                        contentDescription = "Add Button",
-                                        modifier = Modifier
-                                            .align(Alignment.CenterEnd)
-                                            .size(40.dp, 30.dp)
-                                            .padding(end = 10.dp)
-                                            .clickable {
-                                                if (newMemberName.isNotBlank()) {
-                                                    if (memberNames.contains(newMemberName)) {
-                                                        Toast
-                                                            .makeText(
-                                                                context,
-                                                                "이미 존재하는 이름입니다.",
-                                                                Toast.LENGTH_SHORT
-                                                            )
-                                                            .show()
-                                                    } else {
-                                                        memberNames = memberNames + newMemberName
-                                                        viewModel.handleEvents(
-                                                            AddContract.AddEvent.AddMember(
-                                                                newMemberName
-                                                            )
-                                                        )
-                                                        newMemberName = ""
-                                                    }
-                                                }
-                                            },
-                                        contentScale = ContentScale.FillBounds,
-                                    )
                                 }
                             }
                         }
-                    }
 
-                    LaunchedEffect(Unit) {
-                        viewModel.effect.collect { effect ->
-                            when (effect) {
-                                is AddContract.AddSideEffect.NavigateToNextScreen -> {
-                                    navController.navigate(AddScreenRoute.ADJECTIVE.route)
-                                }
+                        Spacer(modifier = Modifier.height(10.dp))
 
-                                is AddContract.AddSideEffect.ShowToast -> {
-                                    Toast.makeText(
-                                        context,
-                                        effect.message,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(210.dp, 40.dp)
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(LightWhite.copy(alpha = 0.5f))
+                                    .border(2.dp, LightWhite.copy(alpha = 0.3f))
+                            ) {
+                                BasicTextField(
+                                    value = newMemberName,
+                                    onValueChange = { newMemberName = it },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 12.dp, vertical = 10.dp)
+                                        .onFocusChanged { state ->
+                                            isFocused = state.isFocused
+                                        },
+                                    textStyle = TextStyle(
+                                        color = SteelBlue,
+                                        background = Color.Transparent,
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontSize = 14.sp,
+                                        textAlign = TextAlign.Start
+                                    ),
+                                    cursorBrush = SolidColor(SteelBlue),
+                                    decorationBox = { innerTextField ->
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .align(Alignment.CenterStart),
+                                            contentAlignment = Alignment.CenterStart
+                                        ) {
+                                            if (newMemberName.isEmpty() && !isFocused) {
+                                                Text(
+                                                    text = "이름",
+                                                    color = SteelBlue,
+                                                    fontSize = 14.sp,
+                                                    textAlign = TextAlign.Start,
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                            }
+                                            innerTextField()
+                                        }
+                                    }
+                                )
 
-                                is AddContract.AddSideEffect.ShowError -> {
-                                    Toast.makeText(
-                                        context,
-                                        effect.error,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-
-                                is AddContract.AddSideEffect.Back -> {  // 뒤로가기
-                                    navigationHome()
-                                }
-
-                                else -> {}
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_example_plus_button_274),
+                                    contentDescription = "Add Button",
+                                    modifier = Modifier
+                                        .align(Alignment.CenterEnd)
+                                        .size(40.dp, 30.dp)
+                                        .padding(end = 10.dp)
+                                        .clickable {
+                                            if (newMemberName.isNotBlank()) {
+                                                if (memberNames.contains(newMemberName)) {
+                                                    Toast
+                                                        .makeText(
+                                                            context,
+                                                            "이미 존재하는 이름입니다.",
+                                                            Toast.LENGTH_SHORT
+                                                        )
+                                                        .show()
+                                                } else {
+                                                    memberNames = memberNames + newMemberName
+                                                    viewModel.handleEvents(
+                                                        AddContract.AddEvent.AddMember(
+                                                            newMemberName
+                                                        )
+                                                    )
+                                                    newMemberName = ""
+                                                }
+                                            }
+                                        },
+                                    contentScale = ContentScale.FillBounds,
+                                )
                             }
+
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            // NextAppBar1 composable
+                            NextAppBar1(
+                                onNextClick = {
+                                    if (memberNames.isNotEmpty()) {
+                                        viewModel.handleEvents(
+                                            AddContract.AddEvent.AddMember(
+                                                newMemberName
+                                            )
+                                        )
+                                        navController.navigate(AddScreenRoute.ADJECTIVE.route)
+                                    }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(end = 40.dp)
+                            )
+                        }
+                    }
+                }
+
+                LaunchedEffect(Unit) {
+                    viewModel.effect.collect { effect ->
+                        when (effect) {
+                            is AddContract.AddSideEffect.NavigateToNextScreen -> {
+                                navController.navigate(AddScreenRoute.ADJECTIVE.route)
+                            }
+
+                            is AddContract.AddSideEffect.ShowToast -> {
+                                Toast.makeText(
+                                    context,
+                                    effect.message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            is AddContract.AddSideEffect.ShowError -> {
+                                Toast.makeText(
+                                    context,
+                                    effect.error,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            is AddContract.AddSideEffect.Back -> {  // 뒤로가기
+                                navigationHome()
+                            }
+
+                            else -> {}
                         }
                     }
                 }
             }
         }
+    }
+}
