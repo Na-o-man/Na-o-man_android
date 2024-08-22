@@ -116,6 +116,7 @@ fun CircleImage(
         modifier = modifier
             .size(28.dp)
             .clip(CircleShape)
+            .border(1.dp, Color.White, CircleShape)
             .background(Color.Gray),
         contentScale = ContentScale.Crop
     )
