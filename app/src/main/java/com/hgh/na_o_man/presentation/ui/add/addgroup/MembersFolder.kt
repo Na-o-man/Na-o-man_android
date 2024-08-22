@@ -97,7 +97,7 @@ fun MembersFolder(
                     .align(Alignment.Center)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_file_227),
+                    painter = painterResource(id = R.drawable.ic_file_group_227),
                     contentDescription = null,
                     modifier = Modifier
                         .size(221.dp, 194.26.dp)

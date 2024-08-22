@@ -15,12 +15,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -96,9 +98,9 @@ fun MembersNameScreen(
             EndTopCloud()
         }
 
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
         ) {
 
             Box(
@@ -155,221 +157,237 @@ fun MembersNameScreen(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // 폴더 이미지
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 40.dp),
-                        contentAlignment = Alignment.Center
+                            .wrapContentWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(240.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .padding(10.dp),
+                                .padding(top = 140.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_file_227),
-                                contentDescription = "ADD",
+                            Box(
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .graphicsLayer(
-                                        alpha = 0.8f,
-                                        shape = RoundedCornerShape(16.dp),
-                                        clip = true
-                                    )
-                            )
-
-                            LazyColumn(
-                                modifier = Modifier
-                                    .padding(
-                                        start = 15.dp,
-                                        top = 35.dp,
-                                        bottom = 20.dp,
-                                        end = 10.dp
-                                    )
-                                    .fillMaxSize()
-                                    .padding(horizontal = 10.dp),
-                                verticalArrangement = Arrangement.Center
+                                    .size(240.dp)
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .padding(10.dp),
+                                contentAlignment = Alignment.Center
                             ) {
-                                memberNames.chunked(3).forEach { rowNames -> // 3개의 이름씩 묶어 Row에 배치
-                                    item {
-                                        LazyRow(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(vertical = 8.dp),
-                                            horizontalArrangement = Arrangement.spacedBy(5.dp)
-                                        ) {
-                                            items(rowNames) { name ->
-                                                var showRemoveButton by remember { mutableStateOf(false) }
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_file_group_227),
+                                    contentDescription = "ADD",
+                                    tint = Color.Unspecified,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .graphicsLayer(
+                                            alpha = 0.8f,
+                                            shape = RoundedCornerShape(16.dp),
+                                            clip = true
+                                        )
+                                )
 
-                                                Box(
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 15.dp,
+                                            top = 35.dp,
+                                            bottom = 20.dp,
+                                            end = 10.dp
+                                        )
+                                        .fillMaxSize()
+                                        .padding(horizontal = 10.dp),
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    memberNames.chunked(3)
+                                        .forEach { rowNames -> // 3개의 이름씩 묶어 Row에 배치
+                                            item {
+                                                LazyRow(
                                                     modifier = Modifier
-                                                        .clip(RoundedCornerShape(8.dp))
-                                                        .border(
-                                                            width = 3.dp,
-                                                            color = LightWhite.copy(alpha = 0.2f),
-                                                            RoundedCornerShape(8.dp)
-                                                        )
-                                                        .background(LightWhite.copy(alpha = 0.3f))
-                                                        .padding(horizontal = 8.dp, vertical = 3.dp)
-                                                        .clickable {
-                                                            showRemoveButton =
-                                                                !showRemoveButton // 클릭 시 삭제 버튼 표시/숨김
-                                                        },
-                                                    contentAlignment = Alignment.Center
+                                                        .fillMaxWidth()
+                                                        .padding(vertical = 8.dp),
+                                                    horizontalArrangement = Arrangement.spacedBy(5.dp)
                                                 ) {
-                                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                                        Text(
-                                                            text = name,
-                                                            fontWeight = FontWeight.SemiBold,
-                                                            color = LightNavy,
-                                                            fontSize = 14.sp
-                                                        )
-
-                                                        if (showRemoveButton) {
-                                                            Image(
-                                                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_button_close_26),
-                                                                contentDescription = "Remove Button",
-                                                                modifier = Modifier
-                                                                    .clickable {
-                                                                        memberNames =
-                                                                            memberNames - name
-                                                                        viewModel.handleEvents(
-                                                                            AddContract.AddEvent.RemoveMember(
-                                                                                name
-                                                                            )
-                                                                        )
-                                                                    }
-                                                                    .size(15.dp)
-                                                                    .padding(1.dp)
+                                                    items(rowNames) { name ->
+                                                        var showRemoveButton by remember {
+                                                            mutableStateOf(
+                                                                false
                                                             )
                                                         }
+
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .clip(RoundedCornerShape(8.dp))
+                                                                .border(
+                                                                    width = 3.dp,
+                                                                    color = LightWhite.copy(alpha = 0.2f),
+                                                                    RoundedCornerShape(8.dp)
+                                                                )
+                                                                .background(LightWhite.copy(alpha = 0.3f))
+                                                                .padding(
+                                                                    horizontal = 8.dp,
+                                                                    vertical = 3.dp
+                                                                )
+                                                                .clickable {
+                                                                    showRemoveButton =
+                                                                        !showRemoveButton // 클릭 시 삭제 버튼 표시/숨김
+                                                                },
+                                                            contentAlignment = Alignment.Center
+                                                        ) {
+                                                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                                                Text(
+                                                                    text = name,
+                                                                    fontWeight = FontWeight.SemiBold,
+                                                                    color = LightNavy,
+                                                                    fontSize = 14.sp
+                                                                )
+
+                                                                if (showRemoveButton) {
+                                                                    Image(
+                                                                        imageVector = ImageVector.vectorResource(
+                                                                            id = R.drawable.ic_button_close_26
+                                                                        ),
+                                                                        contentDescription = "Remove Button",
+                                                                        modifier = Modifier
+                                                                            .clickable {
+                                                                                memberNames =
+                                                                                    memberNames - name
+                                                                                viewModel.handleEvents(
+                                                                                    AddContract.AddEvent.RemoveMember(
+                                                                                        name
+                                                                                    )
+                                                                                )
+                                                                            }
+                                                                            .size(15.dp)
+                                                                            .padding(1.dp)
+                                                                        )
+                                                                    }
+                                                             }
+                                                         }
                                                     }
+                                                     }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }
-                    }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                                Spacer(modifier = Modifier.height(10.dp))
 
-                    // 입력창
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 70.dp, end = 70.dp, top = 360.dp)
-                            .height(40.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(LightWhite.copy(alpha = 0.5f))
-                            .border(2.dp, LightWhite.copy(alpha = 0.3f))
-                    ) {
-                        BasicTextField(
-                            value = newMemberName,
-                            onValueChange = { newMemberName = it },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 10.dp)
-                                .onFocusChanged { state -> isFocused = state.isFocused },
-                            textStyle = TextStyle(
-                                color = SteelBlue,
-                                background = Color.Transparent,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 14.sp,
-                                textAlign = TextAlign.Start
-                            ),
-                            cursorBrush = SolidColor(SteelBlue),
-                            decorationBox = { innerTextField ->
+                                // 입력창
                                 Box(
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .align(Alignment.CenterStart),
-                                    contentAlignment = Alignment.CenterStart
+                                        .height(40.dp)
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(LightWhite.copy(alpha = 0.5f))
+                                        .border(2.dp, LightWhite.copy(alpha = 0.3f))
                                 ) {
-                                    if (newMemberName.isEmpty() && !isFocused) {
-                                        Text(
-                                            text = "이름",
+                                    BasicTextField(
+                                        value = newMemberName,
+                                        onValueChange = { newMemberName = it },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 12.dp, vertical = 10.dp)
+                                            .onFocusChanged { state ->
+                                                isFocused = state.isFocused
+                                            },
+                                        textStyle = TextStyle(
                                             color = SteelBlue,
+                                            background = Color.Transparent,
+                                            fontWeight = FontWeight.SemiBold,
                                             fontSize = 14.sp,
-                                            textAlign = TextAlign.Start,
-                                            fontWeight = FontWeight.SemiBold
-                                        )
-                                    }
-                                    innerTextField()
+                                            textAlign = TextAlign.Start
+                                        ),
+                                        cursorBrush = SolidColor(SteelBlue),
+                                        decorationBox = { innerTextField ->
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .align(Alignment.CenterStart),
+                                                contentAlignment = Alignment.CenterStart
+                                            ) {
+                                                if (newMemberName.isEmpty() && !isFocused) {
+                                                    Text(
+                                                        text = "이름",
+                                                        color = SteelBlue,
+                                                        fontSize = 14.sp,
+                                                        textAlign = TextAlign.Start,
+                                                        fontWeight = FontWeight.SemiBold
+                                                    )
+                                                }
+                                                innerTextField()
+                                            }
+                                        }
+                                    )
+
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_example_plus_button_274),
+                                        contentDescription = "Add Button",
+                                        modifier = Modifier
+                                            .align(Alignment.CenterEnd)
+                                            .size(40.dp, 30.dp)
+                                            .padding(end = 10.dp)
+                                            .clickable {
+                                                if (newMemberName.isNotBlank()) {
+                                                    if (memberNames.contains(newMemberName)) {
+                                                        Toast
+                                                            .makeText(
+                                                                context,
+                                                                "이미 존재하는 이름입니다.",
+                                                                Toast.LENGTH_SHORT
+                                                            )
+                                                            .show()
+                                                    } else {
+                                                        memberNames = memberNames + newMemberName
+                                                        viewModel.handleEvents(
+                                                            AddContract.AddEvent.AddMember(
+                                                                newMemberName
+                                                            )
+                                                        )
+                                                        newMemberName = ""
+                                                    }
+                                                }
+                                            },
+                                        contentScale = ContentScale.FillBounds,
+                                    )
                                 }
                             }
-                        )
-
-
-                    Image(
-                            painter = painterResource(id = R.drawable.ic_example_plus_button_274),
-                            contentDescription = "Add Button",
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .size(40.dp, 30.dp)
-                                .padding(end = 10.dp)
-                                .clickable {
-                                    if (newMemberName.isNotBlank()) {
-                                        if (memberNames.contains(newMemberName)) {
-                                            Toast
-                                                .makeText(
-                                                    context,
-                                                    "이미 존재하는 이름입니다.",
-                                                    Toast.LENGTH_SHORT
-                                                )
-                                                .show()
-                                        } else {
-                                            memberNames = memberNames + newMemberName
-                                            viewModel.handleEvents(
-                                                AddContract.AddEvent.AddMember(
-                                                    newMemberName
-                                                )
-                                            )
-                                            newMemberName = ""
-                                        }
-                                    }
-                                },
-                            contentScale = ContentScale.FillBounds,
-                        )
+                        }
                     }
-                }
-            }
 
-            LaunchedEffect(Unit) {
-                viewModel.effect.collect { effect ->
-                    when (effect) {
-                        is AddContract.AddSideEffect.NavigateToNextScreen -> {
-                            navController.navigate(AddScreenRoute.ADJECTIVE.route)
+                    LaunchedEffect(Unit) {
+                        viewModel.effect.collect { effect ->
+                            when (effect) {
+                                is AddContract.AddSideEffect.NavigateToNextScreen -> {
+                                    navController.navigate(AddScreenRoute.ADJECTIVE.route)
+                                }
+
+                                is AddContract.AddSideEffect.ShowToast -> {
+                                    Toast.makeText(
+                                        context,
+                                        effect.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                is AddContract.AddSideEffect.ShowError -> {
+                                    Toast.makeText(
+                                        context,
+                                        effect.error,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                is AddContract.AddSideEffect.Back -> {  // 뒤로가기
+                                    navigationHome()
+                                }
+
+                                else -> {}
+                            }
                         }
-
-                        is AddContract.AddSideEffect.ShowToast -> {
-                            Toast.makeText(
-                                context,
-                                effect.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        is AddContract.AddSideEffect.ShowError -> {
-                            Toast.makeText(
-                                context,
-                                effect.error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        is AddContract.AddSideEffect.Back -> {  // 뒤로가기
-                            navigationHome()
-                        }
-
-                        else -> {}
                     }
                 }
             }
         }
-    }
-}

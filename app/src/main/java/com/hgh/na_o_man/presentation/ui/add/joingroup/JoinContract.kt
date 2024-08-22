@@ -7,7 +7,8 @@ import com.hgh.na_o_man.presentation.base.ViewState
 data class Member(
     val id: Long, // ID 추가
     val name: String,
-    val avatarUrl: String // URL로 변경
+    val avatarUrl: String, // URL로 변경
+    val memberId : Long?,
 )
 
 class JoinContract {

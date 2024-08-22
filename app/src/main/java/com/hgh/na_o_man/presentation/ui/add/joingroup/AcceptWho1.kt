@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.hgh.na_o_man.R
@@ -46,7 +47,8 @@ fun AcceptWho1(
                     .align(Alignment.Center)
             ) {
                 members.forEachIndexed { index, member ->
-                    val isSelectable = index != firstItemIndex
+                    //val isProfileIdNull = existingMemberIds.contains(null)
+                   // val isSelectable = member.id != null && !isProfileIdNull
                     val painter = if (member.avatarUrl.isNotEmpty()) {
                         rememberAsyncImagePainter(member.avatarUrl)
                     } else {
@@ -57,9 +59,9 @@ fun AcceptWho1(
                     UserInfo(
                         userName = member.name,
                         profileImagePainter = painter,
-                        isSelected = selectedProfile?.name == member.name && isSelectable,
+                        isSelected = selectedProfile?.name == member.name ,
                         onClick = {
-                            if (isSelectable) {
+                            if (member.memberId==-1L) {
                                 onProfileSelected(member.name)
                             }
                         }

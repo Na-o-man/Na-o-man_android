@@ -62,6 +62,8 @@ fun AcceptScreen(
     var selectedProfile by remember { mutableStateOf<Member?>(null) }
     val context = LocalContext.current as Activity
 
+//    val existingMemberIds = listOf(viewState.memberId)
+
     Scaffold(
         topBar = {
             StartAppBar(onStartClick = {
@@ -116,7 +118,8 @@ fun AcceptScreen(
                         },
                         members = pageMembers,
                         selectedProfile = selectedProfile,
-                        currentPage = page
+                        currentPage = page,
+                       // existingMemberIds = existingMemberIds
                     )
                 }
 
