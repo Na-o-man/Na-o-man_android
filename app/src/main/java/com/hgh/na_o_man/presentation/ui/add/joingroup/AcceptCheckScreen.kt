@@ -123,7 +123,7 @@ fun AcceptCheckScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_file_227),
+                        painter = painterResource(id = R.drawable.ic_file_group_227),
                         contentDescription = "Image 2",
                         modifier = Modifier.size(250.dp, 305.dp)
                             .align(Alignment.Center)

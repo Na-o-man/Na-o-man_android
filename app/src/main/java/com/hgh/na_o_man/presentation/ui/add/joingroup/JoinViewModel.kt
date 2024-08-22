@@ -62,7 +62,7 @@ class JoinViewModel @Inject constructor(
                         copy(
                             shareGroupId = response.shareGroupId,
                             members = response.profileInfoList.mapIndexed { index, profile ->
-                                Member(id = profile.profileId, name = profile.name, avatarUrl = profile.image)
+                                Member(id = profile.profileId, name = profile.name, avatarUrl = profile.image, memberId = profile.memberId)
                             },
                             groupName = response.name,
                             inviteCode = inviteCode
