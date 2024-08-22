@@ -32,10 +32,10 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         //커밋시 이부분 지우고 커밋
         //건희
-//        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjIiLCJyb2xlIjoiUk9MRV9ERUZBVUxUIiwiaWF0IjoxNzIzNTU4MTA4LCJleHAiOjE3MjQxNjI5MDh9.S32eSvP-uOIngYHuOdMiTD6zsiE-epSyWH6KS1cFzcU")
+        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjM5Iiwicm9sZSI6IlJPTEVfREVGQVVMVCIsImlhdCI6MTcyNDMzMzM5NSwiZXhwIjoxNzI0OTM4MTk1fQ.XUOF9HApwVTjxbtk40IMX2FjH9Aur6IUepdfjImQye4")
         //강연
 
-        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjQiLCJyb2xlIjoiUk9MRV9ERUZBVUxUIiwiaWF0IjoxNzI0MTY2OTQxLCJleHAiOjE3MjQ3NzE3NDF9.SN6zt-aZePZyRgnZGaVDgdwTYWxF-ubXPCx_KN2Wmgs")
+//        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjEiLCJyb2xlIjoiUk9MRV9ERUZBVUxUIiwiaWF0IjoxNzI0MjQ1NzI2LCJleHAiOjE3MjQ4NTA1MjZ9._YV7aZ2tvyRKGLNe8cU96thRtI2L7749jXxoepJSFz4")
         
         //dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUzMjFAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfREVGQVVMVCIsImlhdCI6MTcyMzM4NDk3OCwiZXhwIjoxNzIzOTg5Nzc4fQ.SI91aCKHgLhVzU8Of8OP0H_c6IDJ4NrFX9U9W4jgBdc")
         dateStoreUtil.setAutoLogin(true)

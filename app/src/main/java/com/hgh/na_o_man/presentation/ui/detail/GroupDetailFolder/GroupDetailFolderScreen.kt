@@ -157,7 +157,10 @@ fun GroupDetailFolderScreen(
                         Spacer(modifier = Modifier.height(100.dp))
 
                         Box(
-                            modifier = Modifier.padding(start = 200.dp)
+                            modifier = Modifier
+                                .offset(x = -50.dp)
+                                .fillMaxWidth(),
+                            Alignment.CenterEnd
                         ) {
                             viewState.groupDetail?.let { groupDetail ->
                                 GroupInfo(
