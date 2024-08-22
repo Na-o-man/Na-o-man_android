@@ -38,7 +38,7 @@ fun SplashScreen(
 //        dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjEiLCJyb2xlIjoiUk9MRV9ERUZBVUxUIiwiaWF0IjoxNzI0MjQ1NzI2LCJleHAiOjE3MjQ4NTA1MjZ9._YV7aZ2tvyRKGLNe8cU96thRtI2L7749jXxoepJSFz4")
         
         //dateStoreUtil.setAccessToken("eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdoZWUzMjFAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfREVGQVVMVCIsImlhdCI6MTcyMzM4NDk3OCwiZXhwIjoxNzIzOTg5Nzc4fQ.SI91aCKHgLhVzU8Of8OP0H_c6IDJ4NrFX9U9W4jgBdc")
-        dateStoreUtil.setAutoLogin(true)
+        dateStoreUtil.setAutoLogin(false)
 
 
         delay(2000)

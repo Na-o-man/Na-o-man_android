@@ -59,6 +59,7 @@ fun HomeScreen(
         mainViewModel.effect.collect { effect ->
             when (effect) {
                 MainContract.MainSideEffect.RefreshScreen -> {
+                    Log.d("왜왜", "RefreshScreen")
                     viewModel.setEvent(HomeContract.HomeEvent.InitHomeScreen)
                 }
 

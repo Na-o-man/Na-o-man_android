@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,7 +63,10 @@ fun ImageDialog(
                 Column {
                     Box {
                         ImageCard(
-                            image = image, isSelectMode = false, modifier = Modifier
+                            image = image,
+                            isSelectMode = false,
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
                                 .shadow(3.dp, RoundedCornerShape(16.dp))

@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,7 +39,10 @@ class HomeViewModel @Inject constructor(
     override fun handleEvents(event: HomeContract.HomeEvent) {
         when (event) {
             is HomeContract.HomeEvent.InitHomeScreen -> {
-                showRefreshGroupList()
+                Log.d("왜왜", "InitHomeScreen")
+                CoroutineScope(Dispatchers.IO).launch {
+                    showRefreshGroupList()
+                }
             }
 
             is HomeContract.HomeEvent.OnAddGroupInBoxClicked -> {
@@ -65,6 +69,7 @@ class HomeViewModel @Inject constructor(
             }
 
             HomeContract.HomeEvent.OnPagingGroupList -> {
+                Log.d("왜왜", "OnPagingGroupList")
                 showGroupList()
             }
 
@@ -111,8 +116,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun showRefreshGroupList() = viewModelScope.launch {
+    private suspend fun showRefreshGroupList() = viewModelScope.launch {
         try {
+            Log.d("왜왜", "showRefreshGroupList")
             updateState { copy(groupList = listOf()) }
             groupListReferUsecase(0, 10).collect { result ->
                 result.onSuccess { response ->
