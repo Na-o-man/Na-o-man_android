@@ -23,11 +23,11 @@ import androidx.compose.ui.unit.dp
 fun GroupNameBox(
     title: String
 ) {
-    val titleLength = title.length * 8
+    val titleLength = title.length * 13
     Surface(
         modifier = Modifier
             .width((titleLength * 1.5).dp)
-            .height(29.dp),
+            .height(39.dp),
         color = Color.Transparent
     ) {
         Canvas(
