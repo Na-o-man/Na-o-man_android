@@ -231,6 +231,7 @@ fun GroupDetailFolderScreen(
                                         .align(Alignment.BottomCenter)
                                 )
 
+
                                 HorizontalPager(
                                     count = pageCount,
                                     state = pagerState,
@@ -296,10 +297,14 @@ fun GroupDetailFolderScreen(
                             HorizontalPagerIndicator(
                                 pagerState = pagerState,
                                 pageCount = realSize,
-                                pageIndexMapping =  {page -> page % realSize},
+                                pageIndexMapping = { page -> page % realSize },
+                                inactiveColor = Color.White,
+                                activeColor = Color(0xFF6E6BFF),
+                                indicatorWidth = if(realSize<=10)7.dp else 5.dp,
+                                indicatorHeight = if(realSize<=10)7.dp else 5.dp, // Set the height of the indicator
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
-                                    .padding(16.dp),
+                                    .padding(16.dp)
                             )
                         }
 
