@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hgh.na_o_man.R
 import com.hgh.na_o_man.domain.model.AlarmDummy
 import com.hgh.na_o_man.presentation.base.LoadState
 import com.hgh.na_o_man.presentation.component.DecorationCloud
@@ -36,6 +37,8 @@ import com.hgh.na_o_man.presentation.component.NoticeIcon.ReadAllUnClickableButt
 import com.hgh.na_o_man.presentation.component.StartAppBar
 import com.hgh.na_o_man.presentation.component.StateErrorScreen
 import com.hgh.na_o_man.presentation.component.StateLoadingScreen
+import com.hgh.na_o_man.presentation.component.homeIcon.AlarmDummyNotRead
+import com.hgh.na_o_man.presentation.component.homeIcon.AlarmDummyRead
 import com.hgh.na_o_man.presentation.component.homeIcon.AlarmNotRead
 import com.hgh.na_o_man.presentation.component.homeIcon.AlarmRead
 import com.hgh.na_o_man.presentation.component.homeIcon.NoAlarmBox
@@ -105,7 +108,11 @@ fun AlarmScreen(
                                 viewModel.setEvent(AlarmContract.AlarmEvent.OnReadAllClicked)
                             })
                         } else {
-                            ReadAllUnClickableButton(title = "모두 읽음")
+                            AlarmButton(title = "모두 읽음", onClick = {
+                                Log.d("AlarmButton", "모두 읽음 버튼 클릭")
+                                viewModel.setEvent(AlarmContract.AlarmEvent.OnReadAllClicked)
+                            })
+//                            ReadAllUnClickableButton(title = "모두 읽음")
                         }
                         Spacer(modifier = Modifier.width(5.dp))
                         AlarmButton(title = "전체 삭제", onClick = {
@@ -113,22 +120,22 @@ fun AlarmScreen(
                             viewModel.setEvent(AlarmContract.AlarmEvent.OnDeleteAllClicked)
                         })
                     }
-                    if (viewState.alarmList.isEmpty()) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            NoAlarmBox(message = "알림이 없습니다.")
-                        }
-                    } else {
-                        AlarmListScreen(
-                            alarmList = viewState.alarmList,
-                        )
-                    }
+                    ShowAlarmList()
+//                    if (viewState.alarmList.isEmpty()) {
+//                        Box(
+//                            modifier = Modifier
+//                                .fillMaxSize()
+//                                .padding(padding),
+//                            contentAlignment = Alignment.Center
+//                        ) {
+//                            NoAlarmBox(message = "알림이 없습니다.")
+//                        }
+//                    } else {
+//                        AlarmListScreen(
+//                            alarmList = viewState.alarmList,
+//                        )
+//                    }
                 }
-
             }
         }
     }
@@ -206,9 +213,49 @@ fun AlarmListScreen(
     }
 }
 
+@Composable
+fun ShowAlarmList(
+    modifier: Modifier = Modifier
+) {
+    val alarmList = listOf(null)
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = 12.dp),
+    ) {
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+        ) {
+            items(alarmList) { group ->
+                AlarmDummyNotRead(imageRes = R.drawable.hani_1, detail = "[음악 친구들]에 하니님이 4장의 사진을 업로드 했습니다.", date = "2024-08-24")
+                AlarmDummyNotRead(imageRes = R.drawable.minji_1, detail = "민지님이 [가장 예쁜 사진은?] 안건을 올렸습니다.", date = "2024-08-24")
+                AlarmDummyNotRead(imageRes = R.drawable.daniel_1, detail = "[음악 동호회] 민지가 안건을 올렸습니다.", date = "2024-08-23")
+                AlarmDummyNotRead(imageRes = R.drawable.minji_2, detail = "민지님이 [가장 예쁜 사진은?] 안건을 올렸습니다.", date = "2024-08-22")
+                AlarmDummyNotRead(imageRes = R.drawable.haerin_1, detail = "[음악 동호회] 해린님이 안건을 올렸습니다.", date = "2024-08-22")
+                AlarmDummyRead(imageRes = R.drawable.hani_2, detail = "[음악 동호회] 민지가 안건을 올렸습니다.", date = "2024-08-21")
+                AlarmDummyRead(imageRes = R.drawable.minji_3, detail = "[음악 동호회] 민지가 안건을 올렸습니다.", date = "2024-08-21")
+                AlarmDummyRead(imageRes = R.drawable.hani_3, detail = "[음악 친구들]에 하니님이 4장의 사진을 업로드 했습니다.", date = "2024-08-21")
+                AlarmDummyRead(imageRes = R.drawable.hani_4, detail = "[음악 친구들]에 하니님이 4장의 사진을 업로드 했습니다.", date = "2024-08-20")
+                AlarmDummyRead(imageRes = R.drawable.haerin_1, detail = "[음악 친구들]에 해린님이 4장의 사진을 업로드 했습니다.", date = "2024-08-20")
+                AlarmDummyRead(imageRes = R.drawable.minji_2, detail = "[음악 친구들]에 민지님이 4장의 사진을 업로드 했습니다.", date = "2024-08-19")
+                AlarmDummyRead(imageRes = R.drawable.minji_1, detail = "[음악 친구들]에 민지님이 4장의 사진을 업로드 했습니다.", date = "2024-08-19")
+            }
+        }
+    }
+}
+
+//@Preview
+//@Composable
+//fun AlarmPreView(
+//) {
+//    AlarmScreen(navigationHome = {})
+//}
+
 @Preview
 @Composable
-fun AlarmPreView(
+fun AlarmExPreview(
 ) {
-    AlarmScreen(navigationHome = {})
+    ShowAlarmList()
 }
