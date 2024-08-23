@@ -231,6 +231,7 @@ fun GroupDetailFolderScreen(
                                         .align(Alignment.BottomCenter)
                                 )
 
+
                                 HorizontalPager(
                                     count = pageCount,
                                     state = pagerState,
@@ -293,14 +294,33 @@ fun GroupDetailFolderScreen(
 
                             Spacer(modifier = Modifier.height(15.dp))
 
-                            HorizontalPagerIndicator(
-                                pagerState = pagerState,
-                                pageCount = realSize,
-                                pageIndexMapping =  {page -> page % realSize},
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(16.dp),
-                            )
+                            if (realSize <= 10) {
+                                HorizontalPagerIndicator(
+                                    pagerState = pagerState,
+                                    pageCount = realSize,
+                                    pageIndexMapping = { page -> page % realSize },
+                                    inactiveColor = Color.White,
+                                    activeColor = Color(0xFF6E6BFF),
+                                    indicatorWidth = 7.dp,  // Set the width of the indicator
+                                    indicatorHeight = 7.dp, // Set the height of the indicator
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(16.dp)
+                                )
+                            } else {
+                                HorizontalPagerIndicator(
+                                    pagerState = pagerState,
+                                    pageCount = realSize,
+                                    pageIndexMapping = { page -> page % realSize },
+                                    inactiveColor = Color.White,
+                                    activeColor = Color(0xFF6E6BFF),
+                                    indicatorWidth = 5.dp,  // Set the width of the indicator
+                                    indicatorHeight = 5.dp, // Set the height of the indicator
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(16.dp)
+                                )
+                            }
                         }
 
 
