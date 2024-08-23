@@ -9,6 +9,7 @@ import com.hgh.na_o_man.di.util.remote.onSuccess
 import com.hgh.na_o_man.di.util.work_manager.enqueue.DownloadEnqueuer
 import com.hgh.na_o_man.di.util.work_manager.enqueue.UploadEnqueuer
 import com.hgh.na_o_man.domain.usecase.photo.PhotoAllAlbumUsecase
+import com.hgh.na_o_man.domain.usecase.photo.PhotoAllUrlUsecase
 import com.hgh.na_o_man.domain.usecase.photo.PhotoNoUsecase
 import com.hgh.na_o_man.domain.usecase.share_group.CheckSpecificGroupUsecase
 import com.hgh.na_o_man.presentation.base.BaseViewModel
@@ -22,6 +23,7 @@ class GroupDetailFolderViewModel @Inject constructor(
     private val checkSpecificGroupUsecase: CheckSpecificGroupUsecase,
     private val downloadUserAlbumUsecase: PhotoAllAlbumUsecase,
     private val downloadEtcAlbumUsecase: PhotoNoUsecase,
+    private val downloadAllUsecase: PhotoAllUrlUsecase,
     private val uploadEnqueuer: UploadEnqueuer,
     private val downloadEnqueuer: DownloadEnqueuer,
 ) : BaseViewModel<GroupDetailFolderContract.GroupDetailFolderViewState, GroupDetailFolderContract.GroupDetailFolderSideEffect, GroupDetailFolderContract.GroupDetailFolderEvent>(
@@ -60,9 +62,7 @@ class GroupDetailFolderViewModel @Inject constructor(
             is GroupDetailFolderContract.GroupDetailFolderEvent.OnDownloadClicked -> {
                 when (event.profileId) {
                     100L -> {
-                        sendEffect({
-                            GroupDetailFolderContract.GroupDetailFolderSideEffect.ShowToast("전체 사진은 다운로드 할 수 없습니다.")
-                        })
+                        downloadAllAlbum()
                     }
 
                     101L -> {
@@ -150,6 +150,28 @@ class GroupDetailFolderViewModel @Inject constructor(
     private fun downloadEtcAlbum() = viewModelScope.launch {
         try {
             downloadEtcAlbumUsecase(
+                shareGroupId = viewState.value.groupId
+            ).collect { result ->
+                result.onSuccess {
+                    if (it.downloadUrls.isNotEmpty()) {
+                        downloadEnqueuer.enqueueDownloadWork(it.downloadUrls)
+                    } else {
+                        sendEffect({ GroupDetailFolderContract.GroupDetailFolderSideEffect.ShowToast("폴더에 사진이 없습니다.") })
+                    }
+                }.onFail {
+                    sendEffect({ GroupDetailFolderContract.GroupDetailFolderSideEffect.ShowToast("서버와 연결을 실패했습니다.") })
+                }.onException {
+                    throw it
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("예외받기", "$e")
+        }
+    }
+
+    private fun downloadAllAlbum() = viewModelScope.launch {
+        try {
+            downloadAllUsecase(
                 shareGroupId = viewState.value.groupId
             ).collect { result ->
                 result.onSuccess {
