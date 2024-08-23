@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -68,12 +69,12 @@ fun VoteBeforeDialog(
             ) {
                 Box {
                     ImageCard(
-                        // 포토수정필요
                         image = voteData.photoInfo,
                         isSelectMode = false,
                         modifier = Modifier
                             .wrapContentHeight()
-                            .shadow(3.dp, RoundedCornerShape(16.dp))
+                            .shadow(3.dp, RoundedCornerShape(16.dp)),
+                        imageModifier = Modifier.heightIn(max = 300.dp)
                     )
 
                     IconButton(
@@ -200,7 +201,8 @@ fun VoteAfterDialog(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
-                                .shadow(3.dp, RoundedCornerShape(16.dp))
+                                .shadow(3.dp, RoundedCornerShape(16.dp)),
+                            imageModifier = Modifier.heightIn(max = 300.dp)
                         )
 
                         IconButton(

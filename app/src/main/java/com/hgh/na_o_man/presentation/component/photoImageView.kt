@@ -36,8 +36,10 @@ import com.hgh.na_o_man.presentation.theme.SteelBlue
 @Composable
 fun ImageCard(
     modifier: Modifier = Modifier,
+    imageModifier: Modifier = Modifier,
     image: PhotoInfoModel,
     isSelectMode: Boolean,
+    contentScale: ContentScale = ContentScale.Crop,
     onClick: (PhotoInfoModel) -> Unit = {},
     onSelect: (PhotoInfoModel) -> Unit = {},
 ) {
@@ -65,10 +67,9 @@ fun ImageCard(
             AsyncImage(
                 model = image.rawPhotoUrl,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
+                contentScale = contentScale,
+                modifier = imageModifier
                     .fillMaxWidth()
-                    .heightIn(max = 250.dp)
             )
 
             if (image.isDownloaded) {

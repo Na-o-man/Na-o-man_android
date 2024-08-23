@@ -72,9 +72,14 @@ interface PhotosService {
         @Query("shareGroupId") shareGroupId: Long
     ) : Response<ApiResult<PhotoDownloadUrlsDto>>
 
-    @GET("photos/download/all")
+    @GET("photos/download/album")
     suspend fun getPhotoAllAlbum(
         @Query("shareGroupId") shareGroupId: Long,
         @Query("profileId") profileId : Long
+    ) : Response<ApiResult<PhotoDownloadUrlsDto>>
+
+    @GET("photos/download/all")
+    suspend fun getAllPhoto(
+        @Query("shareGroupId") shareGroupId: Long
     ) : Response<ApiResult<PhotoDownloadUrlsDto>>
 }

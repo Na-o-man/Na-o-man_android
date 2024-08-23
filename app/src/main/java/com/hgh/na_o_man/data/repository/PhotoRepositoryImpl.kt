@@ -98,4 +98,9 @@ class PhotoRepositoryImpl @Inject constructor(
     override suspend fun getPhotoAlbum(shareGroupId: Long, profileId: Long): RetrofitResult<PhotoDownloadUrlsModel> {
         return apiHandler({ api.getPhotoAllAlbum(shareGroupId, profileId) }) { response: ApiResult<PhotoDownloadUrlsDto> -> response.data.toModel() }
     }
+
+    override suspend fun getAllPhoto(shareGroupId: Long): RetrofitResult<PhotoDownloadUrlsModel> {
+        return apiHandler({ api.getAllPhoto(shareGroupId) }) { response: ApiResult<PhotoDownloadUrlsDto> -> response.data.toModel() }
+    }
+
 }
