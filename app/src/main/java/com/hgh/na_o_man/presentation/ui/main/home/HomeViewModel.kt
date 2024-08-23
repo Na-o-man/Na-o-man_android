@@ -3,6 +3,7 @@ package com.hgh.na_o_man.presentation.ui.main.home
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import coil.compose.rememberAsyncImagePainter
 import com.hgh.na_o_man.R
 import com.hgh.na_o_man.di.util.remote.onFail
 import com.hgh.na_o_man.di.util.remote.onSuccess
@@ -84,9 +85,9 @@ class HomeViewModel @Inject constructor(
                 groupListReferUsecase(nextPage.value, 10).collect { result ->
                     result.onSuccess { response ->
                         val newGroupList = response.shareGroupInfoList.map { groupInfo ->
-                            val imageResID = getImageResId(groupInfo.image)
+//                            val imageResID = getImageResId(groupInfo.image)
                             GroupDummy(
-                                imageRes = imageResID,  //수정 필요
+                                imageRes = groupInfo.image?:"https://i.ibb.co/BKpgBf1/na-o-man-null-img.png",  //수정 필요
                                 name = groupInfo.name,
                                 participantCount = groupInfo.memberCount,
                                 date = groupInfo.createdAt,
@@ -123,9 +124,9 @@ class HomeViewModel @Inject constructor(
             groupListReferUsecase(0, 10).collect { result ->
                 result.onSuccess { response ->
                     val newGroupList = response.shareGroupInfoList.map { groupInfo ->
-                        val imageResID = getImageResId(groupInfo.image)
+//                        val imageResID = getImageResId(groupInfo.image)
                         GroupDummy(
-                            imageRes = imageResID,  //수정 필요
+                            imageRes = groupInfo.image?:"https://i.ibb.co/BKpgBf1/na-o-man-null-img.png",  //수정 필요
                             name = groupInfo.name,
                             participantCount = groupInfo.memberCount,
                             date = groupInfo.createdAt,
@@ -160,8 +161,7 @@ class HomeViewModel @Inject constructor(
         return if (imageName.isNullOrEmpty()) {
             "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png"
         } else {
-            val resId =
-                application.resources.getIdentifier(imageName, "drawable", application.packageName)
+            val resId = application.resources.getIdentifier(imageName, "drawable", application.packageName)
             if (resId != 0) {
                 resId.toString()
             } else "https://i.ibb.co/BKpgBf1/na-o-man-null-img.png"
