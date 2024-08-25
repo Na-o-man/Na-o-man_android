@@ -21,6 +21,11 @@
     <td align="center"> GroupAdd <br> GroupJoin </td>
   </tr>
 </table>
+<br>
+
+## 시연영상
+[![Video Label](http://img.youtube.com/vi/KuYXcd8srDA/0.jpg)](https://youtu.be/KuYXcd8srDA?si=kQGUw3UE9g7H3I9Y)
+<br>
 
 ## SCREENSHOTS
 |       나       |                                                              o                                                              |                                                              만                                                              |                                                              !                                                              |     
