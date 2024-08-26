@@ -134,6 +134,8 @@ fun AcceptScreen(
                     HorizontalPagerIndicator(
                         pagerState = pagerState,
                         pageCount = pageCount,
+                        indicatorWidth = if(pageCount<=10)7.dp else 5.dp,
+                        indicatorHeight = if(pageCount<=10)7.dp else 5.dp, // Set the height of the indicator
                         modifier = Modifier
                             .padding(start = 10.dp)
                             .align(Alignment.Center)
