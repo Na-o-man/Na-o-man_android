@@ -1,9 +1,14 @@
-# 나o만
+# 나o만 - AI 기반 사진 공유 클라우드 서비스
+・ 공유 그룹을 만들어 대규모 사진 업로드&다운로드 할 수 있어요.
+<br>
+・ AI가 분류해 준 <code>나만</code> 나온 사진만 다운 받을 수 있어요.
+<br>
+・ 안건을 만들어 투표 받을 수 있어요. (ex,프사 추천 & 웃긴 사진)
+<br>
 <div>
   <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=Kotlin&logoColor=white">
   <img src="https://img.shields.io/badge/jetpack_compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white">
 </div>
-<br>
 <table>
   <tr>
     <td align="center"><img width="150" alt="na-o-man-한건희" src="https://github.com/user-attachments/assets/e7f9feda-04c8-4dda-8426-4173bac0dcb8"></td>
