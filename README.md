@@ -44,8 +44,7 @@
 
 ## Clean Architecture
 - MVVM + MVI
-<img width="767" alt="manageApp_arch" src="https://github.com/hangunhee39/manageApp/assets/77563098/d10cb136-8371-415c-b1bb-672d19b09f8c">
-
+<img width="829" alt="나0만 arch" src="https://github.com/user-attachments/assets/8babe269-dd53-4f4c-a170-f378a85ab6b3">
 
 ## Project Folder Structure
 ```plaintext
