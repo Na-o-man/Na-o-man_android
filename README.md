@@ -43,7 +43,7 @@
 
 
 ## Clean Architecture
-- MVVM + MVI
+- MVI (viewModel를 이용)
 <img width="829" alt="나0만 arch" src="https://github.com/user-attachments/assets/8babe269-dd53-4f4c-a170-f378a85ab6b3">
 
 ## Project Folder Structure
