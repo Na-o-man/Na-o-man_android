@@ -8,8 +8,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -74,141 +76,126 @@ fun MembersSpace(
             EndTopCloud()
         }
 
-        Box(
-            modifier = Modifier.fillMaxSize().padding(10.dp),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Box(
+            // 중앙 이미지
+            Image(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
+                contentDescription = "Center Image",
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(bottom = 230.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_nangman_23),
-                    contentDescription = "Center Image"
-                )
-            }
+                    .padding(bottom = 30.dp)
+            )
 
-            Box(
+            // 중앙 텍스트
+            Text(
+                text = "어디에서 찍은 사진인가요?",
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(bottom = 160.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "어디에서 찍은 사진인가요?",
-                    modifier = Modifier
-                        .drawBehind {
-                            val strokeWidth = 1.dp.toPx()
-                            val y = size.height - strokeWidth / 2 + 10.dp.toPx()
-                            drawLine(
-                                color = LightWhite,
-                                start = Offset(0f, y),
-                                end = Offset(size.width, y),
-                                strokeWidth = strokeWidth
-                            )
-                        },
-                    color = LightWhite,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                // 텍스트창
-                Box(
-                    modifier = Modifier
-                        .padding(top = 285.dp)
-                        .size(295.dp, 55.dp)
-                        .background(
-                            color = LightWhite.copy(alpha = 0.7f),
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                        .border(
-                            width = 1.dp,
+                    .padding(bottom = 10.dp)
+                    .drawBehind {
+                        val strokeWidth = 1.dp.toPx()
+                        val y = size.height - strokeWidth / 2 + 10.dp.toPx()
+                        drawLine(
                             color = LightWhite,
-                            shape = RoundedCornerShape(20.dp)
+                            start = Offset(0f, y),
+                            end = Offset(size.width, y),
+                            strokeWidth = strokeWidth
                         )
-                ) {
-                    BasicTextField(
-                        value = textValue,
-                        onValueChange = { newValue ->
-                            textValue = newValue
-                            viewModel.updatePlace(newValue)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.Center)
-                            .onFocusChanged { state ->
-                                isFocused = state.isFocused
-                            },
-                        textStyle = TextStyle(
-                            color = SteelBlue,
-                            background = Color.Transparent,
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 14.sp,
-                            textAlign = TextAlign.Center
-                        ),
-                        cursorBrush = SolidColor(SteelBlue),
-                        decorationBox = { innerTextField ->
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .align(Alignment.Center),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                if (textValue.isEmpty() && !isFocused) {
-                                    Text(
-                                        text = "공간을 입력해주세요.",
-                                        color = SteelBlue,
-                                        textAlign = TextAlign.Center,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                }
-                                innerTextField()
-                            }
-                        }
-                    )
-                }
+                    },
+                color = LightWhite,
+                fontWeight = FontWeight.SemiBold
+            )
 
-                Box(
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // 텍스트 입력 필드
+            Box(
+                modifier = Modifier
+                    .size(295.dp, 55.dp)
+                    .background(
+                        color = LightWhite.copy(alpha = 0.7f),
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = LightWhite,
+                        shape = RoundedCornerShape(20.dp)
+                    )
+            ) {
+                BasicTextField(
+                    value = textValue,
+                    onValueChange = { newValue ->
+                        textValue = newValue
+                        viewModel.updatePlace(newValue)
+                    },
                     modifier = Modifier
-                        .padding(bottom = 245.dp)
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    NextAppBar1(
-                        onNextClick = {
-                            if (textValue.isNotEmpty()) {
-                                viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
-                                navController.navigate(AddScreenRoute.LOADING.route)
-                            } else {
-                                AddContract.AddSideEffect.ShowToast("텍스트를 입력해주세요.")
+                        .fillMaxWidth()
+                        .align(Alignment.Center)
+                        .onFocusChanged { state ->
+                            isFocused = state.isFocused
+                        },
+                    textStyle = TextStyle(
+                        color = SteelBlue,
+                        background = Color.Transparent,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
+                    ),
+                    cursorBrush = SolidColor(SteelBlue),
+                    decorationBox = { innerTextField ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (textValue.isEmpty() && !isFocused) {
+                                Text(
+                                    text = "공간을 입력해주세요.",
+                                    color = SteelBlue,
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             }
+                            innerTextField()
                         }
-                    )
-                }
+                    }
+                )
+            }
 
-                val context = LocalContext.current
+            Spacer(modifier = Modifier.height(10.dp))
 
-                LaunchedEffect(Unit) {
-                    viewModel.effect.collect { effect ->
-                        when (effect) {
-                            is AddContract.AddSideEffect.NavigateToNextScreen -> {
-                                navController.navigate(AddScreenRoute.LOADING.route)
-                            }
+            // 네비게이션 버튼
+            NextAppBar1(
+                onNextClick = {
+                    if (textValue.isNotEmpty()) {
+                        viewModel.handleEvents(AddContract.AddEvent.CreateGroup)
+                        navController.navigate(AddScreenRoute.LOADING.route)
+                    } else {
+                        AddContract.AddSideEffect.ShowToast("텍스트를 입력해주세요.")
+                    }
+                },
+                modifier = Modifier
+                    .padding(bottom = 55.dp)
+                    .align(Alignment.End)
+            )
 
-                            is AddContract.AddSideEffect.ShowToast -> {
-                                Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
-                            }
-                            else -> {}
+            // LaunchedEffect for handling side effects
+            val context = LocalContext.current
+
+            LaunchedEffect(Unit) {
+                viewModel.effect.collect { effect ->
+                    when (effect) {
+                        is AddContract.AddSideEffect.NavigateToNextScreen -> {
+                            navController.navigate(AddScreenRoute.LOADING.route)
                         }
+                        is AddContract.AddSideEffect.ShowToast -> {
+                            Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                        }
+                        else -> {}
                     }
                 }
             }
